@@ -3,9 +3,6 @@ package com.Utils;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
 import java.sql.*;
@@ -18,7 +15,7 @@ public class DBUtil {
 
     private static Connection connection = null;
 
-    static File dbFile = new File("D:\\Müll", "sample.db");
+    static File dbFile = new File(ObjectHub.getInstance().getProperties().getProperty("dbPath"));
 
     public static List<Document> getFilesForSearchTerm(String searchTerm) {
         List<Document> documentList = DBUtil

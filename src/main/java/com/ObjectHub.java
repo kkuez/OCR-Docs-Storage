@@ -2,6 +2,10 @@ package com;
 
 import com.Controller.MainController;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,9 +17,18 @@ public class ObjectHub {
 
     private ExecutorService executorService;
 
+    private Properties properties;
+
     private ObjectHub() {
+        properties = new Properties();
+        String root = "";
+        try {
+            properties.load(new FileInputStream(root + "setup.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         archiver = new Archiver();
-        executorService = Executors.newFixedThreadPool(8);
+        executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));
     }
 
     private Archiver archiver;
@@ -28,6 +41,14 @@ public class ObjectHub {
     }
 
     // GETTER SETTER
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 
     public MainController getMainController() {
         return mainController;

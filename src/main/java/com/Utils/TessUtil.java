@@ -67,8 +67,8 @@ public class TessUtil {
 
     private static Tesseract getTesseract() {
         Tesseract instance = new Tesseract();
-        instance.setDatapath("C:\\Program Files\\Tesseract-OCR\\tessdata");
-        instance.setLanguage("deu");
+        instance.setDatapath(ObjectHub.getInstance().getProperties().getProperty("tessData"));
+        instance.setLanguage(ObjectHub.getInstance().getProperties().getProperty("tessLang="));
         instance.setHocr(true);
         return instance;
     }

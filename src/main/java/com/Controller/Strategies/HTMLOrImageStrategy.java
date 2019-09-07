@@ -1,12 +1,10 @@
 package com.Controller.Strategies;
 
 import com.Controller.Controller;
-import com.Controller.SelectHTMLOrImageController;
 import com.ObjectTemplates.Document;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,7 +20,7 @@ public class HTMLOrImageStrategy extends ControllerStrategy {
     @Override
     public Stage getPreparedStage() {
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/selectHTMLOrImage.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/selectHTMLOrImage.fxml"));
         try {
             Parent root = fxmlLoader.load();
             Controller controller = (Controller) fxmlLoader.getController();
