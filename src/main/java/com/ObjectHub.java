@@ -1,6 +1,7 @@
 package com;
 
 import com.Controller.MainController;
+import com.Misc.CustomProperties;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,10 +18,10 @@ public class ObjectHub {
 
     private ExecutorService executorService;
 
-    private Properties properties;
+    private CustomProperties properties;
 
     private ObjectHub() {
-        properties = new Properties();
+        properties = new CustomProperties();
         String root = "";
         try {
             properties.load(new FileInputStream(root + "setup.properties"));
@@ -46,7 +47,7 @@ public class ObjectHub {
         return properties;
     }
 
-    public void setProperties(Properties properties) {
+    public void setProperties(CustomProperties properties) {
         this.properties = properties;
     }
 

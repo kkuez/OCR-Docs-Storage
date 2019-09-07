@@ -64,6 +64,7 @@ public class MainController extends Controller {
 
     @FXML
     private void initialize() {
+        inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
         archivePathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
 
         mainTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -107,7 +108,9 @@ public class MainController extends Controller {
     }
 
     public void chooseButtonInputPath() {
-        choosePath(inputPathLabel);
+
+        String inputPath = choosePath(inputPathLabel);
+        ObjectHub.getInstance().getProperties().setProperty("lastInputPath", inputPath);
     }
 
     public void archiveButtonInputPath() {

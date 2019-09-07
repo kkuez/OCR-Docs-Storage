@@ -12,11 +12,19 @@ import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TessUtil {
+
+    private static Pattern datePattern;
+
+    private static void compileDatePattern(){
+        datePattern = Pattern.compile("\\s*(3[01]|[12][0-9]|0?[1-9])\\.(1[012]|0?[1-9])\\.((?:19|20)\\d{2})\\s*");
+    }
 
     public static void processFolder(File folder) {
         Collection<File> filesInFolder = FileUtils.listFiles(folder,
@@ -26,7 +34,7 @@ public class TessUtil {
 
     public static void processFolder(File folder, TableView tableView, TableColumn[] tableColumns,
             PropertyValueFactory[] propertyValueFactories) {
-        Collection<File> filesInFolder = FileUtils.listFiles(folder,
+        Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
                 new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, true);
         Set<String> filePathSet = DBUtil.getFilePathOfDocsContainedInDB();
         AtomicInteger counterProcessedFiles = new AtomicInteger();
@@ -55,6 +63,12 @@ public class TessUtil {
         try {
             String result = tesseract.doOCR(inputfile);
             System.out.println(result);
+            List<LocalDate> datesInFile;
+            try {
+                datesInFile = searchForDates(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             DBUtil.executeSQL("insert into Documents (id, content, originalFile) Values (1, '"
                     + result.replaceAll("'", "''") + "', '" + inputfile.getAbsolutePath() + "')");
@@ -63,6 +77,24 @@ public class TessUtil {
         } catch (TesseractException e) {
             e.printStackTrace();
         }
+    }
+
+    private static List<LocalDate> searchForDates(String documentData) throws Exception{
+
+        if(datePattern == null){
+            compileDatePattern();
+        }
+
+        List<String> datesInData = new ArrayList<>();
+        Matcher matcher = datePattern.matcher(documentData);
+
+        while(matcher.find()){
+            datesInData.add(matcher.group());
+        }
+
+        List<LocalDate> dateList = new ArrayList<>();
+        datesInData.forEach(dateAsString-> dateList.add(LocalDate.parse(dateAsString.replace(".", "-"))));
+        return dateList;
     }
 
     private static Tesseract getTesseract() {
