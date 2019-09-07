@@ -115,11 +115,15 @@ public class MainController extends Controller {
 
     public void archiveButtonInputPath() {
         String archivePath = choosePath(archivePathLabel);
-        ObjectHub.getInstance().getProperties().setProperty("localArchivePath", archivePath.replace("\\", "\\\\"));
+        ObjectHub.getInstance().getProperties().setProperty("localArchivePath", archivePath);
     }
 
     private String choosePath(Label label) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
+        if(!label.getText().equals("")){
+            directoryChooser.setInitialDirectory(new File(label.getText()));
+        }
+
         directoryChooser.setTitle("Wähle einen Ordner...");
 
         File chosenDir = directoryChooser.showDialog(new Stage());

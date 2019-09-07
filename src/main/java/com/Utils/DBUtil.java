@@ -37,7 +37,7 @@ public class DBUtil {
             try {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath().replace("\\", "/"));
                 Statement statement = connection.createStatement();
-                statement.executeUpdate("create table Documents (id integer, content string, originalFile string)");
+                statement.executeUpdate("create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT)");
                 statement.close();
                 statement.getConnection().close();
             } catch (SQLException e) {

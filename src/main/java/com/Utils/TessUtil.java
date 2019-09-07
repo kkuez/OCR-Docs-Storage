@@ -13,6 +13,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -63,15 +65,15 @@ public class TessUtil {
         try {
             String result = tesseract.doOCR(inputfile);
             System.out.println(result);
-            List<LocalDate> datesInFile;
+            String dateOfFile = null;
             try {
-                datesInFile = searchForDates(result);
+                dateOfFile = getFirstDate(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            DBUtil.executeSQL("insert into Documents (id, content, originalFile) Values (1, '"
-                    + result.replaceAll("'", "''") + "', '" + inputfile.getAbsolutePath() + "')");
+            DBUtil.executeSQL("insert into Documents (id, content, originalFile, date) Values (1, '"
+                    + result.replaceAll("'", "''") + "', '" + inputfile.getAbsolutePath() + "', '" + dateOfFile + "')");
             Document document = new Image(result, inputfile);
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {
@@ -79,22 +81,22 @@ public class TessUtil {
         }
     }
 
-    private static List<LocalDate> searchForDates(String documentData) throws Exception{
+    private static String getFirstDate(String documentData) throws Exception{
 
         if(datePattern == null){
             compileDatePattern();
         }
 
-        List<String> datesInData = new ArrayList<>();
         Matcher matcher = datePattern.matcher(documentData);
+        DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
 
+        String date = null;
         while(matcher.find()){
-            datesInData.add(matcher.group());
+            date = matcher.group();
+            //Always take first found date, since presumably its the one in the documents header
+            break;
         }
-
-        List<LocalDate> dateList = new ArrayList<>();
-        datesInData.forEach(dateAsString-> dateList.add(LocalDate.parse(dateAsString.replace(".", "-"))));
-        return dateList;
+        return date;
     }
 
     private static Tesseract getTesseract() {
