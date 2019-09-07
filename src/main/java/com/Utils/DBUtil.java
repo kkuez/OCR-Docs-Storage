@@ -3,9 +3,6 @@ package com.Utils;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
 import java.sql.*;
@@ -18,7 +15,7 @@ public class DBUtil {
 
     private static Connection connection = null;
 
-    static File dbFile = new File("D:\\Müll", "sample.db");
+    static File dbFile = new File(ObjectHub.getInstance().getProperties().getProperty("dbPath"));
 
     public static List<Document> getFilesForSearchTerm(String searchTerm) {
         List<Document> documentList = DBUtil
@@ -40,7 +37,7 @@ public class DBUtil {
             try {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath().replace("\\", "/"));
                 Statement statement = connection.createStatement();
-                statement.executeUpdate("create table Documents (id integer, content string, originalFile string)");
+                statement.executeUpdate("create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT)");
                 statement.close();
                 statement.getConnection().close();
             } catch (SQLException e) {

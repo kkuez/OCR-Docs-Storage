@@ -13,14 +13,12 @@ public class Archiver {
 
     private List<Document> documentList;
 
-    private File chosenFolder;
-
     public Archiver() {
         documentList = new ArrayList<>();
     }
 
     public void archive(String nameOfArchive) {
-        File tempForZip = new File(chosenFolder.getAbsolutePath(), "temp");
+        File tempForZip = new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"), "temp");
         tempForZip.mkdir();
 
         documentList.forEach(document -> {
@@ -39,18 +37,11 @@ public class Archiver {
     }
 
     private void zipDir(File dir, String nameOfArchive) {
-        ZipUtil.pack(dir, new File(chosenFolder, nameOfArchive + ".zip"));
+        ZipUtil.pack(dir, new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"), nameOfArchive + ".zip"));
     }
 
     // GETTER SETTER
 
-    public File getChosenFolder() {
-        return chosenFolder;
-    }
-
-    public void setChosenFolder(File chosenFolder) {
-        this.chosenFolder = chosenFolder;
-    }
 
     public List<Document> getDocumentList() {
         return documentList;

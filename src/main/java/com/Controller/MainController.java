@@ -64,13 +64,9 @@ public class MainController extends Controller {
 
     @FXML
     private void initialize() {
-        archivePathLabel.textProperty().addListener(new ChangeListener<String>() {
+        inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
+        archivePathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
 
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                ObjectHub.getInstance().getArchiver().setChosenFolder(new File(archivePathLabel.getText()));
-            }
-        });
         mainTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
@@ -112,20 +108,28 @@ public class MainController extends Controller {
     }
 
     public void chooseButtonInputPath() {
-        choosePath(inputPathLabel);
+
+        String inputPath = choosePath(inputPathLabel);
+        ObjectHub.getInstance().getProperties().setProperty("lastInputPath", inputPath);
     }
 
     public void archiveButtonInputPath() {
-        choosePath(archivePathLabel);
+        String archivePath = choosePath(archivePathLabel);
+        ObjectHub.getInstance().getProperties().setProperty("localArchivePath", archivePath);
     }
 
-    private void choosePath(Label label) {
+    private String choosePath(Label label) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
+        if(!label.getText().equals("")){
+            directoryChooser.setInitialDirectory(new File(label.getText()));
+        }
+
         directoryChooser.setTitle("Wähle einen Ordner...");
 
         File chosenDir = directoryChooser.showDialog(new Stage());
 
         label.setText(chosenDir.getAbsolutePath());
+        return chosenDir.getAbsolutePath();
     }
 
     public void archive() {
