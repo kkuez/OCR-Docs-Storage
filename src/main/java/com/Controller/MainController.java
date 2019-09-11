@@ -6,8 +6,6 @@ import com.ObjectTemplates.Document;
 import com.Utils.ControllerUtil;
 import com.Utils.DBUtil;
 import com.Utils.TessUtil;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,9 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import javax.print.Doc;
 import java.io.File;
-import java.util.List;
 
 public class MainController extends Controller {
 
