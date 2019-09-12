@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="562.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller.MainController">
+<AnchorPane prefHeight="562.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Controller.MainController">
     <children>
         <Button fx:id="searchButton" layoutX="475.0" layoutY="133.0" mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="90.0" text="Suchen!" AnchorPane.leftAnchor="475.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="133.0" />
         <Button fx:id="processButton" layoutX="475.0" layoutY="27.0" mnemonicParsing="false" onAction="#process" prefHeight="25.0" prefWidth="90.0" text="Verarbeiten" AnchorPane.leftAnchor="475.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="27.0" />

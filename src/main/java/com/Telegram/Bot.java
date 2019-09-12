@@ -5,9 +5,13 @@ import com.ObjectTemplates.Document;
 import com.Utils.DBUtil;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,28 +31,46 @@ public class Bot extends TelegramLongPollingBot {
             checkForCommands(update);
         }
         System.out.println(update.getMessage().getText());
-
        // sendMsg(update.getMessage().getChatId().toString(), message);
+
+    }
+
+    private void sendPhotoFromURL(Update update, String imagePath){
+        SendPhoto sendPhoto = null;
+        try {
+            sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        sendPhoto.setChatId(update.getMessage().getChatId());
+        try {
+            execute(sendPhoto);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     private void checkForCommands(Update update){
-        String input = update.getMessage().getText().toLowerCase();
+        String input = update.getMessage().getText();
+        String searchTerm = input.substring(input.indexOf(" ") + 1);
+        String cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
         List<Document> listOfDocs = new ArrayList<>();
-        if(input.startsWith("search")){
-             listOfDocs = DBUtil.getFilesForSearchTerm(input.substring(input.indexOf(" ")));
+        if(cmd.startsWith("search")){
+             listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
              System.out.println("Send list of Pictures related to \"" + input);
             sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)");
         }else{
-        if(input.startsWith("getpics")){
+        if(cmd.startsWith("getpics")){
+            listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
+            listOfDocs.forEach(document -> sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath()));
+        }else{
+        if(cmd.startsWith("")){
 
         }else{
-        if(input.startsWith("")){
+        if(cmd.startsWith("")){
 
         }else{
-        if(input.startsWith("")){
-
-        }else{
-        if(input.startsWith("")){
+        if(cmd.startsWith("")){
 
         }}}}}
     }
