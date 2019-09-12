@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.properties" beforeDir="false" afterPath="$PROJECT_DIR$/setup.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Controller/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/fxml/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/fxml/main.fxml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,15 +44,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="63" column="64" selection-start-line="63" selection-start-column="64" selection-end-line="63" selection-end-column="64" />
+            <state relative-caret-position="142">
+              <caret line="54" column="68" selection-start-line="54" selection-start-column="68" selection-end-line="54" selection-end-column="68" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3442#3443#0" expanded="true" />
-                <element signature="e#3712#3713#0" expanded="true" />
+                <element signature="e#3443#3444#0" expanded="true" />
+                <element signature="e#3713#3714#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -83,7 +80,7 @@
           <provider editor-type-id="JavaFX-Scene-Builder" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="196">
@@ -130,8 +127,8 @@
       <find>telegram</find>
       <find>StaticLoggerBinder</find>
       <find>telegra</find>
-      <find>sear</find>
       <find>searc</find>
+      <find>sear</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -150,7 +147,6 @@
         <option value="$PROJECT_DIR$/setup.properties" />
         <option value="$PROJECT_DIR$/src/main/java/com/ObjectHub.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Misc/CustomProperties.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Utils/ExecutorUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Controller/StartApplication.java" />
@@ -159,6 +155,7 @@
         <option value="$PROJECT_DIR$/src/main/resources/fxml/main.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/com/Controller/MainController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" />
       </list>
     </option>
   </component>
@@ -290,7 +287,7 @@
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1568290847742" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1568297931694" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15539034" />
@@ -407,7 +404,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568288624844</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Bot able to sendpixs">
+      <created>1568290868492</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1568290868492</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -504,19 +508,8 @@
     <MESSAGE value="Date now parsed from doc. Always the first one.&#10;&#10;..since its presumably the one in the header." />
     <MESSAGE value="Bot running (atleast without maven)!" />
     <MESSAGE value="Bot able to search in db." />
-    <option name="LAST_COMMIT_MESSAGE" value="Bot able to search in db." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java</url>
-          <line>23</line>
-          <properties />
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Bot able to sendpixs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bot able to sendpixs" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="breakpointCondition">
@@ -761,24 +754,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="54" column="68" selection-start-line="54" selection-start-column="68" selection-end-line="54" selection-end-column="68" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3443#3444#0" expanded="true" />
+            <element signature="e#3713#3714#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
           <caret line="23" selection-start-line="23" selection-end-line="23" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="63" column="64" selection-start-line="63" selection-start-column="64" selection-end-line="63" selection-end-column="64" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3442#3443#0" expanded="true" />
-            <element signature="e#3712#3713#0" expanded="true" />
           </folding>
         </state>
       </provider>
