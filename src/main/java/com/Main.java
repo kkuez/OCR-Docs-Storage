@@ -1,8 +1,11 @@
 package com;
 
 import com.Controller.StartApplication;
+import com.Telegram.Bot;
 import javafx.application.Application;
-import com.Telegram.*;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 public class Main {
 
@@ -16,6 +19,13 @@ public class Main {
 
         }
     public static void activateTGBot(){
-        Bot bot = new Bot();
+        ApiContextInitializer.init();
+        TelegramBotsApi telegramBotApi = new TelegramBotsApi();
+        try {
+            Bot.bot = new Bot();
+            telegramBotApi.registerBot(Bot.bot);
+        } catch (TelegramApiRequestException e) {
+            e.printStackTrace();
+        }
     }
 }
