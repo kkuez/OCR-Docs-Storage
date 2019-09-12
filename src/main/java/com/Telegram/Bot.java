@@ -1,11 +1,15 @@
 package com.Telegram;
 
 import com.ObjectHub;
+import com.ObjectTemplates.Document;
+import com.Utils.DBUtil;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Bot extends TelegramLongPollingBot {
@@ -19,10 +23,35 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         String message = update.getMessage().getText();
+        if(message != null && !message.equals("")){
+            checkForCommands(update);
+        }
         System.out.println(update.getMessage().getText());
-        sendMsg(update.getMessage().getChatId().toString(), message);
+
+       // sendMsg(update.getMessage().getChatId().toString(), message);
     }
 
+    private void checkForCommands(Update update){
+        String input = update.getMessage().getText().toLowerCase();
+        List<Document> listOfDocs = new ArrayList<>();
+        if(input.startsWith("search")){
+             listOfDocs = DBUtil.getFilesForSearchTerm(input.substring(input.indexOf(" ")));
+             System.out.println("Send list of Pictures related to \"" + input);
+            sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)");
+        }else{
+        if(input.startsWith("getpics")){
+
+        }else{
+        if(input.startsWith("")){
+
+        }else{
+        if(input.startsWith("")){
+
+        }else{
+        if(input.startsWith("")){
+
+        }}}}}
+    }
     /**
      * Method for creating a message and sending it.
      * @param chatId chat id
