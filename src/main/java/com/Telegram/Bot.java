@@ -64,7 +64,7 @@ public class Bot extends TelegramLongPollingBot {
             listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
             listOfDocs.forEach(document -> sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath()));
         }else{
-        if(cmd.startsWith("")){
+        if(cmd.startsWith("bon")){
 
         }else{
         if(cmd.startsWith("")){

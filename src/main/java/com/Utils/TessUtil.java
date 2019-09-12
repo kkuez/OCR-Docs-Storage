@@ -12,7 +12,6 @@ import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
@@ -24,8 +23,11 @@ public class TessUtil {
 
     private static Pattern datePattern;
 
-    private static void compileDatePattern(){
+    private static Pattern numberPattern;
+
+    private static void compilePatterns(){
         datePattern = Pattern.compile("\\s*(3[01]|[12][0-9]|0?[1-9])\\.(1[012]|0?[1-9])\\.((?:19|20)\\d{2})\\s*");
+        numberPattern = Pattern.compile("\\d*\\.\\d*|\\d");
     }
 
     public static void processFolder(File folder) {
@@ -84,7 +86,7 @@ public class TessUtil {
     private static String getFirstDate(String documentData) throws Exception{
 
         if(datePattern == null){
-            compileDatePattern();
+            compilePatterns();
         }
 
         Matcher matcher = datePattern.matcher(documentData);
@@ -97,6 +99,20 @@ public class TessUtil {
             break;
         }
         return date;
+    }
+
+    public static double getLastNumber(String content){
+        if(numberPattern == null){
+            compilePatterns();
+        }
+        Matcher matcher = numberPattern.matcher(content);
+        List<String> numberList = new ArrayList<>();
+
+        while(matcher.find()){
+            numberList.add(matcher.group());
+        }
+
+        return Double.parseDouble(numberList.get(numberList.size() - 1));
     }
 
     private static Tesseract getTesseract() {
