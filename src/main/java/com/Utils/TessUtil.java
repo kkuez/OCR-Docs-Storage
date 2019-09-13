@@ -1,8 +1,11 @@
 package com.Utils;
 
+import com.Misc.Processes.BonProcess;
 import com.ObjectHub;
+import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
+import com.Telegram.Bot;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -10,6 +13,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.io.File;
 import java.time.format.DateTimeFormatter;
@@ -30,13 +35,8 @@ public class TessUtil {
         numberPattern = Pattern.compile("\\d*\\.\\d*|\\d");
     }
 
-    public static void processFolder(File folder) {
-        Collection<File> filesInFolder = FileUtils.listFiles(folder,
-                new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, true);
-        filesInFolder.forEach(file -> processFile(file));
-    }
 
-    public static void processFolder(File folder, TableView tableView, TableColumn[] tableColumns,
+    public static void processFolder(File folder, Bot bot, TableView tableView, TableColumn[] tableColumns,
             PropertyValueFactory[] propertyValueFactories) {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
                 new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, true);
@@ -48,7 +48,7 @@ public class TessUtil {
 
                     @Override
                     public void run() {
-                        processFile(file);
+                        processFile(file, null, bot);
                         counterProcessedFiles.getAndIncrement();
                     }
                 });
@@ -62,25 +62,53 @@ public class TessUtil {
         System.out.println("\n" + counterProcessedFiles.get() + " Files stored.");
     }
 
-    public static void processFile(File inputfile) {
+    public static void processFile(File inputfile, String user, Bot bot) {
         Tesseract tesseract = getTesseract();
         try {
             String result = tesseract.doOCR(inputfile);
             System.out.println(result);
             String dateOfFile = null;
+            float sumIfBon = 0f;
+            Document document = new Image(result, inputfile, DBUtil.countDocuments() + 1);
             try {
                 dateOfFile = getFirstDate(result);
+                if(checkIfBon(result)){
+                    float sum = getLastNumber(result);
+                    Bon bon = new Bon(result, inputfile, sum, document.getId());
+                    if(bot != null){
+                        Bot.process = new BonProcess(bon, bot);
+                        return;
+                    }
+
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            DBUtil.executeSQL("insert into Documents (id, content, originalFile, date) Values (1, '"
-                    + result.replaceAll("'", "''") + "', '" + inputfile.getAbsolutePath() + "', '" + dateOfFile + "')");
-            Document document = new Image(result, inputfile);
+
+            DBUtil.executeSQL("insert into Documents (id, content, originalFile, date, user) Values (" + DBUtil.countDocuments() + 1 + ", '" +
+                     result.replaceAll("'", "''") + "', '" + inputfile.getAbsolutePath() + "', '" + dateOfFile + "', '" + user + "')");
+
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    private static boolean checkIfBon(String content){
+        String[] bonTerms = new String[]{"netto", "mwst", "einkauf", "summe", "aldi", "netto", "penny", "rewe", "real"};
+        for(String term : bonTerms){
+            if(content.toLowerCase().contains(term)){
+                Bot.process = new BonProcess((Bon)Bot.idleDocumentOrNull, Bot.bot);
+                return true;
+            }
+        }
+
+
+        return false;
     }
 
     private static String getFirstDate(String documentData) throws Exception{
@@ -101,7 +129,7 @@ public class TessUtil {
         return date;
     }
 
-    public static double getLastNumber(String content){
+    public static float getLastNumber(String content){
         if(numberPattern == null){
             compilePatterns();
         }
@@ -112,7 +140,7 @@ public class TessUtil {
             numberList.add(matcher.group());
         }
 
-        return Double.parseDouble(numberList.get(numberList.size() - 1));
+        return Float.parseFloat(numberList.get(numberList.size() - 1));
     }
 
     private static Tesseract getTesseract() {

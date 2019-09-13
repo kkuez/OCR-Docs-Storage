@@ -6,13 +6,26 @@ import java.io.File;
 
 public class Bon extends Document {
 
-    double sum;
 
-    public Bon(String content, File originalFile) {
+
+    public float getSum() {
+        return sum;
+    }
+
+    public void setSum(float sum) {
+        this.sum = sum;
+    }
+
+    float sum;
+
+    int belongsToDocument;
+
+    public Bon(String content, File originalFile, float sum, int belongsToDocument) {
         this.setContent(content);
         this.setOriginFile(originalFile);
         this.setTags("");
-        sum = TessUtil.getLastNumber(content);
+        this.sum = sum;
+        this.belongsToDocument = belongsToDocument;
     }
 
 

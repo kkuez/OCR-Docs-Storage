@@ -2,23 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Notizen/Installation" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Notizen/Recreate DB" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/BonProcess.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/Process.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/Utils/BotUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx-swt.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.base.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.controls.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.fxml.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.graphics.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.media.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.swing.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.web.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/sqlite-jdbc-3.28.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/tess4j-4.4.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/lib/zt-zip-1.13.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.properties" beforeDir="false" afterPath="$PROJECT_DIR$/setup.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Controller/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Bon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Bon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Document.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Document.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Image.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,6 +29,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -51,11 +49,6 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="241" />
-    <option name="width" value="1410" />
-    <option name="height" value="860" />
-  </component>
   <component name="ProjectId" id="1QkWxY72J7ziXlVuC9OboJwM6PB" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -73,7 +66,7 @@
     <property name="project.structure.proportion" value="0.15539034" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -216,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568360737710</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Stores Files of users that were sent.">
+      <created>1568374297590</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1568374297590</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -272,13 +272,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java</url>
-          <line>50</line>
+          <line>59</line>
           <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Controller/MainController.java</url>
-          <line>83</line>
-          <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java</url>
@@ -286,9 +281,9 @@
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java</url>
-          <line>67</line>
-          <option name="timeStamp" value="13" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java</url>
+          <line>40</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

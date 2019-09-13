@@ -6,7 +6,8 @@ public class Image extends Document {
 
     private String imageAsBase64 = null;
 
-    public Image(String content, File originalFile) {
+    public Image(String content, File originalFile, int id) {
+        this.setId(id);
         this.setContent(content);
         this.setOriginFile(originalFile);
     }

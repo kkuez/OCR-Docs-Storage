@@ -4,7 +4,9 @@ import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
 
+import javax.print.Doc;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,13 +39,22 @@ public class DBUtil {
             try {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath().replace("\\", "/"));
                 Statement statement = connection.createStatement();
-                statement.executeUpdate("create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT, user TEXT, sumIfBon REAL)");
+                statement.executeUpdate("");
                 statement.close();
                 statement.getConnection().close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void insertDocumentToDB(Document document){
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("insert into ")
+
+        DBUtil.executeSQL("insert into Documents (id, content, originalFile, date, user) Values (" + DBUtil.countDocuments() + 1 + ", '" +
+                result.replaceAll("'", "''") + "', '" + inputfile.getAbsolutePath() + "', '" + dateOfFile + "', '" + user + "')");
     }
 
     public static void executeSQL(String sqlStatement) {
@@ -76,6 +87,24 @@ public class DBUtil {
             e.printStackTrace();
         }
         return documentList;
+    }
+
+    public static int countDocuments(){
+        Statement statement = null;
+        int count = 0;
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Documents");
+            while (rs.next()) {
+                count = rs.getInt("Count(*)");
+            }
+
+            statement.close();
+            statement.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
     }
 
     private static Connection getConnection() {

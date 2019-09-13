@@ -81,7 +81,7 @@ public class MainController extends Controller {
 
             @Override
             public void run() {
-                TessUtil.processFolder(new File(inputPathLabel.getText()), mainTableView,
+                TessUtil.processFolder(new File(inputPathLabel.getText()), null,mainTableView,
                         new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                         new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
                                 new PropertyValueFactory<Document, String>("date"),

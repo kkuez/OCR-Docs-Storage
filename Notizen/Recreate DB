@@ -1,0 +1,2 @@
+create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT, user TEXT);
+create table Bons (belongsToDocument INTEGER, sum REAL);

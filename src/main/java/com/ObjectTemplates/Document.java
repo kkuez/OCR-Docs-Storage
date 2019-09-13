@@ -14,6 +14,8 @@ public abstract class Document {
 
     private String tags;
 
+    private int id;
+
     public Document() {
     }
 
@@ -24,6 +26,12 @@ public abstract class Document {
     }
 
     // Getter Setter
+
+
+
+    public void setOriginalFileName(String originalFileName) {
+        this.originalFileName = originalFileName;
+    }
 
     public String getTags() {
         return tags;
@@ -62,5 +70,13 @@ public abstract class Document {
 
     public void setOriginFile(File originFile) {
         this.originFile = originFile;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
