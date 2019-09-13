@@ -13,10 +13,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
@@ -69,24 +68,29 @@ public class TessUtil {
             System.out.println(result);
             String dateOfFile = null;
             float sumIfBon = 0f;
-            Document document = new Image(result, inputfile, DBUtil.countDocuments() + 1);
+            Document document = new Image(result, inputfile, DBUtil.countDocuments() );
+            String date = getFirstDate(result) == null ? null : LocalDateTime.now().toString();
+            document.setDate(date);
+            document.setUser(user);
             try {
                 dateOfFile = getFirstDate(result);
                 if(checkIfBon(result)){
                     float sum = getLastNumber(result);
                     Bon bon = new Bon(result, inputfile, sum, document.getId());
                     Bot.process = new BonProcess(bon, Bot.bot);
-                    return;
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+
             DBUtil.insertDocumentToDB(document);
 
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

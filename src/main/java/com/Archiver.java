@@ -13,8 +13,28 @@ public class Archiver {
 
     private List<Document> documentList;
 
+    File archiveFolder;
+
+    File documentFolder;
+
+    File bonFolder;
+
     public Archiver() {
         documentList = new ArrayList<>();
+         archiveFolder = new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
+         if(!archiveFolder.exists()){
+             archiveFolder.mkdir();
+         }
+
+        documentFolder = new File(archiveFolder, "Documents");
+         if(!documentFolder.exists()){
+             documentFolder.mkdir();
+         }
+
+         bonFolder = new File(archiveFolder, "Bons");
+         if(!bonFolder.exists()){
+             bonFolder.mkdir();
+         }
     }
 
     public void archive(String nameOfArchive) {
@@ -41,6 +61,30 @@ public class Archiver {
     }
 
     // GETTER SETTER
+
+    public File getArchiveFolder() {
+        return archiveFolder;
+    }
+
+    public void setArchiveFolder(File archiveFolder) {
+        this.archiveFolder = archiveFolder;
+    }
+
+    public File getDocumentFolder() {
+        return documentFolder;
+    }
+
+    public void setDocumentFolder(File documentFolder) {
+        this.documentFolder = documentFolder;
+    }
+
+    public File getBonFolder() {
+        return bonFolder;
+    }
+
+    public void setBonFolder(File bonFolder) {
+        this.bonFolder = bonFolder;
+    }
 
 
     public List<Document> getDocumentList() {

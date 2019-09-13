@@ -57,7 +57,7 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
 
-            TessUtil.processFile(targetFile, update.getMessage().getFrom().getUserName(), bot);
+            TessUtil.processFile(targetFile, update.getMessage().getFrom().getFirstName(), bot);
             if (process != null && process.getClass().equals(BonProcess.class)) {
                 BotUtil.askBoolean("Das ist ein Bon oder?", update, Bot.this);
             }

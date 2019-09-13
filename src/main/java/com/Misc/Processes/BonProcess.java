@@ -40,7 +40,7 @@ public class BonProcess extends Process {
                 break;
 
             case EnterRightSum:
-                bon.setSum(Float.parseFloat(arg));
+                bon.setSum(Float.parseFloat(arg.replace(",", ".")));
                 DBUtil.insertDocumentToDB(bon);
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok, richtige Summe korrigiert :)",bot);
                 Bot.process = null;

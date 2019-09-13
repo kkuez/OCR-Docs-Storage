@@ -31,12 +31,20 @@ public abstract class Document{
     }
 
     public String getInsertDBString(){
-        return "insert into Documents (id, content, originalFile, date, user) Values (" + DBUtil.countDocuments() + 1 + ", '" +
+        return "insert into Documents (id, content, originalFile, date, user) Values (" + DBUtil.countDocuments() + ", '" +
                 content.replaceAll("'", "''") + "', '" + originFile.getAbsolutePath() + "', '" + date + "', '" + user + "')";
     }
 
     // Getter Setter
 
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
 
     public void setOriginalFileName(String originalFileName) {
