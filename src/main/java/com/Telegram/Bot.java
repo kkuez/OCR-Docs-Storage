@@ -43,7 +43,7 @@ public class Bot extends TelegramLongPollingBot {
             checkForCommands(update);
         }
 
-        if (update.getMessage().getPhoto().size() != 0) {
+        if (update.getMessage().hasPhoto()) {
             File largestPhoto = null;
             List<PhotoSize> photoList = update.getMessage().getPhoto();
             photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
@@ -57,7 +57,7 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
 
-            TessUtil.processFile(targetFile, update.getMessage().getFrom().getUserName());
+            TessUtil.processFile(targetFile, update.getMessage().getFrom().getUserName(), bot);
             if (process != null && process.getClass().equals(BonProcess.class)) {
                 BotUtil.askBoolean("Das ist ein Bon oder?", update, Bot.this);
             }
@@ -122,29 +122,25 @@ public class Bot extends TelegramLongPollingBot {
     private void checkForCommands(Update update){
         String input = update.getMessage().getText();
         String searchTerm = input.substring(input.indexOf(" ") + 1);
-        String cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
         List<Document> listOfDocs = new ArrayList<>();
-        if(cmd.startsWith("search")){
+        if(input.startsWith("search")){
              listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
              System.out.println("Send list of Pictures related to \"" + input);
             BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", Bot.this);
         }else{
-        if(cmd.startsWith("getpics")){
+        if(input.startsWith("getpics")){
             listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
             listOfDocs.forEach(document -> sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath()));
         }else{
-        if(cmd.startsWith("Japp")){
+        if(input.startsWith("Japp")){
             process.performNextStep("Japp", update);
         }else{
-        if(cmd.startsWith("Nee")){
+        if(input.startsWith("Nee")){
             process.performNextStep("Nee", update);
 
         }else{
-        if(cmd.startsWith("")){
-
-        }else{
-            process.performNextStep(cmd, update);
-        }}}}}
+            process.performNextStep(input, update);
+        }}}}
     }
 
 

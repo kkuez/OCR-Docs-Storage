@@ -1,8 +1,10 @@
 package com.ObjectTemplates;
 
+import com.Utils.DBUtil;
+
 import java.io.File;
 
-public abstract class Document {
+public abstract class Document{
 
     private String date;
 
@@ -16,13 +18,21 @@ public abstract class Document {
 
     private int id;
 
+    private String user;
+
     public Document() {
     }
 
-    public Document(String content, File originalFile) {
+    public Document(String content, File originalFile, String user) {
         this.setContent(content);
         this.setOriginFile(originalFile);
+        this.user = user;
         this.tags = "";
+    }
+
+    public String getInsertDBString(){
+        return "insert into Documents (id, content, originalFile, date, user) Values (" + DBUtil.countDocuments() + 1 + ", '" +
+                content.replaceAll("'", "''") + "', '" + originFile.getAbsolutePath() + "', '" + date + "', '" + user + "')";
     }
 
     // Getter Setter

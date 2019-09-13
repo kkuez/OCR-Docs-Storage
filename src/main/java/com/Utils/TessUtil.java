@@ -75,20 +75,15 @@ public class TessUtil {
                 if(checkIfBon(result)){
                     float sum = getLastNumber(result);
                     Bon bon = new Bon(result, inputfile, sum, document.getId());
-                    if(bot != null){
-                        Bot.process = new BonProcess(bon, bot);
-                        return;
-                    }
-
+                    Bot.process = new BonProcess(bon, Bot.bot);
+                    return;
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-
-            DBUtil.executeSQL("insert into Documents (id, content, originalFile, date, user) Values (" + DBUtil.countDocuments() + 1 + ", '" +
-                     result.replaceAll("'", "''") + "', '" + inputfile.getAbsolutePath() + "', '" + dateOfFile + "', '" + user + "')");
+            DBUtil.insertDocumentToDB(document);
 
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {
@@ -99,10 +94,9 @@ public class TessUtil {
 
 
     private static boolean checkIfBon(String content){
-        String[] bonTerms = new String[]{"netto", "mwst", "einkauf", "summe", "aldi", "netto", "penny", "rewe", "real"};
+        String[] bonTerms = new String[]{"netto", "mwst", "einkauf", "summe", "aldi", "netto", "penny", "rewe", "real", "lidl"};
         for(String term : bonTerms){
             if(content.toLowerCase().contains(term)){
-                Bot.process = new BonProcess((Bon)Bot.idleDocumentOrNull, Bot.bot);
                 return true;
             }
         }
@@ -140,7 +134,7 @@ public class TessUtil {
             numberList.add(matcher.group());
         }
 
-        return Float.parseFloat(numberList.get(numberList.size() - 1));
+        return Float.parseFloat(numberList.get(numberList.size() - 1).replace(",","."));
     }
 
     private static Tesseract getTesseract() {

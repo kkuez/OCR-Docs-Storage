@@ -1,12 +1,11 @@
 package com.ObjectTemplates;
 
+import com.Utils.DBUtil;
 import com.Utils.TessUtil;
 
 import java.io.File;
 
 public class Bon extends Document {
-
-
 
     public float getSum() {
         return sum;
@@ -28,5 +27,8 @@ public class Bon extends Document {
         this.belongsToDocument = belongsToDocument;
     }
 
-
+    @Override
+    public String getInsertDBString(){
+        return "insert into Bons (belongsToDocument, sum) Values (" + belongsToDocument + ", " + sum + ")";
+    }
 }

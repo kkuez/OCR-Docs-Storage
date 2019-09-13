@@ -3,6 +3,7 @@ package com.Misc.Processes;
 import com.ObjectTemplates.Bon;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
+import com.Utils.DBUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class BonProcess extends Process {
@@ -30,6 +31,7 @@ public class BonProcess extends Process {
             case isSum:
                 if(arg.equals("Japp")){
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "OK :)",bot);
+                    DBUtil.insertDocumentToDB(bon);
                     Bot.process = null;
                 }else{
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bitte richtige Summe eingeben:",bot);
@@ -39,6 +41,7 @@ public class BonProcess extends Process {
 
             case EnterRightSum:
                 bon.setSum(Float.parseFloat(arg));
+                DBUtil.insertDocumentToDB(bon);
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok, richtige Summe korrigiert :)",bot);
                 Bot.process = null;
                 break;

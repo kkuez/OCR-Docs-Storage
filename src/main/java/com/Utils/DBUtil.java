@@ -49,12 +49,7 @@ public class DBUtil {
     }
 
     public static void insertDocumentToDB(Document document){
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("insert into ")
-
-        DBUtil.executeSQL("insert into Documents (id, content, originalFile, date, user) Values (" + DBUtil.countDocuments() + 1 + ", '" +
-                result.replaceAll("'", "''") + "', '" + inputfile.getAbsolutePath() + "', '" + dateOfFile + "', '" + user + "')");
+        DBUtil.executeSQL(document.getInsertDBString());
     }
 
     public static void executeSQL(String sqlStatement) {
@@ -77,7 +72,7 @@ public class DBUtil {
             ResultSet rs = statement.executeQuery(sqlExpression);
             documentList = new ArrayList<>();
             while (rs.next()) {
-                documentList.add(new Image(rs.getString("content"), new File(rs.getString("originalFile"))));
+                documentList.add(new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id")));
                 System.out.println(rs.getString("originalFile"));
             }
 
