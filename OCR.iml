@@ -170,5 +170,6 @@
     <orderEntry type="library" name="org.telegram:telegrambots:4.4.0.1" level="project" />
     <orderEntry type="library" name="tess4j-4.4.0" level="project" />
     <orderEntry type="library" name="zt-zip-1.13" level="project" />
+    <orderEntry type="library" name="sqlite-jdbc-3.28.0" level="project" />
   </component>
 </module>

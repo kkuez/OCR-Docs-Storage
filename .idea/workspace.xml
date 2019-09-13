@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/external_libs/lib/tess4j-4.4.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/external_libs/lib/zt-zip-1.13.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/external_libs/lib/sqlite-jdbc-3.28.0.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.properties" beforeDir="false" afterPath="$PROJECT_DIR$/setup.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/Misc/CustomProperties.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,13 +82,14 @@
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/external_libs/lib" />
+      <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\target\classes" />
+      <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\src\main\resources\fxml" />
       <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\external_libs" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\target\classes" />
-      <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -207,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568298212958</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added some more libs to project.">
+      <created>1568356488593</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1568356488593</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -254,63 +259,18 @@
     <MESSAGE value="Bot running (atleast without maven)!" />
     <MESSAGE value="Bot able to search in db." />
     <MESSAGE value="Bot able to sendpixs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bot able to sendpixs" />
+    <MESSAGE value="Added some more libs to project." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some more libs to project." />
   </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="breakpointCondition">
-      <expression>
-        <expression-string>inputfile.getName().contains(&quot;Premium&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
-    <expressions id="evaluateExpression">
-      <expression>
-        <expression-string>label.getText()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>getClass()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>getClass().getResource(&quot;/fxml/main.fxml&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>((ThreadPoolExecutor)ObjectHub.getInstance().getExecutorService()).getCompletedTaskCount()</expression-string>
-        <language-id>JAVA</language-id>
-        <custom-info>java.util.concurrent.ThreadPoolExecutor</custom-info>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>((ThreadPoolExecutor) executor).getCompletedTaskCount()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>datesInData.get(0).substring(datesInData.get(0).indexOf(&quot;.&quot;) + 1, datesInData.get(0).lastIndexOf(&quot;.&quot;))</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>datesInData.get(0).substring(datesInData.get(0).indexOf(&quot;.&quot;), datesInData.get(0).lastIndexOf(&quot;.&quot;))</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>datesInData.get(0).substring(0, datesInData.get(0).indexOf(&quot;.&quot;))</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>dateAsString.substring(0, dateAsString.indexOf(&quot;.&quot;))</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
