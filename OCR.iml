@@ -167,5 +167,8 @@
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.25" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:log4j-over-slf4j:1.7.25" level="project" />
     <orderEntry type="library" name="org.xerial:sqlite-jdbc:3.27.2" level="project" />
+    <orderEntry type="library" name="org.telegram:telegrambots:4.4.0.1" level="project" />
+    <orderEntry type="library" name="tess4j-4.4.0" level="project" />
+    <orderEntry type="library" name="zt-zip-1.13" level="project" />
   </component>
 </module>
