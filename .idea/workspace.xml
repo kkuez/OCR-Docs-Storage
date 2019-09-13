@@ -2,9 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/external_libs/lib/sqlite-jdbc-3.28.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx-swt.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.base.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.controls.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.fxml.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.graphics.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.media.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.swing.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/javafx.web.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/sqlite-jdbc-3.28.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/tess4j-4.4.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/lib/zt-zip-1.13.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.properties" beforeDir="false" afterPath="$PROJECT_DIR$/setup.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
     </list>
@@ -23,24 +35,6 @@
         <option value="Class" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>fxml&quot;</find>
-      <find>D:</find>
-      <find>C:</find>
-      <find>execut</find>
-      <find>set</find>
-      <find>setPro</find>
-      <find>Direct</find>
-      <find>deutsch</find>
-      <find>telegrambo</find>
-      <find>telegram</find>
-      <find>StaticLoggerBinder</find>
-      <find>telegra</find>
-      <find>searc</find>
-      <find>sear</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -88,6 +82,8 @@
       <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/external_libs/lib" />
       <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\src\main\resources\fxml" />
       <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\external_libs" />
     </key>
@@ -127,6 +123,7 @@
                 <option value="verify" />
                 <option value="assembly:single" />
                 <option value="exec:java" />
+                <option value="-U" />
               </list>
             </option>
             <option name="pomFileName" />
@@ -212,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568356488593</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Stores Files of users that were sent.">
+      <created>1568360737710</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1568360737710</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -260,17 +264,36 @@
     <MESSAGE value="Bot able to search in db." />
     <MESSAGE value="Bot able to sendpixs" />
     <MESSAGE value="Added some more libs to project." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added some more libs to project." />
+    <MESSAGE value="Stores Files of users that were sent." />
+    <option name="LAST_COMMIT_MESSAGE" value="Stores Files of users that were sent." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java</url>
-          <line>41</line>
-          <option name="timeStamp" value="6" />
+          <line>50</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/Controller/MainController.java</url>
+          <line>83</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java</url>
+          <line>67</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Unnamed.ic" NAME="Unnamed Coverage Results" MODIFIED="1568373084538" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

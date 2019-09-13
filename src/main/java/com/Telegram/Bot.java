@@ -3,6 +3,7 @@ package com.Telegram;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.Utils.DBUtil;
+import com.Utils.TessUtil;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
@@ -41,12 +42,13 @@ public class Bot extends TelegramLongPollingBot {
             Collections.reverse(photoList);
             String filePath = getFilePath(photoList.get(0));
             largestPhoto = downloadPhotoByFilePath(filePath);
+            File targetFile = new File("/home/marcel/Muell", LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
             try {
-                FileUtils.copyFile(largestPhoto, new File("/home/marcel/Muell", LocalDateTime.now().toString().replace(".", "-")));
+                FileUtils.copyFile(largestPhoto, targetFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            TessUtil.processFile(targetFile);
         }
 
         System.out.println(update.getMessage().getText());
