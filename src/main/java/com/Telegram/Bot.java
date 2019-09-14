@@ -3,6 +3,7 @@ package com.Telegram;
 import com.Misc.Processes.*;
 import com.Misc.Processes.Process;
 import com.ObjectHub;
+import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
@@ -58,6 +59,7 @@ public class Bot extends TelegramLongPollingBot {
 
     }
     private void processUpdateReceveived(Update update){
+
         String message = update.getMessage().getText();
         if (message != null && !message.equals("")) {
             try {
@@ -80,8 +82,20 @@ public class Bot extends TelegramLongPollingBot {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon");
 
-            TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), bot);
+            Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), bot, forceBon);
+            try {
+
+                if((TessUtil.checkIfBon(document.getContent()) || forceBon)&& bot != null){
+                    float sum = TessUtil.getLastNumber(document.getContent());
+                    Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
+                    Bot.process = new BonProcess(bon, bot, document);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             if (process != null && process.getClass().equals(BonProcess.class)) {
                 BotUtil.askBoolean("Das ist ein Bon oder?", update, Bot.this);
             }
@@ -146,7 +160,7 @@ public class Bot extends TelegramLongPollingBot {
     private void checkForCommands(Update update) throws ParseException {
         String input = update.getMessage().getText();
         String searchTerm = input.substring(input.indexOf(" ") + 1);
-        String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase() : input.toLowerCase();
+        String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase().replace("/", "") : input.toLowerCase().replace("/", "");
         List<Document> listOfDocs = new ArrayList<>();
         if(cmd.startsWith("search")){
              listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);

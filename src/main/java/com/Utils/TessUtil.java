@@ -48,7 +48,7 @@ public class TessUtil {
 
                     @Override
                     public void run() {
-                        processFile(file, 0, null);
+                        processFile(file, 0, null, false);
                         counterProcessedFiles.getAndIncrement();
                     }
                 });
@@ -62,14 +62,13 @@ public class TessUtil {
         System.out.println("\n" + counterProcessedFiles.get() + " Files stored.");
     }
 
-    public static void processFile(File inputfile, int userID, Bot bot) {
+    public static Document processFile(File inputfile, int userID, Bot bot, boolean forceIsBon) {
         Tesseract tesseract = getTesseract();
+        Document document = null;
         try {
             String result = tesseract.doOCR(inputfile);
             System.out.println(result);
-            String dateOfFile = null;
-            float sumIfBon = 0f;
-            Document document = new Image(result, inputfile, DBUtil.countDocuments() );
+            document = new Image(result, inputfile, DBUtil.countDocuments() );
             String date = getFirstDate(result);
             date = date == null ? LocalDate.now().toString() : date;
             document.setDate(date);
@@ -79,17 +78,8 @@ public class TessUtil {
                 FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
             }
             document.setOriginFile(newOriginalFilePath);
+            document.setDate(getFirstDate(document.getContent()));
 
-            try {
-                dateOfFile = getFirstDate(result);
-                if(checkIfBon(result) && bot != null){
-                    float sum = getLastNumber(result);
-                    Bon bon = new Bon(result, inputfile, sum, document.getId());
-                    Bot.process = new BonProcess(bon, bot, document);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             DBUtil.insertDocumentToDB(document);
 
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
@@ -98,11 +88,12 @@ public class TessUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return document;
     }
 
 
 
-    private static boolean checkIfBon(String content){
+    public static boolean checkIfBon(String content){
         String[] bonTerms = new String[]{"netto", "mwst", "einkauf", "summe", "aldi", "netto", "penny", "rewe", "real", "lidl"};
         for(String term : bonTerms){
             if(content.toLowerCase().contains(term)){
@@ -114,7 +105,7 @@ public class TessUtil {
         return false;
     }
 
-    private static String getFirstDate(String documentData) throws Exception{
+    public static String getFirstDate(String documentData) throws Exception{
 
         if(datePattern == null){
             compilePatterns();
@@ -142,8 +133,14 @@ public class TessUtil {
         while(matcher.find()){
             numberList.add(matcher.group());
         }
+        float lastNumer = 0;
+        try{
+            lastNumer = Float.parseFloat(numberList.get(numberList.size() - 1).replace(",","."));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        return Float.parseFloat(numberList.get(numberList.size() - 1).replace(",","."));
+        return lastNumer;
     }
 
     private static Tesseract getTesseract() {
