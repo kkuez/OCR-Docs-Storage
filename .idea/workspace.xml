@@ -2,15 +2,13 @@
 <project version="4">
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java" description="documentList.forEach(document1 -&gt; BotUtil.);" line="51" />
-    <bookmark url="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" description="File largestPhoto = null;" line="72" />
-    <bookmark url="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" description="TessUtil.processFile(targetFile, update.getMessage..." line="86" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" line="195" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,8 +44,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="125" column="32" selection-start-line="125" selection-start-column="32" selection-end-line="125" selection-end-column="32" />
+            <state relative-caret-position="133">
+              <caret line="84" selection-start-line="84" selection-end-line="84" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -58,12 +56,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="90" column="43" lean-forward="true" selection-start-line="90" selection-start-column="43" selection-end-line="90" selection-end-column="43" />
+            <state relative-caret-position="195">
+              <caret line="200" column="5" selection-start-line="200" selection-start-column="5" selection-end-line="200" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#8301#8302#0" expanded="true" />
-                <element signature="e#8571#8572#0" expanded="true" />
+                <element signature="e#8550#8551#0" expanded="true" />
+                <element signature="e#8820#8821#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -83,6 +81,31 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="121">
               <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Document.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="379">
+              <caret line="52" column="17" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
+              <folding>
+                <element signature="e#1071#1072#0" expanded="true" />
+                <element signature="e#1098#1099#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="456">
+              <caret line="73" selection-start-line="73" selection-end-line="73" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -117,7 +140,6 @@
       <find>processFolder</find>
       <find>LocalDate</find>
       <find>FirstN</find>
-      <find>insert</find>
       <find>Date</find>
       <find>new Bon</find>
       <find>bon.set</find>
@@ -128,6 +150,7 @@
       <find>new BonP</find>
       <find>getFirstDate</find>
       <find>getFir</find>
+      <find>insert</find>
       <find>getLa</find>
     </findStrings>
   </component>
@@ -170,13 +193,13 @@
         <option value="$PROJECT_DIR$/src/main/java/com/Misc/KeyboardFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Utils/TimeUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SumProcess.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java" />
-        <option value="$PROJECT_DIR$/Readme.md" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/setup.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" />
+        <option value="$PROJECT_DIR$/Readme.md" />
+        <option value="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" />
       </list>
     </option>
   </component>
@@ -287,6 +310,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="ObjectTemplates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="Telegram" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -326,7 +358,7 @@
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1568484110126" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1568485588496" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15539034" />
@@ -492,7 +524,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568468583954</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Bons can now forcabely added by captioning an image eatbon.">
+      <created>1568484136376</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1568484136376</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -509,7 +548,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3286119" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.37677053" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.46458924" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -620,16 +659,17 @@
     <MESSAGE value="getsum now casts presentation of sum of purchases." />
     <MESSAGE value="Now getbons für Time possible" />
     <MESSAGE value="Readme included, now getbons will post you your bons." />
-    <option name="LAST_COMMIT_MESSAGE" value="Readme included, now getbons will post you your bons." />
+    <MESSAGE value="Bons can now forcabely added by captioning an image eatbon." />
+    <option name="LAST_COMMIT_MESSAGE" value="Bons can now forcabely added by captioning an image eatbon." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java</url>
-          <line>61</line>
+          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java</url>
+          <line>73</line>
           <properties />
-          <option name="timeStamp" value="25" />
+          <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -643,6 +683,16 @@
       </expression>
     </expressions>
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>lastProcessedDoc</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>DBUtil.lastProcessedDoc</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>update.getMessage()</expression-string>
         <language-id>JAVA</language-id>
@@ -675,17 +725,6 @@
       </expression>
       <expression>
         <expression-string>this.originFile != null</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>update.getMessage().getFrom().getId()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&quot;insert into AllowedUsers (id, name) Values (&quot; + update.getMessage().getFrom().getId() + &quot;, '&quot; +
-                    update.getMessage().getFrom().getFirstName() + &quot;')&quot;</expression-string>
         <language-id>JAVA</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -953,18 +992,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="113" selection-start-line="113" selection-end-line="113" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1754#1755#0" expanded="true" />
-            <element signature="e#1817#1818#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
@@ -997,17 +1024,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Document.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="52" column="17" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
-          <folding>
-            <element signature="e#1071#1072#0" expanded="true" />
-            <element signature="e#1098#1099#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/Misc/Processes/NewUserRegProcess.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -1015,13 +1031,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Readme.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -1046,6 +1055,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/BotUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="15" column="23" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Readme.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Document.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="52" column="17" selection-start-line="52" selection-start-column="17" selection-end-line="52" selection-end-column="17" />
+          <folding>
+            <element signature="e#1071#1072#0" expanded="true" />
+            <element signature="e#1098#1099#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectHub.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="953">
@@ -1057,17 +1091,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/BotUtil.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="15" column="23" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+        <state relative-caret-position="133">
+          <caret line="84" selection-start-line="84" selection-end-line="84" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="125" column="32" selection-start-line="125" selection-start-column="32" selection-end-line="125" selection-end-column="32" />
+        <state relative-caret-position="456">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1076,12 +1113,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="90" column="43" lean-forward="true" selection-start-line="90" selection-start-column="43" selection-end-line="90" selection-end-column="43" />
+        <state relative-caret-position="195">
+          <caret line="200" column="5" selection-start-line="200" selection-start-column="5" selection-end-line="200" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8301#8302#0" expanded="true" />
-            <element signature="e#8571#8572#0" expanded="true" />
+            <element signature="e#8550#8551#0" expanded="true" />
+            <element signature="e#8820#8821#0" expanded="true" />
           </folding>
         </state>
       </provider>

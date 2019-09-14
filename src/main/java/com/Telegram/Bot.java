@@ -192,12 +192,16 @@ public class Bot extends TelegramLongPollingBot {
                     BotUtil.askMonth("Für welchem Monat...?", update, bot);
 
                     }else{
+                if(cmd.startsWith("removelast")){
+                    DBUtil.removeLastProcressedDocument();
+                    BotUtil.sendMsg( update.getMessage().getChatId() + "", "Letztes Bild gelöscht :)",Bot.bot);
+                    }else{
 
                     if(Bot.process != null){
                         process.performNextStep(input, update);
                     }
                 }}
-        }}}}}}
+        }}}}}}}
 
 
 

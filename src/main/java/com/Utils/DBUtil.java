@@ -5,6 +5,7 @@ import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
 import com.ObjectTemplates.User;
+import org.apache.commons.io.FileUtils;
 
 import javax.print.Doc;
 import java.io.File;
@@ -18,6 +19,8 @@ public class DBUtil {
     private static Connection connection = null;
 
     static File dbFile = new File(ObjectHub.getInstance().getProperties().getProperty("dbPath"));
+
+    public static Document lastProcessedDoc;
 
     public static List<Document> getFilesForSearchTerm(String searchTerm) {
         List<Document> documentList = DBUtil
@@ -69,7 +72,16 @@ public class DBUtil {
     }
 
     public static void insertDocumentToDB(Document document){
+        if(document.getClass().equals(Image.class)){
+            lastProcessedDoc = document;
+        }
         DBUtil.executeSQL(document.getInsertDBString());
+    }
+
+    public static void removeLastProcressedDocument(){
+        executeSQL("delete from Documents where id=" + lastProcessedDoc.getId() + "");
+        executeSQL("delete from Bons where belongsToDocument=" + lastProcessedDoc.getId() + "");
+        FileUtils.deleteQuietly(lastProcessedDoc.getOriginFile());
     }
 
     public static void executeSQL(String sqlStatement) {
