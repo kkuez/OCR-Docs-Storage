@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public abstract class Process {
 
-    private Document document;
+    public Document document;
 
     private Boolean hasStarted = false;
 

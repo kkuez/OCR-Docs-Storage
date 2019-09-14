@@ -17,7 +17,4 @@ public class NewUserRegProcess extends Process {
             Bot.process = null;
         }
     }
-    enum Steps{
-        Start
-    }
 }

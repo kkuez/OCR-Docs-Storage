@@ -3,11 +3,13 @@ package com.Telegram;
 import com.Misc.Processes.BonProcess;
 import com.Misc.Processes.NewUserRegProcess;
 import com.Misc.Processes.Process;
+import com.Misc.Processes.SumProcess;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.TessUtil;
+import com.Utils.TimeUtil;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
@@ -20,11 +22,17 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.print.Doc;
+import javax.swing.text.DateFormatter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
@@ -54,7 +62,11 @@ public class Bot extends TelegramLongPollingBot {
     private void processUpdateReceveived(Update update){
         String message = update.getMessage().getText();
         if (message != null && !message.equals("")) {
-            checkForCommands(update);
+            try {
+                checkForCommands(update);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         if (update.getMessage().hasPhoto()) {
@@ -133,16 +145,17 @@ public class Bot extends TelegramLongPollingBot {
         return null; // Just in case
     }
 
-    private void checkForCommands(Update update){
+    private void checkForCommands(Update update) throws ParseException {
         String input = update.getMessage().getText();
         String searchTerm = input.substring(input.indexOf(" ") + 1);
+        String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase() : input.toLowerCase();
         List<Document> listOfDocs = new ArrayList<>();
-        if(input.toLowerCase().startsWith("search")){
+        if(cmd.startsWith("search")){
              listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
              System.out.println("Send list of Pictures related to \"" + input);
             BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", Bot.this);
         }else{
-        if(input.toLowerCase().startsWith("getpics")){
+        if(cmd.startsWith("getpics")){
             listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
             listOfDocs.forEach(document -> sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath()));
         }else{
@@ -153,9 +166,22 @@ public class Bot extends TelegramLongPollingBot {
             process.performNextStep("Nee", update);
 
         }else{
-            process.performNextStep(input, update);
-        }}}}
-    }
+            if(TimeUtil.getMonthMap().keySet().contains(cmd) || TimeUtil.getYearsSet().contains(cmd)){
+                process.performNextStep(cmd, update);
+
+            }else{
+                if(cmd.startsWith("getsum")){
+                    Bot.process = new SumProcess();
+                    BotUtil.askMonth("Für welchem Monat...?", update, bot);
+
+                    }else{
+
+                    if(Bot.process != null){
+                        process.performNextStep(input, update);
+                    }
+                }}
+        }}}}}
+
 
 
     /**

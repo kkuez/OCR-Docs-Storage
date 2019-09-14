@@ -98,6 +98,9 @@ public abstract class Document{
     }
 
     public void setOriginFile(File originFile) {
+        if(this.originFile != null){
+            DBUtil.executeSQL("update Documents set originalFile='" + originFile.getAbsolutePath() + "' where originalFile='" + this.originFile.getAbsolutePath() + "'");
+        }
         this.originFile = originFile;
     }
 

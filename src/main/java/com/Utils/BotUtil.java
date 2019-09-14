@@ -1,5 +1,6 @@
 package com.Utils;
 
+import com.Misc.KeyboardFactory;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,7 +15,34 @@ public class BotUtil {
 
     public static void askBoolean(String question, Update update, Bot bot){
         SendMessage sendMessage = new SendMessage();
-        ReplyKeyboardMarkup keyboardMarkup = getBooleanKeyBoard();
+        ReplyKeyboardMarkup keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean);
+        sendMessage.setText(question);
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(update.getMessage().getChatId());
+        sendMessage.setReplyMarkup(keyboardMarkup);
+        try {
+            bot.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+public static void askMonth(String question, Update update, Bot bot){
+        SendMessage sendMessage = new SendMessage();
+        ReplyKeyboardMarkup keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar_Month);
+        sendMessage.setText(question);
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(update.getMessage().getChatId());
+        sendMessage.setReplyMarkup(keyboardMarkup);
+        try {
+            bot.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+public static void askYear(String question, Update update, Bot bot){
+        SendMessage sendMessage = new SendMessage();
+        ReplyKeyboardMarkup keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar_Year);
         sendMessage.setText(question);
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(update.getMessage().getChatId());
@@ -44,19 +72,5 @@ public class BotUtil {
         }
     }
 
-    private static ReplyKeyboardMarkup getBooleanKeyBoard() {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(true);
 
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add("Japp");
-        keyboardFirstRow.add("Nee");
-        keyboard.add(keyboardFirstRow);
-        replyKeyboardMarkup.setKeyboard(keyboard);
-
-        return replyKeyboardMarkup;
-    }
 }

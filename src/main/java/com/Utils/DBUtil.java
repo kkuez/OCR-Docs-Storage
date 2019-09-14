@@ -1,6 +1,7 @@
 package com.Utils;
 
 import com.ObjectHub;
+import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
 import com.ObjectTemplates.User;
@@ -9,6 +10,7 @@ import javax.print.Doc;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 
 public class DBUtil {
@@ -80,6 +82,56 @@ public class DBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static float getSumMonth(String month){
+        //TODO schlampig
+        Statement statement = null;
+        List<Document> documentList = new ArrayList<>();
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + month + "%' AND originalFile like '%Bons%'");
+            documentList = new ArrayList<>();
+            while (rs.next()) {
+                documentList.add(new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id")));
+                System.out.println(rs.getString("originalFile"));
+            }
+
+            statement.close();
+            statement.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Map<Integer, Float> bonIdMap = new HashMap<>();
+        getBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
+
+        float resultSum = 0f;
+
+        for(Document document : documentList){
+            if(bonIdMap.keySet().contains(document.getId())){
+                resultSum += bonIdMap.get(document.getId());
+            }
+        }
+        return resultSum;
+    }
+
+     private static Set<Bon> getBonsfromDB(){
+        Statement statement = null;
+        Set<Bon> bonSet = new HashSet<>();
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select * from Bons");
+            while (rs.next()) {
+                bonSet.add(new Bon(rs.getInt("belongsToDocument"), rs.getFloat("sum")));
+                System.out.println(rs.getString("originalFile"));
+            }
+
+            statement.close();
+            statement.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bonSet;
     }
 
     public static List<Document> showResultsFromSQLExpression(String sqlExpression) {

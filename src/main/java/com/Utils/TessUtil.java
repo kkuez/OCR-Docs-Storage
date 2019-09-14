@@ -15,6 +15,7 @@ import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -69,11 +70,14 @@ public class TessUtil {
             String dateOfFile = null;
             float sumIfBon = 0f;
             Document document = new Image(result, inputfile, DBUtil.countDocuments() );
-            String date = getFirstDate(result) == null ? null : LocalDateTime.now().toString();
+            String date = getFirstDate(result);
+            date = date == null ? LocalDate.now().toString() : date;
             document.setDate(date);
             document.setUser(userID);
             File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), document.getOriginalFileName());
-            FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
+            if(!newOriginalFilePath.exists()) {
+                FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
+            }
             document.setOriginFile(newOriginalFilePath);
 
             try {
@@ -81,10 +85,7 @@ public class TessUtil {
                 if(checkIfBon(result) && bot != null){
                     float sum = getLastNumber(result);
                     Bon bon = new Bon(result, inputfile, sum, document.getId());
-                    Bot.process = new BonProcess(bon, bot);
-                    newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
-                    FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
-                    document.setOriginFile(newOriginalFilePath);
+                    Bot.process = new BonProcess(bon, bot, document);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
