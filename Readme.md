@@ -7,3 +7,4 @@ getsum
 getbons
 
 eatbon
+removelast
