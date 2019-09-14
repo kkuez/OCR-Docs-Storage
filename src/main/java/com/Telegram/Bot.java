@@ -1,9 +1,7 @@
 package com.Telegram;
 
-import com.Misc.Processes.BonProcess;
-import com.Misc.Processes.NewUserRegProcess;
+import com.Misc.Processes.*;
 import com.Misc.Processes.Process;
-import com.Misc.Processes.SumProcess;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.Utils.BotUtil;
@@ -97,7 +95,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
 
-    private void sendPhotoFromURL(Update update, String imagePath){
+    public void sendPhotoFromURL(Update update, String imagePath){
         SendPhoto sendPhoto = null;
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
@@ -175,12 +173,17 @@ public class Bot extends TelegramLongPollingBot {
                     BotUtil.askMonth("Für welchem Monat...?", update, bot);
 
                     }else{
+                if(cmd.startsWith("getbons")){
+                    Bot.process = new GetBonsProcess();
+                    BotUtil.askMonth("Für welchem Monat...?", update, bot);
+
+                    }else{
 
                     if(Bot.process != null){
                         process.performNextStep(input, update);
                     }
                 }}
-        }}}}}
+        }}}}}}
 
 
 

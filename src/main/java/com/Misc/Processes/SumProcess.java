@@ -3,6 +3,7 @@ package com.Misc.Processes;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
+import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.text.DateFormat;
@@ -25,7 +26,7 @@ public class SumProcess extends Process{
     public void performNextStep(String arg, Update update) {
         switch (currentStep){
             case selectMonth:
-                month = getNumberForMonth(arg);
+                month = TimeUtil.getMonthMap().get(arg);
                 BotUtil.askYear("Für welches Jahr...?", update, Bot.bot);
                 currentStep = Steps.selectYear;
                 break;
@@ -54,33 +55,5 @@ public class SumProcess extends Process{
     private enum Steps{
         selectMonth, selectYear
     }
-    private String getNumberForMonth(String month){
-        switch (month){
-            case "JAN":
-                return "01";
-            case "FEB":
-                return "02";
-            case "MÄR":
-                return "03";
-            case "APR":
-                return "04";
-            case "MAI":
-                return "05";
-            case "JUN":
-                return "06";
-            case "JUL":
-                return "07";
-            case "AUG":
-                return "08";
-            case "SEP":
-                return "09";
-            case "OKT":
-                return "10";
-            case "NOV":
-                return "11";
-            case "DEZ":
-                return "12";
-        }
-        return null;
-    }
+
 }

@@ -84,24 +84,10 @@ public class DBUtil {
         }
     }
 
-    public static float getSumMonth(String month){
+    public static float getSumMonth(String monthAndYear){
         //TODO schlampig
-        Statement statement = null;
-        List<Document> documentList = new ArrayList<>();
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + month + "%' AND originalFile like '%Bons%'");
-            documentList = new ArrayList<>();
-            while (rs.next()) {
-                documentList.add(new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id")));
-                System.out.println(rs.getString("originalFile"));
-            }
+        List<Document> documentList = getDocumentsForMonthAndYear(monthAndYear);
 
-            statement.close();
-            statement.getConnection().close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         Map<Integer, Float> bonIdMap = new HashMap<>();
         getBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
 
@@ -115,6 +101,27 @@ public class DBUtil {
         return resultSum;
     }
 
+    public static List<Document> getDocumentsForMonthAndYear(String monthAndYear){
+        List<Document> documentList = new ArrayList<>();
+        Statement statement = null;
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear + "%' AND originalFile like '%Bons%'");
+            documentList = new ArrayList<>();
+            while (rs.next()) {
+                Document document = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
+                document.setUser(rs.getInt("user"));
+                documentList.add(document);
+                System.out.println(rs.getString("originalFile"));
+            }
+
+            statement.close();
+            statement.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return documentList;
+    }
      private static Set<Bon> getBonsfromDB(){
         Statement statement = null;
         Set<Bon> bonSet = new HashSet<>();
