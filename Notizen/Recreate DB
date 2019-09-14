@@ -1,2 +1,6 @@
-create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT, user TEXT);
+Drop Table Documents;
+create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT, user INTEGER, inZipFile TEXT);
+Drop Table Bons;
 create table Bons (belongsToDocument INTEGER, sum REAL);
+Drop Table AllowedUsers;
+create Table AllowedUsers(id INTEGER, name TEXT);

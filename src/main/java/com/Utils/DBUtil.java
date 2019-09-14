@@ -3,15 +3,13 @@ package com.Utils;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
+import com.ObjectTemplates.User;
 
 import javax.print.Doc;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DBUtil {
 
@@ -46,6 +44,26 @@ public class DBUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static Map<Integer, User> getAllowedUsersMap(){
+        Statement statement = null;
+        Map<Integer, User> userMap = new HashMap<>();
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select * from AllowedUsers");
+            while (rs.next()) {
+                User user = new User(rs.getInt("id"), rs.getString("name"));
+                userMap.put(rs.getInt("id"), user);
+            }
+
+            statement.close();
+            statement.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userMap;
     }
 
     public static void insertDocumentToDB(Document document){

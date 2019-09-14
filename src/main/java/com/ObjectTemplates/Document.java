@@ -18,12 +18,14 @@ public abstract class Document{
 
     private int id;
 
-    private String user;
+    private int user;
+
+    private String inZipFile;
 
     public Document() {
     }
 
-    public Document(String content, File originalFile, String user) {
+    public Document(String content, File originalFile, int user) {
         this.setContent(content);
         this.setOriginFile(originalFile);
         this.user = user;
@@ -38,11 +40,20 @@ public abstract class Document{
     // Getter Setter
 
 
-    public String getUser() {
+    public String getInZipFile() {
+        return inZipFile;
+    }
+
+    public void setInZipFile(String inZipFile) {
+        this.inZipFile = inZipFile;
+    }
+
+
+    public int getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(int user) {
         this.user = user;
     }
 

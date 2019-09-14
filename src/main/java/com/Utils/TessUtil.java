@@ -47,7 +47,7 @@ public class TessUtil {
 
                     @Override
                     public void run() {
-                        processFile(file, null, bot);
+                        processFile(file, 0, null);
                         counterProcessedFiles.getAndIncrement();
                     }
                 });
@@ -61,7 +61,7 @@ public class TessUtil {
         System.out.println("\n" + counterProcessedFiles.get() + " Files stored.");
     }
 
-    public static void processFile(File inputfile, String user, Bot bot) {
+    public static void processFile(File inputfile, int userID, Bot bot) {
         Tesseract tesseract = getTesseract();
         try {
             String result = tesseract.doOCR(inputfile);
@@ -71,20 +71,24 @@ public class TessUtil {
             Document document = new Image(result, inputfile, DBUtil.countDocuments() );
             String date = getFirstDate(result) == null ? null : LocalDateTime.now().toString();
             document.setDate(date);
-            document.setUser(user);
+            document.setUser(userID);
+            File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), document.getOriginalFileName());
+            FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
+            document.setOriginFile(newOriginalFilePath);
+
             try {
                 dateOfFile = getFirstDate(result);
-                if(checkIfBon(result)){
+                if(checkIfBon(result) && bot != null){
                     float sum = getLastNumber(result);
                     Bon bon = new Bon(result, inputfile, sum, document.getId());
-                    Bot.process = new BonProcess(bon, Bot.bot);
+                    Bot.process = new BonProcess(bon, bot);
+                    newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
+                    FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
+                    document.setOriginFile(newOriginalFilePath);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
             DBUtil.insertDocumentToDB(document);
 
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);

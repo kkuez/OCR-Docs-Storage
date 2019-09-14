@@ -1,6 +1,7 @@
 package com.Telegram;
 
 import com.Misc.Processes.BonProcess;
+import com.Misc.Processes.NewUserRegProcess;
 import com.Misc.Processes.Process;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
@@ -38,6 +39,19 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
+       if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(update.getMessage().getFrom().getId())){
+           processUpdateReceveived(update);
+       }else{
+           if(Bot.process != null && Bot.process.getClass().equals(NewUserRegProcess.class)){
+               Bot.process.performNextStep(update.getMessage().getText(), update);
+           }else{
+               BotUtil.sendMsg(update.getMessage().getChatId() + "", "Hallo " + update.getMessage().getFrom().getFirstName() + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", Bot.bot);
+                Bot.process = new NewUserRegProcess();
+           }
+       }
+
+    }
+    private void processUpdateReceveived(Update update){
         String message = update.getMessage().getText();
         if (message != null && !message.equals("")) {
             checkForCommands(update);
@@ -50,14 +64,14 @@ public class Bot extends TelegramLongPollingBot {
             Collections.reverse(photoList);
             String filePath = getFilePath(photoList.get(0));
             largestPhoto = downloadPhotoByFilePath(filePath);
-            File targetFile = new File("/home/marcel/Muell", LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
+            File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
             try {
                 FileUtils.copyFile(largestPhoto, targetFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            TessUtil.processFile(targetFile, update.getMessage().getFrom().getFirstName(), bot);
+            TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), bot);
             if (process != null && process.getClass().equals(BonProcess.class)) {
                 BotUtil.askBoolean("Das ist ein Bon oder?", update, Bot.this);
             }
@@ -123,12 +137,12 @@ public class Bot extends TelegramLongPollingBot {
         String input = update.getMessage().getText();
         String searchTerm = input.substring(input.indexOf(" ") + 1);
         List<Document> listOfDocs = new ArrayList<>();
-        if(input.startsWith("search")){
+        if(input.toLowerCase().startsWith("search")){
              listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
              System.out.println("Send list of Pictures related to \"" + input);
             BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", Bot.this);
         }else{
-        if(input.startsWith("getpics")){
+        if(input.toLowerCase().startsWith("getpics")){
             listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
             listOfDocs.forEach(document -> sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath()));
         }else{

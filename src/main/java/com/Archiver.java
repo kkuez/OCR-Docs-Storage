@@ -6,8 +6,10 @@ import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class Archiver {
 
@@ -19,22 +21,29 @@ public class Archiver {
 
     File bonFolder;
 
-    public Archiver() {
+    File zipFolder;
+
+    public Archiver(Properties properties) {
         documentList = new ArrayList<>();
-         archiveFolder = new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
-         if(!archiveFolder.exists()){
-             archiveFolder.mkdir();
-         }
+        archiveFolder = new File(properties.getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
+        if(!archiveFolder.exists()){
+            archiveFolder.mkdir();
+        }
+
+        zipFolder = new File(archiveFolder.getParent(), "Zips");
+        if(!zipFolder.exists()){
+            zipFolder.mkdir();
+        }
 
         documentFolder = new File(archiveFolder, "Documents");
-         if(!documentFolder.exists()){
-             documentFolder.mkdir();
-         }
+        if(!documentFolder.exists()){
+            documentFolder.mkdir();
+        }
 
-         bonFolder = new File(archiveFolder, "Bons");
-         if(!bonFolder.exists()){
-             bonFolder.mkdir();
-         }
+        bonFolder = new File(archiveFolder, "Bons");
+        if(!bonFolder.exists()){
+            bonFolder.mkdir();
+        }
     }
 
     public void archive(String nameOfArchive) {
@@ -49,8 +58,11 @@ public class Archiver {
             }
         });
         zipDir(tempForZip, nameOfArchive);
+        File zippedDir = new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"), nameOfArchive + ".zip");
         try {
+            FileUtils.copyFile(zippedDir, new File(ObjectHub.getInstance().getArchiver().getZipFolder(), nameOfArchive + ".zip"));
             FileUtils.deleteDirectory(tempForZip);
+            FileUtils.deleteQuietly(zippedDir);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,6 +73,15 @@ public class Archiver {
     }
 
     // GETTER SETTER
+
+
+    public File getZipFolder() {
+        return zipFolder;
+    }
+
+    public void setZipFolder(File zipFolder) {
+        this.zipFolder = zipFolder;
+    }
 
     public File getArchiveFolder() {
         return archiveFolder;
