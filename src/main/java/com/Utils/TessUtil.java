@@ -48,7 +48,7 @@ public class TessUtil {
 
                     @Override
                     public void run() {
-                        processFile(file, 0, null, false);
+                        processFile(file, 0);
                         counterProcessedFiles.getAndIncrement();
                     }
                 });
@@ -62,7 +62,7 @@ public class TessUtil {
         System.out.println("\n" + counterProcessedFiles.get() + " Files stored.");
     }
 
-    public static Document processFile(File inputfile, int userID, Bot bot, boolean forceIsBon) {
+    public static Document processFile(File inputfile, int userID) {
         Tesseract tesseract = getTesseract();
         Document document = null;
         try {

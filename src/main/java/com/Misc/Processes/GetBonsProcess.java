@@ -21,16 +21,21 @@ public class GetBonsProcess extends Process{
 
     private String year;
 
-    public GetBonsProcess(){
-        currentStep = Steps.selectMonth;
+    public GetBonsProcess(Bot bot){
+        setBot(bot);
+        currentStep = Steps.Start;
     }
 
     @Override
     public void performNextStep(String arg, Update update) {
             switch (currentStep){
+                case Start:
+                    BotUtil.askMonth("Für welchem Monat...?", update, getBot());
+                    currentStep = Steps.selectMonth;
+                    break;
                 case selectMonth:
                     month = TimeUtil.getMonthMap().get(arg);
-                    BotUtil.askYear("Für welches Jahr...?", update, Bot.bot);
+                    BotUtil.askYear("Für welches Jahr...?", update, getBot());
                     currentStep = Steps.selectYear;
                     break;
 
@@ -50,18 +55,18 @@ public class GetBonsProcess extends Process{
                     List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
 
                     documentList.forEach(document1 -> {
-                        Bot.bot.sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath());
+                        getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath());
                         if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(document1.getUser())){
-                            BotUtil.sendMsg(update.getMessage().getChatId() + "","Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName(), Bot.bot);
+                            BotUtil.sendMsg(update.getMessage().getChatId() + "","Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName(), getBot());
                         }
 
                     });
-                    Bot.process = null;
+                    getBot().process = null;
                     break;
         }
 
     }
     private enum Steps{
-        selectMonth, selectYear
+        selectMonth, selectYear, Start
     }
 }

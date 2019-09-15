@@ -19,15 +19,20 @@ public class SumProcess extends Process{
 
     private Steps currentStep;
 
-    public SumProcess(){
-        currentStep = Steps.selectMonth;
+    public SumProcess(Bot bot){
+        setBot(bot);
+        currentStep = Steps.Start;
     }
     @Override
     public void performNextStep(String arg, Update update) {
         switch (currentStep){
+            case Start:
+                BotUtil.askMonth("Für welchem Monat...?", update, getBot());
+                currentStep = Steps.selectMonth;
+                break;
             case selectMonth:
                 month = TimeUtil.getMonthMap().get(arg);
-                BotUtil.askYear("Für welches Jahr...?", update, Bot.bot);
+                BotUtil.askYear("Für welches Jahr...?", update, getBot());
                 currentStep = Steps.selectYear;
                 break;
 
@@ -45,15 +50,15 @@ public class SumProcess extends Process{
                 }
                 parsedDate = formatter.format(convertedDate);
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Summe " + month + "/" + year + ":\n" + sumOfMonth, Bot.bot);
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot());
 
-                Bot.process = null;
+                getBot().process = null;
                 break;
         }
     }
 
     private enum Steps{
-        selectMonth, selectYear
+        selectMonth, selectYear, Start
     }
 
 }

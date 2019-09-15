@@ -16,13 +16,11 @@ public class BonProcess extends Process {
 
     private Steps currentStep;
 
-    Bot bot;
-
     private Bon bon;
 
     public BonProcess(Bon bon, Bot bot, Document document){
         this.bon = bon;
-        this.bot = bot;
+        setBot(bot);
         this.document = document;
         currentStep = Steps.Start;
     }
@@ -40,17 +38,17 @@ public class BonProcess extends Process {
                 }
                 FileUtils.deleteQuietly(document.getOriginFile());
                 document.setOriginFile(newOriginalFilePath);
-                BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, bot);
+                BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot());
                 currentStep = Steps.isSum;
                 break;
 
             case isSum:
                 if(arg.equals("Japp")){
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "OK :)",bot);
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "OK :)",getBot());
                     DBUtil.insertDocumentToDB(bon);
-                    Bot.process = null;
+                    getBot().process = null;
                 }else{
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bitte richtige Summe eingeben:",bot);
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bitte richtige Summe eingeben:",getBot());
                     currentStep = Steps.EnterRightSum;
                 }
                 break;
@@ -58,8 +56,8 @@ public class BonProcess extends Process {
             case EnterRightSum:
                 bon.setSum(Float.parseFloat(arg.replace(",", ".")));
                 DBUtil.insertDocumentToDB(bon);
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok, richtige Summe korrigiert :)",bot);
-                Bot.process = null;
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok, richtige Summe korrigiert :)",getBot());
+                getBot().process = null;
                 break;
         }
     }

@@ -3,6 +3,7 @@ package com;
 import com.Controller.MainController;
 import com.Misc.CustomProperties;
 import com.ObjectTemplates.User;
+import com.Telegram.Bot;
 import com.Utils.DBUtil;
 
 import java.io.FileInputStream;
@@ -23,6 +24,9 @@ public class ObjectHub {
     private CustomProperties properties;
 
     private Map<Integer, User> allowedUsersMap;
+
+
+    private Bot bot;
 
     private ObjectHub() {
         properties = new CustomProperties();
@@ -66,6 +70,13 @@ public class ObjectHub {
 
     // GETTER SETTER
 
+    public Bot getBot() {
+        return bot;
+    }
+
+    public void setBot(Bot bot) {
+        this.bot = bot;
+    }
     public Map<Integer, User> getAllowedUsersMap() {
         return allowedUsersMap;
     }

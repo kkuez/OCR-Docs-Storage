@@ -12,33 +12,22 @@ import com.Utils.TimeUtil;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.print.Doc;
-import javax.swing.text.DateFormatter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
 
-    public static Bot bot = null;
-
-    public static Process process = null;
+    public Process process = null; //TODO Setter abfangen wenn neuer Prozess gestartet wird obwohl nicht null
 
     /**
      * Method for receiving messages.
@@ -46,67 +35,80 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
-       if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(update.getMessage().getFrom().getId())){
-           processUpdateReceveived(update);
-       }else{
-           if(Bot.process != null && Bot.process.getClass().equals(NewUserRegProcess.class)){
-               Bot.process.performNextStep(update.getMessage().getText(), update);
-           }else{
-               BotUtil.sendMsg(update.getMessage().getChatId() + "", "Hallo " + update.getMessage().getFrom().getFirstName() + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", Bot.bot);
-                Bot.process = new NewUserRegProcess();
-           }
-       }
+        if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(update.getMessage().getFrom().getId())){
+            processUpdateReceveived(update);
+        }else{
+            if(process != null && process.getClass().equals(NewUserRegProcess.class)){
+                process.performNextStep(update.getMessage().getText(), update);
+            }else{
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Hallo " + update.getMessage().getFrom().getFirstName() + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", this);
+                process = new NewUserRegProcess(this);
+            }
+        }
 
     }
-    private void processUpdateReceveived(Update update){
+    private void processUpdateReceveived(Update update) {
 
         String message = update.getMessage().getText();
+
         if (message != null && !message.equals("")) {
-            try {
-                checkForCommands(update);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
 
-        if (update.getMessage().hasPhoto()) {
-            File largestPhoto = null;
-            List<PhotoSize> photoList = update.getMessage().getPhoto();
-            photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
-            Collections.reverse(photoList);
-            String filePath = getFilePath(photoList.get(0));
-            largestPhoto = downloadPhotoByFilePath(filePath);
-            File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
-            try {
-                FileUtils.copyFile(largestPhoto, targetFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon");
-
-            Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), bot, forceBon);
-            try {
-
-                if((TessUtil.checkIfBon(document.getContent()) || forceBon)&& bot != null){
-                    float sum = TessUtil.getLastNumber(document.getContent());
-                    Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
-                    Bot.process = new BonProcess(bon, bot, document);
+            Process processToProcess = fetchCommandOrNull(update);
+            if (process != null && processToProcess == null) {
+                String input = update.getMessage().getText();
+                if (input.startsWith("Japp")) {
+                    process.performNextStep("Japp", update);
+                } else {
+                    if (input.startsWith("Nee")) {
+                        process.performNextStep("Nee", update);
+                    } else {
+                        process.performNextStep(input, update);
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
-            if (process != null && process.getClass().equals(BonProcess.class)) {
-                BotUtil.askBoolean("Das ist ein Bon oder?", update, Bot.this);
+
+            if (update.getMessage().hasPhoto()) {
+                processPhoto(update);
             }
-
-            System.out.println(update.getMessage().getText());
-            // sendMsg(update.getMessage().getChatId().toString(), message);
-
         }
     }
 
+    private void processPhoto(Update update){
+        File largestPhoto = null;
+        List<PhotoSize> photoList = update.getMessage().getPhoto();
+        photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
+        Collections.reverse(photoList);
+        String filePath = getFilePath(photoList.get(0));
+        largestPhoto = downloadPhotoByFilePath(filePath);
+        File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
+        try {
+            FileUtils.copyFile(largestPhoto, targetFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon");
 
+        Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId());
+        try {
+
+            if((TessUtil.checkIfBon(document.getContent()) || forceBon) && this != null){
+                float sum = TessUtil.getLastNumber(document.getContent());
+                Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
+                process = new BonProcess(bon, this, document);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (process != null && process.getClass().equals(BonProcess.class)) {
+            BotUtil.askBoolean("Das ist ein Bon oder?", update, Bot.this);
+        }
+
+        System.out.println(update.getMessage().getText());
+        // sendMsg(update.getMessage().getChatId().toString(), message);
+
+    }
 
 
     public void sendPhotoFromURL(Update update, String imagePath){
@@ -157,53 +159,28 @@ public class Bot extends TelegramLongPollingBot {
         return null; // Just in case
     }
 
-    private void checkForCommands(Update update) throws ParseException {
+    private Process fetchCommandOrNull(Update update){
         String input = update.getMessage().getText();
-        String searchTerm = input.substring(input.indexOf(" ") + 1);
         String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase().replace("/", "") : input.toLowerCase().replace("/", "");
-        List<Document> listOfDocs = new ArrayList<>();
+
         if(cmd.startsWith("search")){
-             listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
-             System.out.println("Send list of Pictures related to \"" + input);
-            BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", Bot.this);
+            return new SearchProcess(this, update);
         }else{
-        if(cmd.startsWith("getpics")){
-            listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
-            listOfDocs.forEach(document -> sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath()));
-        }else{
-        if(input.startsWith("Japp")){
-            process.performNextStep("Japp", update);
-        }else{
-        if(input.startsWith("Nee")){
-            process.performNextStep("Nee", update);
-
-        }else{
-            if(TimeUtil.getMonthMap().keySet().contains(cmd) || TimeUtil.getYearsSet().contains(cmd)){
-                process.performNextStep(cmd, update);
-
+            if(cmd.startsWith("getpics")){
+                return new GetPicsProcess(this, update);
             }else{
+
                 if(cmd.startsWith("getsum")){
-                    Bot.process = new SumProcess();
-                    BotUtil.askMonth("Für welchem Monat...?", update, bot);
-
+                    return new SumProcess(this);
+                }else{
+                    if(cmd.startsWith("getbons")){
+                        return new GetBonsProcess(this);
                     }else{
-                if(cmd.startsWith("getbons")){
-                    Bot.process = new GetBonsProcess();
-                    BotUtil.askMonth("Für welchem Monat...?", update, bot);
-
-                    }else{
-                if(cmd.startsWith("removelast")){
-                    DBUtil.removeLastProcressedDocument();
-                    BotUtil.sendMsg( update.getMessage().getChatId() + "", "Letztes Bild gelöscht :)",Bot.bot);
-                    }else{
-
-                    if(Bot.process != null){
-                        process.performNextStep(input, update);
-                    }
-                }}
-        }}}}}}}
-
-
+                        if(cmd.startsWith("removelast")) {
+                            return new RemoveLastProcess(this);
+                        }}}}}
+        return null;
+    }
 
     /**
      * This method returns the bot's name, which was specified during registration.
@@ -222,7 +199,7 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotToken() {
         return ObjectHub.getInstance().getProperties().getProperty("tgBotToken");
     }
-public static void enterCommands(){
+    public static void enterCommands(){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -237,5 +214,5 @@ public static void enterCommands(){
                 }
             }
         });
-}
+    }
 }

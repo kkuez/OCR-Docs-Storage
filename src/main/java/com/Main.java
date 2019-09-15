@@ -12,18 +12,17 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
         ObjectHub.getInstance();
-
         activateTGBot();
         Application.launch(StartApplication.class, args);
-
-
         }
+
     public static void activateTGBot(){
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotApi = new TelegramBotsApi();
         try {
-            Bot.bot = new Bot();
-            telegramBotApi.registerBot(Bot.bot);
+            Bot bot = new Bot();
+            ObjectHub.getInstance().setBot(bot);
+            telegramBotApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {
             e.printStackTrace();
         }
