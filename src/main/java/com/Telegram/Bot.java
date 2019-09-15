@@ -52,10 +52,10 @@ public class Bot extends TelegramLongPollingBot {
         String message = update.getMessage().getText();
 
         if (message != null && !message.equals("")) {
-
-            Process processToProcess = fetchCommandOrNull(update);
-            if (process != null && processToProcess == null) {
-                String input = update.getMessage().getText();
+            String input = update.getMessage().getText();
+            if(process == null){
+                process = fetchCommandOrNull(update);
+            }else{
                 if (input.startsWith("Japp")) {
                     process.performNextStep("Japp", update);
                 } else {
@@ -66,7 +66,6 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
             }
-
 
             if (update.getMessage().hasPhoto()) {
                 processPhoto(update);

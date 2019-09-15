@@ -16,6 +16,7 @@ public class SearchProcess extends Process {
         String searchTerm = input.substring(input.indexOf(" ") + 1);
         this.searchTerm = searchTerm;
         setBot(bot);
+        performNextStep(searchTerm, update);
     }
 
     @Override
