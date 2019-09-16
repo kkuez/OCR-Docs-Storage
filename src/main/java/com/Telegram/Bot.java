@@ -49,9 +49,7 @@ public class Bot extends TelegramLongPollingBot {
     }
     private void processUpdateReceveived(Update update) {
 
-        String message = update.getMessage().getText();
 
-        if (message != null && !message.equals("")) {
             String input = update.getMessage().getText();
             if(process == null){
                 process = fetchCommandOrNull(update);
@@ -71,7 +69,6 @@ public class Bot extends TelegramLongPollingBot {
                 processPhoto(update);
             }
         }
-    }
 
     private void processPhoto(Update update){
         File largestPhoto = null;
@@ -159,25 +156,32 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private Process fetchCommandOrNull(Update update){
-        String input = update.getMessage().getText();
-        String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase().replace("/", "") : input.toLowerCase().replace("/", "");
+        if(update.getMessage().getText() != null) {
+            String input = update.getMessage().getText();
 
-        if(cmd.startsWith("search")){
-            return new SearchProcess(this, update);
-        }else{
-            if(cmd.startsWith("getpics")){
-                return new GetPicsProcess(this, update);
-            }else{
+            String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase().replace("/", "") : input.toLowerCase().replace("/", "");
 
-                if(cmd.startsWith("getsum")){
-                    return new SumProcess(this);
-                }else{
-                    if(cmd.startsWith("getbons")){
-                        return new GetBonsProcess(this);
-                    }else{
-                        if(cmd.startsWith("removelast")) {
-                            return new RemoveLastProcess(this);
-                        }}}}}
+            if (cmd.startsWith("search")) {
+                return new SearchProcess(this, update);
+            } else {
+                if (cmd.startsWith("getpics")) {
+                    return new GetPicsProcess(this, update);
+                } else {
+
+                    if (cmd.startsWith("getsum")) {
+                        return new SumProcess(this);
+                    } else {
+                        if (cmd.startsWith("getbons")) {
+                            return new GetBonsProcess(this);
+                        } else {
+                            if (cmd.startsWith("removelast")) {
+                                return new RemoveLastProcess(this);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return null;
     }
 
