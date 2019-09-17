@@ -6,6 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public abstract class Process {
 
+
+
     private Bot bot;
 
     public Document document;
@@ -15,6 +17,9 @@ public abstract class Process {
     public abstract void performNextStep(String arg, Update update);
 
     //GETTER SETTER
+
+
+
     public Bot getBot() {
         return bot;
     }

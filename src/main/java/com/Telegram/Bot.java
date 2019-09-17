@@ -1,5 +1,6 @@
 package com.Telegram;
 
+import com.Misc.KeyboardFactory;
 import com.Misc.Processes.*;
 import com.Misc.Processes.Process;
 import com.ObjectHub;
@@ -15,6 +16,7 @@ import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
@@ -28,6 +30,8 @@ import java.util.*;
 public class Bot extends TelegramLongPollingBot {
 
     public Process process = null; //TODO Setter abfangen wenn neuer Prozess gestartet wird obwohl nicht null
+
+    private Boolean isBusy;
 
     /**
      * Method for receiving messages.
@@ -49,18 +53,23 @@ public class Bot extends TelegramLongPollingBot {
     }
     private void processUpdateReceveived(Update update) {
 
-
-            String input = update.getMessage().getText();
-            if(process == null){
-                process = fetchCommandOrNull(update);
-            }else{
-                if (input.startsWith("Japp")) {
-                    process.performNextStep("Japp", update);
+            if(update.getMessage().getText() != null) {
+                String input = update.getMessage().getText();
+                if (process == null) {
+                    process = fetchCommandOrNull(update);
                 } else {
-                    if (input.startsWith("Nee")) {
-                        process.performNextStep("Nee", update);
+                    if (getBusy()) {
+                        BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", process.getBot());
                     } else {
-                        process.performNextStep(input, update);
+                        if (input.startsWith("Japp")) {
+                            process.performNextStep("Japp", update);
+                        } else {
+                            if (input.startsWith("Nee")) {
+                                process.performNextStep("Nee", update);
+                            } else {
+                                process.performNextStep(input, update);
+                            }
+                        }
                     }
                 }
             }
@@ -71,6 +80,7 @@ public class Bot extends TelegramLongPollingBot {
         }
 
     private void processPhoto(Update update){
+        setBusy(true);
         File largestPhoto = null;
         List<PhotoSize> photoList = update.getMessage().getPhoto();
         photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
@@ -98,19 +108,22 @@ public class Bot extends TelegramLongPollingBot {
         }
 
         if (process != null && process.getClass().equals(BonProcess.class)) {
-            BotUtil.askBoolean("Das ist ein Bon oder?", update, Bot.this);
+            sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean));
         }
 
         System.out.println(update.getMessage().getText());
-        // sendMsg(update.getMessage().getChatId().toString(), message);
-
+        setBusy(false);
     }
 
 
-    public void sendPhotoFromURL(Update update, String imagePath){
+    public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboardMarkup possibleKeyBoardOrNull){
         SendPhoto sendPhoto = null;
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
+            sendPhoto.setCaption(caption);
+            if(possibleKeyBoardOrNull != null){
+                sendPhoto.setReplyMarkup(possibleKeyBoardOrNull);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -217,5 +230,14 @@ public class Bot extends TelegramLongPollingBot {
                 }
             }
         });
+    }
+
+    //GETTER SETTER
+    public Boolean getBusy() {
+        return isBusy;
+    }
+
+    public void setBusy(Boolean busy) {
+        isBusy = busy;
     }
 }

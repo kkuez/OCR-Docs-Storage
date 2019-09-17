@@ -3,9 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notizen/Installation" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Installation" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/BonProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/BonProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/OCR-Storage.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/OCR-Storage.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetPicsProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/Process.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SearchProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SearchProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SumProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SumProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -163,7 +167,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568719754052</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixed BonProcess Start when Answer negativ.">
+      <created>1568725014522</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1568725014522</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -181,17 +192,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fixed many things in pom." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed many things in pom." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Misc/Processes/BonProcess.java</url>
-          <line>29</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Fixed BonProcess Start when Answer negativ." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed BonProcess Start when Answer negativ." />
   </component>
 </project>

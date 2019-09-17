@@ -21,9 +21,11 @@ public class SearchProcess extends Process {
 
     @Override
     public void performNextStep(String arg, Update update) {
+        getBot().setBusy(true);
         List<Document> listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
         System.out.println("Send list of Pictures related to \"" + searchTerm);
         BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", getBot());
+        getBot().setBusy(false);
         getBot().process = null;
     }
 }

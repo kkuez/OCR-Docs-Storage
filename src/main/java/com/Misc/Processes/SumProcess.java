@@ -38,7 +38,7 @@ public class SumProcess extends Process{
 
             case selectYear:
                 year = arg;
-
+                getBot().setBusy(true);
                 String parsedDate = month + "/" + year;
                     DateFormat parser = new SimpleDateFormat("mm/yyyy");
                     DateFormat formatter = new SimpleDateFormat("yyyy-mm");
@@ -51,7 +51,7 @@ public class SumProcess extends Process{
                 parsedDate = formatter.format(convertedDate);
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot());
-
+                getBot().setBusy(false);
                 getBot().process = null;
                 break;
         }

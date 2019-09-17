@@ -30,6 +30,7 @@ public class BonProcess extends Process {
         switch(currentStep){
             case Start:
                 if(arg.equals("Japp")) {
+                    getBot().setBusy(true);
                     //In Bonfolder kompieren nachdem der User bestätigt hat dass Dok ein Bon ist.
                     File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
                     try {
@@ -41,6 +42,7 @@ public class BonProcess extends Process {
                     document.setOriginFile(newOriginalFilePath);
                     BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot());
                     currentStep = Steps.isSum;
+                    getBot().setBusy(false);
                 }else{
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok :)",getBot());
                     getBot().process = null;

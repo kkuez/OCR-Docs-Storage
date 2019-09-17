@@ -40,6 +40,7 @@ public class GetBonsProcess extends Process{
                     break;
 
                 case selectYear:
+                    getBot().setBusy(true);
                     year = arg;
 
                     String parsedDate = month + "/" + year;
@@ -55,13 +56,16 @@ public class GetBonsProcess extends Process{
                     List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
 
                     documentList.forEach(document1 -> {
-                        getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath());
+                        String possibleCaption = " ";
                         if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(document1.getUser())){
-                            BotUtil.sendMsg(update.getMessage().getChatId() + "","Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName(), getBot());
+                            possibleCaption = "Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName();
                         }
+                        getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
+
 
                     });
                     getBot().process = null;
+                    getBot().setBusy(false);
                     break;
         }
 
