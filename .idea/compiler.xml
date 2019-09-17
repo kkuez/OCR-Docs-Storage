@@ -9,9 +9,8 @@
         <module name="OCR" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="11">
       <module name="OCR" target="11" />
-      <module name="OCR-Docs-Storage" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

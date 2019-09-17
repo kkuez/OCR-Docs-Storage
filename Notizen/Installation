@@ -1,1 +1,3 @@
 Tesseract auf OS installieren!!
+
+export TESSDATA_PREFIX=$PATH:/myNewDir

@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="">
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notizen/Installation" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Installation" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ObjectHub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ObjectHub.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Unnamed.ic" NAME="Unnamed Coverage Results" MODIFIED="1567845313733" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Enum" />
-        <option value="Class" />
-        <option value="Interface" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -35,44 +25,33 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="importAutomatically" value="true" />
+        <option name="vmOptionsForImporter" value="-Xmx768m" />
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectId" id="1QkWxY72J7ziXlVuC9OboJwM6PB" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="1Qb6Egp0JmSrEDoijrezpploG2D" />
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="Downloaded.Files.Path.Enabled" value="true" />
-    <property name="Repository.Attach.Annotations" value="false" />
-    <property name="Repository.Attach.JavaDocs" value="false" />
-    <property name="Repository.Attach.Sources" value="false" />
-    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1568314515036" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/target" />
     <property name="project.structure.last.edited" value="Libraries" />
-    <property name="project.structure.proportion" value="0.15539034" />
+    <property name="project.structure.proportion" value="0.1484375" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.build.tools" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/external_libs/lib" />
-      <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\src\main\resources\fxml" />
-      <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\external_libs" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/target" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/external_libs/lib" />
-      <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage\target\classes" />
-      <recent name="D:\OneDrive - HYPE Softwaretechnik GmbH\Sonstiges\Projekte\OCR-Docs-Storage" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -87,16 +66,17 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Maven.OCR [clean,verify,assembly:single...]">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="11 (2)" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.Main" />
       <module name="OCR" />
-      <option name="PROGRAM_PARAMETERS" value="asd=123" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="OCR [clean,verify,assembly:single...]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+    <configuration name="OCR [clean,exec:exec]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
       <MavenSettings>
         <option name="myGeneralSettings" />
         <option name="myRunnerSettings" />
@@ -108,10 +88,34 @@
             <option name="goals">
               <list>
                 <option value="clean" />
-                <option value="verify" />
+                <option value="exec:exec" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <configuration name="OCR [clean,package,assembly:single]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="clean" />
+                <option value="package" />
                 <option value="assembly:single" />
-                <option value="exec:java" />
-                <option value="-U" />
               </list>
             </option>
             <option name="pomFileName" />
@@ -127,7 +131,8 @@
     </configuration>
     <list>
       <item itemvalue="Application.Main" />
-      <item itemvalue="Maven.OCR [clean,verify,assembly:single...]" />
+      <item itemvalue="Maven.OCR [clean,package,assembly:single]" />
+      <item itemvalue="Maven.OCR [clean,exec:exec]" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -135,115 +140,13 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="" />
-      <created>1567839969290</created>
+      <changelist id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="" />
+      <created>1568026838417</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1567839969290</updated>
+      <updated>1568026838417</updated>
     </task>
-    <task id="LOCAL-00001" summary="Reading properties now from .property File.">
-      <created>1567843422390</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1567843422390</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Now CustomProperties to store values in file.">
-      <created>1567847390502</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1567847390502</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Date now parsed from doc. Always the first one.&#10;&#10;..since its presumably the one in the header.">
-      <created>1567851702989</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1567851702989</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Bot running (atleast without maven)!">
-      <created>1568287195185</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1568287195185</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Bot able to search in db.">
-      <created>1568288624844</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1568288624844</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Bot able to sendpixs">
-      <created>1568290868492</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1568290868492</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Bot able to sendpixs">
-      <created>1568298212958</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1568298212958</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Added some more libs to project.">
-      <created>1568356488593</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1568356488593</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Stores Files of users that were sent.">
-      <created>1568360737710</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1568360737710</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Stores Files of users that were sent.">
-      <created>1568374297590</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1568374297590</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Interaction with Bot when uploading Bon.">
-      <created>1568398767685</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1568398767685</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Folders for Bons and Documents, nothing further done yet.">
-      <created>1568402084675</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1568402084675</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Fixed Bug not doing anything when no text was commited.">
-      <created>1568628661132</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1568628661132</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
     <servers />
-  </component>
-  <component name="Vcs.Log.History.Properties">
-    <option name="COLUMN_ORDER">
-      <list>
-        <option value="0" />
-        <option value="2" />
-        <option value="3" />
-        <option value="1" />
-      </list>
-    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -257,52 +160,5 @@
         </entry>
       </map>
     </option>
-    <option name="RECENT_FILTERS">
-      <map>
-        <entry key="Branch">
-          <value>
-            <list />
-          </value>
-        </entry>
-        <entry key="User">
-          <value>
-            <list />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Reading properties now from .property File." />
-    <MESSAGE value="Now CustomProperties to store values in file." />
-    <MESSAGE value="Date now parsed from doc. Always the first one.&#10;&#10;..since its presumably the one in the header." />
-    <MESSAGE value="Bot running (atleast without maven)!" />
-    <MESSAGE value="Bot able to search in db." />
-    <MESSAGE value="Bot able to sendpixs" />
-    <MESSAGE value="Added some more libs to project." />
-    <MESSAGE value="Stores Files of users that were sent." />
-    <MESSAGE value="Interaction with Bot when uploading Bon." />
-    <MESSAGE value="Folders for Bons and Documents, nothing further done yet." />
-    <MESSAGE value="Fixed Bug not doing anything when no text was commited." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Bug not doing anything when no text was commited." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java</url>
-          <line>105</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Unnamed.ic" NAME="Unnamed Coverage Results" MODIFIED="1568373084538" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
