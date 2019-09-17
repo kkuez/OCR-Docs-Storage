@@ -29,17 +29,22 @@ public class BonProcess extends Process {
     public void performNextStep(String arg, Update update) {
         switch(currentStep){
             case Start:
-                //In Bonfolder kompieren nachdem der User bestätigt hat dass Dok ein Bon ist.
-                File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
-                try {
-                    FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(arg.equals("Japp")) {
+                    //In Bonfolder kompieren nachdem der User bestätigt hat dass Dok ein Bon ist.
+                    File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
+                    try {
+                        FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    FileUtils.deleteQuietly(document.getOriginFile());
+                    document.setOriginFile(newOriginalFilePath);
+                    BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot());
+                    currentStep = Steps.isSum;
+                }else{
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok :)",getBot());
+                    getBot().process = null;
                 }
-                FileUtils.deleteQuietly(document.getOriginFile());
-                document.setOriginFile(newOriginalFilePath);
-                BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot());
-                currentStep = Steps.isSum;
                 break;
 
             case isSum:
