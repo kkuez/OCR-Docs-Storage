@@ -23,7 +23,6 @@
                     <manifest>
                         <mainClass>com.Main</mainClass>
                     </manifest>
-                    <include></include>
                 </archive>
             </configuration>
             </plugin>

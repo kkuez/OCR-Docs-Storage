@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
-        ObjectHub.getInstance();
+        ObjectHub.getInstance().setInputArgs(args);
         activateTGBot();
         Application.launch(StartApplication.class, args);
         }

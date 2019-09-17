@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="New .jar.">
+    <list default="true" id="8d925074-557b-40ff-984d-101099b9f4be" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ObjectHub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ObjectHub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -86,10 +87,11 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Unnamed">
-    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+  <component name="RunManager" selected="Maven.OCR [clean,verify,assembly:single...]">
+    <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.Main" />
       <module name="OCR" />
+      <option name="PROGRAM_PARAMETERS" value="asd=123" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -124,7 +126,7 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Unnamed" />
+      <item itemvalue="Application.Main" />
       <item itemvalue="Maven.OCR [clean,verify,assembly:single...]" />
     </list>
   </component>
@@ -223,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568402084675</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Fixed Bug not doing anything when no text was commited.">
+      <created>1568628661132</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1568628661132</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -274,7 +283,8 @@
     <MESSAGE value="Stores Files of users that were sent." />
     <MESSAGE value="Interaction with Bot when uploading Bon." />
     <MESSAGE value="Folders for Bons and Documents, nothing further done yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="Folders for Bons and Documents, nothing further done yet." />
+    <MESSAGE value="Fixed Bug not doing anything when no text was commited." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Bug not doing anything when no text was commited." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

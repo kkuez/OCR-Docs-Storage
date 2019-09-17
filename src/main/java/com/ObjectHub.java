@@ -8,6 +8,7 @@ import com.Utils.DBUtil;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -25,6 +26,7 @@ public class ObjectHub {
 
     private Map<Integer, User> allowedUsersMap;
 
+    private Map<String, String> inputArgs;
 
     private Bot bot;
 
@@ -112,4 +114,24 @@ public class ObjectHub {
         this.executorService = executorService;
     }
 
+    public Map<String, String> getInputArgs() {
+        return inputArgs;
+    }
+
+    public void setInputArgs(String[] inputArgs) {
+        Map<String, String> argsMap = new HashMap<>();
+
+        for(String s : inputArgs){
+            if(s.contains("=")){
+                String key = s.substring(0, s.indexOf("="));
+                String value = s.substring(s.indexOf("=") + 1, s.length());
+                argsMap.put(key.toLowerCase(), value);
+            }else{
+                System.out.println("Couldnt parse inputArguments, exit.");
+                System.exit(0);
+            }
+        }
+
+        this.inputArgs = argsMap;
+    }
 }
