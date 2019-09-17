@@ -12,11 +12,23 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
         ObjectHub.getInstance().setInputArgs(args);
-        activateTGBot();
-        Application.launch(StartApplication.class, args);
+
+
+        for(String s : args){
+            if(s.equals("-gui")){
+                launchGui(args);
+            }
+            if(s.equals("-bot")){
+                activateTGBot();
+            }
+        }
         }
 
-    public static void activateTGBot(){
+        private static void launchGui(String[] args){
+            Application.launch(StartApplication.class, args);
+        }
+
+    private static void activateTGBot(){
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotApi = new TelegramBotsApi();
         try {

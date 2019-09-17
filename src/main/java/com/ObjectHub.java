@@ -126,9 +126,6 @@ public class ObjectHub {
                 String key = s.substring(0, s.indexOf("="));
                 String value = s.substring(s.indexOf("=") + 1, s.length());
                 argsMap.put(key.toLowerCase(), value);
-            }else{
-                System.out.println("Couldnt parse inputArguments, exit.");
-                System.exit(0);
             }
         }
 

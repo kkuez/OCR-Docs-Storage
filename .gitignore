@@ -1,3 +1,12 @@
 .idea
-target
 setup.properties
+target/archive-tmp
+target/classes
+target/generated-sources
+target/maven-archiver
+target/maven-status
+target/SEPTEMBER_2019
+target/Zips
+target/OCR-1.0-SNAPSHOT-jar-with-dependencies.jar
+target/OCR-1.0-SNAPSHOT.jar
+target/setup.properties

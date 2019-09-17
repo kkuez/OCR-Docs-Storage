@@ -29,6 +29,8 @@
                         <mainClass>com.Main</mainClass>
                     </manifest>
                 </archive>
+                <finalName>OCR-Storage</finalName>
+                <appendAssemblyId>false</appendAssemblyId>
             </configuration>
             </plugin>
             <plugin>
