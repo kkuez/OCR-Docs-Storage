@@ -1,6 +1,7 @@
 package com.ObjectTemplates;
 
 import com.Utils.DBUtil;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 
@@ -33,8 +34,8 @@ public abstract class Document{
     }
 
     public String getInsertDBString(){
-        return "insert into Documents (id, content, originalFile, date, user) Values (" + DBUtil.countDocuments() + ", '" +
-                content.replaceAll("'", "''") + "', '" + originFile.getAbsolutePath() + "', '" + date + "', '" + user + "')";
+        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBUtil.countDocuments("") + ", '" +
+                content.replaceAll("'", "''") + "', '" + originFile.getAbsolutePath() + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
     }
 
     // Getter Setter

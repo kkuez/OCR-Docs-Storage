@@ -44,7 +44,6 @@ public class DBUtil {
                 Statement statement = connection.createStatement();
                 statement.executeUpdate("");
                 statement.close();
-                statement.getConnection().close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -63,7 +62,6 @@ public class DBUtil {
             }
 
             statement.close();
-            statement.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,7 +88,6 @@ public class DBUtil {
 
             statement.executeUpdate(sqlStatement);
             statement.close();
-            statement.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -128,16 +125,23 @@ public class DBUtil {
             }
 
             statement.close();
-            statement.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return documentList;
     }
+
+    public static boolean isFilePresent(File newFile){
+        int filesSizeOfNewFile = countDocuments("where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
+
+        return filesSizeOfNewFile > 0;
+    }
+
      private static Set<Bon> getBonsfromDB(){
-        Statement statement = null;
+
         Set<Bon> bonSet = new HashSet<>();
         try {
+            Statement statement = getConnection().createStatement();
             statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("select * from Bons");
             while (rs.next()) {
@@ -146,7 +150,6 @@ public class DBUtil {
             }
 
             statement.close();
-            statement.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -166,25 +169,23 @@ public class DBUtil {
             }
 
             statement.close();
-            statement.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return documentList;
     }
 
-    public static int countDocuments(){
+    public static int countDocuments(String sqlAddition){
         Statement statement = null;
         int count = 0;
         try {
             statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Documents");
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Documents " + sqlAddition);
             while (rs.next()) {
                 count = rs.getInt("Count(*)");
             }
 
             statement.close();
-            statement.getConnection().close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

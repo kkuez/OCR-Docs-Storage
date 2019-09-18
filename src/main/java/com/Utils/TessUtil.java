@@ -48,7 +48,11 @@ public class TessUtil {
 
                     @Override
                     public void run() {
-                        processFile(file, 0);
+                        if(!DBUtil.isFilePresent(file)) {
+                            processFile(file, 0);
+                        }else{
+                            System.out.println("File already present: " + file.getName());
+                        }
                         counterProcessedFiles.getAndIncrement();
                     }
                 });
@@ -68,7 +72,7 @@ public class TessUtil {
         try {
             String result = tesseract.doOCR(inputfile);
             System.out.println(result);
-            document = new Image(result, inputfile, DBUtil.countDocuments() );
+            document = new Image(result, inputfile, DBUtil.countDocuments("") );
             String date = getFirstDate(result);
             date = date == null ? LocalDate.now().toString() : date;
             document.setDate(date);

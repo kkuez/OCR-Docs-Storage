@@ -87,6 +87,12 @@ public class Bot extends TelegramLongPollingBot {
         Collections.reverse(photoList);
         String filePath = getFilePath(photoList.get(0));
         largestPhoto = downloadPhotoByFilePath(filePath);
+
+        if(DBUtil.isFilePresent(largestPhoto)){
+            System.out.println("File already present: " + largestPhoto.getName());
+            return;
+        }
+
         File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
         try {
             FileUtils.copyFile(largestPhoto, targetFile);
