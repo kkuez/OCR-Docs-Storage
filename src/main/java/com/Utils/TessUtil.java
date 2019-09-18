@@ -39,9 +39,10 @@ public class TessUtil {
             PropertyValueFactory[] propertyValueFactories) {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
                 new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
+        Collection<File> absoluteDifferentFilesSet = IOUtil.createFileSetBySize(filesInFolder);
         Set<String> filePathSet = DBUtil.getFilePathOfDocsContainedInDB();
         AtomicInteger counterProcessedFiles = new AtomicInteger();
-        filesInFolder.forEach(file -> {
+        absoluteDifferentFilesSet.forEach(file -> {
             if (!filePathSet.contains(file.getAbsolutePath())) {
                 ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
 

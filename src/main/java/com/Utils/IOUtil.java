@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 
 public class IOUtil {
 
@@ -17,5 +18,12 @@ public class IOUtil {
             e.printStackTrace();
         }
         return result.exists() ? result : null;
+    }
+
+    public static Collection<File> createFileSetBySize(Collection<File> inputFiles){
+        //Method to make sure only absolute different files in size will be processed
+        Map<Long, File> fileMap = new HashMap<>();
+        inputFiles.forEach(file -> fileMap.putIfAbsent(FileUtils.sizeOf(file), file));
+        return fileMap.values();
     }
 }
