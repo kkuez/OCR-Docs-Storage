@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/BonProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/BonProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetPicsProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/Process.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SearchProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SearchProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SumProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SumProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Controller/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,7 +41,7 @@
   <component name="ProjectId" id="1Qb6Egp0JmSrEDoijrezpploG2D" />
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.1484375" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -68,9 +65,9 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main -bot">
+  <component name="RunManager" selected="Application.Main -gui">
     <configuration name="Main -bot" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="11 (2)" />
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.Main" />
       <module name="OCR" />
@@ -80,7 +77,7 @@
       </method>
     </configuration>
     <configuration name="Main -gui" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="11 (2)" />
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.Main" />
       <module name="OCR" />
@@ -174,7 +171,14 @@
       <option name="project" value="LOCAL" />
       <updated>1568725014522</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Init.">
+      <created>1568816446512</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1568816446512</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -193,6 +197,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fixed many things in pom." />
     <MESSAGE value="Fixed BonProcess Start when Answer negativ." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed BonProcess Start when Answer negativ." />
+    <MESSAGE value="Init." />
+    <option name="LAST_COMMIT_MESSAGE" value="Init." />
   </component>
 </project>

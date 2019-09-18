@@ -62,6 +62,8 @@ public class MainController extends Controller {
     private void initialize() {
         archivePathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
 
+        inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
+
         mainTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override

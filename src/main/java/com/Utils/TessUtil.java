@@ -35,11 +35,10 @@ public class TessUtil {
         numberPattern = Pattern.compile("\\d*\\.\\d*|\\d");
     }
 
-
     public static void processFolder(File folder, Bot bot, TableView tableView, TableColumn[] tableColumns,
             PropertyValueFactory[] propertyValueFactories) {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
-                new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, true);
+                new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
         Set<String> filePathSet = DBUtil.getFilePathOfDocsContainedInDB();
         AtomicInteger counterProcessedFiles = new AtomicInteger();
         filesInFolder.forEach(file -> {
@@ -50,8 +49,6 @@ public class TessUtil {
                     public void run() {
                         if(!DBUtil.isFilePresent(file)) {
                             processFile(file, 0);
-                        }else{
-                            System.out.println("File already present: " + file.getName());
                         }
                         counterProcessedFiles.getAndIncrement();
                     }
@@ -67,6 +64,7 @@ public class TessUtil {
     }
 
     public static Document processFile(File inputfile, int userID) {
+
         Tesseract tesseract = getTesseract();
         Document document = null;
         try {
