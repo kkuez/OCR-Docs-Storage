@@ -62,11 +62,23 @@ public static void askYear(String question, Update update, Bot bot){
         sendMessage.setText(s);
         try {
             bot.execute(sendMessage);
-            //sendMessage(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
 
+    public static void sendKeyBoard(String message, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardType){
+        SendMessage sendMessage = new SendMessage();
+        ReplyKeyboardMarkup keyboardMarkup = KeyboardFactory.getKeyBoard(keyBoardType);
+        sendMessage.setText(message);
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(update.getMessage().getChatId());
+        sendMessage.setReplyMarkup(keyboardMarkup);
+        try {
+            bot.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
