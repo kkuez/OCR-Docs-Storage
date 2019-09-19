@@ -1,15 +1,13 @@
 package com.Telegram;
 
-import com.Misc.KeyboardFactory;
-import com.Misc.Processes.*;
-import com.Misc.Processes.Process;
+import com.Telegram.Processes.*;
+import com.Telegram.Processes.Process;
 import com.ObjectHub;
 import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.TessUtil;
-import com.Utils.TimeUtil;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
@@ -23,7 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -180,23 +177,27 @@ public class Bot extends TelegramLongPollingBot {
 
             String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase().replace("/", "") : input.toLowerCase().replace("/", "");
 
-            if (cmd.startsWith("search")) {
+            if (cmd.startsWith("start")) {
+                return new StartProcess(this, update);
+            } else {
+                if (cmd.startsWith("search") && input.equals("Search Document")) {
                 return new SearchProcess(this, update);
             } else {
-                if (cmd.startsWith("getpics")) {
+                if (cmd.startsWith("getpics") && input.equals("Get Documents")) {
                     return new GetPicsProcess(this, update);
                 } else {
 
-                    if (cmd.startsWith("getsum")) {
+                    if (cmd.startsWith("getsum") && input.equals("Get Sum of Bons")) {
                         return new SumProcess(this);
                     } else {
-                        if (cmd.startsWith("getbons")) {
+                        if (cmd.startsWith("getbons") && input.equals("Get Bons")) {
                             return new GetBonsProcess(this);
                         } else {
-                            if (cmd.startsWith("removelast")) {
+                            if (cmd.startsWith("removelast") && input.equals("Remove last Document")) {
                                 return new RemoveLastProcess(this);
                             }
                         }
+                    }
                     }
                 }
             }

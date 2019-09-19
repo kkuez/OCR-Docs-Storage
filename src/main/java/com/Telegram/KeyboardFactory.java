@@ -1,5 +1,6 @@
-package com.Misc;
+package com.Telegram;
 
+import com.Utils.BotUtil;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
@@ -20,6 +21,7 @@ public class KeyboardFactory {
 
         return replyKeyboardMarkup;
     }
+
 
     private static List<KeyboardRow> createKeyBoard(KeyBoardType keyBoardType){
         List<KeyboardRow> keyboard = new ArrayList<>();
@@ -45,13 +47,25 @@ public class KeyboardFactory {
                 KeyboardRow keyboardYearThirdRow = createKeyBoardRow(new String[]{"2017", "2018","2019","2020",});
                 keyboard.add(keyboardYearThirdRow);
                 break;
+            case Start:
+                KeyboardRow keyboardStartFirstRow = createKeyBoardRow(new String[]{"Search Document"});
+                keyboard.add(keyboardStartFirstRow);
+                KeyboardRow keyboardStartSecondRow = createKeyBoardRow(new String[]{"Get Documents"});
+                keyboard.add(keyboardStartSecondRow);
+                KeyboardRow keyboardStartThirdRow = createKeyBoardRow(new String[]{"Get Sum of Bons"});
+                keyboard.add(keyboardStartThirdRow);
+                KeyboardRow keyboardStartFourthRow = createKeyBoardRow(new String[]{"Get Bons"});
+                keyboard.add(keyboardStartFourthRow);
+                KeyboardRow keyboardStartFifthRow = createKeyBoardRow(new String[]{"Remove last Document"});
+                keyboard.add(keyboardStartFifthRow);
+                break;
         }
 
         return keyboard;
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year
+        Boolean, Calendar_Month, Calendar_Year, Start
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();

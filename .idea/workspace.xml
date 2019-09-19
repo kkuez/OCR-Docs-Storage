@@ -2,7 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/IOUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/IOUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/StartProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/KeyboardFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/KeyboardFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/BonProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetBonsProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetPicsProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/NewUserRegProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/NewUserRegProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/Process.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/RemoveLastProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/RemoveLastProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SearchProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/SearchProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SumProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/SumProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/BotUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/BotUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -11,10 +23,17 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="FileSizeCheck" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -62,7 +81,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main -gui">
+  <component name="RunManager" selected="Maven.OCR [clean,package,assembly:single]">
     <configuration name="Main -bot" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -182,7 +201,21 @@
       <option name="project" value="LOCAL" />
       <updated>1568835321167</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="New jar.">
+      <created>1568873949146</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1568873949146</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Removed prepareDB Method from DBUtil.">
+      <created>1568905146335</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1568905146335</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -203,6 +236,8 @@
     <MESSAGE value="Fixed BonProcess Start when Answer negativ." />
     <MESSAGE value="Init." />
     <MESSAGE value="DB wont save when FIlesize already present." />
-    <option name="LAST_COMMIT_MESSAGE" value="DB wont save when FIlesize already present." />
+    <MESSAGE value="New jar." />
+    <MESSAGE value="Removed prepareDB Method from DBUtil." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed prepareDB Method from DBUtil." />
   </component>
 </project>

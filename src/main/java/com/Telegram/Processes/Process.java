@@ -1,4 +1,4 @@
-package com.Misc.Processes;
+package com.Telegram.Processes;
 
 import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
