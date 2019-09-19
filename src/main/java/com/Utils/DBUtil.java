@@ -37,19 +37,6 @@ public class DBUtil {
         return filePathSet;
     }
 
-    public static void prepareDB() {
-        if (dbFile.exists()) {
-            try {
-                connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath().replace("\\", "/"));
-                Statement statement = connection.createStatement();
-                statement.executeUpdate("");
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public static Map<Integer, User> getAllowedUsersMap(){
         Statement statement = null;
         Map<Integer, User> userMap = new HashMap<>();
