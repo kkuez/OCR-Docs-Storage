@@ -9,7 +9,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class SelectHTMLOrImageController extends Controller {
+public class SelectHTMLOrImageController extends SingleDocumentController {
 
     @FXML
     Button hTMLButton;

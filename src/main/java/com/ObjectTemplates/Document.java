@@ -4,6 +4,10 @@ import com.Utils.DBUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Document{
 
@@ -15,7 +19,7 @@ public abstract class Document{
 
     private String originalFileName;
 
-    private String tags;
+    private Set<String> tags;
 
     private int id;
 
@@ -30,7 +34,7 @@ public abstract class Document{
         this.setContent(content);
         this.setOriginFile(originalFile);
         this.user = user;
-        this.tags = "";
+        this.tags = new HashSet<>();
     }
 
     public String getInsertDBString(){
@@ -63,11 +67,11 @@ public abstract class Document{
         this.originalFileName = originalFileName;
     }
 
-    public String getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
     }
 

@@ -39,8 +39,15 @@ public class Bot extends TelegramLongPollingBot {
         printUpdateData(update);
 
         if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(update.getMessage().getFrom().getId())){
-            processUpdateReceveived(update);
-        }else{
+            try {
+                processUpdateReceveived(update);
+            }catch (Exception e){
+                e.printStackTrace();
+                System.out.println("Update added to perform later...");
+                ObjectHub.getInstance().getPerformUpdateLaterMap().put(update, this);
+            }
+
+            }else{
             if(process != null && process.getClass().equals(NewUserRegProcess.class)){
                 process.performNextStep(update.getMessage().getText(), update);
             }else{
@@ -48,38 +55,41 @@ public class Bot extends TelegramLongPollingBot {
                 process = new NewUserRegProcess(this);
             }
         }
-
     }
-    private void processUpdateReceveived(Update update) {
-
-            if(update.getMessage().getText() != null) {
-                String input = update.getMessage().getText();
-                if (process == null) {
-                    process = fetchCommandOrNull(update);
-                } else {
-                    if (getBusy()) {
-                        BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", process.getBot());
+    public void processUpdateReceveived(Update update) throws Exception{
+            try {
+                if (update.getMessage().getText() != null) {
+                    String input = update.getMessage().getText();
+                    if (process == null) {
+                        process = fetchCommandOrNull(update);
                     } else {
-                        if (input.startsWith("Japp")) {
-                            process.performNextStep("Japp", update);
+                        if (getBusy()) {
+                            BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", process.getBot());
                         } else {
-                            if (input.startsWith("Nee")) {
-                                process.performNextStep("Nee", update);
+                            if (input.startsWith("Japp")) {
+                                process.performNextStep("Japp", update);
                             } else {
-                                process.performNextStep(input, update);
+                                if (input.startsWith("Nee")) {
+                                    process.performNextStep("Nee", update);
+                                } else {
+                                    process.performNextStep(input, update);
+                                }
                             }
                         }
                     }
                 }
-            }
-            if (update.getMessage().hasPhoto()) {
-                processPhoto(update);
+                if (update.getMessage().hasPhoto()) {
+                    processPhoto(update);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                throw new RuntimeException();
             }
         }
 
         private void printUpdateData(Update update){
             StringBuilder printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getMessage().getFrom().getFirstName());
-            String append = update.getMessage().hasPhoto() ? ", picture: " +update.getMessage().getPhoto().toString() : "";
+            String append = update.getMessage().hasPhoto() ? ", new Picture" : "";
             printBuilder.append(append);
             append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : "";
             printBuilder.append(append);

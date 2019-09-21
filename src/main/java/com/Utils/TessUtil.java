@@ -32,13 +32,15 @@ public class TessUtil {
         numberPattern = Pattern.compile("\\d*\\.\\d*|\\d");
     }
 
-    public static void processFolder(File folder, Bot bot, TableView tableView, TableColumn[] tableColumns,
+    public static Set<Document> processFolder(File folder, Bot bot, TableView tableView, TableColumn[] tableColumns,
             PropertyValueFactory[] propertyValueFactories) {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
                 new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
         Collection<File> absoluteDifferentFilesSet = IOUtil.createFileSetBySize(filesInFolder);
         Set<String> filePathSet = DBUtil.getFilePathOfDocsContainedInDB();
         AtomicInteger counterProcessedFiles = new AtomicInteger();
+
+        Set<Document> documentSet = new HashSet<>();
         absoluteDifferentFilesSet.forEach(file -> {
             if (!filePathSet.contains(file.getAbsolutePath())) {
                 ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
@@ -46,7 +48,8 @@ public class TessUtil {
                     @Override
                     public void run() {
                         if(!DBUtil.isFilePresent(file)) {
-                            processFile(file, 0);
+                            Document document = processFile(file, 0);
+                            documentSet.add(document);
                         }
                         counterProcessedFiles.getAndIncrement();
                     }
@@ -59,6 +62,8 @@ public class TessUtil {
                 .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());
         ControllerUtil.fillTable(tableView, documentObservableList, tableColumns, propertyValueFactories);
         System.out.println("\n" + counterProcessedFiles.get() + " Files stored.");
+
+        return documentSet;
     }
 
     public static Document processFile(File inputfile, int userID) {

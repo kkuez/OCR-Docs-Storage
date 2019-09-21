@@ -5,12 +5,11 @@ import com.Misc.CustomProperties;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.DBUtil;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,6 +28,10 @@ public class ObjectHub {
     private Map<String, String> inputArgs;
 
     private Bot bot;
+
+    private Map<Update, Bot> performUpdateLaterMap;
+
+    private Thread performUpdateLaterThread;
 
     private ObjectHub() {
         properties = new CustomProperties();
@@ -56,10 +59,10 @@ public class ObjectHub {
                     e.printStackTrace();
                 }
                 allowedUsersMap = DBUtil.getAllowedUsersMap();
+                performUpdateLaterMap = new HashMap<>();
             }
         });
         thread.start();
-
     }
     private Archiver archiver;
 
@@ -71,6 +74,50 @@ public class ObjectHub {
     }
 
     // GETTER SETTER
+
+    public Thread getPerformUpdateLaterThread() {
+        return performUpdateLaterThread;
+    }
+
+    public void setPerformUpdateLaterThread(Thread performUpdateLaterThread) {
+        this.performUpdateLaterThread = performUpdateLaterThread;
+    }
+
+    public Map<Update, Bot> getPerformUpdateLaterMap() {
+        if(performUpdateLaterThread == null){
+            performUpdateLaterThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while(performUpdateLaterMap.size() != 0) {
+                        try {
+                            //Wait 10 minutes
+                            Thread.sleep(600000);
+                            performUpdateLaterMap.keySet().forEach(update -> {
+                                Bot bot = performUpdateLaterMap.get(update);
+
+                                try {
+                                    bot.processUpdateReceveived(update);
+                                    performUpdateLaterMap.remove(update);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    performUpdateLaterMap = null;
+                    performUpdateLaterThread = null;
+                }
+            });
+            performUpdateLaterThread.start();
+        }
+        return performUpdateLaterMap;
+    }
+
+    public void setPerformUpdateLaterMap(Map<Update, Bot> performUpdateLaterMap) {
+        this.performUpdateLaterMap = performUpdateLaterMap;
+    }
 
     public Bot getBot() {
         return bot;
