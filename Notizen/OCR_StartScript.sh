@@ -1,5 +1,5 @@
 #Formatierunr für Tesserate
-LC_ALL=C
+export LC_ALL=C
 cd Repo/OCR-Docs-Storage
 git pull
 cd ..
