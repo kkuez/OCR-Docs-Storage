@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/StartProcess.java" afterDir="false" />
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Neue .jar.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/KeyboardFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/KeyboardFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/BonProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetBonsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetBonsProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetPicsProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/NewUserRegProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/NewUserRegProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/Process.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/RemoveLastProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/RemoveLastProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SearchProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/SearchProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/Processes/SumProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/SumProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/BotUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/BotUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notizen/OCR_StartScript.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/OCR_StartScript.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -215,7 +203,42 @@
       <option name="project" value="LOCAL" />
       <updated>1568905146335</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added StartKeyboard to Bot.">
+      <created>1568919098329</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1568919098329</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added StartKeyboard to Bot.">
+      <created>1568922414311</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1568922414311</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Neue .jar.">
+      <created>1568961948465</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1568961948465</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Script tp set format, pull, copy new version to local rep.">
+      <created>1569077180265</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1569077180266</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Neue .jar.">
+      <created>1569077237527</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1569077237527</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -238,6 +261,9 @@
     <MESSAGE value="DB wont save when FIlesize already present." />
     <MESSAGE value="New jar." />
     <MESSAGE value="Removed prepareDB Method from DBUtil." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed prepareDB Method from DBUtil." />
+    <MESSAGE value="Added StartKeyboard to Bot." />
+    <MESSAGE value="Script tp set format, pull, copy new version to local rep." />
+    <MESSAGE value="Neue .jar." />
+    <option name="LAST_COMMIT_MESSAGE" value="Neue .jar." />
   </component>
 </project>

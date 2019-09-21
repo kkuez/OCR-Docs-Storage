@@ -4,4 +4,4 @@ cd Repo/OCR-Docs-Storage
 git pull
 cd ..
 cd ..
-mv Repo/OCR-Docs-Storage/target/OCR-Storage.jar OCR-Storage.jar
+cp Repo/OCR-Docs-Storage/target/OCR-Storage.jar OCR-Storage.jar
