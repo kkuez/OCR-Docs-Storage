@@ -36,6 +36,8 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
+        printUpdateData(update);
+
         if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(update.getMessage().getFrom().getId())){
             processUpdateReceveived(update);
         }else{
@@ -70,10 +72,18 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
             }
-
             if (update.getMessage().hasPhoto()) {
                 processPhoto(update);
             }
+        }
+
+        private void printUpdateData(Update update){
+            StringBuilder printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getMessage().getFrom().getFirstName());
+            String append = update.getMessage().hasPhoto() ? ", picture: " +update.getMessage().getPhoto().toString() : "";
+            printBuilder.append(append);
+            append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : "";
+            printBuilder.append(append);
+            System.out.println(printBuilder);
         }
 
     private void processPhoto(Update update){
@@ -145,7 +155,6 @@ public class Bot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -167,7 +176,6 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-
         return null; // Just in case
     }
 

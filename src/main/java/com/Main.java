@@ -2,6 +2,7 @@ package com;
 
 import com.Controller.StartApplication;
 import com.Telegram.Bot;
+import com.Utils.BotUtil;
 import javafx.application.Application;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.ApiContextInitializer;
