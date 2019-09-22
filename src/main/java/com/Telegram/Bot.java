@@ -241,7 +241,7 @@ public class Bot extends TelegramLongPollingBot {
                             if (cmd.startsWith("removelast") || input.equals("Remove last Document")) {
                                 return new RemoveLastProcess(this);
                             }else {
-                                if (cmd.startsWith("add") || cmd.startsWith("removeitem") || cmd.startsWith("getlist")) {
+                                if (cmd.startsWith("add") || cmd.startsWith("removeitem") || cmd.startsWith("getlist") || cmd.startsWith("removeall")) {
                                     return new ShoppingListProcess(this, update);
                                 }
                         }}

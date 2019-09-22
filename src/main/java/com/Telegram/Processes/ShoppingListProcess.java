@@ -4,10 +4,14 @@ import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.ArrayList;
+
 public class ShoppingListProcess extends Process{
 
     public ShoppingListProcess(Bot bot, Update update){
         this.setBot(bot);
+        getBot().setBusy(true);
+        performNextStep("asd", update);
     }
     @Override
     public void performNextStep(String arg, Update update) {
@@ -16,7 +20,7 @@ public class ShoppingListProcess extends Process{
         if(input.contains(" ")){
             cmd = input.substring(0, update.getMessage().getText().indexOf(" ")).toLowerCase();
         }else{
-            cmd = input;
+            cmd = input.toLowerCase();
         }
 
          arg = input.substring(input.indexOf(" ") + 1);
@@ -37,13 +41,18 @@ public class ShoppingListProcess extends Process{
 
                 break;
             case "getlist":
-                StringBuilder listeBuilder = new StringBuilder();
+                StringBuilder listeBuilder = new StringBuilder("Aktuelle Einkaufsliste:\n");
                 for(int i = 0;i<getBot().getShoppingList().size();i++){
                     listeBuilder.append( i + ": " + getBot().getShoppingList().get(i) + "\n");
                 }
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", listeBuilder.toString(), getBot());
                 break;
+            case "removeall":
+                getBot().setShoppingList(new ArrayList<String>());
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Einkaufsliste gelöscht :)", getBot());
+                break;
         }
+        getBot().setBusy(false);
         getBot().process = null;
     }
 }

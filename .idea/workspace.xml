@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/OCR-Storage.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/OCR-Storage.jar" afterDir="false" />
     </list>
@@ -344,7 +345,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569170334072</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Process getlist and free process field.">
+      <created>1569171434538</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1569171434538</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -376,6 +384,18 @@
     <MESSAGE value="New .jar." />
     <MESSAGE value="New .jar. Fixed Camelcase in cmd." />
     <MESSAGE value="New .jar. Fixed space case in cmd." />
-    <option name="LAST_COMMIT_MESSAGE" value="New .jar. Fixed space case in cmd." />
+    <MESSAGE value="Process getlist and free process field." />
+    <option name="LAST_COMMIT_MESSAGE" value="Process getlist and free process field." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java</url>
+          <line>42</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
