@@ -48,4 +48,8 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
         this.document = document;
     }
 
+    @Override
+    void closeWindow() {
+
+    }
 }

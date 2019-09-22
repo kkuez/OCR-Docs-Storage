@@ -1,5 +1,6 @@
 package com.Utils;
 
+import com.Controller.StartApplication;
 import com.ObjectHub;
 import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
@@ -22,10 +23,12 @@ public class DBUtil {
 
     public static Document lastProcessedDoc;
 
-    public static List<Document> getFilesForSearchTerm(String searchTerm) {
+    public static List<Document> getDocumentsForSearchTerm(String searchTerm) {
         List<Document> documentList = DBUtil
                 .showResultsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'");
-
+        documentList.forEach(document -> {
+            document.setTags(getTagsForDocument(document));
+        });
         ObjectHub.getInstance().getArchiver().setDocumentList(documentList);
         return documentList;
     }
@@ -67,6 +70,23 @@ public class DBUtil {
         executeSQL("delete from Documents where id=" + lastProcessedDoc.getId() + "");
         executeSQL("delete from Bons where belongsToDocument=" + lastProcessedDoc.getId() + "");
         FileUtils.deleteQuietly(lastProcessedDoc.getOriginFile());
+    }
+
+    public static Set<String> getTagsForDocument(Document document){
+        Set<String> tagSet = new HashSet<>();
+        Statement statement = null;
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());
+            while (rs.next()) {
+                tagSet.add(rs.getString("Tag"));
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tagSet;
     }
 
     public static void executeSQL(String sqlStatement) {

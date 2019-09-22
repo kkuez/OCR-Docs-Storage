@@ -34,7 +34,6 @@ public abstract class Document{
         this.setContent(content);
         this.setOriginFile(originalFile);
         this.user = user;
-        this.tags = new HashSet<>();
     }
 
     public String getInsertDBString(){
@@ -80,6 +79,13 @@ public abstract class Document{
             originalFileName = originFile.getName();
         }
         return originalFileName;
+    }
+
+    public String getTagString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        tags.forEach(tag->stringBuilder.append(tag + ", "));
+
+        return stringBuilder.toString();
     }
 
     public String getDate() {

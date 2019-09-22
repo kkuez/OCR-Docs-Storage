@@ -22,7 +22,7 @@ public class SearchProcess extends Process {
     @Override
     public void performNextStep(String arg, Update update) {
         getBot().setBusy(true);
-        List<Document> listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
+        List<Document> listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
         System.out.println("Send list of Pictures related to \"" + searchTerm);
         BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", getBot());
         getBot().setBusy(false);

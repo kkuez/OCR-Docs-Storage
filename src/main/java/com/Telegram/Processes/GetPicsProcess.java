@@ -20,7 +20,7 @@ public class GetPicsProcess extends Process {
     @Override
     public void performNextStep(String arg, Update update) {
         getBot().setBusy(true);
-        List<Document> listOfDocs = DBUtil.getFilesForSearchTerm(searchTerm);
+        List<Document> listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
         listOfDocs.forEach(document -> getBot().sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "", null));
         getBot().setBusy(false);
         getBot().process = null;

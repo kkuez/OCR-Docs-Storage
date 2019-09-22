@@ -1,6 +1,5 @@
 package com.Controller;
 
-import com.Controller.Actions.Action;
 import com.Controller.Reporter.Reporter;
 import com.Controller.Reporter.SubmitBooleanReporter;
 import com.Controller.Reporter.SubmitTagsReporter;
@@ -139,14 +138,14 @@ public class MainController extends SingleDocumentController {
     }
 
     public void search() {
-        DBUtil.getFilesForSearchTerm(searchTermTextField.getText());
+        DBUtil.getDocumentsForSearchTerm(searchTermTextField.getText());
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());
         ControllerUtil.fillTable(mainTableView, documentObservableList,
                 new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                 new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
                         new PropertyValueFactory<Document, String>("date"),
-                        new PropertyValueFactory<Document, String>("tags") });
+                        new PropertyValueFactory<Document, String>("tagString") });
     }
 
     public void chooseButtonInputPath() {
@@ -195,5 +194,10 @@ public class MainController extends SingleDocumentController {
 
     public void setReporter(Reporter reporter) {
         this.reporter = reporter;
+    }
+
+    @Override
+    void closeWindow() {
+
     }
 }

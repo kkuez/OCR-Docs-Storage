@@ -1,6 +1,5 @@
 package com.Controller;
 
-import com.Controller.Actions.TagAction;
 import com.Controller.Reporter.Reporter;
 import com.Controller.Reporter.SubmitTagsReporter;
 import javafx.fxml.FXML;
@@ -46,10 +45,8 @@ public class AddTags extends SimpleSubmitController{
 
     @Override
     public void submit() {
-
         ((SubmitTagsReporter) reporter).submitTags(tags);
-        Stage stage = (Stage) addButton.getScene().getWindow();
-        stage.close();
+        closeWindow();
     }
 
     //GETTER SETTER
@@ -64,4 +61,9 @@ public class AddTags extends SimpleSubmitController{
     }
 
 
+    @Override
+    void closeWindow() {
+        Stage stage = (Stage) addButton.getScene().getWindow();
+        stage.close();
+    }
 }

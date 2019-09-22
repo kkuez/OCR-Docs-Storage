@@ -1,9 +1,6 @@
 package com.Controller;
 
-import com.Controller.Actions.Action;
-import com.Controller.Reporter.Reporter;
 import com.Controller.Reporter.SubmitBooleanReporter;
-import com.ObjectTemplates.Document;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,12 +21,12 @@ public class BooleanWindow extends Controller{
 
     public void yes(){
         reporter.submitBoolean(true);
+        closeWindow();
     }
 
     public void no(){
         reporter.submitBoolean(false);
-        Stage stage = (Stage) jaButton.getScene().getWindow();
-        stage.close();
+        closeWindow();
     }
 
     //GETTER SETTER
@@ -51,4 +48,9 @@ public class BooleanWindow extends Controller{
         this.reporter = reporter;
     }
 
+    @Override
+    void closeWindow() {
+        Stage stage = (Stage) jaButton.getScene().getWindow();
+        stage.close();
+    }
 }
