@@ -14,17 +14,15 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class LogUtil {
 
     public static void log(String message){
-        String logString = LocalDateTime.now().toString().replace("T", " ") + "      " + message;
+        String logString = LocalDateTime.now().toString().replace("T", " ") + "      " + message + "\n";
         checkLogFile(logString);
         try {
-            FileUtils.writeStringToFile(ObjectHub.getInstance().getArchiver().getCurrentLogFile(), logString, UTF_8);
+            FileUtils.write(ObjectHub.getInstance().getArchiver().getCurrentLogFile(), logString, UTF_8, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(logString);
+        System.out.print(logString);
     }
-
-
 
     public static void checkLogFile(String logString){
         if(ObjectHub.getInstance().getArchiver().getCurrentLogFile() == null){

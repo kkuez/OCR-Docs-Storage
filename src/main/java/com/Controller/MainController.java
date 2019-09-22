@@ -10,6 +10,7 @@ import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.Utils.ControllerUtil;
 import com.Utils.DBUtil;
+import com.Utils.LogUtil;
 import com.Utils.TessUtil;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -69,6 +70,7 @@ public class MainController extends SingleDocumentController {
 
     @FXML
     private void initialize() {
+        LogUtil.log("Gui: " + "Init Gui.");
         archivePathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
 
         inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
@@ -87,6 +89,7 @@ public class MainController extends SingleDocumentController {
     }
 
     public void prepareTagsBeforeProcessing(){
+        LogUtil.log("Gui: " + "Process new Files from Folder: " + inputPathLabel);
         Reporter booleanReporter = new SubmitBooleanReporter() {
             @Override
             public void submitBoolean(boolean value) {
@@ -139,6 +142,7 @@ public class MainController extends SingleDocumentController {
     }
 
     public void search() {
+        LogUtil.log("Gui: " + "Performing search with Term '" + searchTermTextField.getText() + "'");
         List<Document> documentList = DBUtil.getDocumentsForSearchTerm(searchTermTextField.getText());
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(documentList);
@@ -174,6 +178,7 @@ public class MainController extends SingleDocumentController {
     }
 
     public void archive() {
+        LogUtil.log("Gui: " + "Archive "  + nameOfProjectTextField.getText());
         ObjectHub.getInstance().getArchiver().archive(nameOfProjectTextField.getText());
     }
 

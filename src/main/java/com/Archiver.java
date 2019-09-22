@@ -1,6 +1,7 @@
 package com;
 
 import com.ObjectTemplates.Document;
+import com.Utils.LogUtil;
 import org.apache.commons.io.FileUtils;
 import org.zeroturnaround.zip.ZipUtil;
 
@@ -56,6 +57,7 @@ public class Archiver {
     }
 
     public void archive(String nameOfArchive) {
+        LogUtil.log("Gui: " + "Create Zip-Archive");
         File tempForZip = new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"), "temp");
         tempForZip.mkdir();
 

@@ -2,6 +2,7 @@ package com.Controller;
 
 import com.Controller.Reporter.Reporter;
 import com.Controller.Reporter.SubmitTagsReporter;
+import com.Utils.LogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -45,6 +46,7 @@ public class AddTags extends SimpleSubmitController{
 
     @Override
     public void submit() {
+        LogUtil.log("Gui: " + "Added Tags.");
         ((SubmitTagsReporter) reporter).submitTags(tags);
         closeWindow();
     }
