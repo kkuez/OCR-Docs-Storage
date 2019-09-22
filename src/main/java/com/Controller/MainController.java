@@ -1,8 +1,6 @@
 package com.Controller;
 
-import com.Controller.Reporter.Reporter;
-import com.Controller.Reporter.SubmitBooleanReporter;
-import com.Controller.Reporter.SubmitTagsReporter;
+import com.Controller.Reporter.*;
 import com.Controller.Strategies.BooleanWIndowStrategy;
 import com.Controller.Strategies.HTMLOrImageStrategy;
 import com.Controller.Strategies.SubmitTagsStrategy;

@@ -5,4 +5,6 @@ create table Bons (belongsToDocument INTEGER, sum REAL);
 Drop Table AllowedUsers;
 create Table AllowedUsers(id INTEGER, name TEXT);
 Drop Table Tags;
-create Table Tags(belongsToDocument, Tag TEXT);
+create Table Tags(belongsToDocument INTEGER, Tag TEXT);
+Drop Table ShoppingList;
+create Table ShoppingList(item TEXT);

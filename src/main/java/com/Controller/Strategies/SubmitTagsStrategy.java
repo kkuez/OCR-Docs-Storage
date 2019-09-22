@@ -1,10 +1,7 @@
 package com.Controller.Strategies;
 
 import com.Controller.AddTags;
-import com.Controller.BooleanWindow;
-import com.Controller.Reporter.Reporter;
-import com.Controller.Reporter.SubmitBooleanReporter;
-import com.Controller.Reporter.SubmitTagsReporter;
+import com.Controller.Reporter.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

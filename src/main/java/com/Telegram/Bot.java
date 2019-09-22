@@ -31,6 +31,12 @@ public class Bot extends TelegramLongPollingBot {
 
     private Boolean isBusy;
 
+    private List<String> shoppingList;
+
+    public Bot(){
+        shoppingList = DBUtil.getShoppingListFromDB();
+    }
+
     /**
      * Method for receiving messages.
      * @param update Contains a message from the user.
@@ -218,23 +224,26 @@ public class Bot extends TelegramLongPollingBot {
             if (cmd.startsWith("start")) {
                 return new StartProcess(this, update);
             } else {
-                if (cmd.startsWith("search") && input.equals("Search Document")) {
+                if (cmd.startsWith("search") || input.equals("Search Document")) {
                 return new SearchProcess(this, update);
             } else {
-                if (cmd.startsWith("getpics") && input.equals("Get Documents")) {
+                if (cmd.startsWith("getpics") || input.equals("Get Documents")) {
                     return new GetPicsProcess(this, update);
                 } else {
 
-                    if (cmd.startsWith("getsum") && input.equals("Get Sum of Bons")) {
+                    if (cmd.startsWith("getsum") || input.equals("Get Sum of Bons")) {
                         return new SumProcess(this);
                     } else {
-                        if (cmd.startsWith("getbons") && input.equals("Get Bons")) {
+                        if (cmd.startsWith("getbons") || input.equals("Get Bons")) {
                             return new GetBonsProcess(this);
                         } else {
-                            if (cmd.startsWith("removelast") && input.equals("Remove last Document")) {
+                            if (cmd.startsWith("removelast") || input.equals("Remove last Document")) {
                                 return new RemoveLastProcess(this);
-                            }
-                        }
+                            }else {
+                                if (cmd.startsWith("add") || cmd.startsWith("removeItem") || cmd.startsWith("getList")) {
+                                    return new ShoppingListProcess(this, update);
+                                }
+                        }}
                     }
                     }
                 }
@@ -278,6 +287,14 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     //GETTER SETTER
+    public List<String> getShoppingList() {
+        return shoppingList;
+    }
+
+    public void setShoppingList(List<String> shoppingList) {
+        this.shoppingList = shoppingList;
+    }
+
     public Boolean getBusy() {
         return isBusy;
     }

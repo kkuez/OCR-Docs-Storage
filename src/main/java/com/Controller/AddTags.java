@@ -1,7 +1,6 @@
 package com.Controller;
 
-import com.Controller.Reporter.Reporter;
-import com.Controller.Reporter.SubmitTagsReporter;
+import com.Controller.Reporter.*;
 import com.Utils.LogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,7 +10,6 @@ import javafx.stage.Stage;
 
 import java.util.HashSet;
 import java.util.Set;
-
 
 public class AddTags extends SimpleSubmitController{
 
@@ -52,8 +50,6 @@ public class AddTags extends SimpleSubmitController{
     }
 
     //GETTER SETTER
-
-
     public Reporter getReporter() {
         return reporter;
     }

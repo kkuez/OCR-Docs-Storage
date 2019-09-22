@@ -63,6 +63,31 @@ public class DBUtil {
         return userMap;
     }
 
+    public static List<String> getShoppingListFromDB(){
+        List<String> shoppingList = new ArrayList<>();
+        Statement statement = null;
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");
+            while (rs.next()) {
+                shoppingList.add(rs.getString("item"));
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shoppingList;
+    }
+
+    public static void addToShoppingList(String item){
+        executeSQL("insert into ShoppingList (item) Values ('" + item + "')");
+    }
+
+    public static void removeFromShoppingList(String item){
+        executeSQL("delete from ShoppingList where item='" + item + "'");
+    }
+
     public static void insertDocumentToDB(Document document){
         if(document.getClass().equals(Image.class)){
             lastProcessedDoc = document;
