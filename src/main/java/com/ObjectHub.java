@@ -6,6 +6,7 @@ import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
+import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.FileInputStream;
@@ -91,12 +92,15 @@ public class ObjectHub {
                 public void run() {
                     while(performUpdateLaterMap.size() != 0) {
                         try {
+                            int sleepTimeInMs = 600000;
                             //Wait 10 minutes
-                            Thread.sleep(600000);
+                            LogUtil.log("System: Waiting to perform LaterUpdates... (" + performUpdateLaterMap.size() + ", " + sleepTimeInMs / 1000 + " seconds)");
+                            Thread.sleep(sleepTimeInMs);
                             performUpdateLaterMap.keySet().forEach(update -> {
                                 Bot bot = performUpdateLaterMap.get(update);
 
                                 try {
+                                    LogUtil.log("System: Trying to perform LaterUpdate");
                                     bot.processUpdateReceveived(update);
                                     performUpdateLaterMap.remove(update);
                                 } catch (Exception e) {
@@ -108,6 +112,7 @@ public class ObjectHub {
                             e.printStackTrace();
                         }
                     }
+                    LogUtil.log("System: No LaterUpdates left.");
                     performUpdateLaterMap = null;
                     performUpdateLaterThread = null;
                 }

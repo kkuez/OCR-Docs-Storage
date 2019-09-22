@@ -45,7 +45,7 @@ public class Bot extends TelegramLongPollingBot {
             }catch (Exception e){
                 e.printStackTrace();
                 LogUtil.log("Update added to perform later...");
-                ObjectHub.getInstance().getPerformUpdateLaterMap().put(update, this);
+                ObjectHub.getInstance().getPerformUpdateLaterMap().putIfAbsent(update, this);
             }
 
             }else{
