@@ -16,7 +16,7 @@ public class ShoppingListProcess extends Process{
                 bot.getShoppingList().add(arg);
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " hinzugefügt! :)", bot);
                 break;
-            case "removeItem":
+            case "removeitem":
                 try{
                     bot.getShoppingList().remove(Integer.parseInt(arg));
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " gelöscht.", bot);
@@ -27,7 +27,7 @@ public class ShoppingListProcess extends Process{
 
 
                 break;
-            case "getList":
+            case "getlist":
                 StringBuilder listeBuilder = new StringBuilder();
                 for(int i = 0;i<bot.getShoppingList().size();i++){
                     listeBuilder.append( i + ": " + bot.getShoppingList().get(i) + "\n");
