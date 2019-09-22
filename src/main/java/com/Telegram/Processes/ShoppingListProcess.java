@@ -17,12 +17,21 @@ public class ShoppingListProcess extends Process{
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " hinzugefügt! :)", bot);
                 break;
             case "removeItem":
-                bot.getShoppingList().remove(arg);
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + "gelöscht.", bot);
+                try{
+                    bot.getShoppingList().remove(Integer.parseInt(arg));
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " gelöscht.", bot);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " nicht gelöscht. Hast du eine Zahl aus der Liste angegeben? (/getList)", bot);
+                }
+
+
                 break;
             case "getList":
                 StringBuilder listeBuilder = new StringBuilder();
-                bot.getShoppingList().forEach(item -> listeBuilder.append(item + "\n"));
+                for(int i = 0;i<bot.getShoppingList().size();i++){
+                    listeBuilder.append( i + ": " + bot.getShoppingList().get(i) + "\n");
+                }
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", listeBuilder.toString(), bot);
                 break;
         }
