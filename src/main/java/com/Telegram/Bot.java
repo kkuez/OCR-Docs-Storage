@@ -7,6 +7,7 @@ import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
+import com.Utils.LogUtil;
 import com.Utils.TessUtil;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -43,7 +44,7 @@ public class Bot extends TelegramLongPollingBot {
                 processUpdateReceveived(update);
             }catch (Exception e){
                 e.printStackTrace();
-                System.out.println("Update added to perform later...");
+                LogUtil.log("Update added to perform later...");
                 ObjectHub.getInstance().getPerformUpdateLaterMap().put(update, this);
             }
 
@@ -93,7 +94,7 @@ public class Bot extends TelegramLongPollingBot {
             printBuilder.append(append);
             append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : "";
             printBuilder.append(append);
-            System.out.println(printBuilder);
+            LogUtil.log(printBuilder.toString());
         }
 
     private void processPhoto(Update update){
@@ -106,7 +107,7 @@ public class Bot extends TelegramLongPollingBot {
         largestPhoto = downloadPhotoByFilePath(filePath);
 
         if(DBUtil.isFilePresent(largestPhoto)){
-            System.out.println("File already present: " + largestPhoto.getName());
+            LogUtil.log("File already present: " + largestPhoto.getName());
             return;
         }
 
@@ -141,7 +142,7 @@ public class Bot extends TelegramLongPollingBot {
             sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean));
         }
 
-        System.out.println(update.getMessage().getText());
+        LogUtil.log(update.getMessage().getText());
         setBusy(false);
     }
 
@@ -263,7 +264,7 @@ public class Bot extends TelegramLongPollingBot {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Command 1 getupdate");
+                LogUtil.log("Command 1 getupdate");
                 while(true){
                     Scanner scanner = new Scanner(System.in);
                     switch (scanner.next()){

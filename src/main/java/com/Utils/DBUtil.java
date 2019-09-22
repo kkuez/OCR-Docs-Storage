@@ -132,7 +132,7 @@ public class DBUtil {
                 Document document = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
                 document.setUser(rs.getInt("user"));
                 documentList.add(document);
-                System.out.println(rs.getString("originalFile"));
+                LogUtil.log(rs.getString("originalFile"));
             }
 
             statement.close();
@@ -157,7 +157,7 @@ public class DBUtil {
             ResultSet rs = statement.executeQuery("select * from Bons");
             while (rs.next()) {
                 bonSet.add(new Bon(rs.getInt("belongsToDocument"), rs.getFloat("sum")));
-                System.out.println(rs.getString("originalFile"));
+                LogUtil.log(rs.getString("originalFile"));
             }
 
             statement.close();
@@ -202,7 +202,7 @@ public class DBUtil {
                 Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
                 image.setTags(getTagsForDocument(image));
                 documentList.add(image);
-                System.out.println(rs.getString("originalFile"));
+                LogUtil.log(rs.getString("originalFile"));
             }
 
             statement.close();

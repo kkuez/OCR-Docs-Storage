@@ -4,6 +4,7 @@ import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
+import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class SearchProcess extends Process {
     public void performNextStep(String arg, Update update) {
         getBot().setBusy(true);
         List<Document> listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
-        System.out.println("Send list of Pictures related to \"" + searchTerm);
+        LogUtil.log("Send list of Pictures related to \"" + searchTerm);
         BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", getBot());
         getBot().setBusy(false);
         getBot().process = null;

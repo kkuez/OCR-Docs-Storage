@@ -21,7 +21,11 @@ public class Archiver {
 
     File bonFolder;
 
+    File logFolder;
+
     File zipFolder;
+
+    File currentLogFile;
 
     public Archiver(Properties properties) {
         documentList = new ArrayList<>();
@@ -33,6 +37,11 @@ public class Archiver {
         zipFolder = new File(archiveFolder.getParent(), "Zips");
         if(!zipFolder.exists()){
             zipFolder.mkdir();
+        }
+
+        logFolder = new File(archiveFolder, "Logs");
+        if(!logFolder.exists()){
+            logFolder.mkdir();
         }
 
         documentFolder = new File(archiveFolder, "Documents");
@@ -74,6 +83,23 @@ public class Archiver {
 
     // GETTER SETTER
 
+
+    public File getCurrentLogFile() {
+        return currentLogFile;
+    }
+
+    public void setCurrentLogFile(File currentLogFile) {
+        this.currentLogFile = currentLogFile;
+    }
+
+
+    public File getLogFolder() {
+        return logFolder;
+    }
+
+    public void setLogFolder(File logFolder) {
+        this.logFolder = logFolder;
+    }
 
     public File getZipFolder() {
         return zipFolder;

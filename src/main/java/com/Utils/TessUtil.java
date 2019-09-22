@@ -61,7 +61,7 @@ public class TessUtil {
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());
         ControllerUtil.fillTable(tableView, documentObservableList, tableColumns, propertyValueFactories);
-        System.out.println("\n" + counterProcessedFiles.get() + " Files stored.");
+        LogUtil.log("\n" + counterProcessedFiles.get() + " Files stored.");
 
         return documentSet;
     }
@@ -72,7 +72,6 @@ public class TessUtil {
         Document document = null;
         try {
             String result = tesseract.doOCR(inputfile);
-            System.out.println(result);
             document = new Image(result, inputfile, DBUtil.countDocuments("") );
             String date = getFirstDate(result);
             date = date == null ? LocalDate.now().toString() : date;
@@ -160,7 +159,7 @@ public class TessUtil {
         String datapath = "";
         if(ObjectHub.getInstance().getInputArgs().containsKey("tessdata")){
             datapath = ObjectHub.getInstance().getInputArgs().get("tessdata");
-            System.out.println("Alternative datapath set.");
+            LogUtil.log("Alternative datapath set.");
         }else{
             datapath = ObjectHub.getInstance().getProperties().getProperty("tessData");
         }
