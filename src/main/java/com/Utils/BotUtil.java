@@ -13,13 +13,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 public class BotUtil {
 
-    public static void activateTGBot(Bot inputBot){
+    public static void activateTGBot(Bot inputBotOrNull){
         LogUtil.log("System: Activate TG-Bot");
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotApi = new TelegramBotsApi();
         Bot bot = null;
         try {
-            bot = inputBot == null ? new Bot() : inputBot;
+            bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
             ObjectHub.getInstance().setBot(bot);
             telegramBotApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {
