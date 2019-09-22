@@ -35,6 +35,7 @@ public class Bot extends TelegramLongPollingBot {
 
     public Bot(){
         shoppingList = DBUtil.getShoppingListFromDB();
+        setBusy(false);
     }
 
     /**
