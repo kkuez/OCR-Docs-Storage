@@ -1,6 +1,5 @@
 package com.Utils;
 
-import com.Controller.StartApplication;
 import com.ObjectHub;
 import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
@@ -8,11 +7,8 @@ import com.ObjectTemplates.Image;
 import com.ObjectTemplates.User;
 import org.apache.commons.io.FileUtils;
 
-import javax.print.Doc;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.*;
 
 public class DBUtil {
@@ -24,18 +20,26 @@ public class DBUtil {
     public static Document lastProcessedDoc;
 
     public static List<Document> getDocumentsForSearchTerm(String searchTerm) {
-        List<Document> documentList = DBUtil
-                .showResultsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'");
-        documentList.forEach(document -> {
+        Map<File, Document> documentMap = new HashMap<>();
+
+        DBUtil.showDocumentsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'").forEach(document -> {
             document.setTags(getTagsForDocument(document));
+            documentMap.put(document.getOriginFile(), document);
         });
+
+        List<Document> taggedDocuments = getDocumentsByTag(searchTerm);
+        taggedDocuments.forEach(document -> documentMap.putIfAbsent(document.getOriginFile(), document));
+        List<Document> documentList = new ArrayList<>();
+        documentList.addAll(documentMap.values());
         ObjectHub.getInstance().getArchiver().setDocumentList(documentList);
         return documentList;
     }
 
+
+
     public static Set<String> getFilePathOfDocsContainedInDB() {
         Set<String> filePathSet = new HashSet<>();
-        List<Document> documentList = showResultsFromSQLExpression("select * from Documents");
+        List<Document> documentList = showDocumentsFromSQLExpression("select * from Documents");
         documentList.forEach(document -> filePathSet.add(document.getOriginFile().getAbsolutePath()));
         return filePathSet;
     }
@@ -163,7 +167,31 @@ public class DBUtil {
         return bonSet;
     }
 
-    public static List<Document> showResultsFromSQLExpression(String sqlExpression) {
+
+    public static List<Document> getDocumentsByTag(String tag){
+        Statement statement = null;
+        List<Integer> documentIds = new ArrayList<>();
+        List<Document> documentList = new ArrayList<>();
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select belongsToDocument from Tags where Tag like='%" + tag + "%'");
+            while (rs.next()) {
+                documentIds.add(rs.getInt("belongsToDocument"));
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for(Integer id : documentIds){
+            documentList.addAll(DBUtil
+                    .showDocumentsFromSQLExpression("select * from Documents where id=" + id + ""));
+        }
+        return documentList;
+
+    }
+
+    public static List<Document> showDocumentsFromSQLExpression(String sqlExpression) {
         Statement statement = null;
         List<Document> documentList = new ArrayList<>();
         try {
