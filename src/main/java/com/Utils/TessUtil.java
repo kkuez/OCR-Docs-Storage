@@ -48,7 +48,7 @@ public class TessUtil {
                     @Override
                     public void run() {
                         if(!DBUtil.isFilePresent(file)) {
-                            Document document = processFile(file, 0);
+                            Document document = processFile(file, 0, null);
                             documentSet.add(document);
                         }
                         counterProcessedFiles.getAndIncrement();
@@ -66,7 +66,7 @@ public class TessUtil {
         return documentSet;
     }
 
-    public static Document processFile(File inputfile, int userID) {
+    public static Document processFile(File inputfile, int userID, Set<String> tagSet) {
 
         Tesseract tesseract = getTesseract();
         Document document = null;
@@ -86,6 +86,13 @@ public class TessUtil {
             document.setDate(getFirstDate(document.getContent()));
 
             DBUtil.insertDocumentToDB(document);
+
+            if(tagSet != null){
+                for(String tag : tagSet){
+                        DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
+                }
+                document.setTags(tagSet);
+            }
 
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {

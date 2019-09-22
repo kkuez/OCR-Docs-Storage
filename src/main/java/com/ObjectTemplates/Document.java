@@ -83,8 +83,11 @@ public abstract class Document{
 
     public String getTagString(){
         StringBuilder stringBuilder = new StringBuilder();
-        tags.forEach(tag->stringBuilder.append(tag + ", "));
-
+        if(tags != null) {
+            tags.forEach(tag -> stringBuilder.append(tag + ", "));
+        }else {
+            return "";
+        }
         return stringBuilder.toString();
     }
 

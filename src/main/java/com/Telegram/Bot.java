@@ -118,7 +118,12 @@ public class Bot extends TelegramLongPollingBot {
         }
         Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon");
 
-        Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId());
+        Set<String> tags = null;
+        if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
+            tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
+        };
+
+        Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
         try {
 
             if((TessUtil.checkIfBon(document.getContent()) || forceBon) && this != null){
@@ -126,6 +131,8 @@ public class Bot extends TelegramLongPollingBot {
                 Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
                 process = new BonProcess(bon, this, document);
             }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,6 +145,18 @@ public class Bot extends TelegramLongPollingBot {
         setBusy(false);
     }
 
+    private Set<String> parseTags(String input){
+        input = input.toLowerCase().replace("tag ", "");
+        Set<String> tags = new HashSet<>();
+        while (input.contains(",")){
+            String tag = input.substring(0, input.indexOf(","));
+            tags.add(tag);
+            input = input.replace(tag, "").replaceFirst(",", "");
+        }
+
+        tags.add(input);
+        return tags;
+    }
 
     public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboardMarkup possibleKeyBoardOrNull){
         SendPhoto sendPhoto = null;

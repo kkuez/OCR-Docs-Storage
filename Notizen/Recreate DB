@@ -5,4 +5,4 @@ create table Bons (belongsToDocument INTEGER, sum REAL);
 Drop Table AllowedUsers;
 create Table AllowedUsers(id INTEGER, name TEXT);
 Drop Table Tags;
-create Table Tags(belongsToDOcument, Tag TEXT);
+create Table Tags(belongsToDocument, Tag TEXT);

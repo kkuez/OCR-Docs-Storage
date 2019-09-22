@@ -21,6 +21,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 
 public class MainController extends SingleDocumentController {
@@ -138,9 +139,9 @@ public class MainController extends SingleDocumentController {
     }
 
     public void search() {
-        DBUtil.getDocumentsForSearchTerm(searchTermTextField.getText());
+        List<Document> documentList = DBUtil.getDocumentsForSearchTerm(searchTermTextField.getText());
         ObservableList<Document> documentObservableList = ControllerUtil
-                .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());
+                .createObservableList(documentList);
         ControllerUtil.fillTable(mainTableView, documentObservableList,
                 new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                 new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),

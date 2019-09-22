@@ -3,6 +3,7 @@ package com.Controller;
 import com.ObjectTemplates.Document;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
@@ -25,6 +26,7 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
             FileUtils.writeStringToFile(tempFile, document.getContent(), "UTF-8");
             tempFile.deleteOnExit();
             Desktop.getDesktop().open(tempFile);
+            closeWindow();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,6 +35,7 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
     public void showImage() {
         try {
             Desktop.getDesktop().open(document.getOriginFile());
+            closeWindow();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,6 +53,7 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
 
     @Override
     void closeWindow() {
-
+        Stage stage = (Stage) bildButton.getScene().getWindow();
+        stage.close();
     }
 }

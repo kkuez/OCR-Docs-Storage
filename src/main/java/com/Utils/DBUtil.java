@@ -174,7 +174,7 @@ public class DBUtil {
         List<Document> documentList = new ArrayList<>();
         try {
             statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select belongsToDocument from Tags where Tag like='%" + tag + "%'");
+            ResultSet rs = statement.executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");
             while (rs.next()) {
                 documentIds.add(rs.getInt("belongsToDocument"));
             }
@@ -199,7 +199,9 @@ public class DBUtil {
             ResultSet rs = statement.executeQuery(sqlExpression);
             documentList = new ArrayList<>();
             while (rs.next()) {
-                documentList.add(new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id")));
+                Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
+                image.setTags(getTagsForDocument(image));
+                documentList.add(image);
                 System.out.println(rs.getString("originalFile"));
             }
 
