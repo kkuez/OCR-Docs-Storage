@@ -9,7 +9,13 @@ public class ShoppingListProcess extends Process{
     public ShoppingListProcess(Bot bot, Update update){
         this.setBot(bot);
         String input = update.getMessage().getText();
-        String cmd = input.substring(0, update.getMessage().getText().indexOf(" ")).toLowerCase();
+        String cmd = "";
+        if(input.contains(" ")){
+           cmd = input.substring(0, update.getMessage().getText().indexOf(" ")).toLowerCase();
+        }else{
+            cmd = input;
+        }
+
         String arg = input.substring(input.indexOf(" ") + 1);
         switch (cmd){
             case "add":
