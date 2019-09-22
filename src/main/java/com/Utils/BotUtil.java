@@ -1,13 +1,31 @@
 package com.Utils;
 
+import com.ObjectHub;
 import com.Telegram.KeyboardFactory;
 import com.Telegram.Bot;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 public class BotUtil {
+
+    public static void activateTGBot(Bot inputBot){
+        LogUtil.log("System: Activate TG-Bot");
+        ApiContextInitializer.init();
+        TelegramBotsApi telegramBotApi = new TelegramBotsApi();
+        Bot bot = null;
+        try {
+            bot = inputBot == null ? new Bot() : inputBot;
+            ObjectHub.getInstance().setBot(bot);
+            telegramBotApi.registerBot(bot);
+        } catch (TelegramApiRequestException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void askBoolean(String question, Update update, Bot bot){
         SendMessage sendMessage = new SendMessage();

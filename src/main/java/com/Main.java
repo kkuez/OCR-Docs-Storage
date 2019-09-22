@@ -26,7 +26,7 @@ public class Main {
                 launchGui(args);
             }
             if(s.equals("-bot")){
-                activateTGBot();
+                BotUtil.activateTGBot();
             }
         }
         }
@@ -35,15 +35,5 @@ public class Main {
             Application.launch(StartApplication.class, args);
         }
 
-    private static void activateTGBot(){
-        ApiContextInitializer.init();
-        TelegramBotsApi telegramBotApi = new TelegramBotsApi();
-        try {
-            Bot bot = new Bot();
-            ObjectHub.getInstance().setBot(bot);
-            telegramBotApi.registerBot(bot);
-        } catch (TelegramApiRequestException e) {
-            e.printStackTrace();
-        }
-    }
+
 }
