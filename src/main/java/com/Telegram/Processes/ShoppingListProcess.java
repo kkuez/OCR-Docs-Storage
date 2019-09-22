@@ -8,43 +8,42 @@ public class ShoppingListProcess extends Process{
 
     public ShoppingListProcess(Bot bot, Update update){
         this.setBot(bot);
+    }
+    @Override
+    public void performNextStep(String arg, Update update) {
         String input = update.getMessage().getText();
         String cmd = "";
         if(input.contains(" ")){
-           cmd = input.substring(0, update.getMessage().getText().indexOf(" ")).toLowerCase();
+            cmd = input.substring(0, update.getMessage().getText().indexOf(" ")).toLowerCase();
         }else{
             cmd = input;
         }
 
-        String arg = input.substring(input.indexOf(" ") + 1);
+         arg = input.substring(input.indexOf(" ") + 1);
         switch (cmd){
             case "add":
-                bot.getShoppingList().add(arg);
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " hinzugefügt! :)", bot);
+                getBot().getShoppingList().add(arg);
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " hinzugefügt! :)", getBot());
                 break;
             case "removeitem":
                 try{
-                    bot.getShoppingList().remove(Integer.parseInt(arg));
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " gelöscht.", bot);
+                    getBot().getShoppingList().remove(Integer.parseInt(arg));
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " gelöscht.", getBot());
                 }catch (Exception e){
                     e.printStackTrace();
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " nicht gelöscht. Hast du eine Zahl aus der Liste angegeben? (/getList)", bot);
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " nicht gelöscht. Hast du eine Zahl aus der Liste angegeben? (/getList)", getBot());
                 }
 
 
                 break;
             case "getlist":
                 StringBuilder listeBuilder = new StringBuilder();
-                for(int i = 0;i<bot.getShoppingList().size();i++){
-                    listeBuilder.append( i + ": " + bot.getShoppingList().get(i) + "\n");
+                for(int i = 0;i<getBot().getShoppingList().size();i++){
+                    listeBuilder.append( i + ": " + getBot().getShoppingList().get(i) + "\n");
                 }
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", listeBuilder.toString(), bot);
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", listeBuilder.toString(), getBot());
                 break;
         }
-        bot.process = null;
-    }
-    @Override
-    public void performNextStep(String arg, Update update) {
-
+        getBot().process = null;
     }
 }
