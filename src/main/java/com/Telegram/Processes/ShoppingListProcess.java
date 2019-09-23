@@ -2,6 +2,7 @@ package com.Telegram.Processes;
 
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
+import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class ShoppingListProcess extends Process{
                     getBot().getShoppingList().remove(Integer.parseInt(arg));
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " gelöscht.", getBot());
                 }catch (Exception e){
-                    e.printStackTrace();
+                    LogUtil.logError(null, e);
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " nicht gelöscht. Hast du eine Zahl aus der Liste angegeben? (/getList)", getBot());
                 }
 

@@ -61,13 +61,13 @@ public class TessUtil {
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());
         ControllerUtil.fillTable(tableView, documentObservableList, tableColumns, propertyValueFactories);
-        LogUtil.log("\n" + counterProcessedFiles.get() + " Files stored.");
+        LogUtil.log(counterProcessedFiles.get() + " Files stored.");
 
         return documentSet;
     }
 
     public static Document processFile(File inputfile, int userID, Set<String> tagSet) {
-
+        LogUtil.log("Processing " + inputfile.getAbsolutePath());
         Tesseract tesseract = getTesseract();
         Document document = null;
         try {
@@ -95,9 +95,9 @@ public class TessUtil {
 
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
         return document;
     }
@@ -148,7 +148,7 @@ public class TessUtil {
         try{
             lastNumer = Float.parseFloat(numberList.get(numberList.size() - 1).replace(",","."));
         }catch (Exception e){
-            e.printStackTrace();
+            LogUtil.logError(numberList.get(numberList.size() - 1).replace(",","."), e);
         }
 
         return lastNumer;

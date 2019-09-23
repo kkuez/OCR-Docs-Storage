@@ -15,7 +15,7 @@ public class IOUtil {
                 FileUtils.writeStringToFile(result, content, "UTF-8");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logError(result.getAbsolutePath(), e);
         }
         return result.exists() ? result : null;
     }

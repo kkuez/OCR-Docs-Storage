@@ -54,10 +54,9 @@ public class DBUtil {
                 User user = new User(rs.getInt("id"), rs.getString("name"));
                 userMap.put(rs.getInt("id"), user);
             }
-
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError("select * from AllowedUsers", e);
         }
 
         return userMap;
@@ -72,10 +71,9 @@ public class DBUtil {
             while (rs.next()) {
                 shoppingList.add(rs.getString("item"));
             }
-
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError("SELECT * FROM ShoppingList", e);
         }
         return shoppingList;
     }
@@ -113,7 +111,7 @@ public class DBUtil {
 
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError("SELECT Tag FROM Tags where belongsToDocument=" + document.getId(), e);
         }
         return tagSet;
     }
@@ -125,7 +123,7 @@ public class DBUtil {
             statement.executeUpdate(sqlStatement);
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError(sqlStatement, e);
         }
     }
 
@@ -159,10 +157,9 @@ public class DBUtil {
                 documentList.add(document);
                 LogUtil.log(rs.getString("originalFile"));
             }
-
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError("SELECT * FROM Documents WHERE date like '%" + monthAndYear + "%' AND originalFile like '%Bons%'", e);
         }
         return documentList;
     }
@@ -184,10 +181,9 @@ public class DBUtil {
                 bonSet.add(new Bon(rs.getInt("belongsToDocument"), rs.getFloat("sum")));
                 LogUtil.log(rs.getString("originalFile"));
             }
-
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError("select * from Bons", e);
         }
         return bonSet;
     }
@@ -206,7 +202,7 @@ public class DBUtil {
 
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError("select belongsToDocument from Tags where Tag like '%" + tag + "%'", e);
         }
         for(Integer id : documentIds){
             documentList.addAll(DBUtil
@@ -232,7 +228,7 @@ public class DBUtil {
 
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError(sqlExpression, e);
         }
         return documentList;
     }
@@ -249,7 +245,7 @@ public class DBUtil {
 
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError("SELECT COUNT(*) FROM Documents " + sqlAddition, e);
         }
         return count;
     }
@@ -260,7 +256,7 @@ public class DBUtil {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.logError("jdbc:sqlite:" + dbFile.getAbsolutePath(), e);
         }
 
         return connection;

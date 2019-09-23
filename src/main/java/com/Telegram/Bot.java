@@ -50,7 +50,7 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 processUpdateReceveived(update);
             }catch (Exception e){
-                e.printStackTrace();
+                LogUtil.logError(null, e);
                 LogUtil.log("Update added to perform later...");
                 ObjectHub.getInstance().getPerformUpdateLaterMap().putIfAbsent(update, this);
             }
@@ -90,7 +90,7 @@ public class Bot extends TelegramLongPollingBot {
                     processPhoto(update);
                 }
             }catch (Exception e){
-                e.printStackTrace();
+                LogUtil.logError(null, e);
                 throw new RuntimeException();
             }
         }
@@ -122,7 +122,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             FileUtils.copyFile(largestPhoto, targetFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logError(largestPhoto.getAbsolutePath(), e);
         }
         Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon");
 
@@ -139,10 +139,8 @@ public class Bot extends TelegramLongPollingBot {
                 Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
                 process = new BonProcess(bon, this, document);
             }
-
-
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
 
         if (process != null && process.getClass().equals(BonProcess.class)) {
@@ -175,13 +173,13 @@ public class Bot extends TelegramLongPollingBot {
                 sendPhoto.setReplyMarkup(possibleKeyBoardOrNull);
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LogUtil.logError(imagePath, e);
         }
         sendPhoto.setChatId(update.getMessage().getChatId());
         try {
             execute(sendPhoto);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 
@@ -190,7 +188,7 @@ public class Bot extends TelegramLongPollingBot {
             // Download the file calling AbsSender::downloadFile method
             return downloadFile(filePath);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LogUtil.logError(filePath, e);
         }
         return null;
     }
@@ -210,7 +208,7 @@ public class Bot extends TelegramLongPollingBot {
                 // We now have the file_path
                 return file.getFilePath();
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                LogUtil.logError(null, e);
             }
         }
         return null; // Just in case

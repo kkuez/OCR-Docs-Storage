@@ -3,6 +3,7 @@ package com.Telegram.Processes;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
+import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -46,7 +47,7 @@ public class SumProcess extends Process{
                 try {
                     convertedDate = parser.parse(parsedDate);
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    LogUtil.logError(parsedDate, e);
                 }
                 parsedDate = formatter.format(convertedDate);
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);

@@ -1,5 +1,7 @@
 package com.Misc;
 
+import com.Utils.LogUtil;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -10,7 +12,7 @@ public class CustomProperties extends Properties {
         try {
             this.store(new FileOutputStream("setup.properties"), null);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logError("setup.properties", e);
         }
         return put(key, value);
     }

@@ -23,7 +23,7 @@ public class BotUtil {
             ObjectHub.getInstance().setBot(bot);
             telegramBotApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 
@@ -37,7 +37,7 @@ public class BotUtil {
         try {
             bot.execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 public static void askMonth(String question, Update update, Bot bot){
@@ -50,7 +50,7 @@ public static void askMonth(String question, Update update, Bot bot){
         try {
             bot.execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 
@@ -64,7 +64,7 @@ public static void askYear(String question, Update update, Bot bot){
         try {
             bot.execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 
@@ -81,7 +81,7 @@ public static void askYear(String question, Update update, Bot bot){
         try {
             bot.execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 
@@ -95,7 +95,7 @@ public static void askYear(String question, Update update, Bot bot){
         try {
             bot.execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 

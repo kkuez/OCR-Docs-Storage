@@ -65,7 +65,7 @@ public class Archiver {
             try {
                 FileUtils.copyFile(document.getOriginFile(), new File(tempForZip, document.getOriginalFileName()));
             } catch (IOException e) {
-                e.printStackTrace();
+                LogUtil.logError(document.getOriginFile().getAbsolutePath(), e);
             }
         });
         zipDir(tempForZip, nameOfArchive);
@@ -75,7 +75,7 @@ public class Archiver {
             FileUtils.deleteDirectory(tempForZip);
             FileUtils.deleteQuietly(zippedDir);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.Controller;
 
 import com.ObjectTemplates.Document;
+import com.Utils.LogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -28,7 +29,7 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
             Desktop.getDesktop().open(tempFile);
             closeWindow();
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 
@@ -37,7 +38,7 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
             Desktop.getDesktop().open(document.getOriginFile());
             closeWindow();
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
     }
 

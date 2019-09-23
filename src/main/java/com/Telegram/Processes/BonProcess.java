@@ -6,6 +6,7 @@ import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
+import com.Utils.LogUtil;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -36,7 +37,7 @@ public class BonProcess extends Process {
                     try {
                         FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        LogUtil.logError(document.getOriginFile().getAbsolutePath(), e);
                     }
                     FileUtils.deleteQuietly(document.getOriginFile());
                     document.setOriginFile(newOriginalFilePath);

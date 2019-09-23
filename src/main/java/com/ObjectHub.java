@@ -58,7 +58,7 @@ public class ObjectHub {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    LogUtil.logError(null, e);
                 }
                 allowedUsersMap = DBUtil.getAllowedUsersMap();
                 performUpdateLaterMap = new HashMap<>();
@@ -105,11 +105,11 @@ public class ObjectHub {
                                     performUpdateLaterMap.remove(update);
                                 } catch (Exception e) {
                                     BotUtil.activateTGBot(bot);
-                                    e.printStackTrace();
+                                    LogUtil.logError(null, e);
                                 }
                             });
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            LogUtil.logError(null, e);
                         }
                     }
                     LogUtil.log("System: No LaterUpdates left.");

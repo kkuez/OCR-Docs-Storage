@@ -2,6 +2,7 @@ package com.Controller.Strategies;
 
 import com.Controller.AddTags;
 import com.Controller.Reporter.*;
+import com.Utils.LogUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,7 +28,7 @@ public class SubmitTagsStrategy extends ControllerStrategy {
             stage.setTitle("Tags erstellen");
             stage.setScene(new Scene(root, 400, 300));
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logError(null, e);
         }
         return stage;
     }
