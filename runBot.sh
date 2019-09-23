@@ -1,0 +1,1 @@
+java -cp "OCR-1.0-SNAPSHOT.jar;external_libs/*" com.Main -bot
