@@ -1,5 +1,6 @@
 package com.Telegram;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.Telegram.Processes.*;
 import com.Telegram.Processes.Process;
 import com.ObjectHub;
@@ -33,9 +34,29 @@ public class Bot extends TelegramLongPollingBot {
 
     private List<String> shoppingList;
 
+    private ProgressReporter progressReporter;
+
     public Bot(){
         shoppingList = DBUtil.getShoppingListFromDB();
         setBusy(false);
+        progressReporter = new ProgressReporter() {
+
+
+            @Override
+            public void setSteps(int steps) {
+
+            }
+
+            @Override
+            public void addStep() {
+
+            }
+
+            @Override
+            public void setStep(int step) {
+
+            }
+        };
     }
 
     /**

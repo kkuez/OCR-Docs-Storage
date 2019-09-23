@@ -1,8 +1,5 @@
 package com.ObjectTemplates;
 
-import com.Utils.DBUtil;
-import com.Utils.TessUtil;
-
 import java.io.File;
 import java.util.Collections;
 
@@ -21,7 +18,7 @@ public class Bon extends Document {
     int belongsToDocument;
 
     public Bon(int belongsToDocument, float sum) {
-        this.setTags(Collections.EMPTY_SET);
+        this.setTagSet(Collections.EMPTY_SET);
         this.sum = sum;
         this.belongsToDocument = belongsToDocument;
     }
@@ -29,7 +26,7 @@ public class Bon extends Document {
     public Bon(String content, File originalFile, float sum, int belongsToDocument) {
         this.setContent(content);
         this.setOriginFile(originalFile);
-        this.setTags(Collections.EMPTY_SET);
+        this.setTagSet(Collections.EMPTY_SET);
         this.sum = sum;
         this.belongsToDocument = belongsToDocument;
     }

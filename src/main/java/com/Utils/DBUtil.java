@@ -23,7 +23,7 @@ public class DBUtil {
         Map<File, Document> documentMap = new HashMap<>();
 
         DBUtil.showDocumentsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'").forEach(document -> {
-            document.setTags(getTagsForDocument(document));
+            document.setTagSet(getTagsForDocument(document));
             documentMap.put(document.getOriginFile(), document);
         });
 
@@ -34,8 +34,6 @@ public class DBUtil {
         ObjectHub.getInstance().getArchiver().setDocumentList(documentList);
         return documentList;
     }
-
-
 
     public static Set<String> getFilePathOfDocsContainedInDB() {
         Set<String> filePathSet = new HashSet<>();
@@ -155,7 +153,6 @@ public class DBUtil {
                 Document document = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
                 document.setUser(rs.getInt("user"));
                 documentList.add(document);
-                LogUtil.log(rs.getString("originalFile"));
             }
             statement.close();
         } catch (SQLException e) {
@@ -179,7 +176,6 @@ public class DBUtil {
             ResultSet rs = statement.executeQuery("select * from Bons");
             while (rs.next()) {
                 bonSet.add(new Bon(rs.getInt("belongsToDocument"), rs.getFloat("sum")));
-                LogUtil.log(rs.getString("originalFile"));
             }
             statement.close();
         } catch (SQLException e) {
@@ -221,9 +217,8 @@ public class DBUtil {
             documentList = new ArrayList<>();
             while (rs.next()) {
                 Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
-                image.setTags(getTagsForDocument(image));
+                image.setTagSet(getTagsForDocument(image));
                 documentList.add(image);
-                LogUtil.log(rs.getString("originalFile"));
             }
 
             statement.close();

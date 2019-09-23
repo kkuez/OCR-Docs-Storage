@@ -66,11 +66,11 @@ public abstract class Document{
         this.originalFileName = originalFileName;
     }
 
-    public Set<String> getTags() {
+    public Set<String> getTagSet() {
         return tags;
     }
 
-    public void setTags(Set<String> tags) {
+    public void setTagSet(Set<String> tags) {
         this.tags = tags;
     }
 
@@ -81,7 +81,7 @@ public abstract class Document{
         return originalFileName;
     }
 
-    public String getTagString(){
+    public String getTags(){
         StringBuilder stringBuilder = new StringBuilder();
         if(tags != null) {
             tags.forEach(tag -> stringBuilder.append(tag + ", "));

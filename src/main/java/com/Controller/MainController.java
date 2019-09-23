@@ -64,15 +64,16 @@ public class MainController extends SingleDocumentController {
     @FXML
     private TableColumn tagsTableColumn;
 
+    @FXML
+    private ProgressIndicator progressIndicator;
+
     private Reporter reporter;
 
     @FXML
     private void initialize() {
         LogUtil.log("Gui: " + "Init Gui.");
         archivePathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
-
         inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
-
         mainTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
@@ -148,7 +149,7 @@ public class MainController extends SingleDocumentController {
                 new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                 new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
                         new PropertyValueFactory<Document, String>("date"),
-                        new PropertyValueFactory<Document, String>("tagString") });
+                        new PropertyValueFactory<Document, String>("tags") });
     }
 
     public void chooseButtonInputPath() {
