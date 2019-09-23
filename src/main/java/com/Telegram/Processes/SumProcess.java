@@ -1,5 +1,6 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
@@ -20,7 +21,8 @@ public class SumProcess extends Process{
 
     private Steps currentStep;
 
-    public SumProcess(Bot bot){
+    public SumProcess(Bot bot, ProgressReporter progressReporter){
+        super(progressReporter);
         setBot(bot);
         currentStep = Steps.Start;
     }
@@ -56,6 +58,11 @@ public class SumProcess extends Process{
                 getBot().process = null;
                 break;
         }
+    }
+
+    @Override
+    public String getProcessName() {
+        return "Get sum";
     }
 
     private enum Steps{

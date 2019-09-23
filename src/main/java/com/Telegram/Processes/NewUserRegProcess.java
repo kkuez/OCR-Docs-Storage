@@ -1,5 +1,6 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
@@ -8,7 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class NewUserRegProcess extends Process {
 
-    public NewUserRegProcess(Bot bot){
+    public NewUserRegProcess(Bot bot, ProgressReporter progressReporter){
+        super(progressReporter);
         setBot(bot);
     }
 
@@ -21,5 +23,10 @@ public class NewUserRegProcess extends Process {
             ObjectHub.getInstance().setAllowedUsersMap(DBUtil.getAllowedUsersMap());
             getBot().process = null;
         }
+    }
+
+    @Override
+    public String getProcessName() {
+        return "New User Registration";
     }
 }

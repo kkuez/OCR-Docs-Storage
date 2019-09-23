@@ -1,5 +1,6 @@
 package com.Utils;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
@@ -33,12 +34,14 @@ public class TessUtil {
     }
 
     public static Set<Document> processFolder(File folder, Bot bot, TableView tableView, TableColumn[] tableColumns,
-            PropertyValueFactory[] propertyValueFactories) {
+                                              PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter) {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
                 new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
         Collection<File> absoluteDifferentFilesSet = IOUtil.createFileSetBySize(filesInFolder);
         Set<String> filePathSet = DBUtil.getFilePathOfDocsContainedInDB();
         AtomicInteger counterProcessedFiles = new AtomicInteger();
+
+        progressReporter.setTotalSteps(absoluteDifferentFilesSet.size(), null);
 
         Set<Document> documentSet = new HashSet<>();
         absoluteDifferentFilesSet.forEach(file -> {
@@ -51,6 +54,7 @@ public class TessUtil {
                             Document document = processFile(file, 0, null);
                             documentSet.add(document);
                         }
+                        progressReporter.addStep(null);
                         counterProcessedFiles.getAndIncrement();
                     }
                 });

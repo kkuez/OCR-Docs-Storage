@@ -1,12 +1,17 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public abstract class Process {
 
+    public Process(ProgressReporter reporter){
+        progressReporter = reporter;
+    }
 
+    private ProgressReporter progressReporter;
 
     private Bot bot;
 
@@ -16,8 +21,18 @@ public abstract class Process {
 
     public abstract void performNextStep(String arg, Update update);
 
+    public abstract String getProcessName();
+
     //GETTER SETTER
 
+
+    public ProgressReporter getProgressReporter() {
+        return progressReporter;
+    }
+
+    public void setProgressReporter(ProgressReporter progressReporter) {
+        this.progressReporter = progressReporter;
+    }
 
 
     public Bot getBot() {

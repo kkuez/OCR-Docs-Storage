@@ -1,16 +1,15 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
 import com.Utils.BotUtil;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class StartProcess extends Process {
 
-    public StartProcess(Bot bot, Update update){
+    public StartProcess(Bot bot, Update update, ProgressReporter progressReporter){
+        super(progressReporter);
         BotUtil.sendKeyBoard("Wähle eine Aktion :)",bot, update, KeyboardFactory.KeyBoardType.Start);
         getBot().process = null;
     }
@@ -18,5 +17,10 @@ public class StartProcess extends Process {
     @Override
     public void performNextStep(String arg, Update update) {
 
+    }
+
+    @Override
+    public String getProcessName() {
+        return "Start";
     }
 }

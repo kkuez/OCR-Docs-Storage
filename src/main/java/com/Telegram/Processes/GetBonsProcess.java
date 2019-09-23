@@ -1,5 +1,6 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
@@ -22,7 +23,8 @@ public class GetBonsProcess extends Process{
 
     private String year;
 
-    public GetBonsProcess(Bot bot){
+    public GetBonsProcess(Bot bot, ProgressReporter progressReporter){
+        super(progressReporter);
         setBot(bot);
         currentStep = Steps.Start;
     }
@@ -71,6 +73,12 @@ public class GetBonsProcess extends Process{
         }
 
     }
+
+    @Override
+    public String getProcessName() {
+        return "Get-Bons";
+    }
+
     private enum Steps{
         selectMonth, selectYear, Start
     }

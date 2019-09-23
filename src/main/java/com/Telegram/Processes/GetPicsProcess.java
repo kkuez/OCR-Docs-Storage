@@ -1,5 +1,6 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
 import com.Utils.DBUtil;
@@ -10,7 +11,8 @@ import java.util.List;
 public class GetPicsProcess extends Process {
 
     String searchTerm;
-    public GetPicsProcess(Bot bot, Update update){
+    public GetPicsProcess(Bot bot, Update update, ProgressReporter progressReporter){
+        super(progressReporter);
         String input = update.getMessage().getText();
         String searchTerm = input.substring(input.indexOf(" ") + 1);
         this.searchTerm = searchTerm;
@@ -24,5 +26,10 @@ public class GetPicsProcess extends Process {
         listOfDocs.forEach(document -> getBot().sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "", null));
         getBot().setBusy(false);
         getBot().process = null;
+    }
+
+    @Override
+    public String getProcessName() {
+        return "Get-Pics " + searchTerm;
     }
 }

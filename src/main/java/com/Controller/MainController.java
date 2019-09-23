@@ -10,6 +10,7 @@ import com.Utils.ControllerUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import com.Utils.TessUtil;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.File;
 import java.util.List;
@@ -67,10 +69,39 @@ public class MainController extends SingleDocumentController {
     @FXML
     private ProgressIndicator progressIndicator;
 
-    private Reporter reporter;
+    private Reporter progressReporter;
 
     @FXML
     private void initialize() {
+        progressReporter = new ProgressReporter() {
+            @Override
+            public void setTotalSteps(int steps, Update updateOrNull) {
+                progressManager.setTotalSteps(steps);
+            }
+
+            @Override
+            public void addStep( Update updateOrNull) {
+                progressManager.addStep();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressIndicator.setProgress(progressManager.getCurrentProgress());
+                    }
+                });
+            }
+
+            @Override
+            public void setStep(int step, Update updateOrNull) {
+                progressManager.setCurrentStep(step);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressIndicator.setProgress(progressManager.getCurrentProgress());
+                    }
+                });
+            }
+        };
+
         LogUtil.log("Gui: " + "Init Gui.");
         archivePathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
         inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
@@ -126,7 +157,7 @@ public class MainController extends SingleDocumentController {
                         new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                         new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
                                 new PropertyValueFactory<Document, String>("date"),
-                                new PropertyValueFactory<Document, String>("tags") });
+                                new PropertyValueFactory<Document, String>("tags") }, (ProgressReporter) progressReporter);
 
                 if(tagSet != null){
                     for(String tag : tagSet){
@@ -188,17 +219,6 @@ public class MainController extends SingleDocumentController {
 
     @Override
     public void setDocument(Document document) {
-
-
-    }
-
-
-    public Reporter getReporter() {
-        return reporter;
-    }
-
-    public void setReporter(Reporter reporter) {
-        this.reporter = reporter;
     }
 
     @Override

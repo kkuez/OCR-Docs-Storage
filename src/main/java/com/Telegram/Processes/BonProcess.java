@@ -1,5 +1,6 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
 import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
@@ -19,7 +20,8 @@ public class BonProcess extends Process {
 
     private Bon bon;
 
-    public BonProcess(Bon bon, Bot bot, Document document){
+    public BonProcess(Bon bon, Bot bot, Document document, ProgressReporter progressReporter){
+        super(progressReporter);
         this.bon = bon;
         setBot(bot);
         this.document = document;
@@ -68,6 +70,11 @@ public class BonProcess extends Process {
                 getBot().process = null;
                 break;
         }
+    }
+
+    @Override
+    public String getProcessName() {
+        return "Bon-Process";
     }
 
     private enum Steps{

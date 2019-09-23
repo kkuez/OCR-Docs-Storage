@@ -5,8 +5,12 @@ public class ProgressManager {
 
     private int currentStep;
 
-    public ProgressManager(int totalSteps){
-        this.totalSteps = totalSteps;
+    public void addStep(){
+        currentStep += currentStep + 1;
+    }
+
+    public double getCurrentProgress(){
+        return (double)currentStep / (double)totalSteps;
     }
 
     //GETTER SETTER
@@ -16,6 +20,7 @@ public class ProgressManager {
     }
 
     public void setTotalSteps(int totalSteps) {
+        currentStep = 0;
         this.totalSteps = totalSteps;
     }
 

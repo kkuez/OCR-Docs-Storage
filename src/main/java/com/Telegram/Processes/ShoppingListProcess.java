@@ -1,5 +1,6 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.LogUtil;
@@ -9,7 +10,8 @@ import java.util.ArrayList;
 
 public class ShoppingListProcess extends Process{
 
-    public ShoppingListProcess(Bot bot, Update update){
+    public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter){
+        super(progressReporter);
         this.setBot(bot);
         getBot().setBusy(true);
         performNextStep("asd", update);
@@ -55,5 +57,10 @@ public class ShoppingListProcess extends Process{
         }
         getBot().setBusy(false);
         getBot().process = null;
+    }
+
+    @Override
+    public String getProcessName() {
+        return "Shoppinglist Process";
     }
 }

@@ -1,5 +1,6 @@
 package com.Telegram.Processes;
 
+import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
@@ -12,7 +13,8 @@ import java.util.List;
 public class SearchProcess extends Process {
 
     String searchTerm;
-    public SearchProcess(Bot bot, Update update){
+    public SearchProcess(Bot bot, Update update, ProgressReporter progressReporter){
+        super(progressReporter);
         String input = update.getMessage().getText();
         String searchTerm = input.substring(input.indexOf(" ") + 1);
         this.searchTerm = searchTerm;
@@ -28,5 +30,10 @@ public class SearchProcess extends Process {
         BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", getBot());
         getBot().setBusy(false);
         getBot().process = null;
+    }
+
+    @Override
+    public String getProcessName() {
+        return "Search " + searchTerm;
     }
 }

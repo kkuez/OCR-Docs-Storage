@@ -1,6 +1,7 @@
 package com.Telegram;
 
 import com.Controller.Reporter.ProgressReporter;
+import com.Controller.Reporter.Reporter;
 import com.Telegram.Processes.*;
 import com.Telegram.Processes.Process;
 import com.ObjectHub;
@@ -34,27 +35,28 @@ public class Bot extends TelegramLongPollingBot {
 
     private List<String> shoppingList;
 
-    private ProgressReporter progressReporter;
+    private Reporter progressReporter;
 
-    public Bot(){
+    public Bot() {
         shoppingList = DBUtil.getShoppingListFromDB();
         setBusy(false);
         progressReporter = new ProgressReporter() {
-
-
             @Override
-            public void setSteps(int steps) {
-
+            public void setTotalSteps(int steps, Update updateOrNull) {
+                progressManager.setTotalSteps(steps);
+                BotUtil.sendMsg(updateOrNull.getMessage().getChatId() + "", "Start process " + process.getProcessName(), Bot.this);
             }
 
             @Override
-            public void addStep() {
-
+            public void addStep(Update updateOrNull) {
+                progressManager.addStep();
+                BotUtil.sendMsg(updateOrNull.getMessage().getChatId() + "", progressManager.getCurrentProgress() + "%", Bot.this);
             }
 
             @Override
-            public void setStep(int step) {
-
+            public void setStep(int step, Update updateOrNull) {
+                progressManager.setCurrentStep(step);
+                BotUtil.sendMsg(updateOrNull.getMessage().getChatId() + "", progressManager.getCurrentProgress() + "%", Bot.this);
             }
         };
     }
@@ -81,7 +83,7 @@ public class Bot extends TelegramLongPollingBot {
                 process.performNextStep(update.getMessage().getText(), update);
             }else{
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Hallo " + update.getMessage().getFrom().getFirstName() + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", this);
-                process = new NewUserRegProcess(this);
+                process = new NewUserRegProcess(this, (ProgressReporter) progressReporter);
             }
         }
     }
@@ -158,7 +160,7 @@ public class Bot extends TelegramLongPollingBot {
             if((TessUtil.checkIfBon(document.getContent()) || forceBon) && this != null){
                 float sum = TessUtil.getLastNumber(document.getContent());
                 Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
-                process = new BonProcess(bon, this, document);
+                process = new BonProcess(bon, this, document, (ProgressReporter) progressReporter);
             }
         } catch (Exception e) {
             LogUtil.logError(null, e);
@@ -242,26 +244,26 @@ public class Bot extends TelegramLongPollingBot {
             String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase().replace("/", "") : input.toLowerCase().replace("/", "");
 
             if (cmd.startsWith("start")) {
-                return new StartProcess(this, update);
+                return new StartProcess(this, update, (ProgressReporter) progressReporter);
             } else {
                 if (cmd.startsWith("search") || input.equals("Search Document")) {
-                return new SearchProcess(this, update);
+                return new SearchProcess(this, update,(ProgressReporter) progressReporter);
             } else {
                 if (cmd.startsWith("getpics") || input.equals("Get Documents")) {
-                    return new GetPicsProcess(this, update);
+                    return new GetPicsProcess(this, update, (ProgressReporter) progressReporter);
                 } else {
 
                     if (cmd.startsWith("getsum") || input.equals("Get Sum of Bons")) {
-                        return new SumProcess(this);
+                        return new SumProcess(this, (ProgressReporter) progressReporter);
                     } else {
                         if (cmd.startsWith("getbons") || input.equals("Get Bons")) {
-                            return new GetBonsProcess(this);
+                            return new GetBonsProcess(this, (ProgressReporter) progressReporter);
                         } else {
                             if (cmd.startsWith("removelast") || input.equals("Remove last Document")) {
-                                return new RemoveLastProcess(this);
+                                return new RemoveLastProcess(this, (ProgressReporter) progressReporter);
                             }else {
                                 if (cmd.startsWith("add") || cmd.startsWith("removeitem") || cmd.startsWith("getlist") || cmd.startsWith("removeall")) {
-                                    return new ShoppingListProcess(this, update);
+                                    return new ShoppingListProcess(this, update, (ProgressReporter) progressReporter);
                                 }
                         }}
                     }
