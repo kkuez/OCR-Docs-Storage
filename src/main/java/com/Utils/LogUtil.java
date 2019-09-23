@@ -5,9 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.codehaus.plexus.util.ExceptionUtils;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
