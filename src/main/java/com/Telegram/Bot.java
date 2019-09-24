@@ -110,6 +110,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
                 if (update.getMessage().hasPhoto()) {
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Verarbeite Bild...", this);
                     processPhoto(update);
                 }
             }catch (Exception e){

@@ -41,11 +41,10 @@ public class GetBonsProcess extends Process{
                     BotUtil.askYear("Für welches Jahr...?", update, getBot());
                     currentStep = Steps.selectYear;
                     break;
-
                 case selectYear:
                     getBot().setBusy(true);
                     year = arg;
-
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Hole Bons...", getBot());
                     String parsedDate = month + "/" + year;
                     DateFormat parser = new SimpleDateFormat("mm/yyyy");
                     DateFormat formatter = new SimpleDateFormat("yyyy-mm");
@@ -64,9 +63,8 @@ public class GetBonsProcess extends Process{
                             possibleCaption = "Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName();
                         }
                         getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
-
-
                     });
+                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + documentList.size() + " Bilder geholt.", getBot());
                     getBot().process = null;
                     getBot().setBusy(false);
                     break;

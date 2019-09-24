@@ -15,6 +15,7 @@ public class SearchProcess extends Process {
     String searchTerm;
     public SearchProcess(Bot bot, Update update, ProgressReporter progressReporter){
         super(progressReporter);
+        BotUtil.sendMsg(update.getMessage().getChatId().toString(), "Suche Dokumente mit " + searchTerm, getBot());
         String input = update.getMessage().getText();
         String searchTerm = input.substring(input.indexOf(" ") + 1);
         this.searchTerm = searchTerm;
@@ -27,7 +28,7 @@ public class SearchProcess extends Process {
         getBot().setBusy(true);
         List<Document> listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
         LogUtil.log("Send list of Pictures related to \"" + searchTerm);
-        BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Documents found :)", getBot());
+        BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Dokumente gefunden :)", getBot());
         getBot().setBusy(false);
         getBot().process = null;
     }
