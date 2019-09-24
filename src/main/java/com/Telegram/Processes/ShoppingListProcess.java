@@ -3,6 +3,7 @@ package com.Telegram.Processes;
 import com.Controller.Reporter.ProgressReporter;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
+import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -30,10 +31,12 @@ public class ShoppingListProcess extends Process{
         switch (cmd){
             case "add":
                 getBot().getShoppingList().add(arg);
+                DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " hinzugefügt! :)", getBot());
                 break;
             case "removeitem":
                 try{
+                    DBUtil.executeSQL("delete from ShoppingList where item='" +  getBot().getShoppingList().get(Integer.parseInt(arg)) + "'");
                     getBot().getShoppingList().remove(Integer.parseInt(arg));
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " gelöscht.", getBot());
                 }catch (Exception e){
@@ -51,6 +54,7 @@ public class ShoppingListProcess extends Process{
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", listeBuilder.toString(), getBot());
                 break;
             case "removeall":
+                DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
                 getBot().setShoppingList(new ArrayList<String>());
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Einkaufsliste gelöscht :)", getBot());
                 break;
