@@ -26,10 +26,13 @@ public class TessUtil {
 
     private static Pattern datePattern;
 
+    private static Pattern germanDatePattern;
+
     private static Pattern numberPattern;
 
     private static void compilePatterns(){
         datePattern = Pattern.compile("\\s*(3[01]|[12][0-9]|0?[1-9])\\.(1[012]|0?[1-9])\\.((?:19|20)\\d{2})\\s*");
+        germanDatePattern = Pattern.compile("\\d\\.\\d\\.\\d\\d\\d\\d");
         numberPattern = Pattern.compile("\\d*\\.\\d*|\\d");
     }
 
@@ -122,12 +125,23 @@ public class TessUtil {
 
     public static String getFirstDate(String documentData) throws Exception{
 
-        if(datePattern == null){
+        if(datePattern == null || germanDatePattern == null){
             compilePatterns();
         }
+        String date = getDateWithPattern(datePattern, documentData);
+        if(date == null){
+            date = getDateWithPattern(germanDatePattern, documentData);
+        }
+        if(date == null){
+            DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
+            date = LocalDate.now().format(germanFormatter);
+        }
 
-        Matcher matcher = datePattern.matcher(documentData);
-        DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
+        return date;
+    }
+
+    private static String getDateWithPattern(Pattern pattern, String string){
+        Matcher matcher = pattern.matcher(string);
 
         String date = null;
         while(matcher.find()){
@@ -137,7 +151,6 @@ public class TessUtil {
         }
         return date;
     }
-
     public static float getLastNumber(String content){
         if(numberPattern == null){
             compilePatterns();

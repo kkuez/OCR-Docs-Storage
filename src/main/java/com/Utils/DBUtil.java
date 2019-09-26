@@ -147,7 +147,7 @@ public class DBUtil {
         Statement statement = null;
         try {
             statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear + "%' AND originalFile like '%Bons%'");
+            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear.replace("-", ".") + "%' AND originalFile like '%Bons%'");
             documentList = new ArrayList<>();
             while (rs.next()) {
                 Document document = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));

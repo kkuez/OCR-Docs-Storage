@@ -4,6 +4,7 @@ import com.Utils.DBUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -37,6 +38,9 @@ public abstract class Document{
     }
 
     public String getInsertDBString(){
+        if(date == null){
+            date = LocalDate.now().toString();
+        }
         return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBUtil.countDocuments("") + ", '" +
                 content.replaceAll("'", "''") + "', '" + originFile.getAbsolutePath() + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
     }
