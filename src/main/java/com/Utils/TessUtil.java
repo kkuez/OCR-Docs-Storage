@@ -36,7 +36,7 @@ public class TessUtil {
     public static Set<Document> processFolder(File folder, Bot bot, TableView tableView, TableColumn[] tableColumns,
                                               PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter) {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
-                new String[] { "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
+                new String[] { "pdf", "PDF", "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
         Collection<File> absoluteDifferentFilesSet = IOUtil.createFileSetBySize(filesInFolder);
         Set<String> filePathSet = DBUtil.getFilePathOfDocsContainedInDB();
         AtomicInteger counterProcessedFiles = new AtomicInteger();
