@@ -56,6 +56,7 @@ public class BonProcess extends Process {
                 if(arg.equals("Japp")){
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "OK :)",getBot());
                     DBUtil.insertDocumentToDB(bon);
+                    DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                     getBot().process = null;
                 }else{
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bitte richtige Summe eingeben:",getBot());
