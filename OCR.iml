@@ -10,6 +10,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.plugins:maven-jar-plugin:3.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-api:3.0" level="project" />
     <orderEntry type="library" name="Maven: org.sonatype.sisu:sisu-inject-plexus:1.4.2" level="project" />
@@ -115,15 +120,15 @@
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.12.0" level="project" />
     <orderEntry type="library" name="Maven: org.zeroturnaround:zt-zip:1.13" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:linux:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:linux:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:linux:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-media:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:linux:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:linux:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.tess4j:tess4j:4.4.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.jai-imageio:jai-imageio-core:1.4.0" level="project" />
