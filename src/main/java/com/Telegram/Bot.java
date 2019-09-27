@@ -254,9 +254,8 @@ public class Bot extends TelegramLongPollingBot {
                 if (cmd.startsWith("getpics") || input.equals("Get Documents")) {
                     return new GetPicsProcess(this, update, (ProgressReporter) progressReporter);
                 } else {
-
                     if (cmd.startsWith("getsum") || input.equals("Get Sum of Bons")) {
-                        return new SumProcess(this, (ProgressReporter) progressReporter);
+                        return new SumProcess(this, (ProgressReporter) progressReporter, update);
                     } else {
                         if (cmd.startsWith("getbons") || input.equals("Get Bons")) {
                             return new GetBonsProcess(this, (ProgressReporter) progressReporter);

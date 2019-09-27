@@ -21,10 +21,11 @@ public class SumProcess extends Process{
 
     private Steps currentStep;
 
-    public SumProcess(Bot bot, ProgressReporter progressReporter){
+    public SumProcess(Bot bot, ProgressReporter progressReporter, Update update){
         super(progressReporter);
         setBot(bot);
         currentStep = Steps.Start;
+        performNextStep("", update);
     }
     @Override
     public void performNextStep(String arg, Update update) {
