@@ -266,7 +266,8 @@ public class Bot extends TelegramLongPollingBot {
                                 if (cmd.startsWith("add") || cmd.startsWith("removeitem") || cmd.startsWith("getlist") || cmd.startsWith("removeall")) {
                                     return new ShoppingListProcess(this, update, (ProgressReporter) progressReporter);
                                 }
-                        }}
+                        }
+                        }
                     }
                     }
                 }

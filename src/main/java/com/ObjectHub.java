@@ -33,7 +33,7 @@ public class ObjectHub {
 
     private Map<Update, Bot> performUpdateLaterMap;
 
-    private Thread performUpdateLaterThread;
+    private Taskshub taskshub;
 
     private ObjectHub() {
         properties = new CustomProperties();
@@ -62,6 +62,7 @@ public class ObjectHub {
                 }
                 allowedUsersMap = DBUtil.getAllowedUsersMap();
                 performUpdateLaterMap = new HashMap<>();
+                taskshub = new Taskshub(Integer.parseInt(properties.getProperty("tryPerformingTasksPerHour")));
             }
         });
         thread.start();
@@ -77,53 +78,10 @@ public class ObjectHub {
 
     // GETTER SETTER
 
-    public Thread getPerformUpdateLaterThread() {
-        return performUpdateLaterThread;
-    }
 
-    public void setPerformUpdateLaterThread(Thread performUpdateLaterThread) {
-        this.performUpdateLaterThread = performUpdateLaterThread;
-    }
 
-    public Map<Update, Bot> getPerformUpdateLaterMap() {
-        if(performUpdateLaterThread == null){
-            performUpdateLaterThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while(performUpdateLaterMap.size() != 0) {
-                        try {
-                            int sleepTimeInMs = 600000;
-                            //Wait 10 minutes
-                            LogUtil.log("System: Waiting to perform LaterUpdates... (" + performUpdateLaterMap.size() + ", " + sleepTimeInMs / 1000 + " seconds)");
-                            Thread.sleep(sleepTimeInMs);
-                            performUpdateLaterMap.keySet().forEach(update -> {
-                                Bot bot = performUpdateLaterMap.get(update);
-
-                                try {
-                                    LogUtil.log("System: Trying to perform LaterUpdate");
-                                    bot.processUpdateReceveived(update);
-                                    performUpdateLaterMap.remove(update);
-                                } catch (Exception e) {
-                                    BotUtil.activateTGBot(bot);
-                                    LogUtil.logError(null, e);
-                                }
-                            });
-                        } catch (InterruptedException e) {
-                            LogUtil.logError(null, e);
-                        }
-                    }
-                    LogUtil.log("System: No LaterUpdates left.");
-                    performUpdateLaterMap = null;
-                    performUpdateLaterThread = null;
-                }
-            });
-            performUpdateLaterThread.start();
-        }
-        return performUpdateLaterMap;
-    }
-
-    public void setPerformUpdateLaterMap(Map<Update, Bot> performUpdateLaterMap) {
-        this.performUpdateLaterMap = performUpdateLaterMap;
+    public Taskshub getTaskshub() {
+        return taskshub;
     }
 
     public Bot getBot() {

@@ -1,4 +1,5 @@
 .idea
+.idea/*
 setup.properties
 target/archive-tmp
 target/classes
