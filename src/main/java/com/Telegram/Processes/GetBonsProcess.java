@@ -69,7 +69,6 @@ public class GetBonsProcess extends Process{
                     getBot().setBusy(false);
                     break;
         }
-
     }
 
     @Override
