@@ -3,6 +3,8 @@ package com.Misc.TaskHandling;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
+
 public class UpdateTask implements Task {
     Update update;
 
@@ -26,6 +28,12 @@ public class UpdateTask implements Task {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void deleteFromList(List<Task> taskList) {
+        taskList.remove(this);
+    }
+
 
     //GETTER SETTER
     public Update getUpdate() {

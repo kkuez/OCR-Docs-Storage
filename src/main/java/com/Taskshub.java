@@ -30,7 +30,7 @@ public class Taskshub implements Runnable {
            for(Task task : tasksToDo){
                task.run();
                if(task.isSuccessFullyExecuted()){
-                   tasksToDo.remove(task);
+                   task.deleteFromList(tasksToDo);
                }
            }
         }
