@@ -5,6 +5,7 @@ import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
+import com.Utils.IOUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -55,12 +56,14 @@ public class GetPicsProcess extends Process {
             listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
         }
         listOfDocs.forEach(document -> {
+            if(!document.getOriginFile().exists()){
+                return;
+            }
                     if(document.getOriginalFileName().toLowerCase().endsWith("pdf")){
-                        getBot().sendDocumentFromURL(update, document.getOriginFile().getAbsolutePath(), document.getOriginalFileName(), null);
+                        getBot().sendDocumentFromURL(update, document.getOriginFile().getPath(), document.getOriginalFileName(), null);
                     }else{
-                        getBot().sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "", null);
+                        getBot().sendPhotoFromURL(update, document.getOriginFile().getPath(), "", null);
                     }
-
         });
         getBot().setBusy(false);
         BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot());

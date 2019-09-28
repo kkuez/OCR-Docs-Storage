@@ -59,7 +59,7 @@ public class GetBonsProcess extends Process{
                         if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(document1.getUser())){
                             possibleCaption = "Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName();
                         }
-                        getBot().sendPhotoFromURL(update, document1.getOriginFile().getPath(), possibleCaption, null);
+                        getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
                     });
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + documentList.size() + " Bilder geholt.", getBot());
                     getBot().process = null;
