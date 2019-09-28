@@ -3,6 +3,8 @@ package com;
 import com.Misc.TaskHandling.Task;
 import com.Utils.LogUtil;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,22 +12,23 @@ public class Taskshub implements Runnable {
 
     private List<Task> tasksToDo = new ArrayList<>();
 
-    private int performTimesPerHour;
-
     private boolean loopActive;
 
-    public Taskshub(int performTimesPerHour){
-        this.performTimesPerHour = performTimesPerHour;
-    }
+    private int currentMinute;
+
+    private int currentHour;
+
+    private String currentDate;
 
     private void loop() {
         loopActive = true;
         while (loopActive){
             try {
-                Thread.sleep(60000 / performTimesPerHour);
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            refreshTimes();
             LogUtil.log("System: Trying to perform LaterTasks (" + tasksToDo.size() + " in List)");
            for(Task task : tasksToDo){
                task.run();
@@ -40,6 +43,14 @@ public class Taskshub implements Runnable {
     public void run() {
         loop();
     }
+
+    private void refreshTimes(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+        currentDate = LocalDate.now().toString();
+        currentHour = localDateTime.getHour();
+        currentMinute = localDateTime.getMinute();
+    }
+
 
     //GETTER SETTER
 

@@ -62,7 +62,7 @@ public class ObjectHub {
                 }
                 allowedUsersMap = DBUtil.getAllowedUsersMap();
                 performUpdateLaterMap = new HashMap<>();
-                taskshub = new Taskshub(Integer.parseInt(properties.getProperty("tryPerformingTasksPerHour")));
+                taskshub = new Taskshub();
             }
         });
         thread.start();
