@@ -56,6 +56,9 @@ public class GetPicsProcess extends Process {
             listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
         }
         listOfDocs.forEach(document -> {
+
+            //In case that a wrong path is given in the db f.e. when pictures not added on the local system, but on
+            //a remote one, this will be catched.
             if(!document.getOriginFile().exists()){
                 return;
             }
