@@ -22,7 +22,7 @@ public class Taskshub implements Runnable {
 
     private void loop() {
         loopActive = true;
-        while (loopActive){
+        while (loopActive) {
             try {
                 Thread.sleep(60000);
             } catch (InterruptedException e) {
@@ -30,12 +30,14 @@ public class Taskshub implements Runnable {
             }
             refreshTimes();
             LogUtil.log("System: Trying to perform LaterTasks (" + tasksToDo.size() + " in List)");
-           for(Task task : tasksToDo){
-               task.run();
-               if(task.isSuccessFullyExecuted()){
-                   task.deleteFromList(tasksToDo);
-               }
-           }
+            for (Task task : tasksToDo) {
+                if (task.getTaskStrategy().performNow(currentMinute, currentHour, currentDate)) {
+                    task.run();
+                    if (task.isSuccessFullyExecuted()) {
+                        task.deleteFromList(tasksToDo);
+                    }
+                }
+            }
         }
     }
 

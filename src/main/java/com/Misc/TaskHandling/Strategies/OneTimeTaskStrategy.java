@@ -1,6 +1,6 @@
 package com.Misc.TaskHandling.Strategies;
 
-public class OneTimeTaskStrategy extends TaskStrategy {
+public class OneTimeTaskStrategy implements TaskStrategy {
 
     int minuteToPerform = 99;
 
@@ -26,7 +26,7 @@ public class OneTimeTaskStrategy extends TaskStrategy {
     }
 
     @Override
-    boolean performNow(int currentMinute, int currentHour, String currentDate) {
+    public boolean performNow(int currentMinute, int currentHour, String currentDate) {
         if(dateToPerform.equals(currentDate)){
             if(minuteToPerform == 99 && hourToPerform == 99){
                 doAfterExecute();
