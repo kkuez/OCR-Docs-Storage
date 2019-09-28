@@ -54,8 +54,6 @@ public class GetBonsProcess extends Process{
                             documentList.remove(document);
                         }
                     }
-
-        //TODO getbons gibt keine Bons zurück
                     documentList.forEach(document1 -> {
                         String possibleCaption = " ";
                         if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(document1.getUser())){
