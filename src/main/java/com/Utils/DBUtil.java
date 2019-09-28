@@ -162,7 +162,7 @@ public class DBUtil {
     }
 
     public static boolean isFilePresent(File newFile){
-        int filesSizeOfNewFile = countDocuments("where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
+        int filesSizeOfNewFile = countDocuments("Documents" ,"where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
 
         return filesSizeOfNewFile > 0;
     }
@@ -228,19 +228,19 @@ public class DBUtil {
         return documentList;
     }
 
-    public static int countDocuments(String sqlAddition){
+    public static int countDocuments(String tableName, String sqlAddition){
         Statement statement = null;
         int count = 0;
         try {
             statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Documents " + sqlAddition);
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);
             while (rs.next()) {
                 count = rs.getInt("Count(*)");
             }
 
             statement.close();
         } catch (SQLException e) {
-            LogUtil.logError("SELECT COUNT(*) FROM Documents " + sqlAddition, e);
+            LogUtil.logError("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition, e);
         }
         return count;
     }

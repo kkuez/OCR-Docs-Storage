@@ -2,6 +2,7 @@ package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
+import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
@@ -10,6 +11,7 @@ import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import javax.print.Doc;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,10 +25,11 @@ public class GetBonsProcess extends Process{
 
     private String year;
 
-    public GetBonsProcess(Bot bot, ProgressReporter progressReporter){
+    public GetBonsProcess(Bot bot, ProgressReporter progressReporter, Update update){
         super(progressReporter);
         setBot(bot);
         currentStep = Steps.Start;
+        performNextStep("" , update);
     }
 
     @Override
@@ -42,27 +45,23 @@ public class GetBonsProcess extends Process{
                     currentStep = Steps.selectYear;
                     break;
                 case selectYear:
-                    getBot().setBusy(true);
                     year = arg;
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Hole Bons...", getBot());
-                    String parsedDate = month + "/" + year;
-                    DateFormat parser = new SimpleDateFormat("mm/yyyy");
-                    DateFormat formatter = new SimpleDateFormat("yyyy-mm");
-                    Date convertedDate = null;
-                    try {
-                        convertedDate = parser.parse(parsedDate);
-                    } catch (ParseException e) {
-                        LogUtil.logError(parsedDate, e);
-                    }
-                    parsedDate = formatter.format(convertedDate);
+                    getBot().setBusy(true);
+                    String parsedDate = month + "." + year;
                     List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
+                    for(Document document : documentList){
+                        if(DBUtil.countDocuments("Bons", "where belongsToDocument =" + document.getId()) == 0){
+                            documentList.remove(document);
+                        }
+                    }
 
+        //TODO getbons gibt keine Bons zurück
                     documentList.forEach(document1 -> {
                         String possibleCaption = " ";
                         if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(document1.getUser())){
                             possibleCaption = "Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName();
                         }
-                        getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
+                        getBot().sendPhotoFromURL(update, document1.getOriginFile().getPath(), possibleCaption, null);
                     });
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + documentList.size() + " Bilder geholt.", getBot());
                     getBot().process = null;

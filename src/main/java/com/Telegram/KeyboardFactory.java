@@ -47,17 +47,33 @@ public class KeyboardFactory {
                 KeyboardRow keyboardYearThirdRow = createKeyBoardRow(new String[]{"2017", "2018","2019","2020",});
                 keyboard.add(keyboardYearThirdRow);
                 break;
+                case ShoppingList:
+                KeyboardRow keyboardShoppingListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen"});
+                keyboard.add(keyboardShoppingListFirstRow);
+                KeyboardRow keyboardShoppingListSecondRow = createKeyBoardRow(new String[]{"Item Löschen"});
+                keyboard.add(keyboardShoppingListSecondRow);
+                KeyboardRow keyboardShoppingListThirdRow = createKeyBoardRow(new String[]{"Ganze Liste Löschen"});
+                keyboard.add(keyboardShoppingListThirdRow);
+                KeyboardRow keyboardShoppingListFourthRow = createKeyBoardRow(new String[]{"Einkaufsliste anzeigen"});
+                keyboard.add(keyboardShoppingListFourthRow);
+                KeyboardRow keyboardShoppingListFifthRow = createKeyBoardRow(new String[]{"Start"});
+                keyboard.add(keyboardShoppingListFifthRow);
+                break;
             case Start:
-                KeyboardRow keyboardStartFirstRow = createKeyBoardRow(new String[]{"Search Document"});
+                KeyboardRow keyboardStartFirstRow = createKeyBoardRow(new String[]{"Anzahl Dokumente"});
                 keyboard.add(keyboardStartFirstRow);
-                KeyboardRow keyboardStartSecondRow = createKeyBoardRow(new String[]{"Get Documents"});
+                KeyboardRow keyboardStartSecondRow = createKeyBoardRow(new String[]{"Hole Bilder, Dokumente"});
                 keyboard.add(keyboardStartSecondRow);
-                KeyboardRow keyboardStartThirdRow = createKeyBoardRow(new String[]{"Get Sum of Bons"});
+                KeyboardRow keyboardStartThirdRow = createKeyBoardRow(new String[]{"Summe von Bons"});
                 keyboard.add(keyboardStartThirdRow);
-                KeyboardRow keyboardStartFourthRow = createKeyBoardRow(new String[]{"Get Bons"});
+                KeyboardRow keyboardStartFourthRow = createKeyBoardRow(new String[]{"Hole Bons"});
                 keyboard.add(keyboardStartFourthRow);
-                KeyboardRow keyboardStartFifthRow = createKeyBoardRow(new String[]{"Remove last Document"});
+                KeyboardRow keyboardStartFifthRow = createKeyBoardRow(new String[]{"Letztes Bild Löschen"});
                 keyboard.add(keyboardStartFifthRow);
+                KeyboardRow keyboardStartSeventhRow = createKeyBoardRow(new String[]{"Einkaufslisten-Optionen"});
+                keyboard.add(keyboardStartSeventhRow);
+                KeyboardRow keyboardStartEigthRow = createKeyBoardRow(new String[]{"Einkaufsliste anzeigen"});
+                keyboard.add(keyboardStartEigthRow);
                 break;
         }
 
@@ -65,7 +81,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();
