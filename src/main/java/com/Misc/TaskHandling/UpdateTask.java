@@ -1,7 +1,10 @@
 package com.Misc.TaskHandling;
 
+import com.Misc.TaskHandling.Strategies.TaskStrategy;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.List;
 
 public class UpdateTask implements Task {
     Update update;
@@ -10,11 +13,18 @@ public class UpdateTask implements Task {
 
     boolean successFullyExecuted;
 
+    TaskStrategy taskStrategy;
 
-    public UpdateTask(Update update, Bot bot){
+    public UpdateTask(Update update, Bot bot, TaskStrategy taskStrategy){
         this.update = update;
         this.bot = bot;
         successFullyExecuted = false;
+        this.taskStrategy = taskStrategy;
+    }
+
+    @Override
+    public TaskStrategy getTaskStrategy() {
+        return taskStrategy;
     }
 
     @Override
@@ -26,6 +36,12 @@ public class UpdateTask implements Task {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void deleteFromList(List<Task> taskList) {
+        taskList.remove(this);
+    }
+
 
     //GETTER SETTER
     public Update getUpdate() {

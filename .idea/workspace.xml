@@ -1,119 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java" afterDir="false" />
-    </list>
-    <ignored path="$PROJECT_DIR$/target/" />
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Main__gui.ic" NAME="Main -gui Coverage Results" MODIFIED="1569146224853" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Unnamed.ic" NAME="Unnamed Coverage Results" MODIFIED="1568452261989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-  </component>
-  <component name="FavoritesManager">
-    <favorites_list name="OCR-Docs-Storage" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="169" column="45" selection-start-line="169" selection-start-column="45" selection-end-line="169" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Notizen/CopyFromRepo.sh">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/setup.properties.example">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" selection-start-line="9" selection-end-line="9" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Document.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="106" selection-start-line="106" selection-end-line="106" />
-              <folding>
-                <element signature="e#2389#2390#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Bon.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="58" column="119" selection-start-line="58" selection-start-column="119" selection-end-line="58" selection-end-column="119" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/Controller/MainController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="164" column="27" lean-forward="true" selection-start-line="164" selection-end-line="165" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="80" selection-start-line="80" selection-end-line="80" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/Taskshub.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-85">
-              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk-11.0.2/lib/src.zip!/java.base/java/util/List.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="612" column="9" selection-start-line="612" selection-start-column="9" selection-end-line="612" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -122,62 +18,14 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>fet</find>
-      <find>png</find>
-      <find>Allowe</find>
-      <find>Verar</find>
-      <find>getsum</find>
-      <find>insert</find>
-      <find>pattern</find>
-      <find>date</find>
-      <find>eatbon</find>
-      <find>insert into Tags</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
-    <option name="UPDATE_TYPE" value="REBASE" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
-  </component>
-  <component name="Git.Update.Project.Info.Tabs.Properties">
-    <option name="RECENT_FILTERS">
-      <map>
-        <entry key="Branch">
-          <value>
-            <list>
-              <RecentGroup>
-                <option name="FILTER_VALUES">
-                  <option value="master" />
-                </option>
-              </RecentGroup>
-            </list>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/Notizen/Recreate DB" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/NewUserRegProcess.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Document.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/SumProcess.java" />
-        <option value="$PROJECT_DIR$/setup.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java" />
-      </list>
-    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="IgnoredFileRootStore">
     <option name="generatedRoots">
@@ -190,160 +38,36 @@
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="importAutomatically" value="true" />
+        <option name="vmOptionsForImporter" value="-Xmx768m" />
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
-    <option name="width" value="1754" />
-    <option name="height" value="1038" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1176" />
   </component>
   <component name="ProjectId" id="1Qb6Egp0JmSrEDoijrezpploG2D" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="external_libs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="Notizen" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="Controller" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="ObjectTemplates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="Telegram" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="Telegram" type="462c0819:PsiDirectoryNode" />
-              <item name="Processes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="Utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="fxml" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OCR-Docs-Storage" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="OCR-Docs-Storage" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Maven: aopalliance:aopalliance:1.0" type="70bed36:NamedLibraryElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
-  </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1569610382773" />
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.1484375" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="configurable.group.build.tools" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Eigene Projekte\OCR-Docs-Storage\external_libs" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Eigene Projekte\OCR-Docs-Storage" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/target" />
     </key>
@@ -360,7 +84,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Maven.OCR [clean,package,assembly:single]">
+  <component name="RunManager" selected="Application.Main -gui">
     <configuration name="Main -bot" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -407,6 +131,32 @@
       </MavenSettings>
       <method v="2" />
     </configuration>
+    <configuration name="OCR [clean,package]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="clean" />
+                <option value="package" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
     <configuration name="OCR [clean,package,assembly:single]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -434,26 +184,12 @@
       </MavenSettings>
       <method v="2" />
     </configuration>
-    <configuration name="Remote" type="Remote">
-      <module name="OCR" />
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" />
-      <option name="HOST" value="192.168.178.38" />
-      <option name="PORT" value="12345" />
-      <option name="AUTO_RESTART" value="false" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="12345" />
-        <option name="LOCAL" value="false" />
-      </RunnerSettings>
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Application.Main -bot" />
       <item itemvalue="Application.Main -gui" />
+      <item itemvalue="Maven.OCR [clean,package]" />
       <item itemvalue="Maven.OCR [clean,exec:exec]" />
       <item itemvalue="Maven.OCR [clean,package,assembly:single]" />
-      <item itemvalue="Remote.Remote" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -495,204 +231,78 @@
       <option name="project" value="LOCAL" />
       <updated>1568835321167</updated>
     </task>
-    <task id="LOCAL-00005" summary="New jar.">
-      <created>1568873949146</created>
+    <task id="LOCAL-00005" summary="Added errorLogging.">
+      <created>1569222457099</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1568873949146</updated>
+      <updated>1569222457099</updated>
     </task>
-    <task id="LOCAL-00006" summary="Removed prepareDB Method from DBUtil.">
-      <created>1568905146335</created>
+    <task id="LOCAL-00006" summary="Added ProgressManager.">
+      <created>1569224994807</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1568905146335</updated>
+      <updated>1569224994807</updated>
     </task>
-    <task id="LOCAL-00007" summary="Added StartKeyboard to Bot.">
-      <created>1568919098329</created>
+    <task id="LOCAL-00007" summary="Added external .jars.">
+      <created>1569247580500</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1568919098329</updated>
+      <updated>1569247580500</updated>
     </task>
-    <task id="LOCAL-00008" summary="Added StartKeyboard to Bot.">
-      <created>1568922414311</created>
+    <task id="LOCAL-00008" summary="Pom changed">
+      <created>1569248497284</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1568922414311</updated>
+      <updated>1569248497284</updated>
     </task>
-    <task id="LOCAL-00009" summary="Neue .jar.">
-      <created>1568961948465</created>
+    <task id="LOCAL-00009" summary="Added Runscripts.">
+      <created>1569248794527</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1568961948465</updated>
+      <updated>1569248794527</updated>
     </task>
-    <task id="LOCAL-00010" summary="Script tp set format, pull, copy new version to local rep.">
-      <created>1569077180265</created>
+    <task id="LOCAL-00010" summary="Added exUtils">
+      <created>1569250604103</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1569077180266</updated>
+      <updated>1569250604104</updated>
     </task>
-    <task id="LOCAL-00011" summary="Neue .jar.">
-      <created>1569077237527</created>
+    <task id="LOCAL-00011" summary="Added exUtils">
+      <created>1569250888010</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1569077237527</updated>
+      <updated>1569250888010</updated>
     </task>
-    <task id="LOCAL-00012" summary="Fixed PullScript">
-      <created>1569078198769</created>
+    <task id="LOCAL-00012" summary="Implemented one ThreadClass to perform LaterTasks.">
+      <created>1569605188202</created>
       <option name="number" value="00012" />
       <option name="presentableId" value="LOCAL-00012" />
       <option name="project" value="LOCAL" />
-      <updated>1569078198769</updated>
+      <updated>1569605188202</updated>
     </task>
-    <task id="LOCAL-00013" summary="Fixed PullScript again.">
-      <created>1569078386871</created>
+    <task id="LOCAL-00013" summary="Implemented Regular- and OneTimeTasks Strategies.">
+      <created>1569657115462</created>
       <option name="number" value="00013" />
       <option name="presentableId" value="LOCAL-00013" />
       <option name="project" value="LOCAL" />
-      <updated>1569078386871</updated>
+      <updated>1569657115462</updated>
     </task>
-    <task id="LOCAL-00014" summary="Fixed PullScript again.">
-      <created>1569081490575</created>
+    <task id="LOCAL-00014" summary="TaskHub uses Regular- and OneTimeTasks Strategies.">
+      <created>1569657526797</created>
       <option name="number" value="00014" />
       <option name="presentableId" value="LOCAL-00014" />
       <option name="project" value="LOCAL" />
-      <updated>1569081490575</updated>
+      <updated>1569657526797</updated>
     </task>
-    <task id="LOCAL-00015" summary="Refactor. New .jar.">
-      <created>1569160194601</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1569160194601</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Fix Camelcase in cmd.">
-      <created>1569168393610</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1569168393610</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Bot default not busy.">
-      <created>1569169425150</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1569169425150</updated>
-    </task>
-    <task id="LOCAL-00018" summary="Back to maven assembly plugin.">
-      <created>1569416663369</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1569416663369</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Added pdf to storing.">
-      <created>1569520395175</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1569520395175</updated>
-    </task>
-    <task id="LOCAL-00020" summary="ChatId will now be stored for user.">
-      <created>1569520658166</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1569520658166</updated>
-    </task>
-    <task id="LOCAL-00021" summary="If no Date can be parsed from content, german now() Date is given.">
-      <created>1569528746501</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1569528746501</updated>
-    </task>
-    <task id="LOCAL-00022" summary="Now hopefully always correct german date.">
-      <created>1569529503142</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1569529503142</updated>
-    </task>
-    <task id="LOCAL-00023" summary="Fixed Adding UpdateTask when processing Task later.">
-      <created>1569610042239</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1569610042240</updated>
-    </task>
-    <option name="localTasksCounter" value="24" />
+    <option name="localTasksCounter" value="15" />
     <servers />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="-6" y="0" width="1403" height="830" extended-state="0" />
-    <editor active="true" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6835443" visible="true" weight="0.16157855" />
-      <window_info id="Structure" order="1" sideWeight="0.5011442" side_tool="true" weight="0.27919462" />
-      <window_info id="Capture Tool" order="2" />
-      <window_info id="Image Layers" order="3" />
-      <window_info id="Designer" order="4" />
-      <window_info id="UI Designer" order="5" />
-      <window_info id="Favorites" order="6" sideWeight="0.3164557" side_tool="true" weight="0.16979866" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.66288954" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3286119" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.4627507" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.3286119" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3286119" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.3286119" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Maven" order="6" weight="0.3295302" />
-      <window_info anchor="right" id="Android WiFi ADB" order="7" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
-      <window_info anchor="right" id="Coverage" order="9" side_tool="true" weight="0.3295302" />
-    </layout>
-    <layout-to-restore>
-      <window_info id="Image Layers" order="0" />
-      <window_info id="Designer" order="1" />
-      <window_info id="UI Designer" order="2" />
-      <window_info id="Capture Tool" order="3" />
-      <window_info id="Favorites" order="4" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="5" visible="true" weight="0.25" />
-      <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="0" />
-      <window_info anchor="bottom" id="Version Control" order="1" />
-      <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="3" weight="0.32922733" />
-      <window_info anchor="bottom" id="Message" order="4" />
-      <window_info anchor="bottom" id="Find" order="5" />
-      <window_info anchor="bottom" id="Run" order="6" />
-      <window_info anchor="bottom" id="Debug" order="7" visible="true" weight="0.39977604" />
-      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="10" />
-      <window_info anchor="right" id="Palette" order="0" />
-      <window_info anchor="right" id="Capture Analysis" order="1" />
-      <window_info anchor="right" id="Theme Preview" order="2" />
-      <window_info anchor="right" id="Android WiFi ADB" order="3" />
-      <window_info anchor="right" id="Palette&#9;" order="4" />
-      <window_info anchor="right" id="Maven" order="5" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="6" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="7" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="8" weight="0.25" />
-    </layout-to-restore>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -700,20 +310,7 @@
         <entry key="MAIN">
           <value>
             <State>
-              <option name="RECENTLY_FILTERED_USER_GROUPS">
-                <collection />
-              </option>
-              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-                <collection />
-              </option>
-              <option name="COLUMN_ORDER">
-                <list>
-                  <option value="0" />
-                  <option value="1" />
-                  <option value="2" />
-                  <option value="3" />
-                </list>
-              </option>
+              <option name="COLUMN_ORDER" />
             </State>
           </value>
         </entry>
@@ -739,269 +336,89 @@
     <MESSAGE value="Fixed BonProcess Start when Answer negativ." />
     <MESSAGE value="Init." />
     <MESSAGE value="DB wont save when FIlesize already present." />
-    <MESSAGE value="New jar." />
-    <MESSAGE value="Removed prepareDB Method from DBUtil." />
-    <MESSAGE value="Added StartKeyboard to Bot." />
-    <MESSAGE value="Script tp set format, pull, copy new version to local rep." />
-    <MESSAGE value="Neue .jar." />
-    <MESSAGE value="Fixed PullScript" />
-    <MESSAGE value="Fixed PullScript again." />
-    <MESSAGE value="Refactor. New .jar." />
-    <MESSAGE value="Fix Camelcase in cmd." />
-    <MESSAGE value="Bot default not busy." />
-    <MESSAGE value="Back to maven assembly plugin." />
-    <MESSAGE value="Added pdf to storing." />
-    <MESSAGE value="ChatId will now be stored for user." />
-    <MESSAGE value="If no Date can be parsed from content, german now() Date is given." />
-    <MESSAGE value="Now hopefully always correct german date." />
-    <MESSAGE value="Fixed Adding UpdateTask when processing Task later." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Adding UpdateTask when processing Task later." />
+    <MESSAGE value="Added errorLogging." />
+    <MESSAGE value="Added ProgressManager." />
+    <MESSAGE value="Pom changed" />
+    <MESSAGE value="Added Runscripts." />
+    <MESSAGE value="Added exUtils" />
+    <MESSAGE value="Added getlist to Start-Keyboard." />
+    <MESSAGE value="Implemented one ThreadClass to perform LaterTasks." />
+    <MESSAGE value="Implemented Regular- and OneTimeTasks Strategies." />
+    <MESSAGE value="TaskHub uses Regular- and OneTimeTasks Strategies." />
+    <option name="LAST_COMMIT_MESSAGE" value="TaskHub uses Regular- and OneTimeTasks Strategies." />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java</url>
-          <line>30</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java</url>
-          <line>67</line>
-          <properties />
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="evaluateExpression">
-      <expression>
-        <expression-string>&quot;SELECT * FROM Documents WHERE date like '%&quot; + monthAndYear.replace(&quot;-&quot;, &quot;.&quot;) + &quot;%' AND originalFile like '%Bons%'&quot;</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>SELECT * FROM Documents WHERE date like '%&quot; + monthAndYear.replace(&quot;-&quot;, &quot;.&quot;) + &quot;%' AND originalFile like '%Bons%'</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>LocalDate.now().format()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>document.getClass()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk-11.0.2/lib/src.zip!/java.base/java/lang/ref/Reference.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3417">
-          <caret line="230" column="31" selection-start-line="230" selection-start-column="31" selection-end-line="230" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="63" selection-start-line="63" selection-end-line="63" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="20" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-11.0.2/lib/src.zip!/java.base/java/net/SocketInputStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1054">
-          <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/net/java/dev/jna/jna/5.3.1/jna-5.3.1.jar!/com/sun/jna/Native.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4845">
-          <caret line="286" column="23" selection-start-line="286" selection-start-column="23" selection-end-line="286" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetBonsProcess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/BotUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/TimeUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectHub.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1224">
-          <caret line="87" column="33" selection-start-line="87" selection-start-column="33" selection-end-line="87" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/NewUserRegProcess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="21" column="36" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Notizen/Installation">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="15" lean-forward="true" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Notizen/Recreate DB">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="24" selection-end-line="9" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/IOUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1870">
-          <caret line="130" column="20" selection-start-line="130" selection-start-column="20" selection-end-line="130" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/SumProcess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="55" column="16" selection-start-line="55" selection-start-column="16" selection-end-line="55" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="169" column="45" selection-start-line="169" selection-start-column="45" selection-end-line="169" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Notizen/CopyFromRepo.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-11.0.2/lib/src.zip!/java.base/java/util/List.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="612" column="9" selection-start-line="612" selection-start-column="9" selection-end-line="612" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Taskshub.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.properties.example">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" selection-start-line="9" selection-end-line="9" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Document.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="106" selection-start-line="106" selection-end-line="106" />
-          <folding>
-            <element signature="e#2389#2390#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Controller/MainController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="164" column="27" lean-forward="true" selection-start-line="164" selection-end-line="165" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="80" selection-start-line="80" selection-end-line="80" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/ObjectTemplates/Bon.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="58" column="119" selection-start-line="58" selection-start-column="119" selection-end-line="58" selection-end-column="119" />
-        </state>
-      </provider>
-    </entry>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>OCR</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: aopalliance:aopalliance:1.0</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

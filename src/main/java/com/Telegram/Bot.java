@@ -2,6 +2,8 @@ package com.Telegram;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.Controller.Reporter.Reporter;
+import com.Misc.TaskHandling.Strategies.NextPerformanceStrategy;
+import com.Misc.TaskHandling.Strategies.OneTimeTaskStrategy;
 import com.Misc.TaskHandling.UpdateTask;
 import com.Telegram.Processes.*;
 import com.Telegram.Processes.Process;
@@ -76,7 +78,7 @@ public class Bot extends TelegramLongPollingBot {
             }catch (Exception e){
                 LogUtil.logError(null, e);
                 LogUtil.log("Update added to perform later...");
-                ObjectHub.getInstance().getTaskshub().getTasksToDo().add(new UpdateTask(update, this));
+                ObjectHub.getInstance().getTaskshub().getTasksToDo().add(new UpdateTask(update, this, new NextPerformanceStrategy()));
             }
             }else{
             if(process != null && process.getClass().equals(NewUserRegProcess.class)){
