@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/OneTimeTaskStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/OneTimeTaskStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/TaskStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/TaskStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Task.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/UpdateTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/UpdateTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Taskshub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Taskshub.java" afterDir="false" />
-    </list>
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -301,7 +294,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569657115462</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="TaskHub uses Regular- and OneTimeTasks Strategies.">
+      <created>1569657526797</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1569657526797</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -344,7 +344,8 @@
     <MESSAGE value="Added getlist to Start-Keyboard." />
     <MESSAGE value="Implemented one ThreadClass to perform LaterTasks." />
     <MESSAGE value="Implemented Regular- and OneTimeTasks Strategies." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented Regular- and OneTimeTasks Strategies." />
+    <MESSAGE value="TaskHub uses Regular- and OneTimeTasks Strategies." />
+    <option name="LAST_COMMIT_MESSAGE" value="TaskHub uses Regular- and OneTimeTasks Strategies." />
   </component>
   <component name="masterDetails">
     <states>
