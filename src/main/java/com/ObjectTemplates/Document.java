@@ -1,6 +1,8 @@
 package com.ObjectTemplates;
 
+import com.ObjectHub;
 import com.Utils.DBUtil;
+import com.Utils.IOUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -41,8 +43,13 @@ public abstract class Document{
         if(date == null){
             date = LocalDate.now().toString();
         }
+
+        String originFilePath = originFile.getAbsolutePath();
+        originFilePath = IOUtil.makePathHostRelative(originFilePath);
+        originFilePath = IOUtil.convertFilePathOSDependent(originFilePath);
+
         return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBUtil.countDocuments("") + ", '" +
-                content.replaceAll("'", "''") + "', '" + originFile.getAbsolutePath() + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
+                content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
     }
 
     // Getter Setter

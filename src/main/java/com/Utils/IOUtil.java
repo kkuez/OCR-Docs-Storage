@@ -1,5 +1,6 @@
 package com.Utils;
 
+import com.ObjectHub;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -7,6 +8,26 @@ import java.io.IOException;
 import java.util.*;
 
 public class IOUtil {
+
+    public static final String OS = System.getProperty("os.name").startsWith("Linux") ? "Linux" : "Windows";
+
+    public static final String alternativePathToArchive = ObjectHub.getInstance().getProperties().getProperty("alternativePathToArchive");
+
+    public static final String projectFolderOnHost = ObjectHub.getInstance().getProperties().getProperty("projectFolderOnHost");
+
+    public static String convertFilePathOSDependent(String originFilePath){
+        if(!IOUtil.OS.equals("Linux")){
+            return originFilePath.replace("\\", "/");
+        }
+        return originFilePath;
+    }
+
+    public static String makePathHostRelative(String originFilePath){
+        if(IOUtil.alternativePathToArchive.equals("")){
+            originFilePath = originFilePath.replace(IOUtil.alternativePathToArchive, IOUtil.projectFolderOnHost + "/Archive/");
+        }
+        return originFilePath;
+    }
 
     public static File createFileOrNull(String content, String absolutePathAndName){
         File result = new File(absolutePathAndName);
@@ -26,4 +47,7 @@ public class IOUtil {
         inputFiles.forEach(file -> fileMap.putIfAbsent(FileUtils.sizeOf(file), file));
         return fileMap.values();
     }
+
+
+
 }
