@@ -48,7 +48,7 @@ public abstract class Document{
         originFilePath = IOUtil.makePathHostRelative(originFilePath);
         originFilePath = IOUtil.convertFilePathOSDependent(originFilePath);
 
-        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBUtil.countDocuments("") + ", '" +
+        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBUtil.countDocuments("Documents", "") + ", '" +
                 content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
     }
 
