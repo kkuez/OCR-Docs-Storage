@@ -7,6 +7,8 @@ tessLang=
 #Testibot:
 #tgBotToken=888027877:AAFMukIwai_JiiHjNS9aj7nWZHdsIsfer48
 tgBotToken=
-pwForNewUsers=
+pwForNewUsers=Nuss
 projectFolderOnHost=
+#projectFolderOnHost=
 alternativePathToArchive=
+#alternativePathToArchive=

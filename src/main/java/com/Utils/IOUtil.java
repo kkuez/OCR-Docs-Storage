@@ -17,14 +17,14 @@ public class IOUtil {
 
     public static String convertFilePathOSDependent(String originFilePath){
         if(!IOUtil.OS.equals("Linux")){
-            return originFilePath.replace("\\", "/");
+            return originFilePath.replace("\\", "/").replace("//", "/");
         }
         return originFilePath;
     }
 
     public static String makePathHostRelative(String originFilePath){
-        if(IOUtil.alternativePathToArchive.equals("")){
-            originFilePath = originFilePath.replace(IOUtil.alternativePathToArchive, IOUtil.projectFolderOnHost + "/Archive/");
+        if(!IOUtil.alternativePathToArchive.equals("")){
+            originFilePath = originFilePath.replace(IOUtil.alternativePathToArchive, IOUtil.projectFolderOnHost + "/Archiv");
         }
         return originFilePath;
     }
