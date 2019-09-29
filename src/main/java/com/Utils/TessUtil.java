@@ -79,7 +79,7 @@ public class TessUtil {
         Document document = null;
         try {
             String result = tesseract.doOCR(inputfile);
-            document = new Image(result, inputfile, DBUtil.countDocuments("") );
+            document = new Image(result, inputfile, DBUtil.countDocuments("Documents", "") );
             String date = getFirstDate(result);
             date = date == null ? LocalDate.now().toString() : date;
             document.setDate(date);

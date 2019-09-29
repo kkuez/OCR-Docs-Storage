@@ -17,6 +17,7 @@ import com.Utils.TessUtil;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -80,7 +81,7 @@ public class Bot extends TelegramLongPollingBot {
                 LogUtil.log("Update added to perform later...");
                 ObjectHub.getInstance().getTaskshub().getTasksToDo().add(new UpdateTask(update, this, new NextPerformanceStrategy()));
             }
-            }else{
+        }else{
             if(process != null && process.getClass().equals(NewUserRegProcess.class)){
                 process.performNextStep(update.getMessage().getText(), update);
             }else{
@@ -90,46 +91,46 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
     public void processUpdateReceveived(Update update) throws Exception{
-            try {
-                if (update.getMessage().getText() != null) {
-                    String input = update.getMessage().getText();
-                    if (process == null) {
-                        process = fetchCommandOrNull(update);
+        try {
+            if (update.getMessage().getText() != null) {
+                String input = update.getMessage().getText();
+                if (process == null) {
+                    process = fetchCommandOrNull(update);
+                } else {
+                    if (getBusy()) {
+                        BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", process.getBot());
                     } else {
-                        if (getBusy()) {
-                            BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", process.getBot());
+                        if (input.startsWith("Japp")) {
+                            process.performNextStep("Japp", update);
                         } else {
-                            if (input.startsWith("Japp")) {
-                                process.performNextStep("Japp", update);
+                            if (input.startsWith("Nee")) {
+                                process.performNextStep("Nee", update);
                             } else {
-                                if (input.startsWith("Nee")) {
-                                    process.performNextStep("Nee", update);
-                                } else {
-                                    process.performNextStep(input, update);
-                                }
+                                process.performNextStep(input, update);
                             }
                         }
                     }
                 }
-                if (update.getMessage().hasPhoto()) {
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Verarbeite Bild...", this);
-                    processPhoto(update);
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig.", this);
-                }
-            }catch (Exception e){
-                LogUtil.logError(null, e);
-                throw new RuntimeException();
             }
+            if (update.getMessage().hasPhoto()) {
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Verarbeite Bild...", this);
+                processPhoto(update);
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig.", this);
+            }
+        }catch (Exception e){
+            LogUtil.logError(null, e);
+            throw new RuntimeException();
         }
+    }
 
-        private void printUpdateData(Update update){
-            StringBuilder printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getMessage().getFrom().getFirstName());
-            String append = update.getMessage().hasPhoto() ? ", new Picture" : "";
-            printBuilder.append(append);
-            append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : "";
-            printBuilder.append(append);
-            LogUtil.log(printBuilder.toString());
-        }
+    private void printUpdateData(Update update){
+        StringBuilder printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getMessage().getFrom().getFirstName());
+        String append = update.getMessage().hasPhoto() ? ", new Picture" : "";
+        printBuilder.append(append);
+        append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : "";
+        printBuilder.append(append);
+        LogUtil.log(printBuilder.toString());
+    }
 
     private void processPhoto(Update update){
         setBusy(true);
@@ -191,6 +192,27 @@ public class Bot extends TelegramLongPollingBot {
         return tags;
     }
 
+    public void sendDocumentFromURL(Update update, String imagePath, String caption, ReplyKeyboardMarkup possibleKeyBoardOrNull){
+        SendDocument sendDocument = null;
+        try {
+            sendDocument = new SendDocument().setDocument(caption, new FileInputStream(new File(imagePath)));
+            sendDocument.setCaption(caption);
+            if(possibleKeyBoardOrNull != null){
+                sendDocument.setReplyMarkup(possibleKeyBoardOrNull);
+            }
+        } catch (FileNotFoundException e) {
+            LogUtil.logError(imagePath, e);
+        }
+        sendDocument.setChatId(update.getMessage().getChatId());
+        try {
+            execute(sendDocument);
+        } catch (TelegramApiException e) {
+            LogUtil.logError(null, e);
+            BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fehler, Aktion abgebrochen.", this);
+            setBusy(false);
+        }
+    }
+
     public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboardMarkup possibleKeyBoardOrNull){
         SendPhoto sendPhoto = null;
         try {
@@ -201,11 +223,14 @@ public class Bot extends TelegramLongPollingBot {
             }
         } catch (FileNotFoundException e) {
             LogUtil.logError(imagePath, e);
+            return;
         }
         sendPhoto.setChatId(update.getMessage().getChatId());
         try {
             execute(sendPhoto);
         } catch (TelegramApiException e) {
+            setBusy(false);
+            BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fehler, Aktion abgebrochen.", this);
             LogUtil.logError(null, e);
         }
     }
@@ -250,27 +275,31 @@ public class Bot extends TelegramLongPollingBot {
             if (cmd.startsWith("start")) {
                 return new StartProcess(this, update, (ProgressReporter) progressReporter);
             } else {
-                if (cmd.startsWith("search") || input.equals("Search Document")) {
-                return new SearchProcess(this, update,(ProgressReporter) progressReporter);
-            } else {
-                if (cmd.startsWith("getpics") || input.equals("Get Documents")) {
-                    return new GetPicsProcess(this, update, (ProgressReporter) progressReporter);
+                if (cmd.startsWith("search") || input.equals("Anzahl Dokumente")) {
+                    return new SearchProcess(this, update,(ProgressReporter) progressReporter);
                 } else {
-                    if (cmd.startsWith("getsum") || input.equals("Get Sum of Bons")) {
-                        return new SumProcess(this, (ProgressReporter) progressReporter, update);
+                    if (cmd.startsWith("getpics") || input.equals("Hole Bilder, Dokumente")) {
+                        return new GetPicsProcess(this, update, (ProgressReporter) progressReporter);
                     } else {
-                        if (cmd.startsWith("getbons") || input.equals("Get Bons")) {
-                            return new GetBonsProcess(this, (ProgressReporter) progressReporter);
+                        if (cmd.startsWith("getsum") || input.equals("Summe von Bons")) {
+                            return new SumProcess(this, (ProgressReporter) progressReporter, update);
                         } else {
-                            if (cmd.startsWith("removelast") || input.equals("Remove last Document")) {
-                                return new RemoveLastProcess(this, (ProgressReporter) progressReporter);
-                            }else {
-                                if (cmd.startsWith("add") || cmd.startsWith("removeitem") || cmd.startsWith("getlist") || cmd.startsWith("removeall")) {
-                                    return new ShoppingListProcess(this, update, (ProgressReporter) progressReporter);
+                            if (cmd.startsWith("getbons") || input.equals("Hole Bons")) {
+                                return new GetBonsProcess(this, (ProgressReporter) progressReporter, update);
+                            } else {
+                                if (cmd.startsWith("removelast") || input.equals("Letztes Bild Löschen")) {
+                                    return new RemoveLastProcess(this, (ProgressReporter) progressReporter);
+                                }else{
+                                    if(cmd.startsWith("einkaufslisten-optionen")) {
+                                        BotUtil.sendKeyBoard("Was willst du tun?", this, update, KeyboardFactory.KeyBoardType.ShoppingList);
+                                    } else {
+                                        if (cmd.startsWith("add") || (input.equals("Hinzufügen") || cmd.startsWith("removeitem") || input.equals("Item Löschen") || cmd.startsWith("getlist") || input.equals("Einkaufsliste anzeigen") || cmd.startsWith("removeall") || input.equals("Ganze Liste Löschen"))) {
+                                            return new ShoppingListProcess(this, update, (ProgressReporter) progressReporter);
+                                        }
+                                    }
                                 }
+                            }
                         }
-                        }
-                    }
                     }
                 }
             }
