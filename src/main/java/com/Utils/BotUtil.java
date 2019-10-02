@@ -16,13 +16,13 @@ import java.util.Map;
 
 public class BotUtil {
 
-    public static void activateTGBot(Bot inputBotOrNull, Map<Integer, User> allowedUsersMap){
+    public static void activateTGBot(Bot inputBotOrNull){
         LogUtil.log("System: Activate TG-Bot");
         Bot bot = null;
         try {
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotApi = new TelegramBotsApi();
-            bot = inputBotOrNull == null ? new Bot(allowedUsersMap) : inputBotOrNull;
+            bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
             ObjectHub.getInstance().setBot(bot);
             telegramBotApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {

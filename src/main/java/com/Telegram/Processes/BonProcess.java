@@ -4,6 +4,7 @@ import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
 import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
+import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class BonProcess extends Process {
 
@@ -20,7 +22,7 @@ public class BonProcess extends Process {
 
     private Bon bon;
 
-    public BonProcess(Bon bon, Bot bot, Document document, ProgressReporter progressReporter){
+    public BonProcess(Bon bon, Bot bot, Document document, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         this.bon = bon;
         setBot(bot);
@@ -29,7 +31,7 @@ public class BonProcess extends Process {
     }
 
     @Override
-    public void performNextStep(String arg, Update update) {
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         switch(currentStep){
             case Start:
                 if(arg.equals("Japp")) {
@@ -48,7 +50,7 @@ public class BonProcess extends Process {
                     getBot().setBusy(false);
                 }else{
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok :)",getBot());
-                    getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
+                    allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
                 }
                 break;
 
@@ -57,7 +59,7 @@ public class BonProcess extends Process {
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "OK :)",getBot());
                     DBUtil.insertDocumentToDB(bon);
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
-                    getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
+                    allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
                 }else{
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bitte richtige Summe eingeben:",getBot());
                     currentStep = Steps.EnterRightSum;
@@ -69,7 +71,7 @@ public class BonProcess extends Process {
                 DBUtil.insertDocumentToDB(bon);
                 DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok, richtige Summe korrigiert :)",getBot());
-                getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
+                allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
                 break;
         }
     }

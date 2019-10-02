@@ -2,10 +2,13 @@ package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
+import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.Map;
 
 public class NewUserRegProcess extends Process {
 
@@ -15,15 +18,15 @@ public class NewUserRegProcess extends Process {
     }
 
     @Override
-    public void performNextStep(String arg, Update update) {
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         if(arg.equals(ObjectHub.getInstance().getProperties().getProperty("pwForNewUsers"))){
             BotUtil.sendMsg(update.getMessage().getChatId() + "", "Willkommen :)", getBot());
             DBUtil.executeSQL("insert into AllowedUsers(id, name, chatId) Values (" + update.getMessage().getFrom().getId() + ", '" +
                     update.getMessage().getFrom().getFirstName() + "', " + update.getMessage().getChatId() + ")");
             ObjectHub.getInstance().setAllowedUsersMap(DBUtil.getAllowedUsersMap());
-            ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
+            allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
         }else{
-            ObjectHub.getInstance().getAllowedUsersMap().remove(update.getMessage().getFrom().getId());
+            allowedUsersMap.remove(update.getMessage().getFrom().getId());
         }
     }
 

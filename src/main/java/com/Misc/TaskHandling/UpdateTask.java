@@ -1,6 +1,8 @@
 package com.Misc.TaskHandling;
 
 import com.Misc.TaskHandling.Strategies.TaskStrategy;
+import com.ObjectHub;
+import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -30,7 +32,7 @@ public class UpdateTask implements Task {
     @Override
     public void run() {
         try {
-            bot.processUpdateReceveived(update);
+            bot.processUpdateReceveived(update, ObjectHub.getInstance().getAllowedUsersMap());
             successFullyExecuted = true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,7 +8,7 @@ public class User {
 
     private String name;
 
-    private Process process;
+    private Process process = null;
 
 
     //GETTER SETTER

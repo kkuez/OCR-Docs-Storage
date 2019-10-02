@@ -2,17 +2,20 @@ package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
+import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
+import com.google.inject.internal.cglib.proxy.$Callback;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class SumProcess extends Process{
 
@@ -22,14 +25,14 @@ public class SumProcess extends Process{
 
     private Steps currentStep;
 
-    public SumProcess(Bot bot, ProgressReporter progressReporter, Update update){
+    public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
         currentStep = Steps.Start;
-        performNextStep("", update);
+        performNextStep("", update, allowedUsersMap);
     }
     @Override
-    public void performNextStep(String arg, Update update) {
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         switch (currentStep){
             case Start:
                 BotUtil.askMonth("Für welchem Monat...?", update, getBot());

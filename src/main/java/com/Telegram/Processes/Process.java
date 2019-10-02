@@ -2,8 +2,11 @@ package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.Document;
+import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.Map;
 
 public abstract class Process {
 
@@ -19,7 +22,7 @@ public abstract class Process {
 
     private Boolean hasStarted = false;
 
-    public abstract void performNextStep(String arg, Update update);
+    public abstract void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap);
 
     public abstract String getProcessName();
 

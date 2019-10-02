@@ -2,6 +2,7 @@ package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.Document;
+import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
@@ -9,6 +10,7 @@ import com.Utils.IOUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class GetPicsProcess extends Process {
@@ -18,13 +20,13 @@ public class GetPicsProcess extends Process {
     String action;
 
     String item;
-    public GetPicsProcess(Bot bot, Update update, ProgressReporter progressReporter){
+    public GetPicsProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
-        performNextStep(searchTerm, update);
+        performNextStep(searchTerm, update, allowedUsersMap);
     }
     @Override
-    public void performNextStep(String arg, Update update) {
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         getBot().setBusy(true);
         Set<String> commandsWithLaterExecution = Set.of("Hole Bilder, Dokumente");
         if(action != null){
@@ -32,7 +34,7 @@ public class GetPicsProcess extends Process {
         }
 
         if(!commandsWithLaterExecution.contains(update.getMessage().getText())){
-            processInOneStep(arg, update);
+            processInOneStep(arg, update, allowedUsersMap);
         }else{
             prepareForProcessing(update);
         }
@@ -45,7 +47,7 @@ public class GetPicsProcess extends Process {
         getBot().setBusy(false);
     }
 
-    private void processInOneStep(String arg, Update update) {
+    private void processInOneStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -78,7 +80,7 @@ public class GetPicsProcess extends Process {
             }
         });
         thread.start();
-        getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
+        allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
     }
 
     @Override
