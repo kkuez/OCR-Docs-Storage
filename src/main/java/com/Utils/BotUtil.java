@@ -19,7 +19,7 @@ public class BotUtil {
         try {
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotApi = new TelegramBotsApi();
-            bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
+            bot = inputBotOrNull == null ? new Bot(ObjectHub.getInstance().getAllowedUsersMap()) : inputBotOrNull;
             ObjectHub.getInstance().setBot(bot);
             telegramBotApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {

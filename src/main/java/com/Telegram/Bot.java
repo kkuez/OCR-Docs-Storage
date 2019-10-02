@@ -5,6 +5,7 @@ import com.Controller.Reporter.Reporter;
 import com.Misc.TaskHandling.Strategies.NextPerformanceStrategy;
 import com.Misc.TaskHandling.Strategies.OneTimeTaskStrategy;
 import com.Misc.TaskHandling.UpdateTask;
+import com.ObjectTemplates.User;
 import com.Telegram.Processes.*;
 import com.Telegram.Processes.Process;
 import com.ObjectHub;
@@ -24,6 +25,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.awt.font.TextHitInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,8 +34,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
-
-    public Process process = null; //TODO Setter abfangen wenn neuer Prozess gestartet wird obwohl nicht null
 
     private Boolean isBusy;
 
@@ -48,7 +48,7 @@ public class Bot extends TelegramLongPollingBot {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
                 progressManager.setTotalSteps(steps);
-                BotUtil.sendMsg(updateOrNull.getMessage().getChatId() + "", "Start process " + process.getProcessName(), Bot.this);
+                BotUtil.sendMsg(updateOrNull.getMessage().getChatId() + "", "Start process " + ObjectHub.getInstance().getAllowedUsersMap().get(updateOrNull.getMessage().getFrom().getId()).getProcess().getProcessName(), Bot.this);
             }
 
             @Override
@@ -71,9 +71,16 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
-        printUpdateData(update);
 
-        if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(update.getMessage().getFrom().getId())){
+        printUpdateData(update);
+        int currentUserID = update.getMessage().getFrom().getId();
+
+        if(ObjectHub.getInstance().getAllowedUsersMap().get(currentUserID) == null){
+            ObjectHub.getInstance().getAllowedUsersMap().put(currentUserID, null);
+        }
+
+        Process process = ObjectHub.getInstance().getAllowedUsersMap().get(currentUserID).getProcess();
+        if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(currentUserID)){
             try {
                 processUpdateReceveived(update);
             }catch (Exception e){
@@ -86,19 +93,22 @@ public class Bot extends TelegramLongPollingBot {
                 process.performNextStep(update.getMessage().getText(), update);
             }else{
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Hallo " + update.getMessage().getFrom().getFirstName() + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", this);
+
                 process = new NewUserRegProcess(this, (ProgressReporter) progressReporter);
             }
         }
     }
     public void processUpdateReceveived(Update update) throws Exception{
+        int currentUserID = update.getMessage().getFrom().getId();
+        Process process = ObjectHub.getInstance().getAllowedUsersMap().get(currentUserID).getProcess();
         try {
             if (update.getMessage().getText() != null) {
                 String input = update.getMessage().getText();
                 if (process == null) {
-                    process = fetchCommandOrNull(update);
+                    ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(fetchCommandOrNull(update));
                 } else {
                     if (getBusy()) {
-                        BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", process.getBot());
+                        BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", this);
                     } else {
                         if (input.startsWith("Japp")) {
                             process.performNextStep("Japp", update);
@@ -133,50 +143,57 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void processPhoto(Update update){
-        setBusy(true);
-        File largestPhoto = null;
-        List<PhotoSize> photoList = update.getMessage().getPhoto();
-        photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
-        Collections.reverse(photoList);
-        String filePath = getFilePath(photoList.get(0));
-        largestPhoto = downloadPhotoByFilePath(filePath);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Process process = ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).getProcess();
+                setBusy(true);
+                File largestPhoto = null;
+                List<PhotoSize> photoList = update.getMessage().getPhoto();
+                photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
+                Collections.reverse(photoList);
+                String filePath = getFilePath(photoList.get(0));
+                largestPhoto = downloadPhotoByFilePath(filePath);
 
-        if(DBUtil.isFilePresent(largestPhoto)){
-            LogUtil.log("File already present: " + largestPhoto.getName());
-            return;
-        }
+                if(DBUtil.isFilePresent(largestPhoto)){
+                    LogUtil.log("File already present: " + largestPhoto.getName());
+                    return;
+                }
 
-        File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
-        try {
-            FileUtils.copyFile(largestPhoto, targetFile);
-        } catch (IOException e) {
-            LogUtil.logError(largestPhoto.getAbsolutePath(), e);
-        }
-        Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon");
+                File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
+                try {
+                    FileUtils.copyFile(largestPhoto, targetFile);
+                } catch (IOException e) {
+                    LogUtil.logError(largestPhoto.getAbsolutePath(), e);
+                }
+                Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon");
 
-        Set<String> tags = null;
-        if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
-            tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
-        };
+                Set<String> tags = null;
+                if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
+                    tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
+                };
 
-        Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
-        try {
+                Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
+                try {
 
-            if((TessUtil.checkIfBon(document.getContent()) || forceBon) && this != null){
-                float sum = TessUtil.getLastNumber(document.getContent());
-                Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
-                process = new BonProcess(bon, this, document, (ProgressReporter) progressReporter);
+                    if((TessUtil.checkIfBon(document.getContent()) || forceBon) && this != null){
+                        float sum = TessUtil.getLastNumber(document.getContent());
+                        Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
+                        ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(new BonProcess(bon, Bot.this, document, (ProgressReporter) progressReporter));
+                    }
+                } catch (Exception e) {
+                    LogUtil.logError(null, e);
+                }
+
+                if (process != null && process.getClass().equals(BonProcess.class)) {
+                    sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean));
+                }
+
+                LogUtil.log(update.getMessage().getText());
+                setBusy(false);
             }
-        } catch (Exception e) {
-            LogUtil.logError(null, e);
-        }
-
-        if (process != null && process.getClass().equals(BonProcess.class)) {
-            sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean));
-        }
-
-        LogUtil.log(update.getMessage().getText());
-        setBusy(false);
+        });
+        thread.start();
     }
 
     private Set<String> parseTags(String input){

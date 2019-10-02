@@ -1,12 +1,26 @@
 package com.ObjectTemplates;
 
+import com.Telegram.Processes.*;
+import com.Telegram.Processes.Process;
+
 public class User {
     private int id;
 
     private String name;
 
+    private Process process;
+
 
     //GETTER SETTER
+
+    public Process getProcess() {
+        return process;
+    }
+
+    public void setProcess(Process process) {
+        this.process = process;
+    }
+
     public int getId() {
         return id;
     }

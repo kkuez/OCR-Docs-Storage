@@ -1,6 +1,7 @@
 package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
+import com.ObjectHub;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
@@ -47,7 +48,7 @@ public class SumProcess extends Process{
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot());
                 getBot().setBusy(false);
-                getBot().process = null;
+                ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
                 break;
         }
     }
