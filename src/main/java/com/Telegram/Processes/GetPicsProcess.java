@@ -46,31 +46,38 @@ public class GetPicsProcess extends Process {
     }
 
     private void processInOneStep(String arg, Update update) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        List<Document> listOfDocs;
-        if(action != null){
-            this.searchTerm = item;
-            listOfDocs = DBUtil.getDocumentsForSearchTerm(item);
-        }else{
-            String input = update.getMessage().getText();
-            this.searchTerm = input.substring(input.indexOf(" ") + 1);;
-            listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
-        }
-        listOfDocs.forEach(document -> {
+                List<Document> listOfDocs;
+                if(action != null){
+                    searchTerm = item;
+                    listOfDocs = DBUtil.getDocumentsForSearchTerm(item);
+                }else{
+                    String input = update.getMessage().getText();
+                    searchTerm = input.substring(input.indexOf(" ") + 1);;
+                    listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
+                }
+                listOfDocs.forEach(document -> {
 
-            //In case that a wrong path is given in the db f.e. when pictures not added on the local system, but on
-            //a remote one, this will be catched.
-            if(!document.getOriginFile().exists()){
-                return;
-            }
+                    //In case that a wrong path is given in the db f.e. when pictures not added on the local system, but on
+                    //a remote one, this will be catched.
+                    if(!document.getOriginFile().exists()){
+                        return;
+                    }
                     if(document.getOriginalFileName().toLowerCase().endsWith("pdf")){
                         getBot().sendDocumentFromURL(update, document.getOriginFile().getPath(), document.getOriginalFileName(), null);
                     }else{
                         getBot().sendPhotoFromURL(update, document.getOriginFile().getPath(), "", null);
                     }
+                });
+                getBot().setBusy(false);
+                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot());
+
+            }
         });
-        getBot().setBusy(false);
-        BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot());
+        thread.start();
         getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
     }
 

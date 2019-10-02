@@ -48,20 +48,26 @@ public class GetBonsProcess extends Process{
                     year = arg;
                     getBot().setBusy(true);
                     String parsedDate = month + "." + year;
-                    List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
-                    for(Document document : documentList){
-                        if(DBUtil.countDocuments("Bons", "where belongsToDocument =" + document.getId()) == 0){
-                            documentList.remove(document);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
+                            for(Document document : documentList){
+                                if(DBUtil.countDocuments("Bons", "where belongsToDocument =" + document.getId()) == 0){
+                                    documentList.remove(document);
+                                }
+                            }
+                            documentList.forEach(document1 -> {
+                                String possibleCaption = " ";
+                                if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(document1.getUser())){
+                                    possibleCaption = "Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName();
+                                }
+                                getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
+                            });
+                            BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + documentList.size() + " Bilder geholt.", getBot());
                         }
-                    }
-                    documentList.forEach(document1 -> {
-                        String possibleCaption = " ";
-                        if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(document1.getUser())){
-                            possibleCaption = "Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName();
-                        }
-                        getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
                     });
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + documentList.size() + " Bilder geholt.", getBot());
+                    thread.start();
                     getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
                     getBot().setBusy(false);
                     break;
