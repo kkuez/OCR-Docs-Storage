@@ -46,6 +46,7 @@ public class GetPicsProcess extends Process {
     }
 
     private void processInOneStep(String arg, Update update) {
+
         List<Document> listOfDocs;
         if(action != null){
             this.searchTerm = item;
@@ -70,7 +71,7 @@ public class GetPicsProcess extends Process {
         });
         getBot().setBusy(false);
         BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot());
-        getBot().process = null;
+        getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
     }
 
     @Override

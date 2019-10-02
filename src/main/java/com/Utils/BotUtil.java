@@ -1,6 +1,7 @@
 package com.Utils;
 
 import com.ObjectHub;
+import com.ObjectTemplates.User;
 import com.Telegram.KeyboardFactory;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -11,15 +12,17 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
+import java.util.Map;
+
 public class BotUtil {
 
-    public static void activateTGBot(Bot inputBotOrNull){
+    public static void activateTGBot(Bot inputBotOrNull, Map<Integer, User> allowedUsersMap){
         LogUtil.log("System: Activate TG-Bot");
         Bot bot = null;
         try {
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotApi = new TelegramBotsApi();
-            bot = inputBotOrNull == null ? new Bot(ObjectHub.getInstance().getAllowedUsersMap()) : inputBotOrNull;
+            bot = inputBotOrNull == null ? new Bot(allowedUsersMap) : inputBotOrNull;
             ObjectHub.getInstance().setBot(bot);
             telegramBotApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {

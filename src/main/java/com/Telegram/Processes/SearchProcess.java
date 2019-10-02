@@ -60,7 +60,7 @@ public class SearchProcess extends Process {
         LogUtil.log("Send list of Pictures related to \"" + searchTerm);
         BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Dokumente gefunden :)", getBot());
         getBot().setBusy(false);
-        getBot().process = null;
+        getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
     }
 
     @Override

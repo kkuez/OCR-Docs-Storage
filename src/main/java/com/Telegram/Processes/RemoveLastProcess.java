@@ -16,7 +16,7 @@ public class RemoveLastProcess extends Process {
     public void performNextStep(String arg, Update update) {
         DBUtil.removeLastProcressedDocument();
         BotUtil.sendMsg( update.getMessage().getChatId() + "", "Letztes Bild gelöscht :)",getBot());
-        getBot().process = null;
+        getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
     }
 
     @Override

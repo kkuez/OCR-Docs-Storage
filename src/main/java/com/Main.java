@@ -26,7 +26,7 @@ public class Main {
                 launchGui(args);
             }
             if(s.equals("-bot")){
-                BotUtil.activateTGBot(null);
+                BotUtil.activateTGBot(null, ObjectHub.getInstance().getAllowedUsersMap());
             }
         }
         }

@@ -11,7 +11,7 @@ public class StartProcess extends Process {
     public StartProcess(Bot bot, Update update, ProgressReporter progressReporter){
         super(progressReporter);
         BotUtil.sendKeyBoard("Wähle eine Aktion :)",bot, update, KeyboardFactory.KeyBoardType.Start);
-        getBot().process = null;
+        getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
     }
 
     @Override

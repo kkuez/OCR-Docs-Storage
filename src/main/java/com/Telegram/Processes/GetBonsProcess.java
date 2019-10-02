@@ -62,7 +62,7 @@ public class GetBonsProcess extends Process{
                         getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
                     });
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + documentList.size() + " Bilder geholt.", getBot());
-                    getBot().process = null;
+                    getBot().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
                     getBot().setBusy(false);
                     break;
         }

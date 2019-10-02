@@ -41,14 +41,17 @@ public class Bot extends TelegramLongPollingBot {
 
     private Reporter progressReporter;
 
-    public Bot() {
+    private Map<Integer, User> allowedUsersMap;
+
+    public Bot(Map<Integer, User> allowedUsersMap) {
+        this.allowedUsersMap = allowedUsersMap;
         shoppingList = DBUtil.getShoppingListFromDB();
         setBusy(false);
         progressReporter = new ProgressReporter() {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
                 progressManager.setTotalSteps(steps);
-                BotUtil.sendMsg(updateOrNull.getMessage().getChatId() + "", "Start process " + ObjectHub.getInstance().getAllowedUsersMap().get(updateOrNull.getMessage().getFrom().getId()).getProcess().getProcessName(), Bot.this);
+                BotUtil.sendMsg(updateOrNull.getMessage().getChatId() + "", "Start process " +allowedUsersMap.get(updateOrNull.getMessage().getFrom().getId()).getProcess().getProcessName(), Bot.this);
             }
 
             @Override
@@ -75,12 +78,12 @@ public class Bot extends TelegramLongPollingBot {
         printUpdateData(update);
         int currentUserID = update.getMessage().getFrom().getId();
 
-        if(ObjectHub.getInstance().getAllowedUsersMap().get(currentUserID) == null){
-            ObjectHub.getInstance().getAllowedUsersMap().put(currentUserID, null);
+        if(allowedUsersMap.get(currentUserID) == null){
+           allowedUsersMap.put(currentUserID, null);
         }
 
-        Process process = ObjectHub.getInstance().getAllowedUsersMap().get(currentUserID).getProcess();
-        if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(currentUserID)){
+        Process process =allowedUsersMap.get(currentUserID).getProcess();
+        if(allowedUsersMap.keySet().contains(currentUserID)){
             try {
                 processUpdateReceveived(update);
             }catch (Exception e){
@@ -100,12 +103,12 @@ public class Bot extends TelegramLongPollingBot {
     }
     public void processUpdateReceveived(Update update) throws Exception{
         int currentUserID = update.getMessage().getFrom().getId();
-        Process process = ObjectHub.getInstance().getAllowedUsersMap().get(currentUserID).getProcess();
+        Process process =allowedUsersMap.get(currentUserID).getProcess();
         try {
             if (update.getMessage().getText() != null) {
                 String input = update.getMessage().getText();
                 if (process == null) {
-                    ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(fetchCommandOrNull(update));
+                   allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(fetchCommandOrNull(update));
                 } else {
                     if (getBusy()) {
                         BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", this);
@@ -146,7 +149,7 @@ public class Bot extends TelegramLongPollingBot {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Process process = ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).getProcess();
+                Process process =allowedUsersMap.get(update.getMessage().getFrom().getId()).getProcess();
                 setBusy(true);
                 File largestPhoto = null;
                 List<PhotoSize> photoList = update.getMessage().getPhoto();
@@ -179,7 +182,7 @@ public class Bot extends TelegramLongPollingBot {
                     if((TessUtil.checkIfBon(document.getContent()) || forceBon) && this != null){
                         float sum = TessUtil.getLastNumber(document.getContent());
                         Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
-                        ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(new BonProcess(bon, Bot.this, document, (ProgressReporter) progressReporter));
+                       allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(new BonProcess(bon, Bot.this, document, (ProgressReporter) progressReporter));
                     }
                 } catch (Exception e) {
                     LogUtil.logError(null, e);
@@ -359,6 +362,16 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     //GETTER SETTER
+
+
+    public Map<Integer, User> getAllowedUsersMap() {
+        return allowedUsersMap;
+    }
+
+    public void setAllowedUsersMap(Map<Integer, User> allowedUsersMap) {
+        this.allowedUsersMap = allowedUsersMap;
+    }
+
     public List<String> getShoppingList() {
         return shoppingList;
     }
