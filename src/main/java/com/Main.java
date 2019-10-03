@@ -3,6 +3,7 @@ package com;
 import com.Controller.StartApplication;
 import com.Telegram.Bot;
 import com.Utils.BotUtil;
+import com.Utils.LogUtil;
 import javafx.application.Application;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -26,7 +27,20 @@ public class Main {
                 launchGui(args);
             }
             if(s.equals("-bot")){
-                BotUtil.activateTGBot(null);
+                boolean successfullyActivated = false;
+                while(!successfullyActivated){
+                    try {
+                        successfullyActivated = BotUtil.activateTGBot(null);
+                    } catch (TelegramApiRequestException e) {
+                        e.printStackTrace();
+                        LogUtil.log("Waiting 30s and try again...");
+                        try {
+                            Thread.sleep(30000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
             }
         }
         }

@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class BotUtil {
 
-    public static void activateTGBot(Bot inputBotOrNull){
-        LogUtil.log("System: Activate TG-Bot");
+    public static boolean activateTGBot(Bot inputBotOrNull) throws TelegramApiRequestException {
+        LogUtil.log("System: Activate Bot");
         Bot bot = null;
         try {
             ApiContextInitializer.init();
@@ -27,7 +27,10 @@ public class BotUtil {
             telegramBotApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {
             LogUtil.logError(null, e);
+            LogUtil.log("Failed activating Bot.");
+            throw e;
         }
+        return true;
     }
 
     public static void askBoolean(String question, Update update, Bot bot){
