@@ -7,7 +7,9 @@ import com.Telegram.Bot;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
@@ -35,7 +37,7 @@ public class BotUtil {
 
     public static void askBoolean(String question, Update update, Bot bot){
         SendMessage sendMessage = new SendMessage();
-        ReplyKeyboardMarkup keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean);
+        ReplyKeyboard keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, false);
         sendMessage.setText(question);
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(update.getMessage().getChatId());
@@ -48,7 +50,7 @@ public class BotUtil {
     }
 public static void askMonth(String question, Update update, Bot bot){
         SendMessage sendMessage = new SendMessage();
-        ReplyKeyboardMarkup keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar_Month);
+    ReplyKeyboard keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar_Month, false);
         sendMessage.setText(question);
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(update.getMessage().getChatId());
@@ -62,7 +64,7 @@ public static void askMonth(String question, Update update, Bot bot){
 
 public static void askYear(String question, Update update, Bot bot){
         SendMessage sendMessage = new SendMessage();
-        ReplyKeyboardMarkup keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar_Year);
+    ReplyKeyboard keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar_Year, false);
         sendMessage.setText(question);
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(update.getMessage().getChatId());
@@ -93,7 +95,7 @@ public static void askYear(String question, Update update, Bot bot){
 
     public static void sendKeyBoard(String message, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardType){
         SendMessage sendMessage = new SendMessage();
-        ReplyKeyboardMarkup keyboardMarkup = KeyboardFactory.getKeyBoard(keyBoardType);
+        ReplyKeyboard keyboardMarkup = KeyboardFactory.getKeyBoard(keyBoardType, false);
         sendMessage.setText(message);
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(update.getMessage().getChatId());

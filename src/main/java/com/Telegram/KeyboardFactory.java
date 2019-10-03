@@ -1,31 +1,84 @@
 package com.Telegram;
 
 import com.Utils.BotUtil;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 public class KeyboardFactory {
 
-    public static ReplyKeyboardMarkup getKeyBoard(KeyBoardType keyBoardType) {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(true);
-        List<KeyboardRow> keyboard = createKeyBoard(keyBoardType);
+    public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard) {
+        if(inlineKeyboard){
+            InlineKeyboardMarkup replyKeyboardInline = new InlineKeyboardMarkup();
+            replyKeyboardInline.setKeyboard(createInlineKeyboard(keyBoardType));
+                return replyKeyboardInline;
+        }else {
+                ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+            replyKeyboardMarkup.setSelective(true);
+            replyKeyboardMarkup.setResizeKeyboard(true);
+            replyKeyboardMarkup.setOneTimeKeyboard(true);
+            List<KeyboardRow> keyboard = createKeyBoard(keyBoardType);
 
-        replyKeyboardMarkup.setKeyboard(keyboard);
-
-        return replyKeyboardMarkup;
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            return replyKeyboardMarkup;
+        }
     }
 
+    private static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType){
+        List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
+        switch (keyBoardType){
+            case Boolean:
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Japp", "confirm", "Nee", "deny")));
+                break;
+            case Calendar_Month:
+                endKeyboard.add(createInlineKeyboardRow(Map.of("JAN","JAN", "FEB","FEB","MÄR","MÄR","APR","APR")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("MAI","MAI", "JUN","JUN","JUL","JUL","AUG","AUG")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("SEP","SEP", "OKT","OKT","NOV","NOV","DEZ","DEZ")));
+                break;
+            case Calendar_Year:
+                endKeyboard.add(createInlineKeyboardRow(Map.of("2009","2009", "2010","2010","2011","2011","2012","2012")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("2013","2013", "2014","2014","2015","2015","2016","2016")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("2017","2017", "2018","2018","2019","2019","2020","2020")));
+                break;
+            case ShoppingList:
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Hinzufügen", "add")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Item Löschen", "deleteItem")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Ganze Liste Löschen", "deleteWholeList")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Einkaufsliste anzeigen", "showShoppingList")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Start", "start")));
+                break;
+            case Start:
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Anzahl Dokumente", "documentsCount")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Hole Bilder, Dokumente", "getDocuments")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Summe von Bons", "sumBons")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Letztes Bild Löschen", "deleteLastDocument")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Einkaufslisten-Optionen", "showShoppingListOptions")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Einkaufsliste anzeigen", "showShoppingList")));
+                break;
+        }
+        return endKeyboard;
+    }
+
+    private static List<InlineKeyboardButton> createInlineKeyboardRow(Map<String, String> buttonNamesAndQueries){
+        List<InlineKeyboardButton> inlineKeyboardButtonsRow = new ArrayList<>();
+        for(String name : buttonNamesAndQueries.keySet()){
+            String callBackQuery = buttonNamesAndQueries.get(name);
+            inlineKeyboardButtonsRow.add(new InlineKeyboardButton().setText(name).setCallbackData(callBackQuery);
+        }
+        return inlineKeyboardButtonsRow;
+    }
 
     private static List<KeyboardRow> createKeyBoard(KeyBoardType keyBoardType){
         List<KeyboardRow> keyboard = new ArrayList<>();
-
         switch (keyBoardType){
             case Boolean:
                 KeyboardRow keyboardFirstRow = createKeyBoardRow(new String[]{"Japp", "Nee"});
@@ -76,7 +129,6 @@ public class KeyboardFactory {
                 keyboard.add(keyboardStartEigthRow);
                 break;
         }
-
         return keyboard;
     }
 

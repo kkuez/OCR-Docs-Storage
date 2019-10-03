@@ -22,6 +22,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -188,7 +189,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
 
                 if (process != null && process.getClass().equals(BonProcess.class)) {
-                    sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean));
+                    sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, false));
                 }
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig.", Bot.this);
                 LogUtil.log(update.getMessage().getText());
@@ -232,7 +233,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboardMarkup possibleKeyBoardOrNull){
+    public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
         SendPhoto sendPhoto = null;
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
