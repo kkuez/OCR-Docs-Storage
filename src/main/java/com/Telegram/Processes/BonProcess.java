@@ -44,6 +44,7 @@ public class BonProcess extends Process {
                         LogUtil.logError(document.getOriginFile().getAbsolutePath(), e);
                     }
                     FileUtils.deleteQuietly(document.getOriginFile());
+                    DBUtil.executeSQL("update Documents set originalFile = '" + newOriginalFilePath + "' where originalFile = '" + document.getOriginFile().getAbsolutePath() + "'");
                     document.setOriginFile(newOriginalFilePath);
                     BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot(), true);
                     currentStep = Steps.isSum;
