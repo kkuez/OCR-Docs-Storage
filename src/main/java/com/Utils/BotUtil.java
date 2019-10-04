@@ -1,24 +1,21 @@
 package com.Utils;
 
 import com.ObjectHub;
-import com.ObjectTemplates.User;
 import com.Telegram.KeyboardFactory;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.List;
-import java.util.Map;
 
 public class BotUtil {
     public static void sendKeyboard(String s, Bot bot, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean isInlineKeyBoard, boolean isOnelineKeyboard){
@@ -74,10 +71,34 @@ public static void askYear(String question, Update update, Bot bot, boolean isRe
      *
      */
 
-    public static synchronized void sendMediaMsg(Bot bot, Update update,  boolean isReply,  List<InputMedia> inputMediaList) {
-        boolean isOneTimeKeyboard = false;
+    /**
+    *Documents cannot be send in groups like pictures
+     */
+    public static void sendDocument(Bot bot, Update update,  boolean isReply,  InputMediaDocument inputMediaDocument){
         long chatID = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage().getChatId() : update.getMessage().getChatId();
         Message message = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
+        SendDocument sendDocument = new SendDocument();
+        sendDocument.setDocument(inputMediaDocument.getMediaFile());
+        sendDocument.setChatId(chatID);
+        if(isReply){
+            sendDocument.setReplyToMessageId(message.getMessageId());
+        }
+        try {
+            bot.execute(sendDocument);
+        } catch (TelegramApiException e) {
+            LogUtil.logError(null, e);
+        }
+    }
+
+    public static synchronized void sendMediaMsg(Bot bot, Update update,  boolean isReply,  List<InputMedia> inputMediaList) {
+        long chatID = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage().getChatId() : update.getMessage().getChatId();
+        Message message = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
+        for(InputMedia inputMedia : inputMediaList){
+            if(inputMedia instanceof InputMediaDocument){
+                sendDocument(bot, update, true, (InputMediaDocument) inputMedia);
+                inputMediaList.remove(inputMedia);
+            }
+        }
 
         SendMediaGroup sendMediaGroup = new SendMediaGroup();
         sendMediaGroup.setMedia(inputMediaList);

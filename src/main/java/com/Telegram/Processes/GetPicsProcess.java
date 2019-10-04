@@ -7,11 +7,13 @@ import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.IOUtil;
+import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 
 import java.util.ArrayList;
@@ -67,14 +69,16 @@ public class GetPicsProcess extends Process {
                     searchTerm = input.substring(input.indexOf(" ") + 1);
                     listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
                 }
-                List<InputMedia> inputMediaPhotoList = new ArrayList<>();
+                List<InputMedia> inputMediaList = new ArrayList<>();
                 listOfDocs.forEach(document1 -> {
-                    InputMediaPhoto photo = new InputMediaPhoto();
-                    photo.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
-                    inputMediaPhotoList.add(photo);
+                    Set<String> photoEndings = Set.of("png", "PNG", "jpg", "JPG", "jpeg", "JPEG");
+                    String fileExtension = document1.getOriginalFileName().substring(document1.getOriginalFileName().indexOf(".")).replace(".", "");
+                    InputMedia media = photoEndings.contains(fileExtension) ? new InputMediaPhoto() : new InputMediaDocument();
+                    media.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
+                    inputMediaList.add(media);
                 });
 
-                BotUtil.sendMediaMsg(getBot(), update, true, inputMediaPhotoList);
+                BotUtil.sendMediaMsg(getBot(), update, true, inputMediaList);
                 getBot().setBusy(false);
 
                 BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update, null, true, false);
