@@ -10,6 +10,7 @@ import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.print.Doc;
@@ -66,7 +67,7 @@ public class GetBonsProcess extends Process{
                                 }
                                 getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
                             });
-                            BotUtil.sendMsg("Fertig: " + documentList.size() + " Bilder geholt.",getBot() , update.getMessage(), null, true, false);
+                            BotUtil.sendMsg("Fertig: " + documentList.size() + " Bilder geholt.",getBot() , update, null, true, false);
                         }
                     });
                     thread.start();

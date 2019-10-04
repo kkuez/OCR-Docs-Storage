@@ -54,14 +54,14 @@ public class BotUtil {
     }
 
     public static void askBoolean(String question, Update update, Bot bot){
-        sendMsg(question, bot, update.getMessage(), KeyboardFactory.KeyBoardType.Boolean, true, true);
+        sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Boolean, true, true);
     }
 public static void askMonth(String question, Update update, Bot bot){
-        sendMsg(question, bot, update.getMessage(), KeyboardFactory.KeyBoardType.Calendar_Month, true,true);
+        sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month, true,true);
     }
 
 public static void askYear(String question, Update update, Bot bot){
-    sendMsg(question, bot, update.getMessage(), KeyboardFactory.KeyBoardType.Calendar_Year, true, true);
+    sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year, true, true);
     }
 
     /**
@@ -70,11 +70,14 @@ public static void askYear(String question, Update update, Bot bot){
      * @param s The String that you want to send as a message.
      *
      */
-    public static synchronized void sendMsg(String s, Bot bot, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
+    public static synchronized void sendMsg(String s, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
         boolean isOneTimeKeyboard = false;
+        long chatID = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage().getChatId() : update.getMessage().getChatId();
+        Message message = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
+
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(message.getChatId());
+        sendMessage.setChatId(chatID);
         if(isReply){
             sendMessage.setReplyToMessageId(message.getMessageId());
         }

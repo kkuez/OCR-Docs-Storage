@@ -39,16 +39,16 @@ public class SumProcess extends Process{
                 currentStep = Steps.selectMonth;
                 break;
             case selectMonth:
-                month = TimeUtil.getMonthMap().get(arg);
+                month = TimeUtil.getMonthMap().get(update.getCallbackQuery().getData());
                 BotUtil.askYear("Für welches Jahr...?", update, getBot());
                 currentStep = Steps.selectYear;
                 break;
             case selectYear:
-                year = arg;
+                year = update.getCallbackQuery().getData();
                 getBot().setBusy(true);
                 String parsedDate = month + "." + year;
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);
-                BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update.getMessage(), null, true, false);
+                BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update, null, true, false);
                 getBot().setBusy(false);
                 setDeleteLater(true);
                 break;

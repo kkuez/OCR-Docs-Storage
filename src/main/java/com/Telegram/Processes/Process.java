@@ -4,6 +4,7 @@ import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Map;

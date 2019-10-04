@@ -49,19 +49,19 @@ public class BonProcess extends Process {
                     currentStep = Steps.isSum;
                     getBot().setBusy(false);
                 }else{
-                    BotUtil.sendMsg("Ok :)",getBot(), update.getMessage(), null, true, false);
+                    BotUtil.sendMsg("Ok :)",getBot(), update, null, true, false);
                     setDeleteLater(true);
                 }
                 break;
 
             case isSum:
                 if(arg.equals("Japp")){
-                    BotUtil.sendMsg("Ok :)",getBot(), update.getMessage(), null, true, false);
+                    BotUtil.sendMsg("Ok :)",getBot(), update, null, true, false);
                     DBUtil.insertDocumentToDB(bon);
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                     setDeleteLater(true);
                 }else{
-                    BotUtil.sendMsg("Bitte richtige Summe eingeben:",getBot(), update.getMessage(), null, true, false);
+                    BotUtil.sendMsg("Bitte richtige Summe eingeben:",getBot(), update, null, true, false);
                     currentStep = Steps.EnterRightSum;
                 }
                 break;
@@ -70,7 +70,7 @@ public class BonProcess extends Process {
                 bon.setSum(Float.parseFloat(arg.replace(",", ".")));
                 DBUtil.insertDocumentToDB(bon);
                 DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
-                BotUtil.sendMsg("Ok, richtige Summe korrigiert :)",getBot(), update.getMessage(), null, true, false);
+                BotUtil.sendMsg("Ok, richtige Summe korrigiert :)", getBot(), update, null, true, false);
                 setDeleteLater(true);
                 break;
         }

@@ -42,7 +42,7 @@ public class GetPicsProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-        BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update.getMessage(), null, true, false);
+        BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, null, true, false);
         action = "getpics";
         getBot().setBusy(false);
     }
@@ -57,8 +57,8 @@ public class GetPicsProcess extends Process {
                     searchTerm = item;
                     listOfDocs = DBUtil.getDocumentsForSearchTerm(item);
                 }else{
-                    String input = update.getMessage().getText();
-                    searchTerm = input.substring(input.indexOf(" ") + 1);;
+                    String input = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
+                    searchTerm = input.substring(input.indexOf(" ") + 1);
                     listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
                 }
                 listOfDocs.forEach(document -> {
@@ -75,7 +75,7 @@ public class GetPicsProcess extends Process {
                     }
                 });
                 getBot().setBusy(false);
-                BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update.getMessage(), null, true, false);
+                BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update, null, true, false);
             }
         });
         thread.start();

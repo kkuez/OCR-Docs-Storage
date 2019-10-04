@@ -18,7 +18,7 @@ public class User {
         if(process.getDeleteLater()){
             process = null;
             String userName = update.getMessage().getFrom().getFirstName();
-            BotUtil.sendMsg("@" + userName +" Willst du tun?", bot, update.getMessage(), KeyboardFactory.KeyBoardType.Start, false, false);
+            BotUtil.sendMsg("@" + userName +" Willst du tun?", bot, update, KeyboardFactory.KeyBoardType.Start, false, false);
         }
     };
 

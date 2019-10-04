@@ -48,19 +48,19 @@ public class Bot extends TelegramLongPollingBot {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
                 progressManager.setTotalSteps(steps);
-                BotUtil.sendMsg("Start process " +allowedUsersMap.get(updateOrNull.getMessage().getFrom().getId()).getProcess().getProcessName(), Bot.this, updateOrNull.getMessage(), null,false, false);
+                BotUtil.sendMsg("Start process " +allowedUsersMap.get(updateOrNull.getMessage().getFrom().getId()).getProcess().getProcessName(), Bot.this, updateOrNull, null,false, false);
             }
 
             @Override
             public void addStep(Update updateOrNull) {
                 progressManager.addStep();
-                BotUtil.sendMsg( progressManager.getCurrentProgress() + "%", Bot.this, updateOrNull.getMessage(), null,false, false);
+                BotUtil.sendMsg( progressManager.getCurrentProgress() + "%", Bot.this, updateOrNull, null,false, false);
             }
 
             @Override
             public void setStep(int step, Update updateOrNull) {
                 progressManager.setCurrentStep(step);
-                BotUtil.sendMsg(progressManager.getCurrentProgress() + "%", Bot.this, updateOrNull.getMessage(), null,false, false);
+                BotUtil.sendMsg(progressManager.getCurrentProgress() + "%", Bot.this, updateOrNull, null,false, false);
             }
         };
     }
@@ -72,13 +72,24 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Map<Integer, User> allowedUsersMap = ObjectHub.getInstance().getAllowedUsersMap();
-
         printUpdateData(update);
-        int currentUserID = update.getMessage().getFrom().getId();
+        int currentUserID;
+        String userName;
+        String textGivenByUser;
+        if(update.hasCallbackQuery()){
+            currentUserID = update.getCallbackQuery().getFrom().getId();
+            userName = update.getCallbackQuery().getFrom().getFirstName();
+            textGivenByUser = update.getCallbackQuery().getData();
+        }else{
+            textGivenByUser = update.getMessage().getText();
+            currentUserID = update.getMessage().getFrom().getId();
+            userName = update.getMessage().getFrom().getFirstName();
+        }
+
         Process process = null;
         if(allowedUsersMap.get(currentUserID) == null){
-           allowedUsersMap.put(currentUserID, new User(update.getMessage().getFrom().getId(), update.getMessage().getFrom().getFirstName()));
-            BotUtil.sendMsg("Hallo " + update.getMessage().getFrom().getFirstName() + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", this, update.getMessage(), null, true, false);
+           allowedUsersMap.put(currentUserID, new User(currentUserID, userName));
+            BotUtil.sendMsg("Hallo " + userName + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", this, update, null, true, false);
             allowedUsersMap.get(currentUserID).setProcess(new NewUserRegProcess(this, (ProgressReporter) progressReporter));
             return;
         }
@@ -93,24 +104,36 @@ public class Bot extends TelegramLongPollingBot {
             }
         }else{
             if(process != null && process.getClass().equals(NewUserRegProcess.class)){
-                process.performNextStep(update.getMessage().getText(), update, allowedUsersMap);
+                process.performNextStep(textGivenByUser, update, allowedUsersMap);
             }else{
 
             }
         }
     }
     public void processUpdateReceveived(Update update, Map<Integer, User> allowedUsersMap) throws Exception{
-        int currentUserID = update.getMessage().getFrom().getId();
-        Process process =allowedUsersMap.get(currentUserID).getProcess();
+        int currentUserID;
+        String userName;
+        String textGivenByUser;
+        if(update.hasCallbackQuery()){
+            currentUserID = update.getCallbackQuery().getFrom().getId();
+            userName = update.getCallbackQuery().getFrom().getFirstName();
+            textGivenByUser = update.getCallbackQuery().getData();
+        }else{
+            textGivenByUser = update.getMessage().getText();
+            currentUserID = update.getMessage().getFrom().getId();
+            userName = update.getMessage().getFrom().getFirstName();
+        }
+        Process process = allowedUsersMap.get(currentUserID).getProcess();
+
         try {
-            if (update.getMessage().getText() != null) {
-                String input = update.getMessage().getText();
+            if (textGivenByUser != null) {
+                String input = textGivenByUser;
                 if (process == null) {
-                   allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(fetchCommandOrNull(update, allowedUsersMap));
-                   allowedUsersMap.get(update.getMessage().getFrom().getId()).deleteProcessEventually(this, update);
+                   allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update, allowedUsersMap));
+                   allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
                 } else {
                     if (getBusy()) {
-                        BotUtil.sendMsg("Bin am arbeiten...", this, update.getMessage(),  null, true, false);
+                        BotUtil.sendMsg("Bin am arbeiten...", this, update,  null, true, false);
                     } else {
                         if (input.startsWith("Japp")) {
                             process.performNextStep("Japp", update, allowedUsersMap);
@@ -119,14 +142,14 @@ public class Bot extends TelegramLongPollingBot {
                                 process.performNextStep("Nee", update, allowedUsersMap);
                             } else {
                                 process.performNextStep(input, update, allowedUsersMap);
-                                allowedUsersMap.get(update.getMessage().getFrom().getId()).deleteProcessEventually(this, update);
+                                allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
                             }
                         }
                     }
                 }
             }
             if (update.getMessage().hasPhoto()) {
-                BotUtil.sendMsg("Verarbeite Bild...", this, update.getMessage(),  null, true, false);
+                BotUtil.sendMsg("Verarbeite Bild...", this, update,  null, true, false);
                 processPhoto(update, allowedUsersMap);
             }
         }catch (Exception e){
@@ -134,6 +157,7 @@ public class Bot extends TelegramLongPollingBot {
             throw new RuntimeException();
         }
     }
+
 
     private void printUpdateData(Update update){
         StringBuilder printBuilder;
@@ -196,7 +220,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (process != null && process.getClass().equals(BonProcess.class)) {
                     sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, false, true));
                 }
-                BotUtil.sendMsg("Fertig.", Bot.this, update.getMessage(),  null, true, false);
+                BotUtil.sendMsg("Fertig.", Bot.this, update,  null, true, false);
                 LogUtil.log(update.getMessage().getText());
                 setBusy(false);
             }
@@ -233,7 +257,7 @@ public class Bot extends TelegramLongPollingBot {
             execute(sendDocument);
         } catch (TelegramApiException e) {
             LogUtil.logError(null, e);
-            BotUtil.sendMsg("Fehler, Aktion abgebrochen.",this, update.getMessage(),  null, true, false);
+            BotUtil.sendMsg("Fehler, Aktion abgebrochen.",this, update,  null, true, false);
             setBusy(false);
         }
     }
@@ -255,7 +279,7 @@ public class Bot extends TelegramLongPollingBot {
             execute(sendPhoto);
         } catch (TelegramApiException e) {
             setBusy(false);
-            BotUtil.sendMsg("Fehler, Aktion abgebrochen.",this, update.getMessage(),  null, true, false);
+            BotUtil.sendMsg("Fehler, Aktion abgebrochen.",this, update,  null, true, false);
             LogUtil.logError(null, e);
         }
     }
@@ -292,8 +316,20 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private Process fetchCommandOrNull(Update update, Map<Integer, User> allowedUsersMap){
-        if(update.getMessage().getText() != null) {
-            String input = update.getMessage().getText();
+        int currentUserID;
+        String userName;
+        String textGivenByUser;
+        if(update.hasCallbackQuery()){
+            currentUserID = update.getCallbackQuery().getFrom().getId();
+            userName = update.getCallbackQuery().getFrom().getFirstName();
+            textGivenByUser = update.getCallbackQuery().getData();
+        }else{
+            textGivenByUser = update.getMessage().getText();
+            currentUserID = update.getMessage().getFrom().getId();
+            userName = update.getMessage().getFrom().getFirstName();
+        }
+        if(textGivenByUser != null) {
+            String input = textGivenByUser;
 
             String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase().replace("/", "") : input.toLowerCase().replace("/", "");
 
@@ -316,7 +352,7 @@ public class Bot extends TelegramLongPollingBot {
                                     return new RemoveLastProcess(this, (ProgressReporter) progressReporter, allowedUsersMap);
                                 }else{
                                     if(cmd.startsWith("einkaufslisten-optionen")) {
-                                        BotUtil.sendMsg("Was willst du tun?",this, update.getMessage(),  KeyboardFactory.KeyBoardType.ShoppingList, true, false);
+                                        BotUtil.sendMsg("Was willst du tun?",this, update,  KeyboardFactory.KeyBoardType.ShoppingList, true, false);
                                     } else {
                                         if (cmd.startsWith("add") || (input.equals("Hinzufügen") || cmd.startsWith("removeitem") || input.equals("Item Löschen") || cmd.startsWith("getlist") || input.equals("Einkaufsliste anzeigen") || cmd.startsWith("removeall") || input.equals("Ganze Liste Löschen"))) {
                                             return new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
@@ -365,6 +401,8 @@ public class Bot extends TelegramLongPollingBot {
             }
         });
     }
+
+
 
     //GETTER SETTER
 

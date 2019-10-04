@@ -20,7 +20,7 @@ public class NewUserRegProcess extends Process {
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         if(arg.equals(ObjectHub.getInstance().getProperties().getProperty("pwForNewUsers"))){
-            BotUtil.sendMsg("Willkommen :)", getBot(), update.getMessage(), null, true, false);
+            BotUtil.sendMsg("Willkommen :)", getBot(), update, null, true, false);
             DBUtil.executeSQL("insert into AllowedUsers(id, name, chatId) Values (" + update.getMessage().getFrom().getId() + ", '" +
                     update.getMessage().getFrom().getFirstName() + "', " + update.getMessage().getChatId() + ")");
             ObjectHub.getInstance().setAllowedUsersMap(DBUtil.getAllowedUsersMap());
