@@ -17,8 +17,7 @@ public class User {
     public void deleteProcessEventually(Bot bot, Update update){
         if(process.getDeleteLater()){
             process = null;
-            String userName = update.getMessage().getFrom().getFirstName();
-            BotUtil.sendMsg("@" + userName +" Willst du tun?", bot, update, KeyboardFactory.KeyBoardType.Start, false, false);
+            BotUtil.sendMsg("Was willst du tun?", bot, update, KeyboardFactory.KeyBoardType.Start, false, false);
         }
     };
 

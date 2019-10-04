@@ -42,7 +42,7 @@ public class SearchProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-                BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, null, true, false);
+                BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, null, false, false);
                 action = "search";
         getBot().setBusy(false);
     }

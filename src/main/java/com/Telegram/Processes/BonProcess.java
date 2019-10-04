@@ -45,7 +45,7 @@ public class BonProcess extends Process {
                     }
                     FileUtils.deleteQuietly(document.getOriginFile());
                     document.setOriginFile(newOriginalFilePath);
-                    BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot());
+                    BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot(), true);
                     currentStep = Steps.isSum;
                     getBot().setBusy(false);
                 }else{

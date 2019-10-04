@@ -218,7 +218,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
 
                 if (process != null && process.getClass().equals(BonProcess.class)) {
-                    sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, false, true));
+                    sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true));
                 }
                 BotUtil.sendMsg("Fertig.", Bot.this, update,  null, true, false);
                 LogUtil.log(update.getMessage().getText());

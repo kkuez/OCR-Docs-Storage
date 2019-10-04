@@ -7,8 +7,14 @@ import com.Telegram.Bot;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.IOUtil;
+import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +48,7 @@ public class GetPicsProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-        BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, null, true, false);
+        BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, null, false, false);
         action = "getpics";
         getBot().setBusy(false);
     }
@@ -61,20 +67,16 @@ public class GetPicsProcess extends Process {
                     searchTerm = input.substring(input.indexOf(" ") + 1);
                     listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
                 }
-                listOfDocs.forEach(document -> {
-
-                    //In case that a wrong path is given in the db f.e. when pictures not added on the local system, but on
-                    //a remote one, this will be catched.
-                    if(!document.getOriginFile().exists()){
-                        return;
-                    }
-                    if(document.getOriginalFileName().toLowerCase().endsWith("pdf")){
-                        getBot().sendDocumentFromURL(update, document.getOriginFile().getPath(), document.getOriginalFileName(), null);
-                    }else{
-                        getBot().sendPhotoFromURL(update, document.getOriginFile().getPath(), "", null);
-                    }
+                List<InputMedia> inputMediaPhotoList = new ArrayList<>();
+                listOfDocs.forEach(document1 -> {
+                    InputMediaPhoto photo = new InputMediaPhoto();
+                    photo.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
+                    inputMediaPhotoList.add(photo);
                 });
+
+                BotUtil.sendMediaMsg(getBot(), update, true, inputMediaPhotoList);
                 getBot().setBusy(false);
+
                 BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update, null, true, false);
             }
         });

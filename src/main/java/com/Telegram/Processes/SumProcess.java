@@ -35,12 +35,12 @@ public class SumProcess extends Process{
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         switch (currentStep){
             case Start:
-                BotUtil.askMonth("Für welchem Monat...?", update, getBot());
+                BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
                 currentStep = Steps.selectMonth;
                 break;
             case selectMonth:
                 month = TimeUtil.getMonthMap().get(update.getCallbackQuery().getData());
-                BotUtil.askYear("Für welches Jahr...?", update, getBot());
+                BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
                 currentStep = Steps.selectYear;
                 break;
             case selectYear:
@@ -48,7 +48,7 @@ public class SumProcess extends Process{
                 getBot().setBusy(true);
                 String parsedDate = month + "." + year;
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);
-                BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update, null, true, false);
+                BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update, null, false, false);
                 getBot().setBusy(false);
                 setDeleteLater(true);
                 break;

@@ -39,12 +39,12 @@ public class GetBonsProcess extends Process{
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
             switch (currentStep){
                 case Start:
-                    BotUtil.askMonth("Für welchem Monat...?", update, getBot());
+                    BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
                     currentStep = Steps.selectMonth;
                     break;
                 case selectMonth:
                     month = TimeUtil.getMonthMap().get(arg);
-                    BotUtil.askYear("Für welches Jahr...?", update, getBot());
+                    BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
                     currentStep = Steps.selectYear;
                     break;
                 case selectYear:
