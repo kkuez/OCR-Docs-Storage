@@ -61,7 +61,7 @@ public class BonProcess extends Process {
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                     setDeleteLater(true);
                 }else{
-                    BotUtil.sendMsg("Bitte richtige Summe eingeben:",getBot(), update, null, true, false);
+                    BotUtil.sendMsg("Bitte richtige Summe eingeben:",getBot(), update, null, false, false);
                     currentStep = Steps.EnterRightSum;
                 }
                 break;

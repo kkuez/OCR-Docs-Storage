@@ -135,10 +135,10 @@ public class Bot extends TelegramLongPollingBot {
                     if (getBusy()) {
                         BotUtil.sendMsg("Bin am arbeiten...", this, update,  null, true, false);
                     } else {
-                        if (input.startsWith("Japp")) {
+                        if (input.startsWith("Japp") || input.startsWith("confirm")) {
                             process.performNextStep("Japp", update, allowedUsersMap);
                         } else {
-                            if (input.startsWith("Nee")) {
+                            if (input.startsWith("Nee") || input.startsWith("deny")) {
                                 process.performNextStep("Nee", update, allowedUsersMap);
                             } else {
                                 process.performNextStep(input, update, allowedUsersMap);
