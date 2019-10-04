@@ -1,7 +1,11 @@
 package com.ObjectTemplates;
 
+import com.Telegram.Bot;
+import com.Telegram.KeyboardFactory;
 import com.Telegram.Processes.*;
 import com.Telegram.Processes.Process;
+import com.Utils.BotUtil;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class User {
     private int id;
@@ -10,9 +14,11 @@ public class User {
 
     private Process process = null;
 
-    public void deleteProcessEventually(){
+    public void deleteProcessEventually(Bot bot, Update update){
         if(process.getDeleteLater()){
             process = null;
+            String userName = update.getMessage().getFrom().getFirstName();
+            BotUtil.sendMsg("@" + userName +" Willst du tun?", bot, update.getMessage(), KeyboardFactory.KeyBoardType.Start, false, false);
         }
     };
 

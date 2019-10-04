@@ -66,7 +66,7 @@ public class GetBonsProcess extends Process{
                                 }
                                 getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
                             });
-                            BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + documentList.size() + " Bilder geholt.", getBot());
+                            BotUtil.sendMsg("Fertig: " + documentList.size() + " Bilder geholt.",getBot() , update.getMessage(), null, true, false);
                         }
                     });
                     thread.start();

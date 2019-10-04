@@ -42,7 +42,7 @@ public class SearchProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Wonach soll gesucht werden?", getBot());
+                BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update.getMessage(), null, true, false);
                 action = "search";
         getBot().setBusy(false);
     }
@@ -58,7 +58,7 @@ public class SearchProcess extends Process {
             listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
         }
         LogUtil.log("Send list of Pictures related to \"" + searchTerm);
-        BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Dokumente gefunden :)", getBot());
+        BotUtil.sendMsg("" + listOfDocs.size() + " Dokumente gefunden :)", getBot(), update.getMessage(), null, true, false);
         getBot().setBusy(false);
         setDeleteLater(true);
     }

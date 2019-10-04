@@ -8,6 +8,7 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -17,6 +18,23 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import java.util.Map;
 
 public class BotUtil {
+    public static void sendKeyboard(String s, Bot bot, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean isInlineKeyBoard, boolean isOnelineKeyboard){
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(message.getChatId());
+        if(isReply){
+            sendMessage.setReplyToMessageId(message.getMessageId());
+        }
+        if(keyBoardTypeOrNull != null){
+            sendMessage.setReplyMarkup(KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, isInlineKeyBoard, isOnelineKeyboard));
+        }
+        sendMessage.setText(s);
+        try {
+            bot.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            LogUtil.logError(null, e);
+        }
+    }
 
     public static boolean activateTGBot(Bot inputBotOrNull) throws TelegramApiRequestException {
         LogUtil.log("System: Activate Bot");
@@ -36,55 +54,33 @@ public class BotUtil {
     }
 
     public static void askBoolean(String question, Update update, Bot bot){
-        SendMessage sendMessage = new SendMessage();
-        ReplyKeyboard keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, false);
-        sendMessage.setText(question);
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(update.getMessage().getChatId());
-        sendMessage.setReplyMarkup(keyboardMarkup);
-        try {
-            bot.execute(sendMessage);
-        } catch (TelegramApiException e) {
-            LogUtil.logError(null, e);
-        }
+        sendMsg(question, bot, update.getMessage(), KeyboardFactory.KeyBoardType.Boolean, true, true);
     }
 public static void askMonth(String question, Update update, Bot bot){
-        SendMessage sendMessage = new SendMessage();
-    ReplyKeyboard keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar_Month, false);
-        sendMessage.setText(question);
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(update.getMessage().getChatId());
-        sendMessage.setReplyMarkup(keyboardMarkup);
-        try {
-            bot.execute(sendMessage);
-        } catch (TelegramApiException e) {
-            LogUtil.logError(null, e);
-        }
+        sendMsg(question, bot, update.getMessage(), KeyboardFactory.KeyBoardType.Calendar_Month, true,true);
     }
 
 public static void askYear(String question, Update update, Bot bot){
-        SendMessage sendMessage = new SendMessage();
-    ReplyKeyboard keyboardMarkup = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar_Year, false);
-        sendMessage.setText(question);
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(update.getMessage().getChatId());
-        sendMessage.setReplyMarkup(keyboardMarkup);
-        try {
-            bot.execute(sendMessage);
-        } catch (TelegramApiException e) {
-            LogUtil.logError(null, e);
-        }
+    sendMsg(question, bot, update.getMessage(), KeyboardFactory.KeyBoardType.Calendar_Year, true, true);
     }
 
     /**
      * Method for creating a message and sending it.
      * @param chatId chat id
      * @param s The String that you want to send as a message.
+     *
      */
-    public static synchronized void sendMsg(String chatId, String s, Bot bot) {
+    public static synchronized void sendMsg(String s, Bot bot, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
+        boolean isOneTimeKeyboard = false;
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(chatId);
+        sendMessage.setChatId(message.getChatId());
+        if(isReply){
+            sendMessage.setReplyToMessageId(message.getMessageId());
+        }
+        if(keyBoardTypeOrNull != null){
+            sendMessage.setReplyMarkup(KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard));
+        }
         sendMessage.setText(s);
         try {
             bot.execute(sendMessage);
@@ -92,19 +88,4 @@ public static void askYear(String question, Update update, Bot bot){
             LogUtil.logError(null, e);
         }
     }
-
-    public static void sendKeyBoard(String message, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardType){
-        SendMessage sendMessage = new SendMessage();
-        ReplyKeyboard keyboardMarkup = KeyboardFactory.getKeyBoard(keyBoardType, false);
-        sendMessage.setText(message);
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(update.getMessage().getChatId());
-        sendMessage.setReplyMarkup(keyboardMarkup);
-        try {
-            bot.execute(sendMessage);
-        } catch (TelegramApiException e) {
-            LogUtil.logError(null, e);
-        }
-    }
-
 }

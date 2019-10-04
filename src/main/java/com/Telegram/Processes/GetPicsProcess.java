@@ -42,7 +42,7 @@ public class GetPicsProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-        BotUtil.sendMsg(update.getMessage().getChatId() + "", "Wonach soll gesucht werden?", getBot());
+        BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update.getMessage(), null, true, false);
         action = "getpics";
         getBot().setBusy(false);
     }
@@ -75,7 +75,7 @@ public class GetPicsProcess extends Process {
                     }
                 });
                 getBot().setBusy(false);
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot());
+                BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update.getMessage(), null, true, false);
             }
         });
         thread.start();

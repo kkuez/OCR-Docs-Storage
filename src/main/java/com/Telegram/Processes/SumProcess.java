@@ -43,13 +43,12 @@ public class SumProcess extends Process{
                 BotUtil.askYear("Für welches Jahr...?", update, getBot());
                 currentStep = Steps.selectYear;
                 break;
-
             case selectYear:
                 year = arg;
                 getBot().setBusy(true);
                 String parsedDate = month + "." + year;
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot());
+                BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update.getMessage(), null, true, false);
                 getBot().setBusy(false);
                 setDeleteLater(true);
                 break;

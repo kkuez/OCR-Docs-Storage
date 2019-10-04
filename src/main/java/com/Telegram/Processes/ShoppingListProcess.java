@@ -46,17 +46,17 @@ public class ShoppingListProcess extends Process{
         for(int i = 0;i<getBot().getShoppingList().size();i++){
             listeBuilder.append( i + ": " + getBot().getShoppingList().get(i) + "\n");
         }
-        BotUtil.sendMsg(update.getMessage().getChatId() + "", listeBuilder.toString(), getBot());
+        BotUtil.sendMsg(listeBuilder.toString(), getBot(), update.getMessage(), null, true, false);
     }
 
     private void prepareForProcessing(Update update){
         switch (update.getMessage().getText()){
             case "Hinzufügen":
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Was soll hinzugefügt werden?", getBot());
+                BotUtil.sendMsg("Was soll hinzugefügt werden?", getBot(), update.getMessage(), null, true, false);
                 action = "add";
                 break;
             case "Item Löschen":
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Nummer auf der Liste soll gelöscht werden?", getBot());
+                BotUtil.sendMsg("Nummer auf der Liste soll gelöscht werden?", getBot(), update.getMessage(), null, true, false);
                 action = "removeitem";
                 break;
         }
@@ -85,16 +85,16 @@ public class ShoppingListProcess extends Process{
             case "add":
                 getBot().getShoppingList().add(arg);
                 DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " hinzugefügt! :)", getBot());
+                BotUtil.sendMsg(arg + " hinzugefügt! :)", getBot(), update.getMessage(), null, true, false);
                 break;
             case "removeitem":
                 try{
                     DBUtil.executeSQL("delete from ShoppingList where item='" +  getBot().getShoppingList().get(Integer.parseInt(arg)) + "'");
                     getBot().getShoppingList().remove(Integer.parseInt(arg));
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", getBot().getShoppingList().get(Integer.parseInt(arg)) + " gelöscht.", getBot());
+                    BotUtil.sendMsg(getBot().getShoppingList().get(Integer.parseInt(arg)) + " gelöscht.", getBot(), update.getMessage(), null, true, false);
                 }catch (Exception e){
                     LogUtil.logError(null, e);
-                    BotUtil.sendMsg(update.getMessage().getChatId() + "", arg + " nicht gelöscht. Hast du eine Zahl aus der Liste angegeben? (/getList)", getBot());
+                    BotUtil.sendMsg(arg + " nicht gelöscht. Hast du eine Zahl aus der Liste angegeben? (/getList)", getBot(), update.getMessage(), null, true, false);
                 }
                 break;
             case "getlist":
@@ -103,7 +103,7 @@ public class ShoppingListProcess extends Process{
             case "removeall":
                 DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
                 getBot().setShoppingList(new ArrayList<String>());
-                BotUtil.sendMsg(update.getMessage().getChatId() + "", "Einkaufsliste gelöscht :)", getBot());
+                BotUtil.sendMsg("Einkaufsliste gelöscht :)", getBot(), update.getMessage(), null, true, false);
                 break;
         }
         setDeleteLater(true);

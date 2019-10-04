@@ -1,5 +1,6 @@
 package com.Telegram;
 
+import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -12,10 +13,13 @@ import java.util.Map;
 
 public class KeyboardFactory {
 
-    public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard) {
+    public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard, boolean oneTimeKeyboard) {
         if(inlineKeyboard){
             InlineKeyboardMarkup replyKeyboardInline = new InlineKeyboardMarkup();
             replyKeyboardInline.setKeyboard(createInlineKeyboard(keyBoardType));
+            if(oneTimeKeyboard){
+                LogUtil.log("No oneTimeKeyboard possible for InlineKeyboard.");
+            }
                 return replyKeyboardInline;
         }else {
                 ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
@@ -23,8 +27,8 @@ public class KeyboardFactory {
             replyKeyboardMarkup.setResizeKeyboard(true);
             replyKeyboardMarkup.setOneTimeKeyboard(true);
             List<KeyboardRow> keyboard = createKeyBoard(keyBoardType);
-
             replyKeyboardMarkup.setKeyboard(keyboard);
+            replyKeyboardMarkup.setOneTimeKeyboard(oneTimeKeyboard);
             return replyKeyboardMarkup;
         }
     }
