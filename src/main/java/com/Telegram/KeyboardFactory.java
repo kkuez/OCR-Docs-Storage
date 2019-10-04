@@ -113,7 +113,7 @@ public class KeyboardFactory {
                 keyboard.add(keyboardShoppingListFifthRow);
                 break;
             case Start:
-                KeyboardRow keyboardStartFirstRow = createKeyBoardRow(new String[]{"Anzahl Dokumente"});
+                KeyboardRow keyboardStartFirstRow = createKeyBoardRow(new String[]{"Bon eingeben"});
                 keyboard.add(keyboardStartFirstRow);
                 KeyboardRow keyboardStartSecondRow = createKeyBoardRow(new String[]{"Hole Bilder, Dokumente"});
                 keyboard.add(keyboardStartSecondRow);

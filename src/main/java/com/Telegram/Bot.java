@@ -131,6 +131,10 @@ public class Bot extends TelegramLongPollingBot {
                 if (process == null) {
                    allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update, allowedUsersMap));
                    allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                    if (input.startsWith("Bon eingeben")) {
+                        allowedUsersMap.get(currentUserID).setAboutToUploadFile(true);
+                        BotUtil.sendMsg("Bitte lad jetzt den Bon hoch.", this, update, null, false, false);
+                    }
                 } else {
                     if (getBusy()) {
                         BotUtil.sendMsg("Bin am arbeiten...", this, update,  null, true, false);
@@ -178,7 +182,7 @@ public class Bot extends TelegramLongPollingBot {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Process process =allowedUsersMap.get(update.getMessage().getFrom().getId()).getProcess();
+                Process process = allowedUsersMap.get(update.getMessage().getFrom().getId()).getProcess();
                 setBusy(true);
                 File largestPhoto = null;
                 List<PhotoSize> photoList = update.getMessage().getPhoto();
@@ -198,7 +202,7 @@ public class Bot extends TelegramLongPollingBot {
                 } catch (IOException e) {
                     LogUtil.logError(largestPhoto.getAbsolutePath(), e);
                 }
-                Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon");
+                Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon") || allowedUsersMap.get(update.getMessage().getFrom().getId()).isAboutToUploadFile();
 
                 Set<String> tags = null;
                 if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
@@ -211,7 +215,10 @@ public class Bot extends TelegramLongPollingBot {
                     if((TessUtil.checkIfBon(document.getContent()) || forceBon) && this != null){
                         float sum = TessUtil.getLastNumber(document.getContent());
                         Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
-                       allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(new BonProcess(bon, Bot.this, document, (ProgressReporter) progressReporter, allowedUsersMap));
+                        process = new BonProcess(bon, Bot.this, document, (ProgressReporter) progressReporter, allowedUsersMap);
+                       allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(process);
+                        allowedUsersMap.get(update.getMessage().getFrom().getId()).setAboutToUploadFile(false);
+
                     }
                 } catch (Exception e) {
                     LogUtil.logError(null, e);
@@ -219,8 +226,9 @@ public class Bot extends TelegramLongPollingBot {
 
                 if (process != null && process.getClass().equals(BonProcess.class)) {
                     sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true));
+                }else{
+                    BotUtil.sendMsg("Fertig.", Bot.this, update,  null, true, false);
                 }
-                BotUtil.sendMsg("Fertig.", Bot.this, update,  null, true, false);
                 LogUtil.log(update.getMessage().getText());
                 setBusy(false);
             }

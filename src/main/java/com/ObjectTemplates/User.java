@@ -14,14 +14,24 @@ public class User {
 
     private Process process = null;
 
+    boolean aboutToUploadFile = false;
+
     public void deleteProcessEventually(Bot bot, Update update){
-        if(process.getDeleteLater()){
+        if(process != null && process.getDeleteLater()){
             process = null;
             BotUtil.sendMsg("Was willst du tun?", bot, update, KeyboardFactory.KeyBoardType.Start, false, false);
         }
     };
 
     //GETTER SETTER
+
+    public boolean isAboutToUploadFile() {
+        return aboutToUploadFile;
+    }
+
+    public void setAboutToUploadFile(boolean aboutToUploadFile) {
+        this.aboutToUploadFile = aboutToUploadFile;
+    }
 
     public Process getProcess() {
         return process;
