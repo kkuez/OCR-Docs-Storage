@@ -13,8 +13,8 @@ public class StartProcess extends Process {
 
     public StartProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
-        BotUtil.sendKeyBoard("Wähle eine Aktion :)",bot, update, KeyboardFactory.KeyBoardType.Start);
-        allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+        BotUtil.sendKeyBoard("Wähle eine Aktion :)", bot, update, KeyboardFactory.KeyBoardType.Start);
+        setDeleteLater(true);
     }
 
     @Override

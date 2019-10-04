@@ -70,7 +70,7 @@ public class GetBonsProcess extends Process{
                         }
                     });
                     thread.start();
-                    allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+                    setDeleteLater(true);
                     getBot().setBusy(false);
                     break;
         }

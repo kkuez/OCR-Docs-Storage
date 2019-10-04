@@ -50,7 +50,7 @@ public class BonProcess extends Process {
                     getBot().setBusy(false);
                 }else{
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok :)",getBot());
-                    allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+                    setDeleteLater(true);
                 }
                 break;
 
@@ -59,7 +59,7 @@ public class BonProcess extends Process {
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "OK :)",getBot());
                     DBUtil.insertDocumentToDB(bon);
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
-                    allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+                    setDeleteLater(true);
                 }else{
                     BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bitte richtige Summe eingeben:",getBot());
                     currentStep = Steps.EnterRightSum;
@@ -71,7 +71,7 @@ public class BonProcess extends Process {
                 DBUtil.insertDocumentToDB(bon);
                 DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Ok, richtige Summe korrigiert :)",getBot());
-                allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+                setDeleteLater(true);
                 break;
         }
     }

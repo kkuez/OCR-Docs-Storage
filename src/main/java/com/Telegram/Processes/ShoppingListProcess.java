@@ -106,7 +106,7 @@ public class ShoppingListProcess extends Process{
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Einkaufsliste gelöscht :)", getBot());
                 break;
         }
-        allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+        setDeleteLater(true);
     }
     @Override
     public String getProcessName() {

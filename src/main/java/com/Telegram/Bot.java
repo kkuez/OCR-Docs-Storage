@@ -3,7 +3,6 @@ package com.Telegram;
 import com.Controller.Reporter.ProgressReporter;
 import com.Controller.Reporter.Reporter;
 import com.Misc.TaskHandling.Strategies.NextPerformanceStrategy;
-import com.Misc.TaskHandling.Strategies.OneTimeTaskStrategy;
 import com.Misc.TaskHandling.UpdateTask;
 import com.ObjectTemplates.User;
 import com.Telegram.Processes.*;
@@ -26,7 +25,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.awt.font.TextHitInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -109,6 +107,7 @@ public class Bot extends TelegramLongPollingBot {
                 String input = update.getMessage().getText();
                 if (process == null) {
                    allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(fetchCommandOrNull(update, allowedUsersMap));
+                   allowedUsersMap.get(update.getMessage().getFrom().getId()).deleteProcessEventually();
                 } else {
                     if (getBusy()) {
                         BotUtil.sendMsg(update.getMessage().getChatId() + "", "Bin am arbeiten...", this);
@@ -128,7 +127,6 @@ public class Bot extends TelegramLongPollingBot {
             if (update.getMessage().hasPhoto()) {
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Verarbeite Bild...", this);
                 processPhoto(update, allowedUsersMap);
-
             }
         }catch (Exception e){
             LogUtil.logError(null, e);

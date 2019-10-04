@@ -10,6 +10,11 @@ public class User {
 
     private Process process = null;
 
+    public void deleteProcessEventually(){
+        if(process.getDeleteLater()){
+            process = null;
+        }
+    };
 
     //GETTER SETTER
 

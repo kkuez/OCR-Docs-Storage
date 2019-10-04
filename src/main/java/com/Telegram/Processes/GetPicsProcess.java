@@ -76,11 +76,10 @@ public class GetPicsProcess extends Process {
                 });
                 getBot().setBusy(false);
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot());
-
             }
         });
         thread.start();
-        allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+        setDeleteLater(true);
     }
 
     @Override

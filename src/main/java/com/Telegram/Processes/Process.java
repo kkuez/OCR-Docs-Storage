@@ -22,12 +22,24 @@ public abstract class Process {
 
     private Boolean hasStarted = false;
 
+    private boolean deleteLater = false;
+
     public abstract void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap);
 
     public abstract String getProcessName();
 
+
+
     //GETTER SETTER
 
+
+    public boolean getDeleteLater() {
+        return deleteLater;
+    }
+
+    public void setDeleteLater(boolean deleteLater) {
+        this.deleteLater = deleteLater;
+    }
 
     public ProgressReporter getProgressReporter() {
         return progressReporter;

@@ -22,7 +22,6 @@ public class SearchProcess extends Process {
     String item;
     public SearchProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
-
         setBot(bot);
         performNextStep(searchTerm, update, allowedUsersMap);
     }
@@ -35,7 +34,6 @@ public class SearchProcess extends Process {
         if(action != null){
             item = update.getMessage().getText();
         }
-
         if(!commandsWithLaterExecution.contains(update.getMessage().getText())){
             processInOneStep(arg, update, allowedUsersMap);
         }else{
@@ -62,7 +60,7 @@ public class SearchProcess extends Process {
         LogUtil.log("Send list of Pictures related to \"" + searchTerm);
         BotUtil.sendMsg(update.getMessage().getChatId().toString(), "" + listOfDocs.size() + " Dokumente gefunden :)", getBot());
         getBot().setBusy(false);
-        allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+        setDeleteLater(true);
     }
 
     @Override

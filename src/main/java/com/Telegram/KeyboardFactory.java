@@ -1,16 +1,12 @@
 package com.Telegram;
 
-import com.Utils.BotUtil;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +68,7 @@ public class KeyboardFactory {
         List<InlineKeyboardButton> inlineKeyboardButtonsRow = new ArrayList<>();
         for(String name : buttonNamesAndQueries.keySet()){
             String callBackQuery = buttonNamesAndQueries.get(name);
-            inlineKeyboardButtonsRow.add(new InlineKeyboardButton().setText(name).setCallbackData(callBackQuery);
+            inlineKeyboardButtonsRow.add(new InlineKeyboardButton().setText(name).setCallbackData(callBackQuery));
         }
         return inlineKeyboardButtonsRow;
     }

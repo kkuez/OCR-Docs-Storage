@@ -24,7 +24,7 @@ public class NewUserRegProcess extends Process {
             DBUtil.executeSQL("insert into AllowedUsers(id, name, chatId) Values (" + update.getMessage().getFrom().getId() + ", '" +
                     update.getMessage().getFrom().getFirstName() + "', " + update.getMessage().getChatId() + ")");
             ObjectHub.getInstance().setAllowedUsersMap(DBUtil.getAllowedUsersMap());
-            allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(null);
+            setDeleteLater(true);
         }else{
             allowedUsersMap.remove(update.getMessage().getFrom().getId());
         }

@@ -51,7 +51,7 @@ public class SumProcess extends Process{
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);
                 BotUtil.sendMsg(update.getMessage().getChatId() + "", "Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot());
                 getBot().setBusy(false);
-                ObjectHub.getInstance().getAllowedUsersMap().get(update.getMessage().getFrom().getId()).setProcess(null);
+                setDeleteLater(true);
                 break;
         }
     }
