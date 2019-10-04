@@ -19,7 +19,6 @@ public class User {
     public void deleteProcessEventually(Bot bot, Update update){
         if(process != null && process.getDeleteLater()){
             process = null;
-            BotUtil.sendMsg("Was willst du tun?", bot, update, KeyboardFactory.KeyBoardType.Start, false, false);
         }
     };
 
