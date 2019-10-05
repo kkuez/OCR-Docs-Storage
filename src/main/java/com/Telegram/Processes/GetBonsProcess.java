@@ -51,7 +51,7 @@ public class GetBonsProcess extends Process{
                     year = arg;
                     getBot().setBusy(true);
                     String parsedDate = month + "." + year;
-                    Thread thread = new Thread(new Runnable() {
+                    ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
                         @Override
                         public void run() {
                             List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
@@ -70,7 +70,6 @@ public class GetBonsProcess extends Process{
                             BotUtil.sendMsg("Fertig: " + documentList.size() + " Bilder geholt.",getBot() , update, null, true, false);
                         }
                     });
-                    thread.start();
                     setDeleteLater(true);
                     getBot().setBusy(false);
                     break;

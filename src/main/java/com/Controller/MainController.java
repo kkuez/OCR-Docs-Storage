@@ -148,8 +148,7 @@ public class MainController extends SingleDocumentController {
 
 
     void process(Set<String> tagSet) {
-
-        Thread thread = new Thread(new Runnable() {
+        ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
 
             @Override
             public void run() {
@@ -168,8 +167,7 @@ public class MainController extends SingleDocumentController {
                 }
             }
         });
-        thread.start();
-    }
+        }
 
     public void search() {
         LogUtil.log("Gui: " + "Performing search with Term '" + searchTermTextField.getText() + "'");

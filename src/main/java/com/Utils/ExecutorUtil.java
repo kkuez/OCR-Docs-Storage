@@ -9,6 +9,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class ExecutorUtil {
 
+    public static void blockUntilLocalCountReached(Integer count, int targetCount){
+        while(count != targetCount){
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void blockUntilExecutorIsDone(Executor executor, int tasksToFinish) {
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
 
