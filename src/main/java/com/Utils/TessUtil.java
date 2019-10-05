@@ -63,7 +63,6 @@ public class TessUtil {
                 });
             }
         });
-
         ExecutorUtil.blockUntilExecutorIsDone(ObjectHub.getInstance().getExecutorService(), filesInFolder.size());
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());

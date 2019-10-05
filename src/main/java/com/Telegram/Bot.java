@@ -179,7 +179,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void processPhoto(Update update, Map<Integer, User> allowedUsersMap){
-        Thread thread = new Thread(new Runnable() {
+        ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
             @Override
             public void run() {
                 Process process = allowedUsersMap.get(update.getMessage().getFrom().getId()).getProcess();
@@ -233,7 +233,6 @@ public class Bot extends TelegramLongPollingBot {
                 setBusy(false);
             }
         });
-        thread.start();
     }
 
     private Set<String> parseTags(String input){
@@ -402,7 +401,6 @@ public class Bot extends TelegramLongPollingBot {
                     Scanner scanner = new Scanner(System.in);
                     switch (scanner.next()){
                         case "1":
-
                             break;
                     }
                 }
