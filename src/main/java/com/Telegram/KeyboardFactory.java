@@ -36,6 +36,9 @@ public class KeyboardFactory {
     private static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType){
         List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
         switch (keyBoardType){
+            case Abort:
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
+                break;
             case Boolean:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Japp", "confirm", "Nee", "deny")));
                 break;
@@ -133,7 +136,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, Abort
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();

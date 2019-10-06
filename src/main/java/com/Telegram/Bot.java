@@ -80,6 +80,9 @@ public class Bot extends TelegramLongPollingBot {
             currentUserID = update.getCallbackQuery().getFrom().getId();
             userName = update.getCallbackQuery().getFrom().getFirstName();
             textGivenByUser = update.getCallbackQuery().getData();
+            if (textGivenByUser.equals("abort")){
+                abortProcess(update, allowedUsersMap, userName, currentUserID, textGivenByUser);
+            }
         }else{
             textGivenByUser = update.getMessage().getText();
             currentUserID = update.getMessage().getFrom().getId();
@@ -137,7 +140,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 } else {
                     if (getBusy()) {
-                        BotUtil.sendMsg("Bin am arbeiten...", this, update,  null, true, false);
+                        BotUtil.sendMsg("Bin am arbeiten...", this, update,  KeyboardFactory.KeyBoardType.Abort, true, true);
                     } else {
                         if (input.startsWith("Japp") || input.startsWith("confirm")) {
                             process.performNextStep("Japp", update, allowedUsersMap);
@@ -152,7 +155,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 }
             }
-            if (update.getMessage().hasPhoto()) {
+            if (update.hasMessage() && update.getMessage().hasPhoto()) {
                 BotUtil.sendMsg("Verarbeite Bild...", this, update,  null, true, false);
                 processPhoto(update, allowedUsersMap);
             }
@@ -282,7 +285,8 @@ public class Bot extends TelegramLongPollingBot {
             LogUtil.logError(imagePath, e);
             return;
         }
-        sendPhoto.setChatId(update.getMessage().getChatId());
+        long chatID = update.hasMessage() ? update.getMessage().getChatId() : update.getCallbackQuery().getFrom().getId();
+        sendPhoto.setChatId(chatID);
         try {
             execute(sendPhoto);
         } catch (TelegramApiException e) {
@@ -409,7 +413,12 @@ public class Bot extends TelegramLongPollingBot {
         });
     }
 
-
+    private void abortProcess(Update update, Map<Integer, User> allowedUsersMap, String userName, int currentUserID, String textGivenByUser){
+        Bot.this.setBusy(false);
+        String processName = allowedUsersMap.get(currentUserID).getProcess().getProcessName();
+        allowedUsersMap.get(currentUserID).setProcess(null);
+        BotUtil.sendMsg( processName + " abgebrochen.",Bot.this, update, null, false, false);
+    }
 
     //GETTER SETTER
 
