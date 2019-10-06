@@ -117,8 +117,6 @@ public class TessUtil {
                 return true;
             }
         }
-
-
         return false;
     }
 

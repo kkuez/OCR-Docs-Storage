@@ -193,6 +193,7 @@ public class Bot extends TelegramLongPollingBot {
 
                 if(DBUtil.isFilePresent(largestPhoto)){
                     LogUtil.log("File already present: " + largestPhoto.getName());
+                    BotUtil.sendMsg("Bild schon vorhanden.", Bot.this, update, null, true, false);
                     return;
                 }
 
@@ -229,7 +230,7 @@ public class Bot extends TelegramLongPollingBot {
                 }else{
                     BotUtil.sendMsg("Fertig.", Bot.this, update,  null, true, false);
                 }
-                LogUtil.log(update.getMessage().getText());
+                LogUtil.log("Processed " + document.getOriginalFileName());
                 setBusy(false);
             }
         });
