@@ -6,12 +6,14 @@ import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
+import com.Telegram.KeyboardFactory;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.print.Doc;
 import java.text.DateFormat;
@@ -67,6 +69,11 @@ public class GetBonsProcess extends Process{
                                 }
                                 getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
                             });
+                            try {
+                                BotUtil.sendAnswerCallbackQuery("Fertig", getBot(), false, update.getCallbackQuery());
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
                             BotUtil.sendMsg("Fertig: " + documentList.size() + " Bilder geholt.",getBot() , update, null, false, false);
                         }
                     });

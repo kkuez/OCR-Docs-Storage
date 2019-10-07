@@ -5,13 +5,19 @@ import com.Telegram.KeyboardFactory;
 import com.Telegram.Bot;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
@@ -54,14 +60,79 @@ public class BotUtil {
     }
 
     public static void askBoolean(String question, Update update, Bot bot, boolean isReply){
-        sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Boolean, isReply, true);
+        if(update.hasCallbackQuery()){
+            simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Boolean);
+        }else{
+            sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Boolean, isReply, true);
+        }
     }
-public static void askMonth(String question, Update update, Bot bot, boolean isReply){
-        sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month, isReply,true);
+public static void askMonth(String question, Update update, Bot bot, boolean isReply) {
+    if (update.hasCallbackQuery()) {
+        simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month);
+    } else {
+        sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month, isReply, true);
+    }
+}
+    public static void editCaption(String text, Bot bot, Message message){
+        EditMessageCaption editMessageCaption = new EditMessageCaption();
+        editMessageCaption.setChatId(message.getChatId() + "");
+        editMessageCaption.setMessageId(message.getMessageId());
+        editMessageCaption.setCaption(text);
+        try {
+            bot.execute(editMessageCaption);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
-public static void askYear(String question, Update update, Bot bot, boolean isReply){
-    sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year, isReply, true);
+    public static void editMessage(String text, Bot bot, Message message){
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(message.getChatId());
+        editMessageText.setMessageId(message.getMessageId());
+        editMessageText.setText(text);
+        try {
+            bot.execute(editMessageText);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Convenience method to have one edit method for everything
+    public static void simpleEditMessage(String text, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull){
+        Message message = getMassageFromUpdate(update);
+        if(!message.hasText()){
+            if(message.hasPhoto() && message.getCaption() != null){
+                editCaption(text, bot, message);
+            }
+        }else{
+            EditMessageText editMessageText = new EditMessageText();
+            editMessageText.setChatId(message.getChatId());
+            editMessageText.setMessageId(message.getMessageId());
+            editMessageText.setText(text);
+            try {
+                bot.execute(editMessageText);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        if(keyBoardTypeOrNull != null && message.hasReplyMarkup()) {
+                EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
+                editMessageReplyMarkup.setChatId(message.getChatId());
+                editMessageReplyMarkup.setMessageId(message.getMessageId());
+                editMessageReplyMarkup.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, true, false));
+                try {
+                    bot.execute(editMessageReplyMarkup);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+    }}
+
+    public static void askYear(String question, Update update, Bot bot, boolean isReply){
+        if (update.hasCallbackQuery()) {
+            simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year);
+        } else {
+            sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year, isReply, true);
+        }
     }
 
     /**
@@ -75,8 +146,8 @@ public static void askYear(String question, Update update, Bot bot, boolean isRe
     *Documents cannot be send in groups like pictures
      */
     public static void sendDocument(Bot bot, Update update,  boolean isReply,  InputMediaDocument inputMediaDocument){
-        long chatID = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage().getChatId() : update.getMessage().getChatId();
-        Message message = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
+        Message message = getMassageFromUpdate(update);
+        long chatID = message.getChatId();
         SendDocument sendDocument = new SendDocument();
         sendDocument.setDocument(inputMediaDocument.getMediaFile());
         sendDocument.setChatId(chatID);
@@ -91,8 +162,8 @@ public static void askYear(String question, Update update, Bot bot, boolean isRe
     }
 
     public static synchronized void sendMediaMsg(Bot bot, Update update,  boolean isReply,  List<InputMedia> inputMediaList) {
-        long chatID = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage().getChatId() : update.getMessage().getChatId();
-        Message message = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
+        Message message = getMassageFromUpdate(update);
+        long chatID = message.getChatId();
         for(InputMedia inputMedia : inputMediaList){
             if(inputMedia instanceof InputMediaDocument){
                 sendDocument(bot, update, true, (InputMediaDocument) inputMedia);
@@ -114,9 +185,8 @@ public static void askYear(String question, Update update, Bot bot, boolean isRe
     }
     public static synchronized void sendMsg(String s, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
         boolean isOneTimeKeyboard = false;
-        long chatID = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage().getChatId() : update.getMessage().getChatId();
-        Message message = update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
-
+        Message message = getMassageFromUpdate(update);
+        long chatID = message.getChatId();
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatID);
@@ -132,5 +202,17 @@ public static void askYear(String question, Update update, Bot bot, boolean isRe
         } catch (TelegramApiException e) {
             LogUtil.logError(null, e);
         }
+    }
+
+    private static Message getMassageFromUpdate(Update update){
+       return update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
+    }
+
+    public static  void sendAnswerCallbackQuery(String text, Bot bot, boolean alert, CallbackQuery callbackquery) throws TelegramApiException{
+        AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+        answerCallbackQuery.setCallbackQueryId(callbackquery.getId());
+        answerCallbackQuery.setShowAlert(alert);
+        answerCallbackQuery.setText(text);
+        bot.execute(answerCallbackQuery);
     }
 }

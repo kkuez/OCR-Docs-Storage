@@ -10,6 +10,7 @@ import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
 import com.google.inject.internal.cglib.proxy.$Callback;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -48,6 +49,11 @@ public class SumProcess extends Process{
                 getBot().setBusy(true);
                 String parsedDate = month + "." + year;
                 float sumOfMonth = DBUtil.getSumMonth(parsedDate);
+                try {
+                    BotUtil.sendAnswerCallbackQuery("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), false, update.getCallbackQuery());
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
                 BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update, null, false, false);
                 getBot().setBusy(false);
                 setDeleteLater(true);

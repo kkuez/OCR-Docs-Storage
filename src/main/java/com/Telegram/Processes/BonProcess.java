@@ -10,7 +10,10 @@ import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.apache.commons.io.FileUtils;
+import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +53,7 @@ public class BonProcess extends Process {
                     currentStep = Steps.isSum;
                     getBot().setBusy(false);
                 }else{
-                    BotUtil.sendMsg("Ok :)",getBot(), update, null, true, false);
+                    BotUtil.simpleEditMessage("Ok :)", getBot(), update, null);
                     setDeleteLater(true);
                 }
                 break;
@@ -62,16 +65,20 @@ public class BonProcess extends Process {
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                     setDeleteLater(true);
                 }else{
-                    BotUtil.sendMsg("Bitte richtige Summe eingeben:",getBot(), update, null, false, false);
+                    BotUtil.simpleEditMessage("Bitte richtige Summe eingeben:", getBot(), update, null);
                     currentStep = Steps.EnterRightSum;
                 }
                 break;
-
             case EnterRightSum:
                 bon.setSum(Float.parseFloat(arg.replace(",", ".")));
                 DBUtil.insertDocumentToDB(bon);
                 DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
-                BotUtil.sendMsg("Ok, richtige Summe korrigiert :)", getBot(), update, null, true, false);
+                BotUtil.simpleEditMessage("Ok, richtige Summe korrigiert :)", getBot(), update, null);
+                try {
+                    BotUtil.sendAnswerCallbackQuery("Ok, richtige Summe korrigiert :)", getBot(), false, update.getCallbackQuery());
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
                 setDeleteLater(true);
                 break;
         }
