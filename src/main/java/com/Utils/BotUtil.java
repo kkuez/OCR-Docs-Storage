@@ -18,22 +18,23 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.List;
 
 public class BotUtil {
-    public static void sendKeyboard(String s, Bot bot, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean isInlineKeyBoard, boolean isOnelineKeyboard){
+
+    public static void sendKeyboard(String s, Bot bot, Update update, ReplyKeyboard replyKeyboard, boolean isReply){
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(message.getChatId());
+        sendMessage.setChatId(getMassageFromUpdate(update).getChatId());
         if(isReply){
-            sendMessage.setReplyToMessageId(message.getMessageId());
+            sendMessage.setReplyToMessageId(getMassageFromUpdate(update).getMessageId());
         }
-        if(keyBoardTypeOrNull != null){
-            sendMessage.setReplyMarkup(KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, isInlineKeyBoard, isOnelineKeyboard));
-        }
+            sendMessage.setReplyMarkup(replyKeyboard);
         sendMessage.setText(s);
         try {
             bot.execute(sendMessage);
@@ -204,7 +205,7 @@ public static void askMonth(String question, Update update, Bot bot, boolean isR
         }
     }
 
-    private static Message getMassageFromUpdate(Update update){
+    public static Message getMassageFromUpdate(Update update){
        return update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
     }
 

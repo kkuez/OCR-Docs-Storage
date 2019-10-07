@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +79,18 @@ public class KeyboardFactory {
             inlineKeyboardButtonsRow.add(new InlineKeyboardButton().setText(name).setCallbackData(callBackQuery));
         }
         return inlineKeyboardButtonsRow;
+    }
+
+    public static ReplyKeyboard getInlineKeyboardForList(List<String> list){
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
+        for(String item : list){
+            List<InlineKeyboardButton> buttonRows = createInlineKeyboardRow(Map.of(item, item));
+            endKeyboard.add(buttonRows);
+        }
+
+        inlineKeyboardMarkup.setKeyboard(endKeyboard);
+        return inlineKeyboardMarkup;
     }
 
     private static List<KeyboardRow> createKeyBoard(KeyBoardType keyBoardType){
