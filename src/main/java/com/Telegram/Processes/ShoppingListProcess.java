@@ -27,7 +27,7 @@ public class ShoppingListProcess extends Process{
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         //Terms in this set need more userinformation in a further step
-        Set<String> commandsWithLaterExecution = Set.of("Hinzufügen", "Item Löschen");
+        Set<String> commandsWithLaterExecution = Set.of("Hinzufügen", "Löschen");
         if(action != null){
             item = update.getMessage().getText();
         }
@@ -55,7 +55,7 @@ public class ShoppingListProcess extends Process{
                 BotUtil.sendMsg("Was soll hinzugefügt werden?", getBot(), update, null, true, false);
                 action = "add";
                 break;
-            case "Item Löschen":
+            case "Löschen":
                 BotUtil.sendMsg("Nummer auf der Liste soll gelöscht werden?", getBot(), update, null, true, false);
                 action = "removeitem";
                 break;
@@ -69,10 +69,10 @@ public class ShoppingListProcess extends Process{
             input = update.getMessage().getText();
         }
         String cmd = "";
-        if(input.equals("Ganze Liste Löschen")){
+        if(input.equals("Liste Löschen")){
             cmd = "removeall";
         }
-        if(input.equals("Einkaufsliste anzeigen")){
+        if(input.equals("Liste anzeigen")){
             cmd = "getlist";
         }
 

@@ -363,11 +363,15 @@ public class Bot extends TelegramLongPollingBot {
                                 if (cmd.startsWith("removelast") || input.equals("Letztes Bild Löschen")) {
                                     return new RemoveLastProcess(this, (ProgressReporter) progressReporter, allowedUsersMap);
                                 }else{
-                                    if(cmd.startsWith("einkaufslisten-optionen")) {
-                                        BotUtil.sendMsg("Was willst du tun?",this, update,  KeyboardFactory.KeyBoardType.ShoppingList, true, false);
+                                    if(cmd.startsWith("bon-optionen")) {
+                                        BotUtil.sendMsg("Was willst du tun?",this, update,  KeyboardFactory.KeyBoardType.Bons, true, false);
                                     } else {
-                                        if (cmd.startsWith("add") || (input.equals("Hinzufügen") || cmd.startsWith("removeitem") || input.equals("Item Löschen") || cmd.startsWith("getlist") || input.equals("Einkaufsliste anzeigen") || cmd.startsWith("removeall") || input.equals("Ganze Liste Löschen"))) {
-                                            return new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                                        if (cmd.startsWith("einkaufslisten-optionen")) {
+                                            BotUtil.sendMsg("Was willst du tun?", this, update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
+                                        } else {
+                                            if (cmd.startsWith("add") || (input.equals("Hinzufügen") || cmd.startsWith("removeitem") || input.equals("Löschen") || cmd.startsWith("getlist") || input.equals("Liste anzeigen") || cmd.startsWith("removeall") || input.equals("Liste Löschen"))) {
+                                                return new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                                            }
                                         }
                                     }
                                 }
