@@ -180,7 +180,7 @@ public class TessUtil {
 
         instance.setDatapath(datapath);
 
-        instance.setLanguage(ObjectHub.getInstance().getProperties().getProperty("tessLang="));
+        instance.setLanguage(ObjectHub.getInstance().getProperties().getProperty("tessLang"));
         instance.setHocr(true);
         return instance;
     }
