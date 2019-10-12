@@ -42,16 +42,19 @@ public class KeyboardFactory {
                 break;
             case Boolean:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Japp", "confirm", "Nee", "deny")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
                 break;
             case Calendar_Month:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("JAN","JAN", "FEB","FEB","MÄR","MÄR","APR","APR")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("MAI","MAI", "JUN","JUN","JUL","JUL","AUG","AUG")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("SEP","SEP", "OKT","OKT","NOV","NOV","DEZ","DEZ")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
                 break;
             case Calendar_Year:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("2009","2009", "2010","2010","2011","2011","2012","2012")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("2013","2013", "2014","2014","2015","2015","2016","2016")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("2017","2017", "2018","2018","2019","2019","2020","2020")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
                 break;
             case ShoppingList:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Hinzufügen", "add")));

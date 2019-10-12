@@ -67,7 +67,7 @@ public class ShoppingListProcess extends Process{
     private void prepareForProcessing(Update update){
         switch (update.getMessage().getText()){
             case "Hinzufügen":
-                BotUtil.sendMsg("Was soll hinzugefügt werden?", getBot(), update, null, true, false);
+                BotUtil.sendMsg("Was soll hinzugefügt werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 action = "add";
                 break;
             case "Löschen":

@@ -40,23 +40,31 @@ public class SumProcess extends Process{
                 currentStep = Steps.selectMonth;
                 break;
             case selectMonth:
-                month = TimeUtil.getMonthMap().get(update.getCallbackQuery().getData());
-                BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
-                currentStep = Steps.selectYear;
+                if(TimeUtil.getMonthMap().keySet().contains(update.getCallbackQuery().getData())) {
+                    month = TimeUtil.getMonthMap().get(update.getCallbackQuery().getData());
+                    BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                    currentStep = Steps.selectYear;
+                }else{
+                    BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
+                }
                 break;
             case selectYear:
                 year = update.getCallbackQuery().getData();
-                getBot().setBusy(true);
-                String parsedDate = month + "." + year;
-                float sumOfMonth = DBUtil.getSumMonth(parsedDate);
-                try {
-                    BotUtil.sendAnswerCallbackQuery("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), false, update.getCallbackQuery());
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                if(TimeUtil.getYearsSet().contains(year = update.getCallbackQuery().getData())) {
+                    getBot().setBusy(true);
+                    String parsedDate = month + "." + year;
+                    float sumOfMonth = DBUtil.getSumMonth(parsedDate);
+                    try {
+                        BotUtil.sendAnswerCallbackQuery("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update, null, false, false);
+                    getBot().setBusy(false);
+                    setDeleteLater(true);
+                }else{
+                    BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
                 }
-                BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update, null, false, false);
-                getBot().setBusy(false);
-                setDeleteLater(true);
                 break;
         }
     }

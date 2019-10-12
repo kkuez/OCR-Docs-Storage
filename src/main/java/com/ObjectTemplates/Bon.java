@@ -5,16 +5,6 @@ import java.util.Collections;
 
 public class Bon extends Document {
 
-    public float getSum() {
-        return sum;
-    }
-
-    public void setSum(float sum) {
-        this.sum = sum;
-    }
-
-    float sum;
-
     int belongsToDocument;
 
     public Bon(int belongsToDocument, float sum) {
@@ -36,7 +26,22 @@ public class Bon extends Document {
         return "insert into Bons (belongsToDocument, sum) Values (" + belongsToDocument + ", " + sum + ")";
     }
 
+    @Override
+    public boolean equals(Document document) {
+        return false;
+    }
+
+
     //GETTER SETTER
+    public float getSum() {
+        return sum;
+    }
+
+    public void setSum(float sum) {
+        this.sum = sum;
+    }
+
+    float sum;
 
     public int getBelongsToDocument() {
         return belongsToDocument;

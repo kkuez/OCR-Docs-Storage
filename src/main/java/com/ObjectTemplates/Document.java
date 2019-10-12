@@ -52,6 +52,8 @@ public abstract class Document{
                 content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
     }
 
+    public abstract boolean equals(Document document);
+
     // Getter Setter
 
 

@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.print.Doc;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,11 +46,16 @@ public class GetBonsProcess extends Process{
                     currentStep = Steps.selectMonth;
                     break;
                 case selectMonth:
-                    month = TimeUtil.getMonthMap().get(arg);
-                    BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
-                    currentStep = Steps.selectYear;
+                    if(TimeUtil.getMonthMap().keySet().contains(arg)) {
+                        month = TimeUtil.getMonthMap().get(arg);
+                        BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                        currentStep = Steps.selectYear;
+                    }else{
+                        BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
+                    }
                     break;
                 case selectYear:
+                    if(TimeUtil.getYearsSet().contains(arg)){
                     year = arg;
                     getBot().setBusy(true);
                     String parsedDate = month + "." + year;
@@ -79,6 +85,9 @@ public class GetBonsProcess extends Process{
                     });
                     setDeleteLater(true);
                     getBot().setBusy(false);
+                    }else{
+                        BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                    }
                     break;
         }
     }

@@ -5,6 +5,7 @@ import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
+import com.Telegram.KeyboardFactory;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.ExecutorUtil;
@@ -52,7 +53,7 @@ public class GetPicsProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-        BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, null, false, false);
+        BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
         action = "getpics";
         getBot().setBusy(false);
     }

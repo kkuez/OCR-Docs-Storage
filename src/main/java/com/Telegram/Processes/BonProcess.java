@@ -6,6 +6,7 @@ import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
+import com.Telegram.KeyboardFactory;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
@@ -53,8 +54,12 @@ public class BonProcess extends Process {
                     currentStep = Steps.isSum;
                     getBot().setBusy(false);
                 }else{
-                    BotUtil.simpleEditMessage("Ok :)", getBot(), update, null);
-                    setDeleteLater(true);
+                    if(arg.equals("Nee")) {
+                        BotUtil.simpleEditMessage("Ok :)", getBot(), update, null);
+                        setDeleteLater(true);
+                    }else{
+                        BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
+                    }
                 }
                 break;
 
@@ -65,21 +70,32 @@ public class BonProcess extends Process {
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                     setDeleteLater(true);
                 }else{
-                    BotUtil.simpleEditMessage("Bitte richtige Summe eingeben:", getBot(), update, null);
-                    currentStep = Steps.EnterRightSum;
+                    if(arg.equals("Nee")) {
+                        BotUtil.simpleEditMessage("Bitte richtige Summe eingeben:", getBot(), update, null);
+                        setDeleteLater(true);
+                    }else{
+                        BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
+                    }
                 }
                 break;
             case EnterRightSum:
-                bon.setSum(Float.parseFloat(arg.replace(",", ".")));
-                DBUtil.insertDocumentToDB(bon);
-                DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
-                BotUtil.simpleEditMessage("Ok, richtige Summe korrigiert :)", getBot(), update, null);
+                float sum = 0f;
                 try {
-                    BotUtil.sendAnswerCallbackQuery("Ok, richtige Summe korrigiert :)", getBot(), false, update.getCallbackQuery());
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                    sum = Float.parseFloat(arg.replace(",", "."));
+                    bon.setSum(sum);
+                    DBUtil.insertDocumentToDB(bon);
+                    DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
+                    BotUtil.simpleEditMessage("Ok, richtige Summe korrigiert :)", getBot(), update, null);
+                    try {
+                        BotUtil.sendAnswerCallbackQuery("Ok, richtige Summe korrigiert :)", getBot(), false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    setDeleteLater(true);
+                }catch (NumberFormatException e){
+                    BotUtil.simpleEditMessage("Die Zahl verstehe ich nicht :(", getBot(), update, KeyboardFactory.KeyBoardType.Abort);
                 }
-                setDeleteLater(true);
+
                 break;
         }
     }

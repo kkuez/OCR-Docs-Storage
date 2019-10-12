@@ -1,5 +1,6 @@
 package com.ObjectTemplates;
 
+import com.Telegram.Actions.Action;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
 import com.Telegram.Processes.*;
@@ -14,6 +15,8 @@ public class User {
 
     private Process process = null;
 
+    private Action action = null;
+
     boolean aboutToUploadFile = false;
 
     public void deleteProcessEventually(Bot bot, Update update){
@@ -23,6 +26,15 @@ public class User {
     };
 
     //GETTER SETTER
+
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
 
     public boolean isAboutToUploadFile() {
         return aboutToUploadFile;

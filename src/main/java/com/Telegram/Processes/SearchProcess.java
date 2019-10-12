@@ -4,6 +4,7 @@ import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
+import com.Telegram.KeyboardFactory;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
@@ -42,7 +43,7 @@ public class SearchProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-                BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, null, false, false);
+                BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 action = "search";
         getBot().setBusy(false);
     }
