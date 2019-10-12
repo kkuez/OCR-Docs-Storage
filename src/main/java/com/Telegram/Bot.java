@@ -136,7 +136,7 @@ public class Bot extends TelegramLongPollingBot {
                    allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
                     if (input.startsWith("Bon eingeben")) {
                         allowedUsersMap.get(currentUserID).setAboutToUploadFile(true);
-                        BotUtil.sendMsg("Bitte lad jetzt den Bon hoch.", this, update, null, false, false);
+                        BotUtil.sendMsg("Bitte lad jetzt den Bon hoch.", this, update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     }
                 } else {
                     if (getBusy()) {
