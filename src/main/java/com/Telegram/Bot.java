@@ -328,60 +328,46 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private Process fetchCommandOrNull(Update update, Map<Integer, User> allowedUsersMap){
-        int currentUserID;
-        String userName;
-        String textGivenByUser;
-        if(update.hasCallbackQuery()){
-            currentUserID = update.getCallbackQuery().getFrom().getId();
-            userName = update.getCallbackQuery().getFrom().getFirstName();
-            textGivenByUser = update.getCallbackQuery().getData();
-        }else{
-            textGivenByUser = update.getMessage().getText();
-            currentUserID = update.getMessage().getFrom().getId();
-            userName = update.getMessage().getFrom().getFirstName();
-        }
+        String textGivenByUser = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
+
+        Process processToReturn = null;
         if(textGivenByUser != null) {
             String input = textGivenByUser;
-
-            String cmd = input.contains(" ") ? input.substring(0, input.indexOf(" ")).toLowerCase().replace("/", "") : input.toLowerCase().replace("/", "");
-
-            if (cmd.startsWith("start")) {
-                return new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
-            } else {
-                if (cmd.startsWith("search") || input.equals("Anzahl Dokumente")) {
-                    return new SearchProcess(this, update,(ProgressReporter) progressReporter, allowedUsersMap);
-                } else {
-                    if (cmd.startsWith("getpics") || input.equals("Hole Bilder, Dokumente")) {
-                        return new GetPicsProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
-                    } else {
-                        if (cmd.startsWith("getsum") || input.equals("Summe von Bons")) {
-                            return new SumProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
-                        } else {
-                            if (cmd.startsWith("getbons") || input.equals("Hole Bons")) {
-                                return new GetBonsProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
-                            } else {
-                                if (cmd.startsWith("removelast") || input.equals("Letztes Bild Löschen")) {
-                                    return new RemoveLastProcess(this, (ProgressReporter) progressReporter, allowedUsersMap);
-                                }else{
-                                    if(cmd.startsWith("bon-optionen")) {
-                                        BotUtil.sendMsg("Was willst du tun?",this, update,  KeyboardFactory.KeyBoardType.Bons, true, false);
-                                    } else {
-                                        if (cmd.startsWith("einkaufslisten-optionen")) {
-                                            BotUtil.sendMsg("Was willst du tun?", this, update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
-                                        } else {
-                                            if (cmd.startsWith("add") || (input.equals("Hinzufügen") || cmd.startsWith("removeitem") || input.equals("Löschen") || cmd.startsWith("getlist") || input.equals("Liste anzeigen") || cmd.startsWith("removeall") || input.equals("Liste Löschen"))) {
-                                                return new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            switch (input){
+                case "Anzahl Dokumente":
+                    processToReturn = new SearchProcess(this, update,(ProgressReporter) progressReporter, allowedUsersMap);
+                    break;
+                case "start":
+                case "Start":
+                    processToReturn = new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                    break;
+                case "Hole Bilder, Dokumente":
+                    processToReturn = new GetPicsProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                    break;
+                case "Summe von Bons":
+                    processToReturn = new SumProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
+                    break;
+                case "Hole Bons":
+                    processToReturn =  new GetBonsProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
+                    break;
+                case "Letztes Bild Löschen":
+                    processToReturn = new RemoveLastProcess(this, (ProgressReporter) progressReporter, allowedUsersMap);
+                    break;
+                case "Bon-Optionen":
+                    BotUtil.sendMsg("Was willst du tun?",this, update,  KeyboardFactory.KeyBoardType.Bons, true, false);
+                    break;
+                case "Einkaufslisten-Optionen":
+                    BotUtil.sendMsg("Was willst du tun?", this, update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
+                    break;
+                case "Hinzufügen":
+                case "Löschen":
+                case "Liste anzeigen":
+                case "Liste Löschen":
+                    processToReturn = new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                    break;
             }
         }
-        return null;
+        return processToReturn;
     }
 
     /**
@@ -425,6 +411,7 @@ public class Bot extends TelegramLongPollingBot {
             BotUtil.sendMsg(processName + " abgebrochen.", Bot.this, update, null, false, false);
         }else{
             try {
+                BotUtil.simpleEditMessage("Abgebrochen", this, update, KeyboardFactory.KeyBoardType.NoButtons);
                 BotUtil.sendAnswerCallbackQuery("Abgebrochen", this, false, update.getCallbackQuery());
             } catch (TelegramApiException e) {
                 e.printStackTrace();

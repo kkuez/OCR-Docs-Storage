@@ -99,6 +99,8 @@ public class KeyboardFactory {
     private static List<KeyboardRow> createKeyBoard(KeyBoardType keyBoardType){
         List<KeyboardRow> keyboard = new ArrayList<>();
         switch (keyBoardType){
+            case NoButtons:
+                break;
             case Boolean:
                 KeyboardRow keyboardFirstRow = createKeyBoardRow(new String[]{"Japp", "Nee"});
                 keyboard.add(keyboardFirstRow);
@@ -156,7 +158,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, Abort, Bons
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, Abort, Bons, NoButtons
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();
