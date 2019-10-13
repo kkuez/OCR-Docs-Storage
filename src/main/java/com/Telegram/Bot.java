@@ -81,7 +81,7 @@ public class Bot extends TelegramLongPollingBot {
             userName = update.getCallbackQuery().getFrom().getFirstName();
             textGivenByUser = update.getCallbackQuery().getData();
             if (textGivenByUser.equals("abort")){
-                abortProcess(update, allowedUsersMap, userName, currentUserID, textGivenByUser);
+                abortProcess(update, allowedUsersMap, currentUserID);
             }
         }else{
             textGivenByUser = update.getMessage().getText();
@@ -403,7 +403,7 @@ public class Bot extends TelegramLongPollingBot {
         });
     }
 
-    private void abortProcess(Update update, Map<Integer, User> allowedUsersMap, String userName, int currentUserID, String textGivenByUser){
+    public void abortProcess(Update update, Map<Integer, User> allowedUsersMap, int currentUserID){
         if(allowedUsersMap.get(currentUserID).getProcess() != null) {
             Bot.this.setBusy(false);
             String processName = allowedUsersMap.get(currentUserID).getProcess().getProcessName();

@@ -182,6 +182,8 @@ public static void askMonth(String question, Update update, Bot bot, boolean isR
             bot.execute(sendMediaGroup);
         } catch (TelegramApiException e) {
             LogUtil.logError(null, e);
+            sendMsg("Zuviele Dokumente gefunden für den Begriff... Abgrebrochen.", bot, update, null, false, false);
+            bot.abortProcess(update, ObjectHub.getInstance().getAllowedUsersMap(), update.getMessage().getFrom().getId());
         }
     }
     public static synchronized void sendMsg(String s, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {

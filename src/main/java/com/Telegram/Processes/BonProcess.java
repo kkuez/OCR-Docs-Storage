@@ -71,8 +71,8 @@ public class BonProcess extends Process {
                     setDeleteLater(true);
                 }else{
                     if(arg.equals("Nee")) {
-                        BotUtil.simpleEditMessage("Bitte richtige Summe eingeben:", getBot(), update, null);
-                        setDeleteLater(true);
+                        BotUtil.sendMsg("Bitte richtige Summe eingeben:", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                        currentStep = Steps.EnterRightSum;
                     }else{
                         BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
                     }
@@ -85,17 +85,11 @@ public class BonProcess extends Process {
                     bon.setSum(sum);
                     DBUtil.insertDocumentToDB(bon);
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
-                    BotUtil.simpleEditMessage("Ok, richtige Summe korrigiert :)", getBot(), update, null);
-                    try {
-                        BotUtil.sendAnswerCallbackQuery("Ok, richtige Summe korrigiert :)", getBot(), false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
+                    BotUtil.sendMsg("Ok, richtige Summe korrigiert :)", getBot(), update, null, false, false);
                     setDeleteLater(true);
                 }catch (NumberFormatException e){
-                    BotUtil.simpleEditMessage("Die Zahl verstehe ich nicht :(", getBot(), update, KeyboardFactory.KeyBoardType.Abort);
+                    BotUtil.sendMsg("Die Zahl verstehe ich nicht :(", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 }
-
                 break;
         }
     }
