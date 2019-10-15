@@ -1,15 +1,13 @@
 package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
+import com.Misc.EqualStrategy;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
-import com.Utils.BotUtil;
-import com.Utils.DBUtil;
-import com.Utils.ExecutorUtil;
-import com.Utils.IOUtil;
+import com.Utils.*;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,10 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class GetPicsProcess extends Process {
 
@@ -70,26 +65,15 @@ public class GetPicsProcess extends Process {
                 }
                 List<InputMedia> inputMediaList = new ArrayList<>();
 
-            final Integer[] count = {0};
+                for(Document document1 : listOfDocs){
+                    Set<String> photoEndings = Set.of("png", "PNG", "jpg", "JPG", "jpeg", "JPEG");
+                    String fileExtension = document1.getOriginalFileName().substring(document1.getOriginalFileName().indexOf(".")).replace(".", "");
+                    InputMedia media = photoEndings.contains(fileExtension) ? new InputMediaPhoto() : new InputMediaDocument();
+                    media.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
+                    inputMediaList.add(media);
+                }
 
-                listOfDocs.forEach((document1) -> {
-                    ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
-                        @Override
-                        public void run() {
-                            Set<String> photoEndings = Set.of("png", "PNG", "jpg", "JPG", "jpeg", "JPEG");
-                            String fileExtension = document1.getOriginalFileName().substring(document1.getOriginalFileName().indexOf(".")).replace(".", "");
-                            InputMedia media = photoEndings.contains(fileExtension) ? new InputMediaPhoto() : new InputMediaDocument();
-                            media.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
-                            inputMediaList.add(media);
-                            synchronized (count[0]){
-                                count[0]++;
-                            }
-                        }
-                    });
-                });
-
-        ExecutorUtil.blockUntilLocalCountReached(count[0], listOfDocs.size());
-                BotUtil.sendMediaMsg(getBot(), update, true, inputMediaList);
+    BotUtil.sendMediaMsg(getBot(), update, true, inputMediaList);
                 getBot().setBusy(false);
 
                 BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update, null, true, false);

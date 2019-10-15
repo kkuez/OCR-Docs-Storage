@@ -216,6 +216,7 @@ public class DBUtil {
             ResultSet rs = statement.executeQuery(sqlExpression);
             documentList = new ArrayList<>();
             while (rs.next()) {
+                //TODO auch pdfs eigene klasse schreiben
                 Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
                 image.setTagSet(getTagsForDocument(image));
                 documentList.add(image);

@@ -11,3 +11,4 @@ target/Zips
 target/OCR-1.0-SNAPSHOT-jar-with-dependencies.jar
 target/OCR-1.0-SNAPSHOT.jar
 target/setup.properties
+out/*

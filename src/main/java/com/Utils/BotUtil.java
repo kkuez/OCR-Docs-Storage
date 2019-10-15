@@ -23,6 +23,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BotUtil {
@@ -163,14 +164,21 @@ public static void askMonth(String question, Update update, Bot bot, boolean isR
     }
 
     public static synchronized void sendMediaMsg(Bot bot, Update update,  boolean isReply,  List<InputMedia> inputMediaList) {
+        if(inputMediaList.size() == 0){
+            sendMsg("Keine Dokumente gefunden für den Begriff.", bot, update, null, false, false);
+            bot.abortProcess(update, ObjectHub.getInstance().getAllowedUsersMap(), update.getMessage().getFrom().getId());
+            return;
+        }
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
+        List<InputMedia> toBeRemovedList = new ArrayList<>();
         for(InputMedia inputMedia : inputMediaList){
             if(inputMedia instanceof InputMediaDocument){
                 sendDocument(bot, update, true, (InputMediaDocument) inputMedia);
-                inputMediaList.remove(inputMedia);
+                toBeRemovedList.add(inputMedia);
             }
         }
+        inputMediaList.removeAll(toBeRemovedList);
 
         SendMediaGroup sendMediaGroup = new SendMediaGroup();
         sendMediaGroup.setMedia(inputMediaList);
@@ -182,7 +190,7 @@ public static void askMonth(String question, Update update, Bot bot, boolean isR
             bot.execute(sendMediaGroup);
         } catch (TelegramApiException e) {
             LogUtil.logError(null, e);
-            sendMsg("Zuviele Dokumente gefunden für den Begriff... Abgrebrochen.", bot, update, null, false, false);
+            sendMsg("Zuviele Dokumente gefunden für den Begriff... Abgebrochen.", bot, update, null, false, false);
             bot.abortProcess(update, ObjectHub.getInstance().getAllowedUsersMap(), update.getMessage().getFrom().getId());
         }
     }
