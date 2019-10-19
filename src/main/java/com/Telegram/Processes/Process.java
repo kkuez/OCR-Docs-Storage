@@ -4,9 +4,14 @@ import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
+import com.Telegram.KeyboardFactory;
+import com.Utils.BotUtil;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Process {
@@ -29,10 +34,29 @@ public abstract class Process {
 
     public abstract String getProcessName();
 
+    public List<Message> sentMessages = new ArrayList<>();
 
+    public void clearButtons(){
+        for(Message message : getSentMessages()){
+            BotUtil.simpleEditMessage(message.getText(), getBot(), message, KeyboardFactory.KeyBoardType.NoButtons);
+        }
+    }
+
+    public void close(){
+        clearButtons();
+
+    }
 
     //GETTER SETTER
 
+
+    public synchronized List<Message> getSentMessages() {
+        return sentMessages;
+    }
+
+    public boolean isDeleteLater() {
+        return deleteLater;
+    }
 
     public boolean getDeleteLater() {
         return deleteLater;
@@ -74,4 +98,5 @@ public abstract class Process {
     public void setHasStarted(Boolean hasStarted) {
         this.hasStarted = hasStarted;
     }
+
 }

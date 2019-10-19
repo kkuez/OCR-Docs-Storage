@@ -7,15 +7,11 @@ import com.Telegram.KeyboardFactory;
 import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ShoppingListProcess extends Process{
 
@@ -65,18 +61,21 @@ public class ShoppingListProcess extends Process{
     }
 
     private void prepareForProcessing(Update update){
+        Message message = null;
         switch (update.getMessage().getText()){
             case "Hinzufügen":
-                BotUtil.sendMsg("Was soll hinzugefügt werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                message = BotUtil.sendMsg("Was soll hinzugefügt werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 action = "add";
                 break;
             case "Löschen":
                 ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getShoppingListFromDB());
-                BotUtil.sendKeyboard("Was soll gelöscht werden?", getBot(), update, shoppingListKeyboard, false);
+                message = BotUtil.sendKeyboard("Was soll gelöscht werden?", getBot(), update, shoppingListKeyboard, false);
                 action = "removeitem";
                 break;
         }
+        getSentMessages().add(message);
     }
+
     private void processInOneStep(String arg, Update update, Map<Integer, User> allowedUsersMap){
         String input = null;
         if(item != null){
@@ -102,6 +101,7 @@ public class ShoppingListProcess extends Process{
                 getBot().getShoppingList().add(arg);
                 DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
                 BotUtil.sendMsg(arg + " hinzugefügt! :)", getBot(), update, null, true, false);
+                close();
                 break;
             case "getlist":
                 sendShoppingList(update);
@@ -118,4 +118,7 @@ public class ShoppingListProcess extends Process{
     public String getProcessName() {
         return "Shoppinglist Process";
     }
+
+    //GETTER SETTER
+
 }
