@@ -43,7 +43,7 @@ public class ShoppingListProcess extends Process{
             }
         }
 
-        if(!commandsWithLaterExecution.contains(update.getMessage().getText())){
+        if(!commandsWithLaterExecution.contains(BotUtil.getMassageFromUpdate(update).getText())){
             processInOneStep(arg, update, allowedUsersMap);
         }else{
             prepareForProcessing(update);
