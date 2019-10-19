@@ -42,7 +42,6 @@ public class ShoppingListProcess extends Process{
                 }
             }
         }
-
         if(!commandsWithLaterExecution.contains(BotUtil.getMassageFromUpdate(update).getText())){
             processInOneStep(arg, update, allowedUsersMap);
         }else{
@@ -83,15 +82,15 @@ public class ShoppingListProcess extends Process{
         }else{
             input = update.getMessage().getText();
         }
-        String cmd = "";
+        String cmd = arg;
         if(input.equals("Liste Löschen")){
             cmd = "removeall";
         }
         if(input.equals("Liste anzeigen")){
             cmd = "getlist";
         }
-
-        if(input.contains("add") || input.contains("removeitem")){
+        //FIXME "done" dazwischen gehackt, das alles mal sauberer machen.
+        if((input.contains("add") || input.contains("removeitem")) && !arg.equals("done")){
             cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
         }
 
@@ -100,8 +99,8 @@ public class ShoppingListProcess extends Process{
             case "add":
                 getBot().getShoppingList().add(arg);
                 DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
-                BotUtil.sendMsg(arg + " hinzugefügt! :)", getBot(), update, null, true, false);
-                close();
+                Message message = BotUtil.sendMsg(arg + " hinzugefügt! :) Noch was?", getBot(), update, KeyboardFactory.KeyBoardType.Done, false, true);
+                getSentMessages().add(message);
                 break;
             case "getlist":
                 sendShoppingList(update);
@@ -111,8 +110,11 @@ public class ShoppingListProcess extends Process{
                 getBot().setShoppingList(new ArrayList<String>());
                 BotUtil.sendMsg("Einkaufsliste gelöscht :)", getBot(), update, null, true, false);
                 break;
+            case "done":
+                BotUtil.sendMsg("Ok :)", getBot(), update, null, false, false);
+                close();
+                break;
         }
-        setDeleteLater(true);
     }
     @Override
     public String getProcessName() {

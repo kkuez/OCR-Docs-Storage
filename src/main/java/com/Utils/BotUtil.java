@@ -35,7 +35,7 @@ public class BotUtil {
         if(isReply){
             sendMessage.setReplyToMessageId(getMassageFromUpdate(update).getMessageId());
         }
-            sendMessage.setReplyMarkup(replyKeyboard);
+        sendMessage.setReplyMarkup(replyKeyboard);
         sendMessage.setText(s);
 
         Message messageToReturn = null;
@@ -73,14 +73,14 @@ public class BotUtil {
         }
         return message;
     }
-public static Message askMonth(String question, Update update, Bot bot, boolean isReply) {
-    Message message = null;
-    if (update.hasCallbackQuery()) {
-    message = simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month);
-    } else {
-        message = sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month, isReply, true);
-    }
-    return message;
+    public static Message askMonth(String question, Update update, Bot bot, boolean isReply) {
+        Message message = null;
+        if (update.hasCallbackQuery()) {
+            message = simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month);
+        } else {
+            message = sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month, isReply, true);
+        }
+        return message;
     }
     public static void editCaption(String text, Bot bot, Message message){
         EditMessageCaption editMessageCaption = new EditMessageCaption();
@@ -129,17 +129,21 @@ public static Message askMonth(String question, Update update, Bot bot, boolean 
             }
         }
         if(keyBoardTypeOrNull != null && message.hasReplyMarkup()) {
-                EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
-                editMessageReplyMarkup.setChatId(message.getChatId());
-                editMessageReplyMarkup.setMessageId(message.getMessageId());
-                editMessageReplyMarkup.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, true, false));
-                try {
-                    bot.execute(editMessageReplyMarkup);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
+            EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
+            editMessageReplyMarkup.setChatId(message.getChatId());
+            editMessageReplyMarkup.setMessageId(message.getMessageId());
+            editMessageReplyMarkup.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, true, false));
+            try {
+                bot.execute(editMessageReplyMarkup);
+            } catch (TelegramApiException e) {
+                if(((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                    LogUtil.log("Message not edited, no need.");
+                }else{
+                    LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
                 }
-    }
-    return message;
+            }
+        }
+        return message;
     }
 
     public static Message askYear(String question, Update update, Bot bot, boolean isReply){
@@ -149,7 +153,7 @@ public static Message askMonth(String question, Update update, Bot bot, boolean 
         } else {
             message = sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year, isReply, true);
         }
-    return message;
+        return message;
     }
 
     /**
@@ -160,7 +164,7 @@ public static Message askMonth(String question, Update update, Bot bot, boolean 
      */
 
     /**
-    *Documents cannot be send in groups like pictures
+     *Documents cannot be send in groups like pictures
      */
     public static Message sendDocument(Bot bot, Update update,  boolean isReply,  InputMediaDocument inputMediaDocument){
         Message message = getMassageFromUpdate(update);
@@ -229,7 +233,7 @@ public static Message askMonth(String question, Update update, Bot bot, boolean 
         sendMessage.setText(s);
         Message messageToReturn = null;
         try {
-           messageToReturn = bot.execute(sendMessage);
+            messageToReturn = bot.execute(sendMessage);
         } catch (TelegramApiException e) {
             LogUtil.logError(null, e);
         }
@@ -237,7 +241,7 @@ public static Message askMonth(String question, Update update, Bot bot, boolean 
     }
 
     public static Message getMassageFromUpdate(Update update){
-       return update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
+        return update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
     }
 
     public static  void sendAnswerCallbackQuery(String text, Bot bot, boolean alert, CallbackQuery callbackquery) throws TelegramApiException{

@@ -14,6 +14,11 @@ import java.util.Map;
 
 public class KeyboardFactory {
 
+    private static List<InlineKeyboardButton> DONE_ROW = createInlineKeyboardRow(Map.of("Fertig", "done"));
+
+    private static List<InlineKeyboardButton> ABORT_ROW = createInlineKeyboardRow(Map.of("Abbrechen", "abort"));
+
+
     public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard, boolean oneTimeKeyboard) {
         if(inlineKeyboard){
             InlineKeyboardMarkup replyKeyboardInline = new InlineKeyboardMarkup();
@@ -37,24 +42,27 @@ public class KeyboardFactory {
     private static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType){
         List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
         switch (keyBoardType){
+            case Done:
+                endKeyboard.add(DONE_ROW);
+                break;
             case Abort:
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
+                endKeyboard.add(ABORT_ROW);
                 break;
             case Boolean:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Japp", "confirm", "Nee", "deny")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
+                endKeyboard.add(ABORT_ROW);
                 break;
             case Calendar_Month:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("JAN","JAN", "FEB","FEB","MÄR","MÄR","APR","APR")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("MAI","MAI", "JUN","JUN","JUL","JUL","AUG","AUG")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("SEP","SEP", "OKT","OKT","NOV","NOV","DEZ","DEZ")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
+                endKeyboard.add(ABORT_ROW);
                 break;
             case Calendar_Year:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("2009","2009", "2010","2010","2011","2011","2012","2012")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("2013","2013", "2014","2014","2015","2015","2016","2016")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("2017","2017", "2018","2018","2019","2019","2020","2020")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
+                endKeyboard.add(ABORT_ROW);
                 break;
             case ShoppingList:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Hinzufügen", "add")));
@@ -91,7 +99,7 @@ public class KeyboardFactory {
             List<InlineKeyboardButton> buttonRows = createInlineKeyboardRow(Map.of(item, item));
             endKeyboard.add(buttonRows);
         }
-        endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
+        endKeyboard.add(DONE_ROW);
         inlineKeyboardMarkup.setKeyboard(endKeyboard);
         return inlineKeyboardMarkup;
     }
@@ -158,7 +166,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, Abort, Bons, NoButtons
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, Abort, Bons, NoButtons, Done
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();
