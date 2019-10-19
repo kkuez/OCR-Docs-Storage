@@ -40,9 +40,10 @@ public abstract class Process {
 
     public void clearButtons(){
         for(Message message : getSentMessages()){
+            if(message != null){
             BotUtil.simpleEditMessage(message.getText(), getBot(), message, KeyboardFactory.KeyBoardType.NoButtons);
-        }
-    }
+        }}
+}
 
     public void close(){
         clearButtons();

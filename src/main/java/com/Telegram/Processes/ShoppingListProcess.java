@@ -56,7 +56,7 @@ public class ShoppingListProcess extends Process{
         for(int i = 0;i<getBot().getShoppingList().size();i++){
             listeBuilder.append( i + ": " + getBot().getShoppingList().get(i) + "\n");
         }
-        BotUtil.sendMsg(listeBuilder.toString(), getBot(), update, null, true, false);
+        BotUtil.sendMsg(listeBuilder.toString(), getBot(), update, null, false, false);
     }
 
     private void prepareForProcessing(Update update){
@@ -77,21 +77,34 @@ public class ShoppingListProcess extends Process{
 
     private void processInOneStep(String arg, Update update, Map<Integer, User> allowedUsersMap){
         String input = null;
-        if(item != null){
-            input = action + " " + item;
-        }else{
-            input = update.getMessage().getText();
-        }
         String cmd = arg;
-        if(input.equals("Liste Löschen")){
-            cmd = "removeall";
-        }
-        if(input.equals("Liste anzeigen")){
-            cmd = "getlist";
-        }
-        //FIXME "done" dazwischen gehackt, das alles mal sauberer machen.
-        if((input.contains("add") || input.contains("removeitem")) && !arg.equals("done")){
-            cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
+        if(arg.equals("done")){
+            input = "done";
+        }else{
+            if(item != null){
+                input = action + " " + item;
+            }else{
+                input = BotUtil.getMassageFromUpdate(update).getText();
+            }}
+
+        switch (input){
+            case "Liste Löschen":
+                DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
+                getBot().setShoppingList(new ArrayList<String>());
+                BotUtil.sendMsg("Einkaufsliste gelöscht :)", getBot(), update, null, false, false);
+                break;
+            case "done":
+                BotUtil.sendMsg("Ok :)", getBot(), update, null, false, false);
+                close();
+                break;
+            case "Liste anzeigen":
+                sendShoppingList(update);
+                break;
+            default:
+                if((input.contains("add") || input.contains("removeitem"))){
+                    cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
+                }
+                break;
         }
 
         arg = input.substring(input.indexOf(" ") + 1);
@@ -101,18 +114,6 @@ public class ShoppingListProcess extends Process{
                 DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
                 Message message = BotUtil.sendMsg(arg + " hinzugefügt! :) Noch was?", getBot(), update, KeyboardFactory.KeyBoardType.Done, false, true);
                 getSentMessages().add(message);
-                break;
-            case "getlist":
-                sendShoppingList(update);
-                break;
-            case "removeall":
-                DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
-                getBot().setShoppingList(new ArrayList<String>());
-                BotUtil.sendMsg("Einkaufsliste gelöscht :)", getBot(), update, null, true, false);
-                break;
-            case "done":
-                BotUtil.sendMsg("Ok :)", getBot(), update, null, false, false);
-                close();
                 break;
         }
     }
