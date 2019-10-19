@@ -11,10 +11,8 @@ import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.apache.commons.io.FileUtils;
-import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +34,7 @@ public class BonProcess extends Process {
 
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+        Message message = null;
         switch(currentStep){
             case Start:
                 if(arg.equals("Japp")) {
@@ -50,7 +49,7 @@ public class BonProcess extends Process {
                     FileUtils.deleteQuietly(document.getOriginFile());
                     DBUtil.executeSQL("update Documents set originalFile = '" + newOriginalFilePath + "' where originalFile = '" + document.getOriginFile().getAbsolutePath() + "'");
                     document.setOriginFile(newOriginalFilePath);
-                    BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot(), true);
+                    message = BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot(), true);
                     currentStep = Steps.isSum;
                     getBot().setBusy(false);
                 }else{
@@ -58,7 +57,7 @@ public class BonProcess extends Process {
                         BotUtil.simpleEditMessage("Ok :)", getBot(), update, null);
                         setDeleteLater(true);
                     }else{
-                        BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
+                        message = BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
                     }
                 }
                 break;
@@ -69,12 +68,13 @@ public class BonProcess extends Process {
                     DBUtil.insertDocumentToDB(bon);
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                     setDeleteLater(true);
+                    close();
                 }else{
                     if(arg.equals("Nee")) {
-                        BotUtil.sendMsg("Bitte richtige Summe eingeben:", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                        message = BotUtil.sendMsg("Bitte richtige Summe eingeben:", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
                         currentStep = Steps.EnterRightSum;
                     }else{
-                        BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
+                        message = BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
                     }
                 }
                 break;
@@ -86,11 +86,14 @@ public class BonProcess extends Process {
                     DBUtil.insertDocumentToDB(bon);
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                     BotUtil.sendMsg("Ok, richtige Summe korrigiert :)", getBot(), update, null, false, false);
-                    setDeleteLater(true);
+                    close();
                 }catch (NumberFormatException e){
-                    BotUtil.sendMsg("Die Zahl verstehe ich nicht :(", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                    message = BotUtil.sendMsg("Die Zahl verstehe ich nicht :(", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 }
                 break;
+        }
+        if(message != null){
+            getSentMessages().add(message);
         }
     }
 

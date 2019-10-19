@@ -44,7 +44,7 @@ public abstract class Process {
 
     public void close(){
         clearButtons();
-
+        setDeleteLater(true);
     }
 
     //GETTER SETTER

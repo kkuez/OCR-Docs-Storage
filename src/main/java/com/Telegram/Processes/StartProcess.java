@@ -14,7 +14,7 @@ public class StartProcess extends Process {
     public StartProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         BotUtil.sendMsg("Wähle eine Aktion:", bot, update, KeyboardFactory.KeyBoardType.Start, true, false);
-        setDeleteLater(true);
+        close();
     }
 
     @Override

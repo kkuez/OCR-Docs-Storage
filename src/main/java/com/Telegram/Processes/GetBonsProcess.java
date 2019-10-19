@@ -12,6 +12,7 @@ import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -40,18 +41,19 @@ public class GetBonsProcess extends Process{
 
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+        Message message = null;
             switch (currentStep){
                 case Start:
-                    BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
+                    message = BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
                     currentStep = Steps.selectMonth;
                     break;
                 case selectMonth:
                     if(TimeUtil.getMonthMap().keySet().contains(arg)) {
                         month = TimeUtil.getMonthMap().get(arg);
-                        BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                        message = BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
                         currentStep = Steps.selectYear;
                     }else{
-                        BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
+                        message = BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
                     }
                     break;
                 case selectYear:
@@ -83,12 +85,15 @@ public class GetBonsProcess extends Process{
                             BotUtil.sendMsg("Fertig: " + documentList.size() + " Bilder geholt.",getBot() , update, null, false, false);
                         }
                     });
-                    setDeleteLater(true);
+                    close();
                     getBot().setBusy(false);
                     }else{
-                        BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                        message = BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
                     }
                     break;
+        }
+        if(message != null){
+            getSentMessages().add(message);
         }
     }
 

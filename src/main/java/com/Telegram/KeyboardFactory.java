@@ -91,7 +91,7 @@ public class KeyboardFactory {
             List<InlineKeyboardButton> buttonRows = createInlineKeyboardRow(Map.of(item, item));
             endKeyboard.add(buttonRows);
         }
-
+        endKeyboard.add(createInlineKeyboardRow(Map.of("Abbrechen", "abort")));
         inlineKeyboardMarkup.setKeyboard(endKeyboard);
         return inlineKeyboardMarkup;
     }

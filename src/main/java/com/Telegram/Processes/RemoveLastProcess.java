@@ -19,7 +19,7 @@ public class RemoveLastProcess extends Process {
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         DBUtil.removeLastProcressedDocument();
         BotUtil.sendMsg( "Letztes Bild gelöscht :)", getBot(), update, null, true, false);
-        setDeleteLater(true);
+        close();
     }
 
     @Override

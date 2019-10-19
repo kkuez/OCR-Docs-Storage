@@ -1,17 +1,12 @@
 package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
-import com.Misc.EqualStrategy;
-import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
 import com.Utils.*;
-import org.apache.commons.io.FileUtils;
-import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
@@ -26,6 +21,7 @@ public class GetPicsProcess extends Process {
     String action;
 
     String item;
+
     public GetPicsProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
@@ -48,9 +44,10 @@ public class GetPicsProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-        BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+        Message message = BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
         action = "getpics";
         getBot().setBusy(false);
+        getSentMessages().add(message);
     }
 
     private void processInOneStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
@@ -73,11 +70,13 @@ public class GetPicsProcess extends Process {
                     inputMediaList.add(media);
                 }
 
-    BotUtil.sendMediaMsg(getBot(), update, true, inputMediaList);
+                List<Message> messages = BotUtil.sendMediaMsg(getBot(), update, true, inputMediaList);
                 getBot().setBusy(false);
 
-                BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update, null, true, false);
-        setDeleteLater(true);
+                if(messages.size() > 0){
+                    BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update, null, true, false);
+                }
+        close();
     }
 
     @Override

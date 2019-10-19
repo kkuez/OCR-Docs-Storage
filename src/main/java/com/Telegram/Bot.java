@@ -406,7 +406,9 @@ public class Bot extends TelegramLongPollingBot {
     public void abortProcess(Update update, Map<Integer, User> allowedUsersMap, int currentUserID){
         if(allowedUsersMap.get(currentUserID).getProcess() != null) {
             Bot.this.setBusy(false);
+            allowedUsersMap.get(currentUserID).getProcess().close();
             String processName = allowedUsersMap.get(currentUserID).getProcess().getProcessName();
+            LogUtil.log("User " + allowedUsersMap.get(currentUserID).getName() + " aborts " + allowedUsersMap.get(currentUserID).getProcess().getProcessName() + " Process.");
             allowedUsersMap.get(currentUserID).setProcess(null);
             BotUtil.sendMsg(processName + " abgebrochen.", Bot.this, update, null, false, false);
         }else{

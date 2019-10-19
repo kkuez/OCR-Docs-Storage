@@ -19,12 +19,12 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class BotUtil {
 
@@ -64,20 +64,24 @@ public class BotUtil {
         return true;
     }
 
-    public static void askBoolean(String question, Update update, Bot bot, boolean isReply){
+    public static Message askBoolean(String question, Update update, Bot bot, boolean isReply){
+        Message message = null;
         if(update.hasCallbackQuery()){
-            simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Boolean);
+            message = simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Boolean);
         }else{
-            sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Boolean, isReply, true);
+            message = sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Boolean, isReply, true);
         }
+        return message;
     }
-public static void askMonth(String question, Update update, Bot bot, boolean isReply) {
+public static Message askMonth(String question, Update update, Bot bot, boolean isReply) {
+    Message message = null;
     if (update.hasCallbackQuery()) {
-        simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month);
+    message = simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month);
     } else {
-        sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month, isReply, true);
+        message = sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Month, isReply, true);
     }
-}
+    return message;
+    }
     public static void editCaption(String text, Bot bot, Message message){
         EditMessageCaption editMessageCaption = new EditMessageCaption();
         editMessageCaption.setChatId(message.getChatId() + "");
@@ -103,11 +107,11 @@ public static void askMonth(String question, Update update, Bot bot, boolean isR
     }
 
     //Convenience method to have one edit method for everything
-    public static void simpleEditMessage(String text, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull){
+    public static Message simpleEditMessage(String text, Bot bot, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull){
         Message message = getMassageFromUpdate(update);
-        simpleEditMessage(text, bot, message, keyBoardTypeOrNull);
+        return simpleEditMessage(text, bot, message, keyBoardTypeOrNull);
     }
-    public static void simpleEditMessage(String text, Bot bot, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull){
+    public static Message simpleEditMessage(String text, Bot bot, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull){
 
         if(!message.hasText()){
             if(message.hasPhoto() && message.getCaption() != null){
@@ -134,14 +138,18 @@ public static void askMonth(String question, Update update, Bot bot, boolean isR
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-    }}
+    }
+    return message;
+    }
 
-    public static void askYear(String question, Update update, Bot bot, boolean isReply){
+    public static Message askYear(String question, Update update, Bot bot, boolean isReply){
+        Message message = null;
         if (update.hasCallbackQuery()) {
-            simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year);
+            message = simpleEditMessage(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year);
         } else {
-            sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year, isReply, true);
+            message = sendMsg(question, bot, update, KeyboardFactory.KeyBoardType.Calendar_Year, isReply, true);
         }
+    return message;
     }
 
     /**
@@ -175,7 +183,6 @@ public static void askMonth(String question, Update update, Bot bot, boolean isR
     public static synchronized List<Message> sendMediaMsg(Bot bot, Update update,  boolean isReply,  List<InputMedia> inputMediaList) {
         if(inputMediaList.size() == 0){
             sendMsg("Keine Dokumente gefunden für den Begriff.", bot, update, null, false, false);
-            bot.abortProcess(update, ObjectHub.getInstance().getAllowedUsersMap(), update.getMessage().getFrom().getId());
             return new ArrayList<>();
         }
         Message message = getMassageFromUpdate(update);
