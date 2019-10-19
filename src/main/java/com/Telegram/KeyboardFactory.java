@@ -1,5 +1,6 @@
 package com.Telegram;
 
+import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -70,6 +71,11 @@ public class KeyboardFactory {
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Liste Löschen", "deleteWholeList")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Liste anzeigen", "showShoppingList")));
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Start", "start")));
+                break;
+            case ShoppingList_Current:
+                List<String> shoppingList = DBUtil.getShoppingListFromDB();
+                shoppingList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, item))));
+                endKeyboard.add(DONE_ROW);
                 break;
             case Start:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Anzahl Dokumente", "documentsCount")));
@@ -166,7 +172,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, Abort, Bons, NoButtons, Done
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, Abort, Bons, NoButtons, Done
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();

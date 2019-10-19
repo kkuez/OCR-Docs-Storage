@@ -36,8 +36,8 @@ public class ShoppingListProcess extends Process{
                     DBUtil.executeSQL("delete from ShoppingList where item='" +  item + "'");
                     getBot().getShoppingList().remove(item);
                     BotUtil.sendAnswerCallbackQuery(item + " gelöscht.", getBot(), false, update.getCallbackQuery());
-                    BotUtil.sendMsg(item + " gelöscht.", getBot(), update, null, true, false);
-                }catch (Exception e){
+                        BotUtil.simpleEditMessage(item + " gelöscht. Nochwas?", getBot(), BotUtil.getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current);
+                    }catch (Exception e){
                     LogUtil.logError(null, e);
                 }
             }
