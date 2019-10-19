@@ -92,6 +92,7 @@ public class ShoppingListProcess extends Process{
                 DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
                 getBot().setShoppingList(new ArrayList<String>());
                 BotUtil.sendMsg("Einkaufsliste gelöscht :)", getBot(), update, null, false, false);
+                close();
                 break;
             case "done":
                 BotUtil.sendMsg("Ok :)", getBot(), update, null, false, false);
@@ -99,6 +100,7 @@ public class ShoppingListProcess extends Process{
                 break;
             case "Liste anzeigen":
                 sendShoppingList(update);
+                close();
                 break;
             default:
                 if((input.contains("add") || input.contains("removeitem"))){

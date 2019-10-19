@@ -351,7 +351,7 @@ public class Bot extends TelegramLongPollingBot {
                     processToReturn =  new GetBonsProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
                     break;
                 case "Letztes Bild Löschen":
-                    processToReturn = new RemoveLastProcess(this, (ProgressReporter) progressReporter, allowedUsersMap);
+                    processToReturn = new RemoveLastProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
                     break;
                 case "Bon-Optionen":
                     BotUtil.sendMsg("Was willst du tun?",this, update,  KeyboardFactory.KeyBoardType.Bons, true, false);
