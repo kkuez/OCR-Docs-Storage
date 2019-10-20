@@ -414,7 +414,11 @@ public class Bot extends TelegramLongPollingBot {
             LogUtil.log("User " + allowedUsersMap.get(currentUserID).getName() + " aborts " + allowedUsersMap.get(currentUserID).getProcess().getProcessName() + " Process.");
             allowedUsersMap.get(currentUserID).setProcess(null);
             BotUtil.sendMsg(processName + " abgebrochen.", Bot.this, update, null, false, false);
-            BotUtil.sendAnswerCallbackQuery(processName + " abgebrochen.", this, false, update.getCallbackQuery());
+            try {
+                BotUtil.sendAnswerCallbackQuery(processName + " abgebrochen.", this, false, update.getCallbackQuery());
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }else{
             try {
                 BotUtil.simpleEditMessage("Abgebrochen", this, update, KeyboardFactory.KeyBoardType.NoButtons);
