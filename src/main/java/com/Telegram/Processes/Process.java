@@ -5,12 +5,8 @@ import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
-import com.Utils.BotUtil;
-import com.Utils.LogUtil;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +37,7 @@ public abstract class Process {
     public void clearButtons(){
         for(Message message : getSentMessages()){
             if(message != null){
-            BotUtil.simpleEditMessage(message.getText(), getBot(), message, KeyboardFactory.KeyBoardType.NoButtons);
+            getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons);
         }}
 }
 

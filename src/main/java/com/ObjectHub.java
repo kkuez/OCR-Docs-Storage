@@ -4,7 +4,6 @@ import com.Controller.MainController;
 import com.Misc.CustomProperties;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
-import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;

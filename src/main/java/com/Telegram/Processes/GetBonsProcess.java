@@ -2,26 +2,15 @@ package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
-import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
-import com.Telegram.KeyboardFactory;
-import com.Utils.BotUtil;
 import com.Utils.DBUtil;
-import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.print.Doc;
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,16 +33,16 @@ public class GetBonsProcess extends Process{
         Message message = null;
             switch (currentStep){
                 case Start:
-                    message = BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
+                    message = getBot().askMonth("Für welchem Monat...?", update, false);
                     currentStep = Steps.selectMonth;
                     break;
                 case selectMonth:
                     if(TimeUtil.getMonthMap().keySet().contains(arg)) {
                         month = TimeUtil.getMonthMap().get(arg);
-                        message = BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                        message = getBot().askYear("Für welches Jahr...?", update, false);
                         currentStep = Steps.selectYear;
                     }else{
-                        message = BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
+                        message = getBot().askMonth("Für welchem Monat...?", update, false);
                     }
                     break;
                 case selectYear:
@@ -78,17 +67,17 @@ public class GetBonsProcess extends Process{
                                 getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
                             });
                             try {
-                                BotUtil.sendAnswerCallbackQuery("Fertig", getBot(), false, update.getCallbackQuery());
+                                getBot().sendAnswerCallbackQuery("Fertig", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
-                            BotUtil.sendMsg("Fertig: " + documentList.size() + " Bilder geholt.",getBot() , update, null, false, false);
+                            getBot().sendMsg("Fertig: " + documentList.size() + " Bilder geholt.", update, null, false, false);
                         }
                     });
                     close();
                     getBot().setBusy(false);
                     }else{
-                        message = BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                        message = getBot().askYear("Für welches Jahr...?", update, false);
                     }
                     break;
         }

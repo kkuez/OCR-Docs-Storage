@@ -7,7 +7,6 @@ import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
-import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.apache.commons.io.FileUtils;
@@ -49,32 +48,32 @@ public class BonProcess extends Process {
                     FileUtils.deleteQuietly(document.getOriginFile());
                     DBUtil.executeSQL("update Documents set originalFile = '" + newOriginalFilePath + "' where originalFile = '" + document.getOriginFile().getAbsolutePath() + "'");
                     document.setOriginFile(newOriginalFilePath);
-                    message = BotUtil.askBoolean("Endsumme " + bon.getSum() + "?", update, getBot(), true);
+                    message = getBot().askBoolean("Endsumme " + bon.getSum() + "?", update,  true);
                     currentStep = Steps.isSum;
                     getBot().setBusy(false);
                 }else{
                     if(arg.equals("Nee")) {
-                        BotUtil.simpleEditMessage("Ok :)", getBot(), update, null);
+                        getBot().simpleEditMessage("Ok :)", update, null);
                         setDeleteLater(true);
                     }else{
-                        message = BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
+                        message = getBot().simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
                     }
                 }
                 break;
 
             case isSum:
                 if(arg.equals("Japp")){
-                    BotUtil.sendMsg("Ok :)",getBot(), update, null, true, false);
+                    getBot().sendMsg("Ok :)",update, null, true, false);
                     DBUtil.insertDocumentToDB(bon);
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
                     setDeleteLater(true);
                     close();
                 }else{
                     if(arg.equals("Nee")) {
-                        message = BotUtil.sendMsg("Bitte richtige Summe eingeben:", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                        message = getBot().sendMsg("Bitte richtige Summe eingeben:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                         currentStep = Steps.EnterRightSum;
                     }else{
-                        message = BotUtil.simpleEditMessage("Falsche eingabe...", getBot(), update, KeyboardFactory.KeyBoardType.Boolean);
+                        message = getBot().simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
                     }
                 }
                 break;
@@ -85,10 +84,10 @@ public class BonProcess extends Process {
                     bon.setSum(sum);
                     DBUtil.insertDocumentToDB(bon);
                     DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');" );
-                    BotUtil.sendMsg("Ok, richtige Summe korrigiert :)", getBot(), update, null, false, false);
+                    getBot().sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
                     close();
                 }catch (NumberFormatException e){
-                    message = BotUtil.sendMsg("Die Zahl verstehe ich nicht :(", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                    message = getBot().sendMsg("Die Zahl verstehe ich nicht :(", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 }
                 break;
         }

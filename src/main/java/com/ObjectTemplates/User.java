@@ -2,7 +2,6 @@ package com.ObjectTemplates;
 
 import com.Telegram.Bot;
 import com.Telegram.Processes.Process;
-import com.Utils.BotUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class User {

@@ -44,7 +44,7 @@ public class GetPicsProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-        Message message = BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+        Message message = getBot().sendMsg("Wonach soll gesucht werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
         action = "getpics";
         getBot().setBusy(false);
         getSentMessages().add(message);
@@ -70,11 +70,11 @@ public class GetPicsProcess extends Process {
                     inputMediaList.add(media);
                 }
 
-                List<Message> messages = BotUtil.sendMediaMsg(getBot(), update, true, inputMediaList);
+                List<Message> messages = getBot().sendMediaMsg(update, true, inputMediaList);
                 getBot().setBusy(false);
 
                 if(messages.size() > 0){
-                    BotUtil.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", getBot(), update, null, true, false);
+                    getBot().sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", update, null, true, false);
                 }
         close();
     }

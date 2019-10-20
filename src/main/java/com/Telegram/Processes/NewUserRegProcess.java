@@ -4,7 +4,6 @@ import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
-import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -20,7 +19,7 @@ public class NewUserRegProcess extends Process {
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         if(arg.equals(ObjectHub.getInstance().getProperties().getProperty("pwForNewUsers"))){
-            BotUtil.sendMsg("Willkommen :)", getBot(), update, null, true, false);
+            getBot().sendMsg("Willkommen :)", update, null, true, false);
             DBUtil.executeSQL("insert into AllowedUsers(id, name, chatId) Values (" + update.getMessage().getFrom().getId() + ", '" +
                     update.getMessage().getFrom().getFirstName() + "', " + update.getMessage().getChatId() + ")");
             ObjectHub.getInstance().setAllowedUsersMap(DBUtil.getAllowedUsersMap());

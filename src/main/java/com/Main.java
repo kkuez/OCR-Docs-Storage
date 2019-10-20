@@ -1,9 +1,11 @@
 package com;
 
 import com.Controller.StartApplication;
-import com.Utils.BotUtil;
+import com.Telegram.Bot;
 import com.Utils.LogUtil;
 import javafx.application.Application;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 public class Main {
@@ -20,7 +22,7 @@ public class Main {
                 boolean successfullyActivated = false;
                 while(!successfullyActivated){
                     try {
-                        successfullyActivated = BotUtil.activateTGBot(null);
+                        successfullyActivated = activateTGBot(null);
                     } catch (TelegramApiRequestException e) {
                         e.printStackTrace();
                         LogUtil.log("Waiting 30s and try again...");
@@ -34,6 +36,23 @@ public class Main {
             }
         }
         }
+    private static boolean activateTGBot(Bot inputBotOrNull) throws TelegramApiRequestException {
+        LogUtil.log("System: Activate Bot");
+        Bot bot = null;
+        try {
+            ApiContextInitializer.init();
+            TelegramBotsApi telegramBotApi = new TelegramBotsApi();
+            bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
+            ObjectHub.getInstance().setBot(bot);
+            telegramBotApi.registerBot(bot);
+        } catch (TelegramApiRequestException e) {
+            LogUtil.logError(null, e);
+            LogUtil.log("Failed activating ");
+            throw e;
+        }
+        return true;
+    }
+
 
         private static void launchGui(String[] args){
             Application.launch(StartApplication.class, args);

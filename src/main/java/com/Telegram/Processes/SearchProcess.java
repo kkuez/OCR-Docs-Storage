@@ -5,7 +5,6 @@ import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
-import com.Utils.BotUtil;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -44,7 +43,7 @@ public class SearchProcess extends Process {
     }
 
     private void prepareForProcessing(Update update) {
-                Message message = BotUtil.sendMsg("Wonach soll gesucht werden?", getBot(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                Message message = getBot().sendMsg("Wonach soll gesucht werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 getSentMessages().add(message);
                 action = "search";
         getBot().setBusy(false);
@@ -61,7 +60,7 @@ public class SearchProcess extends Process {
             listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
         }
         LogUtil.log("Send list of Pictures related to \"" + searchTerm);
-        BotUtil.sendMsg("" + listOfDocs.size() + " Dokumente gefunden :)", getBot(), update, null, true, false);
+        getBot().sendMsg("" + listOfDocs.size() + " Dokumente gefunden :)", update, null, true, false);
         getBot().setBusy(false);
         close();
     }

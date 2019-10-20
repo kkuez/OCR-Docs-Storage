@@ -1,22 +1,14 @@
 package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
-import com.ObjectHub;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
-import com.Utils.BotUtil;
 import com.Utils.DBUtil;
-import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
-import com.google.inject.internal.cglib.proxy.$Callback;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 public class SumProcess extends Process{
@@ -38,16 +30,16 @@ public class SumProcess extends Process{
         Message message = null;
         switch (currentStep){
             case Start:
-                message = BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
+                message = getBot().askMonth("Für welchem Monat...?", update, false);
                 currentStep = Steps.selectMonth;
                 break;
             case selectMonth:
                 if(TimeUtil.getMonthMap().keySet().contains(update.getCallbackQuery().getData())) {
                     month = TimeUtil.getMonthMap().get(update.getCallbackQuery().getData());
-                    message =  BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                    message =  getBot().askYear("Für welches Jahr...?", update, false);
                     currentStep = Steps.selectYear;
                 }else{
-                    message = BotUtil.askMonth("Für welchem Monat...?", update, getBot(), false);
+                    message = getBot().askMonth("Für welchem Monat...?", update, false);
                 }
                 break;
             case selectYear:
@@ -57,15 +49,15 @@ public class SumProcess extends Process{
                     String parsedDate = month + "." + year;
                     float sumOfMonth = DBUtil.getSumMonth(parsedDate);
                     try {
-                        BotUtil.sendAnswerCallbackQuery("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), false, update.getCallbackQuery());
+                        getBot().sendAnswerCallbackQuery("Summe " + month + "/" + year + ":\n" + sumOfMonth, false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                    BotUtil.sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, getBot(), update, null, false, false);
+                    getBot().sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, update, null, false, false);
                     getBot().setBusy(false);
                     close();
                 }else{
-                    message = BotUtil.askYear("Für welches Jahr...?", update, getBot(), false);
+                    message = getBot().askYear("Für welches Jahr...?", update, false);
                 }
                 break;
         }
