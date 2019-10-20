@@ -19,6 +19,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -88,7 +89,6 @@ public class Bot extends TelegramLongPollingBot {
             currentUserID = update.getMessage().getFrom().getId();
             userName = update.getMessage().getFrom().getFirstName();
         }
-
         Process process = null;
         if(allowedUsersMap.get(currentUserID) == null){
            allowedUsersMap.put(currentUserID, new User(currentUserID, userName));
@@ -108,8 +108,6 @@ public class Bot extends TelegramLongPollingBot {
         }else{
             if(process != null && process.getClass().equals(NewUserRegProcess.class)){
                 process.performNextStep(textGivenByUser, update, allowedUsersMap);
-            }else{
-
             }
         }
     }
@@ -128,40 +126,45 @@ public class Bot extends TelegramLongPollingBot {
         }
         Process process = allowedUsersMap.get(currentUserID).getProcess();
 
-        try {
-            if (textGivenByUser != null) {
-                String input = textGivenByUser;
-                if (process == null) {
-                   allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update, allowedUsersMap));
-                   allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
-                    if (input.startsWith("Bon eingeben")) {
-                        allowedUsersMap.get(currentUserID).setAboutToUploadFile(true);
-                        BotUtil.sendMsg("Bitte lad jetzt den Bon hoch.", this, update, KeyboardFactory.KeyBoardType.Abort, false, true);
-                    }
-                } else {
-                    if (getBusy()) {
-                        BotUtil.sendMsg("Bin am arbeiten...", this, update,  KeyboardFactory.KeyBoardType.Abort, true, true);
+            try {
+                if (textGivenByUser != null) {
+                    String input = textGivenByUser;
+                    if (process == null) {
+                        allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update, allowedUsersMap));
+                        allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                        if (input.startsWith("Bon eingeben")) {
+                            allowedUsersMap.get(currentUserID).setAboutToUploadFile(true);
+                            BotUtil.sendMsg("Bitte lad jetzt den Bon hoch.", this, update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                        }
                     } else {
-                        if (input.startsWith("Japp") || input.startsWith("confirm")) {
-                            process.performNextStep("Japp", update, allowedUsersMap);
+                        if (getBusy()) {
+                            BotUtil.sendMsg("Bin am arbeiten...", this, update, KeyboardFactory.KeyBoardType.Abort, true, true);
                         } else {
-                            if (input.startsWith("Nee") || input.startsWith("deny")) {
-                                process.performNextStep("Nee", update, allowedUsersMap);
+                            if (input.startsWith("Japp") || input.startsWith("confirm")) {
+                                process.performNextStep("Japp", update, allowedUsersMap);
                             } else {
-                                process.performNextStep(input, update, allowedUsersMap);
-                                allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                                if (input.startsWith("Nee") || input.startsWith("deny")) {
+                                    process.performNextStep("Nee", update, allowedUsersMap);
+                                } else {
+                                    process.performNextStep(input, update, allowedUsersMap);
+                                    allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                                }
                             }
                         }
                     }
                 }
-            }
-            if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                BotUtil.sendMsg("Verarbeite Bild...", this, update,  null, true, false);
-                processPhoto(update, allowedUsersMap);
-            }
-        }catch (Exception e){
-            LogUtil.logError(null, e);
-            throw new RuntimeException();
+                if (update.hasMessage() && update.getMessage().hasPhoto()) {
+                    if (getBusy()) {
+                        BotUtil.sendMsg("Bin am arbeiten...", this, update, KeyboardFactory.KeyBoardType.Abort, true, true);
+                    } else {
+                        BotUtil.sendMsg("Verarbeite Bild...", this, update, null, true, false);
+                        processPhoto(update, allowedUsersMap);
+
+                    }
+                    }
+            } catch (Exception e) {
+                LogUtil.logError(null, e);
+                throw new RuntimeException();
         }
     }
 
@@ -411,6 +414,7 @@ public class Bot extends TelegramLongPollingBot {
             LogUtil.log("User " + allowedUsersMap.get(currentUserID).getName() + " aborts " + allowedUsersMap.get(currentUserID).getProcess().getProcessName() + " Process.");
             allowedUsersMap.get(currentUserID).setProcess(null);
             BotUtil.sendMsg(processName + " abgebrochen.", Bot.this, update, null, false, false);
+            BotUtil.sendAnswerCallbackQuery(processName + " abgebrochen.", this, false, update.getCallbackQuery());
         }else{
             try {
                 BotUtil.simpleEditMessage("Abgebrochen", this, update, KeyboardFactory.KeyBoardType.NoButtons);
