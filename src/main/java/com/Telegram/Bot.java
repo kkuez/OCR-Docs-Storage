@@ -380,11 +380,18 @@ public class Bot extends TelegramLongPollingBot {
                 case "Liste Löschen":
                     processToReturn = new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
                     break;
+                case "Standardlisten-Optionen":
+                    sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.StandardList, true, false);
+                    break;
+                case "Standardliste anzeigen":
+                case "Item hinzufügen":
+                case "Item löschen":
+                    processToReturn = new StandardListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                    break;
             }
         }
         return processToReturn;
     }
-
     /**
      * This method returns the bot's name, which was specified during registration.
      * @return bot name

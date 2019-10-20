@@ -19,7 +19,6 @@ public class KeyboardFactory {
 
     private static List<InlineKeyboardButton> ABORT_ROW = createInlineKeyboardRow(Map.of("Abbrechen", "abort"));
 
-
     public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard, boolean oneTimeKeyboard) {
         if(inlineKeyboard){
             InlineKeyboardMarkup replyKeyboardInline = new InlineKeyboardMarkup();
@@ -65,25 +64,10 @@ public class KeyboardFactory {
                 endKeyboard.add(createInlineKeyboardRow(List.of("2017", "2018","2019","2020"), List.of("2017", "2018","2019","2020")));
                 endKeyboard.add(ABORT_ROW);
                 break;
-            case ShoppingList:
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Hinzufügen", "add")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Löschen", "deleteItem")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Liste Löschen", "deleteWholeList")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Liste anzeigen", "showShoppingList")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Start", "start")));
-                break;
             case ShoppingList_Current:
                 List<String> shoppingList = DBUtil.getShoppingListFromDB();
                 shoppingList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, item))));
                 endKeyboard.add(DONE_ROW);
-                break;
-            case Start:
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Anzahl Dokumente", "documentsCount")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Hole Bilder, Dokumente", "getDocuments")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Summe von Bons", "sumBons")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Letztes Bild Löschen", "deleteLastDocument")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Einkaufslisten-Optionen", "showShoppingListOptions")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Liste anzeigen", "showShoppingList")));
                 break;
         }
         return endKeyboard;
@@ -130,29 +114,15 @@ public class KeyboardFactory {
                 KeyboardRow keyboardFirstRow = createKeyBoardRow(new String[]{"Japp", "Nee"});
                 keyboard.add(keyboardFirstRow);
                 break;
-            case Calendar_Month:
-                KeyboardRow keyboardMonthFirstRow = createKeyBoardRow(new String[]{"JAN", "FEB","MÄR","APR",});
-                keyboard.add(keyboardMonthFirstRow);
-                KeyboardRow keyboardMonthSecondRow = createKeyBoardRow(new String[]{"MAI", "JUN","JUL","AUG",});
-                keyboard.add(keyboardMonthSecondRow);
-                KeyboardRow keyboardMonthThirdRow = createKeyBoardRow(new String[]{"SEP", "OKT","NOV","DEZ",});
-                keyboard.add(keyboardMonthThirdRow);
-                break;
-            case Calendar_Year:
-                KeyboardRow keyboardYearFirstRow = createKeyBoardRow(new String[]{"2009", "2010","2011","2012",});
-                keyboard.add(keyboardYearFirstRow);
-                KeyboardRow keyboardYearSecondRow = createKeyBoardRow(new String[]{"2013", "2014","2015","2016",});
-                keyboard.add(keyboardYearSecondRow);
-                KeyboardRow keyboardYearThirdRow = createKeyBoardRow(new String[]{"2017", "2018","2019","2020",});
-                keyboard.add(keyboardYearThirdRow);
-                break;
                 case ShoppingList:
-                KeyboardRow keyboardShoppingListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen", "Löschen"});
+                KeyboardRow keyboardShoppingListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen", "Standarditem hinzufügen"});
                 keyboard.add(keyboardShoppingListFirstRow);
-                KeyboardRow keyboardShoppingListSecondRow = createKeyBoardRow(new String[]{"Liste anzeigen", "Liste Löschen"});
+                KeyboardRow keyboardShoppingListSecondRow = createKeyBoardRow(new String[]{"Löschen"});
                 keyboard.add(keyboardShoppingListSecondRow);
-                KeyboardRow keyboardShoppingListThirdRow = createKeyBoardRow(new String[]{"Start"});
+                KeyboardRow keyboardShoppingListThirdRow = createKeyBoardRow(new String[]{"Liste anzeigen", "Liste Löschen"});
                 keyboard.add(keyboardShoppingListThirdRow);
+                KeyboardRow keyboardShoppingListFourthRow = createKeyBoardRow(new String[]{"Standardlisten-Optionen", "Start"});
+                keyboard.add(keyboardShoppingListFourthRow);
                 break;
             case Start:
                 KeyboardRow keyboardStartFirstRow = createKeyBoardRow(new String[]{"Bon eingeben"});
@@ -178,12 +148,21 @@ public class KeyboardFactory {
                 KeyboardRow keyboardBonsFourthRow = createKeyBoardRow(new String[]{"Start"});
                 keyboard.add(keyboardBonsFourthRow);
                 break;
+            case StandardList:
+                KeyboardRow keyboardStandardListFirstRow = createKeyBoardRow(new String[]{"Standardliste anzeigen"});
+                keyboard.add(keyboardStandardListFirstRow);
+                KeyboardRow keyboardStandardListSecondRow = createKeyBoardRow(new String[]{"Item hinzufügen"});
+                keyboard.add(keyboardStandardListSecondRow);
+                KeyboardRow keyboardStandardListThirdRow = createKeyBoardRow(new String[]{"Item löschen"});
+                keyboard.add(keyboardStandardListThirdRow);
+                KeyboardRow keyboardStandardListFourthRow = createKeyBoardRow(new String[]{"Start"});
+                keyboard.add(keyboardStandardListFourthRow);
         }
         return keyboard;
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, Abort, Bons, NoButtons, Done
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, StandardList, StandardList_Current, Abort, Bons, NoButtons, Done
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();

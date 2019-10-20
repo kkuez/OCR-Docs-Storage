@@ -46,7 +46,6 @@ public class ShoppingListProcess extends Process{
         }else{
             prepareForProcessing(update);
         }
-
         getBot().setBusy(false);
     }
 

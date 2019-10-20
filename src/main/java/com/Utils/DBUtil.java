@@ -5,6 +5,7 @@ import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
 import com.ObjectTemplates.User;
+import com.Telegram.Item;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -74,6 +75,31 @@ public class DBUtil {
             LogUtil.logError("SELECT * FROM ShoppingList", e);
         }
         return shoppingList;
+    }
+
+    public static Item getStandardItem(String name){
+        for(Item item: getStandardListFromDB()){
+            if(item.getName().equals(name)){
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public static List<Item> getStandardListFromDB(){
+        List<Item> standardList = new ArrayList<>();
+        Statement statement = null;
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");
+            while (rs.next()) {
+                standardList.add(new Item(rs.getString("item"), new File(rs.getString("picturePath"))));
+            }
+            statement.close();
+        } catch (SQLException e) {
+            LogUtil.logError("SELECT * FROM StandardList", e);
+        }
+        return standardList;
     }
 
     public static void addToShoppingList(String item){

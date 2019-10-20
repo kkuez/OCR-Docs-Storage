@@ -28,6 +28,8 @@ public class Archiver {
 
     File currentLogFile;
 
+    File resourceFolder;
+
     public Archiver(Properties properties) {
         documentList = new ArrayList<>();
         archiveFolder = new File(properties.getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
@@ -53,6 +55,11 @@ public class Archiver {
         bonFolder = new File(archiveFolder, "Bons");
         if(!bonFolder.exists()){
             bonFolder.mkdir();
+        }
+
+        resourceFolder = new File(archiveFolder, "resources");
+        if(!resourceFolder.exists()){
+            resourceFolder.mkdir();
         }
     }
 
@@ -85,6 +92,10 @@ public class Archiver {
 
     // GETTER SETTER
 
+
+    public File getResourceFolder() {
+        return resourceFolder;
+    }
 
     public File getCurrentLogFile() {
         return currentLogFile;

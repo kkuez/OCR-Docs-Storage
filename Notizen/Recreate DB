@@ -8,3 +8,5 @@ Drop Table Tags;
 create Table Tags(belongsToDocument INTEGER, Tag TEXT);
 Drop Table ShoppingList;
 create Table ShoppingList(item TEXT);
+Drop Table StandardList;
+create Table StandardList(item TEXT, picturePath TEXT);
