@@ -2,21 +2,22 @@ package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
+import com.ObjectTemplates.Image;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Telegram.Item;
 import com.Telegram.KeyboardFactory;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
+import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 public class StandardListProcess extends Process {
 
@@ -86,7 +87,7 @@ public class StandardListProcess extends Process {
         if(arg.equals("done")){
             input = "done";
         }else{
-            if(item != null){
+            if(item != null ){
                 input = action + " " + item.getName();
             }else{
                 input = getBot().getMassageFromUpdate(update).getText();
@@ -98,9 +99,9 @@ public class StandardListProcess extends Process {
                 close();
                 break;
             case "Standardliste anzeigen":
-                StringBuilder stringBuilder = new StringBuilder();
-                DBUtil.getStandardListFromDB().forEach(item1 -> stringBuilder.append(item1.getName()));
-                getBot().sendMsg(stringBuilder.toString(), update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                StringBuilder stringBuilder = new StringBuilder("Aktuelle Standardliste:\n");
+                DBUtil.getStandardListFromDB().forEach(item1 -> stringBuilder.append(item1.getName() + "\n"));
+                getBot().sendMsg(stringBuilder.toString(), update, KeyboardFactory.KeyBoardType.NoButtons, false, true);
                 close();
                 break;
             default:
@@ -111,12 +112,27 @@ public class StandardListProcess extends Process {
         }
 
         arg = input.substring(input.indexOf(" ") + 1);
-        switch (cmd){
+        switch (action){
             case "add":
-                standardList.add(arg);
-                DBUtil.executeSQL("insert into StandardList(item) Values ('" + arg + "')");
-                Message message = getBot().sendMsg(arg + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
-                getSentMessages().add(message);
+                if(!update.getMessage().hasPhoto() || update.getMessage().getCaption() == null || update.getMessage().getCaption().equals("")){
+                    getBot().sendMsg("Kein Bild oder Name für das Item dabei :/", update, KeyboardFactory.KeyBoardType.Abort, true,true);
+                }else {
+                    List<PhotoSize> photoList = update.getMessage().getPhoto();
+                    photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
+                    Collections.reverse(photoList);
+                    String filePath = getBot().getFilePath(photoList.get(0));
+                    File largestPhoto = getBot().downloadPhotoByFilePath(filePath);
+                    File newPhoto = new File(picturesFolder, largestPhoto.getName());
+                    try {
+                        FileUtils.copyFile(largestPhoto, newPhoto);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    standardList.add(new Item(arg, newPhoto));
+                    DBUtil.executeSQL("insert into StandardList(item, picturePath) Values ('" + item.getName() + "', '" + item.getPicturePath() + "')");
+                    Message message = getBot().sendMsg(arg + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                    getSentMessages().add(message);
+                }
                 break;
         }
     }
