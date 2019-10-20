@@ -416,7 +416,7 @@ public class Bot extends TelegramLongPollingBot {
                 BotUtil.simpleEditMessage("Abgebrochen", this, update, KeyboardFactory.KeyBoardType.NoButtons);
                 BotUtil.sendAnswerCallbackQuery("Abgebrochen", this, false, update.getCallbackQuery());
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+LogUtil.logError(e.getMessage(), e);
             }
         }
         }

@@ -54,15 +54,15 @@ public class KeyboardFactory {
                 endKeyboard.add(ABORT_ROW);
                 break;
             case Calendar_Month:
-                endKeyboard.add(createInlineKeyboardRow(Map.of("JAN","JAN", "FEB","FEB","MÄR","MÄR","APR","APR")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("MAI","MAI", "JUN","JUN","JUL","JUL","AUG","AUG")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("SEP","SEP", "OKT","OKT","NOV","NOV","DEZ","DEZ")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("JAN", "FEB","MÄR","APR"), List.of("JAN", "FEB","MÄR","APR")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("MAI", "JUN","JUL","AUG"), List.of("MAI", "JUN","JUL","AUG")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("SEP", "OKT","NOV","DEZ"), List.of("SEP", "OKT","NOV","DEZ")));
                 endKeyboard.add(ABORT_ROW);
                 break;
             case Calendar_Year:
-                endKeyboard.add(createInlineKeyboardRow(Map.of("2009","2009", "2010","2010","2011","2011","2012","2012")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("2013","2013", "2014","2014","2015","2015","2016","2016")));
-                endKeyboard.add(createInlineKeyboardRow(Map.of("2017","2017", "2018","2018","2019","2019","2020","2020")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("2009", "2010","2011","2012"), List.of("2009", "2010","2011","2012")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("2013","2014","2015","2016"), List.of("2013","2014","2015","2016")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("2017", "2018","2019","2020"), List.of("2017", "2018","2019","2020")));
                 endKeyboard.add(ABORT_ROW);
                 break;
             case ShoppingList:
@@ -89,13 +89,24 @@ public class KeyboardFactory {
         return endKeyboard;
     }
 
-    private static List<InlineKeyboardButton> createInlineKeyboardRow(Map<String, String> buttonNamesAndQueries){
+    private static List<InlineKeyboardButton> createInlineKeyboardRow(List<String> keyList, List<String> valueList){
+        //For ordered processing
         List<InlineKeyboardButton> inlineKeyboardButtonsRow = new ArrayList<>();
-        for(String name : buttonNamesAndQueries.keySet()){
-            String callBackQuery = buttonNamesAndQueries.get(name);
-            inlineKeyboardButtonsRow.add(new InlineKeyboardButton().setText(name).setCallbackData(callBackQuery));
+        for(int i = 0; i < valueList.size(); i++){
+            String callBackQuery = valueList.get(i);
+            inlineKeyboardButtonsRow.add(new InlineKeyboardButton().setText(keyList.get(i)).setCallbackData(callBackQuery));
         }
         return inlineKeyboardButtonsRow;
+    }
+
+    private static List<InlineKeyboardButton> createInlineKeyboardRow(Map<String, String> buttonNamesAndQueries){
+    List<String> keyList = new ArrayList<>();
+    List<String> valueList = new ArrayList<>();
+    for(String key : buttonNamesAndQueries.keySet()){
+        keyList.add(key);
+        valueList.add(buttonNamesAndQueries.get(key));
+    }
+    return createInlineKeyboardRow(keyList, valueList);
     }
 
     public static ReplyKeyboard getInlineKeyboardForList(List<String> list){
