@@ -29,6 +29,8 @@ public class StandardListProcess extends Process {
 
     private Item item = null;
 
+    private int index = 0;
+
     public StandardListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
@@ -42,40 +44,99 @@ public class StandardListProcess extends Process {
         //Terms in this set need more userinformation in a further step
         Set<String> commandsWithLaterExecution = Set.of("Item hinzufügen", "Item löschen");
         if(action != null){
-            item = DBUtil.getStandardItem(getBot().getMassageFromUpdate(update).getText());
             if(action.equals("removeitem")){
-                try{
-                    item = DBUtil.getStandardItem(update.getCallbackQuery().getData());
-                    DBUtil.executeSQL("delete from StandardList where item='" +  item.getName() + "'");
-                    standardList.remove(item);
-                    getBot().sendAnswerCallbackQuery(item.getName() + " gelöscht.", false, update.getCallbackQuery());
-                    getBot().simpleEditMessage(item.getName() + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.StandardList_Current);
-                }catch (Exception e){
-                    LogUtil.logError(null, e);
+                removeItem(update);
+            }else{
+                if(action.equals("add")){
+                    if(!update.getMessage().hasPhoto() || update.getMessage().getCaption() == null || update.getMessage().getCaption().equals("")){
+                        getBot().sendMsg("Kein Bild oder Name für das Item dabei :/", update, KeyboardFactory.KeyBoardType.Abort, true,true);
+                        setAwaitsInput(true);
+                    }else {
+                        List<PhotoSize> photoList = update.getMessage().getPhoto();
+                        photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
+                        Collections.reverse(photoList);
+                        String filePath = getBot().getFilePath(photoList.get(0));
+                        File largestPhoto = getBot().downloadPhotoByFilePath(filePath);
+                        File newPhoto = new File(picturesFolder, largestPhoto.getName());
+                        try {
+                            FileUtils.copyFile(largestPhoto, newPhoto);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        item = new Item(update.getMessage().getCaption(), newPhoto);
+                        standardList.add(item);
+                        DBUtil.executeSQL("insert into StandardList(item, picturePath) Values ('" + item.getName() + "', '" + item.getPicturePath() + "')");
+                        Message message = getBot().sendMsg(item.getName() + " hinzugefügt! :)", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                        getSentMessages().add(message);
+                        close();
+                        return;
+                    }
                 }
             }
         }
-        if(!commandsWithLaterExecution.contains(getBot().getMassageFromUpdate(update).getText())){
+        if(getBot().getMassageFromUpdate(update).hasText() && !commandsWithLaterExecution.contains(getBot().getMassageFromUpdate(update).getText())){
             processInOneStep(arg, update, allowedUsersMap);
-        }else{
-            prepareForProcessing(update);
+        }else{Message message = getBot().getMassageFromUpdate(update);
+            switch (arg) {
+                case "done":
+                    this.close();
+                    break;
+                case "<<":
+                    index = 0;
+                    getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
+                    item = standardList.get(index);
+                    break;
+                case "<":
+                    index = index != 0 ? index - 1 : 0;
+                    getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
+                    item = standardList.get(index);
+                    break;
+                case "select":
+                    removeItem(update);
+                    break;
+                case ">":
+                    index = index == standardList.size() - 1 ? standardList.size() - 1 : index + 1;
+                    getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
+                    item = standardList.get(index);
+                    break;
+                case ">>":
+                    index = standardList.size() - 1;
+                    getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
+                    item = standardList.get(index);
+                    break;
+                default:
+                    prepareForProcessing(update);
+                    break;
+            }
         }
         getBot().setBusy(false);
     }
+    private void removeItem(Update update){
+        try{
+            DBUtil.executeSQL("delete from StandardList where item='" +  item.getName() + "'");
+            int indexOfItem = standardList.indexOf(item);
+            standardList.remove(item);
+            getBot().sendAnswerCallbackQuery(item.getName() + " gelöscht.", false, update.getCallbackQuery());
+getBot().sendOrEditSLIDESHOWMESSAGE("Gelöscht. Noch was?", indexOfItem == 0 ? standardList.get(0) : standardList.get( indexOfItem- 1), update);
+        }catch (Exception e){
+            LogUtil.logError(null, e);
+        }
+    }
 
     private void prepareForProcessing(Update update) {
-        Message message = null;
-        switch (update.getMessage().getText()){
+        Message message = getBot().getMassageFromUpdate(update);
+        switch (message.getText()){
             case "Item hinzufügen":
                 message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 action = "add";
+                setAwaitsInput(true);
                 break;
             case "Item löschen":
                 List<String> standardItemNames = new ArrayList<>();
-                DBUtil.getStandardListFromDB().forEach(item1 -> standardItemNames.add(item1.getName()));
                 ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(standardItemNames);
-                message = getBot().sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
-                action = "removeitem";
+                index = index > standardList.size()-1 ? standardList.size() - 1 : index;
+                message = getBot().sendOrEditSLIDESHOWMESSAGE("Was soll gelöscht werden?", standardList.get(index), update);
+                item = standardList.get(index);
                 break;
         }
         getSentMessages().add(message);
@@ -96,7 +157,7 @@ public class StandardListProcess extends Process {
         switch (input){
             case "done":
                 getBot().sendMsg("Ok :)", update, null, false, false);
-                close();
+                this.close();
                 break;
             case "Standardliste anzeigen":
                 StringBuilder stringBuilder = new StringBuilder("Aktuelle Standardliste:\n");
@@ -110,31 +171,6 @@ public class StandardListProcess extends Process {
                 }
                 break;
         }
-
-        arg = input.substring(input.indexOf(" ") + 1);
-        switch (action){
-            case "add":
-                if(!update.getMessage().hasPhoto() || update.getMessage().getCaption() == null || update.getMessage().getCaption().equals("")){
-                    getBot().sendMsg("Kein Bild oder Name für das Item dabei :/", update, KeyboardFactory.KeyBoardType.Abort, true,true);
-                }else {
-                    List<PhotoSize> photoList = update.getMessage().getPhoto();
-                    photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
-                    Collections.reverse(photoList);
-                    String filePath = getBot().getFilePath(photoList.get(0));
-                    File largestPhoto = getBot().downloadPhotoByFilePath(filePath);
-                    File newPhoto = new File(picturesFolder, largestPhoto.getName());
-                    try {
-                        FileUtils.copyFile(largestPhoto, newPhoto);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    standardList.add(new Item(arg, newPhoto));
-                    DBUtil.executeSQL("insert into StandardList(item, picturePath) Values ('" + item.getName() + "', '" + item.getPicturePath() + "')");
-                    Message message = getBot().sendMsg(arg + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
-                    getSentMessages().add(message);
-                }
-                break;
-        }
     }
 
     @Override
@@ -142,6 +178,19 @@ public class StandardListProcess extends Process {
         return "StandardList";
     }
 
+    @Override
+    public void close(){
+        this.clearButtons();
+        setDeleteLater(true);
+    }
+
+    @Override
+    public void clearButtons(){
+        for(Message message : getSentMessages()){
+            if(message != null){
+                    getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons);
+            }}
+    }
     private void checkForPictureFolder(){
         picturesFolder = new File(ObjectHub.getInstance().getArchiver().getResourceFolder(), "StandardListPictures");
         if(!picturesFolder.exists()){

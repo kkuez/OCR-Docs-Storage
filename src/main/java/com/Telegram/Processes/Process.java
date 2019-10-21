@@ -28,6 +28,8 @@ public abstract class Process {
 
     private boolean deleteLater = false;
 
+    private boolean awaitsInput = false;
+
     public abstract void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap);
 
     public abstract String getProcessName();
@@ -48,6 +50,14 @@ public abstract class Process {
 
     //GETTER SETTER
 
+
+    public boolean isAwaitsInput() {
+        return awaitsInput;
+    }
+
+    public void setAwaitsInput(boolean awaitsInput) {
+        this.awaitsInput = awaitsInput;
+    }
 
     public synchronized List<Message> getSentMessages() {
         return sentMessages;

@@ -14,9 +14,7 @@ import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import com.Utils.TessUtil;
 import org.apache.commons.io.FileUtils;
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
@@ -24,6 +22,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -32,6 +31,7 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -169,11 +169,16 @@ public class Bot extends TelegramLongPollingBot {
                     if (getBusy()) {
                         sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
                     } else {
-                        sendMsg("Verarbeite Bild...", update, null, true, false);
-                        processPhoto(update, allowedUsersMap);
-
+                        if(process != null && process.isAwaitsInput()){
+                            process.setAwaitsInput(false);
+                            process.performNextStep("comingPic", update, allowedUsersMap);
+                            allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                        }else {
+                            sendMsg("Verarbeite Bild...", update, null, true, false);
+                            processPhoto(update, allowedUsersMap);
+                        }
                     }
-                    }
+                }
             } catch (Exception e) {
                 LogUtil.logError(null, e);
                 throw new RuntimeException();
@@ -655,6 +660,55 @@ LogUtil.logError(e.getMessage(), e);
         answerCallbackQuery.setText(text);
         execute(answerCallbackQuery);
     }
+    public void deleteSLIDESHOWMESSAGE(Message message){
+        EditMessageMedia editMessageMedia = new EditMessageMedia();
+        editMessageMedia.setChatId(message.getChatId());
+        editMessageMedia.setMedia(new InputMediaPhoto());
+        editMessageMedia.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.NoButtons, true, false));
+        editMessageMedia.setMessageId(message.getMessageId());
+    try {
+            execute(editMessageMedia);
+        } catch (TelegramApiException e) {
+            LogUtil.logError("", e);
+        }
+    }
+
+    public Message sendOrEditSLIDESHOWMESSAGE(String text, Item item,  Update update){
+        Message messageToReturn = getMassageFromUpdate(update);
+        try(FileInputStream photoPath =  new FileInputStream(item.getPicturePath())){
+        if(update.hasCallbackQuery()){
+            //edit Fall
+            EditMessageMedia editMessageMedia = new EditMessageMedia();
+            editMessageMedia.setChatId(messageToReturn.getChatId());
+            InputMediaPhoto inputMediaPhoto = new InputMediaPhoto();
+            inputMediaPhoto.setMedia(item.getPicturePath(), item.getName());
+            inputMediaPhoto.setCaption(item.getName());
+            editMessageMedia.setMedia(inputMediaPhoto);
+            editMessageMedia.getMedia().setCaption(item.getName());
+            editMessageMedia.setMessageId(messageToReturn.getMessageId());
+            editMessageMedia.setReplyMarkup(messageToReturn.getReplyMarkup());
+            execute(editMessageMedia);
+            messageToReturn = update.getCallbackQuery().getMessage();
+            sendAnswerCallbackQuery(text, false, update.getCallbackQuery());
+        }else{
+            //firsche Nachricht
+            SendPhoto sendPhoto = new SendPhoto();
+                sendPhoto.setPhoto(item.getName(), photoPath);
+                sendPhoto.setChatId(update.getMessage().getChatId());
+                sendPhoto.setReplyMarkup(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.SlideShow, true, false));
+                sendPhoto.setCaption(item.getName());
+               messageToReturn = execute(sendPhoto);
+        }
+        } catch (FileNotFoundException e) {
+            LogUtil.logError("", e);
+        } catch (IOException e) {
+            LogUtil.logError("", e);
+        } catch (TelegramApiException e) {
+            LogUtil.logError("", e);
+        }
+        return messageToReturn;
+    }
+
     //GETTER SETTER
 
 

@@ -19,6 +19,8 @@ public class KeyboardFactory {
 
     private static List<InlineKeyboardButton> ABORT_ROW = createInlineKeyboardRow(Map.of("Abbrechen", "abort"));
 
+    public static List<InlineKeyboardButton> SLIDE_ROW = createInlineKeyboardRow(List.of("<<",  "<", "Select", ">",  ">>"), List.of("<<",  "<", "select", ">",  ">>"));
+
     public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard, boolean oneTimeKeyboard) {
         if(inlineKeyboard){
             InlineKeyboardMarkup replyKeyboardInline = new InlineKeyboardMarkup();
@@ -67,6 +69,10 @@ public class KeyboardFactory {
             case ShoppingList_Current:
                 List<String> shoppingList = DBUtil.getShoppingListFromDB();
                 shoppingList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, item))));
+                endKeyboard.add(DONE_ROW);
+                break;
+            case SlideShow:
+                endKeyboard.add(SLIDE_ROW);
                 endKeyboard.add(DONE_ROW);
                 break;
         }
@@ -162,7 +168,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, StandardList, StandardList_Current, Abort, Bons, NoButtons, Done
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, StandardList, StandardList_Current, Abort, Bons, NoButtons, Done, SlideShow
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();
