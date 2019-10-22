@@ -43,7 +43,7 @@ public class GetBonsProcess extends Process{
             }
             break;
             case "selectYear":
-                if(TimeUtil.getYearsSet().contains(arg)){
+                if(TimeUtil.getYearsSet().contains(commandValue[1])){
                     year = commandValue[1];
                     getBot().setBusy(true);
                     String parsedDate = month + "." + year;

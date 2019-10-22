@@ -539,7 +539,7 @@ LogUtil.logError(e.getMessage(), e);
                 e.printStackTrace();
             }
         }
-       /* if(keyBoardTypeOrNull != null && message.hasReplyMarkup()) {
+        if(keyBoardTypeOrNull != null && message.hasReplyMarkup()) {
             EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
             editMessageReplyMarkup.setChatId(message.getChatId());
             editMessageReplyMarkup.setMessageId(message.getMessageId());
@@ -553,7 +553,7 @@ LogUtil.logError(e.getMessage(), e);
                     LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
                 }
             }
-        }*/
+        }
         return message;
     }
 
