@@ -3,53 +3,24 @@ package com.Telegram.Processes;
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
-import com.Telegram.Item;
 import com.Telegram.KeyboardFactory;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.*;
 
 public class ShoppingListProcess extends Process{
 
-    String action = null;
-    String item = null;
-    int index = 0;
+    private AWAITING_INPUT status = null;
+
     public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         this.setBot(bot);
         getBot().setBusy(true);
-        performNextStep("asd", update,  allowedUsersMap);
-    }
-    @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
-        //Terms in this set need more userinformation in a further step
-        Set<String> commandsWithLaterExecution = Set.of("Hinzufügen", "Löschen");
-        if(action != null){
-            item = getBot().getMassageFromUpdate(update).getText();
-            if(action.equals("removeitem")){
-                try{
-                    item = update.getCallbackQuery().getData();
-                    DBUtil.executeSQL("delete from ShoppingList where item='" +  item + "'");
-                    getBot().getShoppingList().remove(item);
-                    getBot().sendAnswerCallbackQuery(item + " gelöscht.", false, update.getCallbackQuery());
-                        getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current);
-                    }catch (Exception e){
-                    LogUtil.logError(null, e);
-                }
-            }
-        }
-        Message message = getBot().getMassageFromUpdate(update);
-        if(!message.hasText() || !commandsWithLaterExecution.contains(message.getText())){
-            processInOneStep(arg, update, allowedUsersMap);
-        }else{
-            prepareForProcessing(update);
-        }
-        getBot().setBusy(false);
+        performNextStep("-", update,  allowedUsersMap);
     }
 
     private void sendShoppingList(Update update){
@@ -60,46 +31,28 @@ public class ShoppingListProcess extends Process{
         getBot().sendMsg(listeBuilder.toString(), update, null, false, false);
     }
 
-    private void prepareForProcessing(Update update){
+    @Override
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+        String[] commandValue = deserializeInput(update);
         Message message = null;
-        switch (update.getMessage().getText()){
-            case "Hinzufügen":
-                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.StandardList_Abort, false, true);
-                action = "add";
+        switch (commandValue[0]){
+            case "add":
+                String item = commandValue[1];
+                getBot().getShoppingList().add(item);
+                DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
+                message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                getSentMessages().add(message);
                 break;
-            case "Löschen":
-                ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getShoppingListFromDB());
-                message = getBot().sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
-                action = "removeitem";
-                break;
-        }
-        getSentMessages().add(message);
-    }
-
-    private void processInOneStep(String arg, Update update, Map<Integer, User> allowedUsersMap){
-        //TODO Total wirre implementierung der Standardliste hier. FUnktioniert aber alles nur geflickt ://
-        String input = null;
-        String cmd = arg;
-        if(arg.equals("done")){
-            input = "done";
-        }else{
-            if(KeyboardFactory.SLIDESHOW_COMMANDS.contains(arg)){
-                item = update.getCallbackQuery().getMessage().getCaption();
-                input = action + " " + item;
-                cmd = arg;
-            }else{
-            if(item != null){
-                input = action + " " + item;
-            }else{
-                input = getBot().getMassageFromUpdate(update).getText();
-            }}}
-
-        switch (input){
-            case "Liste Löschen":
-                DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
-                getBot().setShoppingList(new ArrayList<String>());
-                getBot().sendMsg("Einkaufsliste gelöscht :)", update, null, false, false);
-                close();
+            case "remove":
+                try{
+                    item = commandValue[1];
+                    DBUtil.executeSQL("delete from ShoppingList where item='" +  item + "'");
+                    getBot().getShoppingList().remove(item);
+                    getBot().sendAnswerCallbackQuery(item + " gelöscht.", false, update.getCallbackQuery());
+                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
+                }catch (Exception e){
+                    LogUtil.logError(null, e);
+                }
                 break;
             case "done":
                 getBot().sendMsg("Ok :)", update, null, false, false);
@@ -109,71 +62,38 @@ public class ShoppingListProcess extends Process{
                 sendShoppingList(update);
                 close();
                 break;
-            default:
-                if(!KeyboardFactory.SLIDESHOW_COMMANDS.contains(arg) || input.contains("add") && input.contains("removeitem")){
-                    cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
-                }
+            case "Liste Löschen":
+                DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
+                getBot().setShoppingList(new ArrayList<String>());
+                getBot().sendMsg("Einkaufsliste gelöscht :)", update, null, false, false);
+                close();
+                break;
+            case "Löschen":
+                ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getShoppingListFromDB(), "remove");
+                message = getBot().sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
+                break;
+            case "Hinzufügen":
+                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 break;
         }
-
-        arg = input.substring(input.indexOf(" ") + 1);
-        Message message = getBot().getMassageFromUpdate(update);
-        List<Item> standardList = DBUtil.getStandardListFromDB();
-        Item itemFromList = null;
-        String messageText = message.hasText() ? message.getText() : "";
-        switch (cmd) {
-            case "<<":
-                index = 0;
-                getBot().sendOrEditSLIDESHOWMESSAGE(messageText, standardList.get(index), update);
-                itemFromList = standardList.get(index);
-                break;
-            case "<":
-                index = index != 0 ? index - 1 : 0;
-                getBot().sendOrEditSLIDESHOWMESSAGE(messageText, standardList.get(index), update);
-                itemFromList = standardList.get(index);
-                break;
-            case ">":
-                index = index == standardList.size() - 1 ? standardList.size() - 1 : index + 1;
-                getBot().sendOrEditSLIDESHOWMESSAGE(messageText, standardList.get(index), update);
-                itemFromList = standardList.get(index);
-                break;
-            case ">>":
-                index = standardList.size() - 1;
-                getBot().sendOrEditSLIDESHOWMESSAGE(messageText, standardList.get(index), update);
-                itemFromList = standardList.get(index);
-                break;
-            case "select":
-                arg = update.getCallbackQuery().getMessage().getCaption();
-            case "add":
-
-                if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("Standardliste anzeigen")) {
-                    message = getBot().sendOrEditSLIDESHOWMESSAGE(standardList.size() == 0 ? "-leer-" : standardList.get(0).getName(), standardList.size() == 0 ? null : standardList.get(0), update);
-                    try {
-                        getBot().sendAnswerCallbackQuery("Standardliste anzeigen", false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        LogUtil.logError("", e);
-                    }
-                } else {
-                    getBot().getShoppingList().add(arg);
-                    DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
-                    if (update.hasCallbackQuery()) {
-
-                        try {
-                            getBot().sendAnswerCallbackQuery(arg + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        message = getBot().sendMsg(arg + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
-                    }
-                }
-                getSentMessages().add(message);
-                break;
+        getBot().setBusy(false);
+        if(message != null){
+            getSentMessages().add(message);
         }
     }
+
     @Override
     public String getProcessName() {
         return "Shoppinglist Process";
+    }
+
+    @Override
+    public String getCommandIfPossible(Update update) {
+        return status == AWAITING_INPUT.add ? "add" : "";
+    }
+
+    enum AWAITING_INPUT{
+        add
     }
 
     //GETTER SETTER

@@ -30,24 +30,21 @@ public class GetBonsProcess extends Process{
 
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+        String[] commandValue = deserializeInput(update);
         Message message = null;
-            switch (currentStep){
-                case Start:
-                    message = getBot().askMonth("Für welchem Monat...?", update, false);
-                    currentStep = Steps.selectMonth;
-                    break;
-                case selectMonth:
-                    if(TimeUtil.getMonthMap().keySet().contains(arg)) {
-                        month = TimeUtil.getMonthMap().get(arg);
-                        message = getBot().askYear("Für welches Jahr...?", update, false);
-                        currentStep = Steps.selectYear;
-                    }else{
-                        message = getBot().askMonth("Für welchem Monat...?", update, false);
-                    }
-                    break;
-                case selectYear:
-                    if(TimeUtil.getYearsSet().contains(arg)){
-                    year = arg;
+        switch (commandValue[0]){
+            case "selectMonth":
+                if(TimeUtil.getMonthMap().keySet().contains(commandValue[1])) {
+                    month = TimeUtil.getMonthMap().get(commandValue[1]);
+                message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
+                currentStep = Steps.selectYear;
+            }else{
+                message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
+            }
+            break;
+            case "selectYear":
+                if(TimeUtil.getYearsSet().contains(arg)){
+                    year = commandValue[1];
                     getBot().setBusy(true);
                     String parsedDate = month + "." + year;
                     ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
@@ -76,10 +73,14 @@ public class GetBonsProcess extends Process{
                     });
                     close();
                     getBot().setBusy(false);
-                    }else{
-                        message = getBot().askYear("Für welches Jahr...?", update, false);
-                    }
-                    break;
+                }else{
+                    message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
+                }
+            break;
+            default:
+                message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
+                currentStep = Steps.selectMonth;
+                break;
         }
         if(message != null){
             getSentMessages().add(message);
@@ -89,6 +90,20 @@ public class GetBonsProcess extends Process{
     @Override
     public String getProcessName() {
         return "Get-Bons";
+    }
+
+    @Override
+    public String getCommandIfPossible(Update update) {
+        if(update.hasCallbackQuery()){
+            if (update.getCallbackQuery().getData().startsWith("selectMonth")){
+                return "selectMonth";
+            }else{
+                if (update.getCallbackQuery().getData().startsWith("selectYear")){
+                    return "selectYear";
+                }
+            }
+        }
+        return "";
     }
 
     private enum Steps{

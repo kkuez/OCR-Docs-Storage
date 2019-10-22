@@ -26,4 +26,9 @@ public class StartProcess extends Process {
     public String getProcessName() {
         return "Start";
     }
+
+    @Override
+    public String getCommandIfPossible(Update update) {
+        return null;
+    }
 }

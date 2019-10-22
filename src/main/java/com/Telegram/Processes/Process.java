@@ -39,7 +39,7 @@ public abstract class Process {
     public void clearButtons(){
         for(Message message : getSentMessages()){
             if(message != null){
-            getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons);
+            getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons, "");
         }}
 }
 
@@ -47,6 +47,33 @@ public abstract class Process {
         clearButtons();
         setDeleteLater(true);
     }
+
+    public String[] deserializeInput(Update update){
+        String command = "";
+        String value = "";
+        String updateText = getBot().getMassageFromUpdate(update).getText();
+        if(update.hasCallbackQuery()){
+            if(updateText.startsWith("remove")){
+                command = "remove";
+                value = updateText.replace(command, "");
+            }else{
+                if(updateText.startsWith("add")){
+                    command = "add";
+                    value = updateText.replace(command, "");
+                }else{
+                    if(updateText.startsWith("done")){
+                        command = "done";
+                    }
+                }
+            }
+        }else{
+            command = getCommandIfPossible(update);
+            value = updateText.replace(command, "");
+        }
+        return new String[]{command, value};
+    }
+
+    public abstract String getCommandIfPossible(Update update);
 
     //GETTER SETTER
 

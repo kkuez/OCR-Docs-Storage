@@ -18,48 +18,26 @@ public class GetPicsProcess extends Process {
 
     String searchTerm;
 
-    String action;
-
-    String item;
+    Step currentStep = null;
 
     public GetPicsProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
         performNextStep(searchTerm, update, allowedUsersMap);
     }
+
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
-        getBot().setBusy(true);
-        Set<String> commandsWithLaterExecution = Set.of("Hole Bilder, Dokumente");
-        if(action != null){
-            item = update.getMessage().getText();
-        }
-
-        if(!commandsWithLaterExecution.contains(update.getMessage().getText())){
-            processInOneStep(arg, update, allowedUsersMap);
-        }else{
-            prepareForProcessing(update);
-        }
-
-    }
-
-    private void prepareForProcessing(Update update) {
-        Message message = getBot().sendMsg("Wonach soll gesucht werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
-        action = "getpics";
-        getBot().setBusy(false);
-        getSentMessages().add(message);
-    }
-
-    private void processInOneStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+        String[] commandValue = deserializeInput(update);
+        switch (commandValue[0]){
+            case "abort":
+                getBot().abortProcess(update, allowedUsersMap, getBot().getMassageFromUpdate(update).getFrom().getId());
+                break;
+            case "getPics":
                 List<Document> listOfDocs;
-                if(action != null){
-                    searchTerm = item;
-                    listOfDocs = DBUtil.getDocumentsForSearchTerm(item);
-                }else{
-                    String input = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
-                    searchTerm = input.substring(input.indexOf(" ") + 1);
+                    searchTerm = commandValue[1];
                     listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
-                }
+
                 List<InputMedia> inputMediaList = new ArrayList<>();
 
                 for(Document document1 : listOfDocs){
@@ -76,11 +54,31 @@ public class GetPicsProcess extends Process {
                 if(messages.size() > 0){
                     getBot().sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", update, null, true, false);
                 }
-        close();
+                close();
+                break;
+                default:
+                    Message message = getBot().sendMsg("Wonach soll gesucht werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                    currentStep = Step.getPics;
+                    getBot().setBusy(false);
+                    getSentMessages().add(message);
+                    break;
+        }
     }
 
     @Override
     public String getProcessName() {
         return "Get-Pics " + searchTerm;
+    }
+
+    @Override
+    public String getCommandIfPossible(Update update) {
+        if(currentStep ==  Step.getPics){
+            return "getPics";
+        }
+        return "";
+    }
+
+    enum Step{
+        getPics
     }
 }

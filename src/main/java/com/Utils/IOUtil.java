@@ -41,6 +41,8 @@ public class IOUtil {
         return result.exists() ? result : null;
     }
 
+
+
     public static Collection<File> createFileSetBySize(Collection<File> inputFiles){
         //Method to make sure only absolute different files in size will be processed
         Map<Long, File> fileMap = new HashMap<>();

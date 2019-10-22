@@ -17,34 +17,30 @@ public class SumProcess extends Process{
 
     private String year;
 
-    private Steps currentStep;
 
     public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
-        currentStep = Steps.Start;
+        Message message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
+        getSentMessages().add(message);
         performNextStep("", update, allowedUsersMap);
     }
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         Message message = null;
-        switch (currentStep){
-            case Start:
-                message = getBot().askMonth("Für welchem Monat...?", update, false);
-                currentStep = Steps.selectMonth;
-                break;
-            case selectMonth:
-                if(TimeUtil.getMonthMap().keySet().contains(update.getCallbackQuery().getData())) {
-                    month = TimeUtil.getMonthMap().get(update.getCallbackQuery().getData());
-                    message =  getBot().askYear("Für welches Jahr...?", update, false);
-                    currentStep = Steps.selectYear;
+        String[] commandValue = deserializeInput(update);
+        switch (commandValue[0]){
+            case "selectMonth":
+                if(TimeUtil.getMonthMap().keySet().contains(commandValue[1])) {
+                    month = TimeUtil.getMonthMap().get(commandValue[1]);
+                    message =  getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
                 }else{
-                    message = getBot().askMonth("Für welchem Monat...?", update, false);
+                    message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
                 }
                 break;
-            case selectYear:
-                year = update.getCallbackQuery().getData();
-                if(TimeUtil.getYearsSet().contains(year = update.getCallbackQuery().getData())) {
+            case "selectYear":
+                year = commandValue[1];
+                if(TimeUtil.getYearsSet().contains(year)) {
                     getBot().setBusy(true);
                     String parsedDate = month + "." + year;
                     float sumOfMonth = DBUtil.getSumMonth(parsedDate);
@@ -57,7 +53,7 @@ public class SumProcess extends Process{
                     getBot().setBusy(false);
                     close();
                 }else{
-                    message = getBot().askYear("Für welches Jahr...?", update, false);
+                    message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
                 }
                 break;
         }
@@ -71,8 +67,17 @@ public class SumProcess extends Process{
         return "Get sum";
     }
 
-    private enum Steps{
-        selectMonth, selectYear, Start
+    @Override
+    public String getCommandIfPossible(Update update) {
+        if(update.hasCallbackQuery()){
+            if(update.getCallbackQuery().getData().startsWith("selectMonth")){
+                return "selectMonth";
+            }else{
+                if(update.getCallbackQuery().getData().startsWith("selectYear")){
+                    return "selectYear";
+                }
+            }
+        }
+        return "";
     }
-
 }

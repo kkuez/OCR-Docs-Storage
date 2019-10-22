@@ -20,10 +20,10 @@ public class KeyboardFactory {
 
     public static List<InlineKeyboardButton> SLIDE_ROW = createInlineKeyboardRow(List.of("<<",  "<", "Select", ">",  ">>"), List.of("<<",  "<", "select", ">",  ">>"));
 
-    public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard, boolean oneTimeKeyboard) {
+    public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard, boolean oneTimeKeyboard, String callbackValuePrefix) {
         if(inlineKeyboard){
             InlineKeyboardMarkup replyKeyboardInline = new InlineKeyboardMarkup();
-            replyKeyboardInline.setKeyboard(createInlineKeyboard(keyBoardType));
+            replyKeyboardInline.setKeyboard(createInlineKeyboard(keyBoardType, callbackValuePrefix));
             if(oneTimeKeyboard){
                 LogUtil.log("No oneTimeKeyboard possible for InlineKeyboard.");
             }
@@ -40,7 +40,7 @@ public class KeyboardFactory {
         }
     }
 
-    private static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType){
+    private static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType, String valuePrefixOrNull){
         List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
         switch (keyBoardType){
             case Done:
@@ -58,15 +58,15 @@ public class KeyboardFactory {
                 endKeyboard.add(ABORT_ROW);
                 break;
             case Calendar_Month:
-                endKeyboard.add(createInlineKeyboardRow(List.of("JAN", "FEB","MÄR","APR"), List.of("JAN", "FEB","MÄR","APR")));
-                endKeyboard.add(createInlineKeyboardRow(List.of("MAI", "JUN","JUL","AUG"), List.of("MAI", "JUN","JUL","AUG")));
-                endKeyboard.add(createInlineKeyboardRow(List.of("SEP", "OKT","NOV","DEZ"), List.of("SEP", "OKT","NOV","DEZ")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("JAN", "FEB","MÄR","APR"), List.of(valuePrefixOrNull + "JAN", valuePrefixOrNull + "FEB",valuePrefixOrNull + "MÄR",valuePrefixOrNull + "APR")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("MAI", "JUN","JUL","AUG"), List.of(valuePrefixOrNull + "MAI",valuePrefixOrNull +  "JUN",valuePrefixOrNull + "JUL",valuePrefixOrNull + "AUG")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("SEP", "OKT","NOV","DEZ"), List.of(valuePrefixOrNull + "SEP",valuePrefixOrNull +  "OKT",valuePrefixOrNull + "NOV",valuePrefixOrNull + "DEZ")));
                 endKeyboard.add(ABORT_ROW);
                 break;
             case Calendar_Year:
-                endKeyboard.add(createInlineKeyboardRow(List.of("2009", "2010","2011","2012"), List.of("2009", "2010","2011","2012")));
-                endKeyboard.add(createInlineKeyboardRow(List.of("2013","2014","2015","2016"), List.of("2013","2014","2015","2016")));
-                endKeyboard.add(createInlineKeyboardRow(List.of("2017", "2018","2019","2020"), List.of("2017", "2018","2019","2020")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("2009", "2010","2011","2012"), List.of(valuePrefixOrNull + "2009", valuePrefixOrNull + "2010",valuePrefixOrNull + "2011",valuePrefixOrNull + "2012")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("2013","2014","2015","2016"), List.of(valuePrefixOrNull + "2013",valuePrefixOrNull  + "2014",valuePrefixOrNull + "2015",valuePrefixOrNull + "2016")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("2017", "2018","2019","2020"), List.of(valuePrefixOrNull + "2017", valuePrefixOrNull  + "2018",valuePrefixOrNull + "2019",valuePrefixOrNull + "2020")));
                 endKeyboard.add(ABORT_ROW);
                 break;
             case ShoppingList_Current:
@@ -102,11 +102,12 @@ public class KeyboardFactory {
     return createInlineKeyboardRow(keyList, valueList);
     }
 
-    public static ReplyKeyboard getInlineKeyboardForList(List<String> list){
+    public static ReplyKeyboard getInlineKeyboardForList(List<String> list, String valuePrefixOrNull){
+        String prefix = valuePrefixOrNull != null ? valuePrefixOrNull : "";
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
         for(String item : list){
-            List<InlineKeyboardButton> buttonRows = createInlineKeyboardRow(Map.of(item, item));
+            List<InlineKeyboardButton> buttonRows = createInlineKeyboardRow(Map.of(item, prefix + item));
             endKeyboard.add(buttonRows);
         }
         endKeyboard.add(DONE_ROW);

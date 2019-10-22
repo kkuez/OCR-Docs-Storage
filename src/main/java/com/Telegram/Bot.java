@@ -249,7 +249,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
 
                 if (process != null && process.getClass().equals(BonProcess.class)) {
-                    sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true));
+                    sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true, ""));
                 }else{
                     sendMsg("Fertig.", update,  null, true, false);
                 }
@@ -433,7 +433,7 @@ public class Bot extends TelegramLongPollingBot {
             allowedUsersMap.get(currentUserID).getProcess().close();
             String processName = allowedUsersMap.get(currentUserID).getProcess().getProcessName();
             LogUtil.log("User " + allowedUsersMap.get(currentUserID).getName() + " aborts " + allowedUsersMap.get(currentUserID).getProcess().getProcessName() + " Process.");
-            allowedUsersMap.get(currentUserID).setProcess(null);
+            allowedUsersMap.get(currentUserID).getProcess().close();
             sendMsg(processName + " abgebrochen.", update, null, false, false);
             try {
                 sendAnswerCallbackQuery(processName + " abgebrochen.",  false, update.getCallbackQuery());
@@ -479,7 +479,7 @@ LogUtil.logError(e.getMessage(), e);
         }
         return message;
     }
-    public  Message askMonth(String question, Update update,  boolean isReply) {
+    public  Message askMonth(String question, Update update,  boolean isReply, String callbackPrefix) {
         Message message = null;
         if (update.hasCallbackQuery()) {
             message = simpleEditMessage(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month);
@@ -513,11 +513,15 @@ LogUtil.logError(e.getMessage(), e);
     }
 
     //Convenience method to have one edit method for everything
+    public  Message simpleEditMessage(String text,  Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callBackPrefix){
+        Message message = getMassageFromUpdate(update);
+        return simpleEditMessage(text,  message, keyBoardTypeOrNull, callBackPrefix);
+    }
     public  Message simpleEditMessage(String text,  Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull){
         Message message = getMassageFromUpdate(update);
-        return simpleEditMessage(text,  message, keyBoardTypeOrNull);
+        return simpleEditMessage(text,  message, keyBoardTypeOrNull, "");
     }
-    public  Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull){
+    public  Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackPrefix){
 
         if(!message.hasText()){
             if(message.hasPhoto() && message.getCaption() != null){
@@ -538,7 +542,7 @@ LogUtil.logError(e.getMessage(), e);
             EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
             editMessageReplyMarkup.setChatId(message.getChatId());
             editMessageReplyMarkup.setMessageId(message.getMessageId());
-            editMessageReplyMarkup.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, true, false));
+            editMessageReplyMarkup.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, true, false, callbackPrefix));
             try {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {
@@ -552,12 +556,12 @@ LogUtil.logError(e.getMessage(), e);
         return message;
     }
 
-    public  Message askYear(String question, Update update, boolean isReply){
+    public  Message askYear(String question, Update update, boolean isReply, String callbackPrefix){
         Message message = null;
         if (update.hasCallbackQuery()) {
-            message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Year);
+            message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Year, callbackPrefix);
         } else {
-            message = sendMsg(question,  update, KeyboardFactory.KeyBoardType.Calendar_Year, isReply, true);
+            message = sendMsg(question,  update, KeyboardFactory.KeyBoardType.Calendar_Year, callbackPrefix, isReply, true);
         }
         return message;
     }
@@ -624,6 +628,9 @@ LogUtil.logError(e.getMessage(), e);
         return messageToReturn;
     }
     public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
+        return sendMsg(s, update, keyBoardTypeOrNull,isReply, inlineKeyboard);
+    }
+    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
         boolean isOneTimeKeyboard = false;
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
@@ -634,7 +641,7 @@ LogUtil.logError(e.getMessage(), e);
             sendMessage.setReplyToMessageId(message.getMessageId());
         }
         if(keyBoardTypeOrNull != null){
-            sendMessage.setReplyMarkup(KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard));
+            sendMessage.setReplyMarkup(KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard, callbackValuePrefix));
         }
         sendMessage.setText(s);
         Message messageToReturn = null;

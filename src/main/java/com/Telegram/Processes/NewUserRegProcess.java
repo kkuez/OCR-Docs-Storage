@@ -33,4 +33,9 @@ public class NewUserRegProcess extends Process {
     public String getProcessName() {
         return "New User Registration";
     }
+
+    @Override
+    public String getCommandIfPossible(Update update) {
+        return null;
+    }
 }

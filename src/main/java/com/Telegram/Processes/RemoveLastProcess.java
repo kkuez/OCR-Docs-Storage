@@ -26,4 +26,9 @@ public class RemoveLastProcess extends Process {
     public String getProcessName() {
         return "Remove last Picture";
     }
+
+    @Override
+    public String getCommandIfPossible(Update update) {
+        return null;
+    }
 }
