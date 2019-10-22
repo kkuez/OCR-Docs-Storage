@@ -70,6 +70,11 @@ public class KeyboardFactory {
                 shoppingList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
                 endKeyboard.add(DONE_ROW);
                 break;
+            case StandardList_Current:
+                List<String> standardList = DBUtil.getStandardListFromDB();
+                standardList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
+                endKeyboard.add(DONE_ROW);
+                break;
         }
         return endKeyboard;
     }
@@ -140,6 +145,14 @@ public class KeyboardFactory {
                 KeyboardRow keyboardShoppingListThirdRow = createKeyBoardRow(new String[]{"Start"});
                 keyboard.add(keyboardShoppingListThirdRow);
                 break;
+            case StandardList:
+                KeyboardRow keyboardStandardListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen", "Löschen"});
+                keyboard.add(keyboardStandardListFirstRow);
+                KeyboardRow keyboardStandardListSecondRow = createKeyBoardRow(new String[]{"Liste anzeigen"});
+                keyboard.add(keyboardStandardListSecondRow);
+                KeyboardRow keyboardStandardListThirdRow = createKeyBoardRow(new String[]{"Start"});
+                keyboard.add(keyboardStandardListThirdRow);
+                break;
             case Start:
                 KeyboardRow keyboardStartFirstRow = createKeyBoardRow(new String[]{"Bon eingeben"});
                 keyboard.add(keyboardStartFirstRow);
@@ -169,7 +182,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, Abort, Bons, NoButtons, Done
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();
