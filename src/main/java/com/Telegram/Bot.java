@@ -354,9 +354,6 @@ public class Bot extends TelegramLongPollingBot {
         if(textGivenByUser != null) {
             String input = textGivenByUser;
             switch (input){
-                case "Anzahl Dokumente":
-                    processToReturn = new SearchProcess(this, update,(ProgressReporter) progressReporter, allowedUsersMap);
-                    break;
                 case "start":
                 case "Start":
                     processToReturn = new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
