@@ -673,25 +673,25 @@ LogUtil.logError(e.getMessage(), e);
     public Message sendOrEditSLIDESHOWMESSAGE(String text, Item item,  Update update){
         Message messageToReturn = getMassageFromUpdate(update);
         try(FileInputStream photoPath =  new FileInputStream(item.getPicturePath())){
-        if(update.hasCallbackQuery()){
-            //edit Fall
-            EditMessageMedia editMessageMedia = new EditMessageMedia();
-            editMessageMedia.setChatId(messageToReturn.getChatId());
-            InputMediaPhoto inputMediaPhoto = new InputMediaPhoto();
-            inputMediaPhoto.setMedia(item.getPicturePath(), item.getName());
-            inputMediaPhoto.setCaption(item.getName());
-            editMessageMedia.setMedia(inputMediaPhoto);
-            editMessageMedia.getMedia().setCaption(item.getName());
-            editMessageMedia.setMessageId(messageToReturn.getMessageId());
-            editMessageMedia.setReplyMarkup(messageToReturn.getReplyMarkup());
-            execute(editMessageMedia);
-            messageToReturn = update.getCallbackQuery().getMessage();
-            sendAnswerCallbackQuery(text, false, update.getCallbackQuery());
+        if(update.hasCallbackQuery() && update.getCallbackQuery().getMessage().hasPhoto()){
+                //edit Fall
+                EditMessageMedia editMessageMedia = new EditMessageMedia();
+                editMessageMedia.setChatId(messageToReturn.getChatId());
+                InputMediaPhoto inputMediaPhoto = new InputMediaPhoto();
+                inputMediaPhoto.setMedia(item.getPicturePath(), item.getName());
+                inputMediaPhoto.setCaption(!text.equals("") || text != null ? text : item.getName());
+                editMessageMedia.setMedia(inputMediaPhoto);
+                editMessageMedia.getMedia().setCaption(item.getName());
+                editMessageMedia.setMessageId(messageToReturn.getMessageId());
+                editMessageMedia.setReplyMarkup(messageToReturn.getReplyMarkup());
+                execute(editMessageMedia);
+                messageToReturn = update.getCallbackQuery().getMessage();
+                sendAnswerCallbackQuery(text, false, update.getCallbackQuery());
         }else{
             //firsche Nachricht
             SendPhoto sendPhoto = new SendPhoto();
                 sendPhoto.setPhoto(item.getName(), photoPath);
-                sendPhoto.setChatId(update.getMessage().getChatId());
+                sendPhoto.setChatId(getMassageFromUpdate(update).getChatId());
                 sendPhoto.setReplyMarkup(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.SlideShow, true, false));
                 sendPhoto.setCaption(item.getName());
                messageToReturn = execute(sendPhoto);

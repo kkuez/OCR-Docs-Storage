@@ -50,6 +50,10 @@ public class KeyboardFactory {
             case Abort:
                 endKeyboard.add(ABORT_ROW);
                 break;
+            case StandardList_Abort:
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Standardliste anzeigen", "Standardliste anzeigen")));
+                endKeyboard.add(ABORT_ROW);
+                break;
             case Boolean:
                 endKeyboard.add(createInlineKeyboardRow(Map.of("Japp", "confirm", "Nee", "deny")));
                 endKeyboard.add(ABORT_ROW);
@@ -121,7 +125,7 @@ public class KeyboardFactory {
                 keyboard.add(keyboardFirstRow);
                 break;
                 case ShoppingList:
-                KeyboardRow keyboardShoppingListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen", "Standarditem hinzufügen"});
+                KeyboardRow keyboardShoppingListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen"});
                 keyboard.add(keyboardShoppingListFirstRow);
                 KeyboardRow keyboardShoppingListSecondRow = createKeyBoardRow(new String[]{"Löschen"});
                 keyboard.add(keyboardShoppingListSecondRow);
@@ -168,7 +172,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, StandardList, StandardList_Current, Abort, Bons, NoButtons, Done, SlideShow
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, StandardList, StandardList_Current, Abort, Bons, NoButtons, Done, SlideShow, StandardList_Abort
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();

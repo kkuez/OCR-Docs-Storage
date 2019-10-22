@@ -3,12 +3,14 @@ package com.Telegram.Processes;
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
+import com.Telegram.Item;
 import com.Telegram.KeyboardFactory;
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.*;
 
@@ -16,7 +18,7 @@ public class ShoppingListProcess extends Process{
 
     String action = null;
     String item = null;
-
+    int index = 0;
     public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         this.setBot(bot);
@@ -41,7 +43,8 @@ public class ShoppingListProcess extends Process{
                 }
             }
         }
-        if(!commandsWithLaterExecution.contains(getBot().getMassageFromUpdate(update).getText())){
+        Message message = getBot().getMassageFromUpdate(update);
+        if(!message.hasText() || !commandsWithLaterExecution.contains(message.getText())){
             processInOneStep(arg, update, allowedUsersMap);
         }else{
             prepareForProcessing(update);
@@ -61,7 +64,7 @@ public class ShoppingListProcess extends Process{
         Message message = null;
         switch (update.getMessage().getText()){
             case "Hinzufügen":
-                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.StandardList_Abort, false, true);
                 action = "add";
                 break;
             case "Löschen":
@@ -79,11 +82,15 @@ public class ShoppingListProcess extends Process{
         if(arg.equals("done")){
             input = "done";
         }else{
+            if(arg.equals("select")){
+                item = update.getCallbackQuery().getMessage().getCaption();
+                input = action + " " + item;
+            }else{
             if(item != null){
                 input = action + " " + item;
             }else{
                 input = getBot().getMassageFromUpdate(update).getText();
-            }}
+            }}}
 
         switch (input){
             case "Liste Löschen":
@@ -108,12 +115,56 @@ public class ShoppingListProcess extends Process{
         }
 
         arg = input.substring(input.indexOf(" ") + 1);
+        Message message = getBot().getMassageFromUpdate(update);
+        List<Item> standardList = DBUtil.getStandardListFromDB();
+        Item itemFromList = null;
         switch (cmd){
+            case "select":
+                arg = update.getCallbackQuery().getMessage().getCaption();
             case "add":
-                getBot().getShoppingList().add(arg);
-                DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
-                Message message = getBot().sendMsg(arg + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+
+                if(update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("Standardliste anzeigen")){
+                    message = getBot().sendOrEditSLIDESHOWMESSAGE(standardList.size() == 0 ? "-leer-" : standardList.get(0).getName(), standardList.size() == 0 ? null : standardList.get(0), update);
+                    try {
+                        getBot().sendAnswerCallbackQuery("Standardliste anzeigen", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        LogUtil.logError("", e);
+                    }
+                }else {
+                    getBot().getShoppingList().add(arg);
+                    DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
+                    if (update.hasCallbackQuery()) {
+
+                        try {
+                            getBot().sendAnswerCallbackQuery(arg + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        message = getBot().sendMsg(arg + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                    }
+                }
                 getSentMessages().add(message);
+                break;
+            case "<<":
+                index = 0;
+                getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
+                itemFromList = standardList.get(index);
+                break;
+            case "<":
+                index = index != 0 ? index - 1 : 0;
+                getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
+                itemFromList = standardList.get(index);
+                break;
+            case ">":
+                index = index == standardList.size() - 1 ? standardList.size() - 1 : index + 1;
+                getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
+                itemFromList = standardList.get(index);
+                break;
+            case ">>":
+                index = standardList.size() - 1;
+                getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
+                itemFromList = standardList.get(index);
                 break;
         }
     }
