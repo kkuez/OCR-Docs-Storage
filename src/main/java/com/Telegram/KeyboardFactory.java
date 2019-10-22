@@ -8,16 +8,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KeyboardFactory {
 
     private static List<InlineKeyboardButton> DONE_ROW = createInlineKeyboardRow(Map.of("Fertig", "done"));
 
     private static List<InlineKeyboardButton> ABORT_ROW = createInlineKeyboardRow(Map.of("Abbrechen", "abort"));
+
+    public static Set<String> SLIDESHOW_COMMANDS = Set.of("<<", "<", "select", ">",  ">>");
 
     public static List<InlineKeyboardButton> SLIDE_ROW = createInlineKeyboardRow(List.of("<<",  "<", "Select", ">",  ">>"), List.of("<<",  "<", "select", ">",  ">>"));
 

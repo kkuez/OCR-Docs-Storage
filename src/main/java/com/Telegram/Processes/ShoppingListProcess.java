@@ -77,14 +77,16 @@ public class ShoppingListProcess extends Process{
     }
 
     private void processInOneStep(String arg, Update update, Map<Integer, User> allowedUsersMap){
+        //TODO Total wirre implementierung der Standardliste hier. FUnktioniert aber alles nur geflickt ://
         String input = null;
         String cmd = arg;
         if(arg.equals("done")){
             input = "done";
         }else{
-            if(arg.equals("select")){
+            if(KeyboardFactory.SLIDESHOW_COMMANDS.contains(arg)){
                 item = update.getCallbackQuery().getMessage().getCaption();
                 input = action + " " + item;
+                cmd = arg;
             }else{
             if(item != null){
                 input = action + " " + item;
@@ -108,7 +110,7 @@ public class ShoppingListProcess extends Process{
                 close();
                 break;
             default:
-                if((input.contains("add") || input.contains("removeitem"))){
+                if(!KeyboardFactory.SLIDESHOW_COMMANDS.contains(arg) || input.contains("add") && input.contains("removeitem")){
                     cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
                 }
                 break;
@@ -118,19 +120,40 @@ public class ShoppingListProcess extends Process{
         Message message = getBot().getMassageFromUpdate(update);
         List<Item> standardList = DBUtil.getStandardListFromDB();
         Item itemFromList = null;
-        switch (cmd){
+        String messageText = message.hasText() ? message.getText() : "";
+        switch (cmd) {
+            case "<<":
+                index = 0;
+                getBot().sendOrEditSLIDESHOWMESSAGE(messageText, standardList.get(index), update);
+                itemFromList = standardList.get(index);
+                break;
+            case "<":
+                index = index != 0 ? index - 1 : 0;
+                getBot().sendOrEditSLIDESHOWMESSAGE(messageText, standardList.get(index), update);
+                itemFromList = standardList.get(index);
+                break;
+            case ">":
+                index = index == standardList.size() - 1 ? standardList.size() - 1 : index + 1;
+                getBot().sendOrEditSLIDESHOWMESSAGE(messageText, standardList.get(index), update);
+                itemFromList = standardList.get(index);
+                break;
+            case ">>":
+                index = standardList.size() - 1;
+                getBot().sendOrEditSLIDESHOWMESSAGE(messageText, standardList.get(index), update);
+                itemFromList = standardList.get(index);
+                break;
             case "select":
                 arg = update.getCallbackQuery().getMessage().getCaption();
             case "add":
 
-                if(update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("Standardliste anzeigen")){
+                if (update.hasCallbackQuery() && update.getCallbackQuery().getData().equals("Standardliste anzeigen")) {
                     message = getBot().sendOrEditSLIDESHOWMESSAGE(standardList.size() == 0 ? "-leer-" : standardList.get(0).getName(), standardList.size() == 0 ? null : standardList.get(0), update);
                     try {
                         getBot().sendAnswerCallbackQuery("Standardliste anzeigen", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         LogUtil.logError("", e);
                     }
-                }else {
+                } else {
                     getBot().getShoppingList().add(arg);
                     DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + arg + "')");
                     if (update.hasCallbackQuery()) {
@@ -145,26 +168,6 @@ public class ShoppingListProcess extends Process{
                     }
                 }
                 getSentMessages().add(message);
-                break;
-            case "<<":
-                index = 0;
-                getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
-                itemFromList = standardList.get(index);
-                break;
-            case "<":
-                index = index != 0 ? index - 1 : 0;
-                getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
-                itemFromList = standardList.get(index);
-                break;
-            case ">":
-                index = index == standardList.size() - 1 ? standardList.size() - 1 : index + 1;
-                getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
-                itemFromList = standardList.get(index);
-                break;
-            case ">>":
-                index = standardList.size() - 1;
-                getBot().sendOrEditSLIDESHOWMESSAGE(message.getText(), standardList.get(index), update);
-                itemFromList = standardList.get(index);
                 break;
         }
     }
