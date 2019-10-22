@@ -49,10 +49,12 @@ public abstract class Process {
     }
 
     public String[] deserializeInput(Update update){
-        String command = "";
-        String value = "";
-        String updateText = getBot().getMassageFromUpdate(update).getText();
+        String command = getCommandIfPossible(update);
+        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  getBot().getMassageFromUpdate(update).getText();
+        String value = updateText.replace(command, "");
+
         if(update.hasCallbackQuery()){
+             updateText = update.getCallbackQuery().getData();
             if(updateText.startsWith("remove")){
                 command = "remove";
                 value = updateText.replace(command, "");
@@ -66,9 +68,6 @@ public abstract class Process {
                     }
                 }
             }
-        }else{
-            command = getCommandIfPossible(update);
-            value = updateText.replace(command, "");
         }
         return new String[]{command, value};
     }

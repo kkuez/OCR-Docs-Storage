@@ -482,9 +482,9 @@ LogUtil.logError(e.getMessage(), e);
     public  Message askMonth(String question, Update update,  boolean isReply, String callbackPrefix) {
         Message message = null;
         if (update.hasCallbackQuery()) {
-            message = simpleEditMessage(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month);
+            message = simpleEditMessage(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month, callbackPrefix);
         } else {
-            message = sendMsg(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month, isReply, true);
+            message = sendMsg(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month, callbackPrefix, isReply, true);
         }
         return message;
     }
@@ -532,13 +532,14 @@ LogUtil.logError(e.getMessage(), e);
             editMessageText.setChatId(message.getChatId());
             editMessageText.setMessageId(message.getMessageId());
             editMessageText.setText(text);
+            editMessageText.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, true, false, callbackPrefix));
             try {
                 execute(editMessageText);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
-        if(keyBoardTypeOrNull != null && message.hasReplyMarkup()) {
+       /* if(keyBoardTypeOrNull != null && message.hasReplyMarkup()) {
             EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
             editMessageReplyMarkup.setChatId(message.getChatId());
             editMessageReplyMarkup.setMessageId(message.getMessageId());
@@ -552,7 +553,7 @@ LogUtil.logError(e.getMessage(), e);
                     LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
                 }
             }
-        }
+        }*/
         return message;
     }
 
@@ -628,7 +629,7 @@ LogUtil.logError(e.getMessage(), e);
         return messageToReturn;
     }
     public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
-        return sendMsg(s, update, keyBoardTypeOrNull,isReply, inlineKeyboard);
+        return sendMsg(s, update, keyBoardTypeOrNull, "", isReply, inlineKeyboard);
     }
     public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
         boolean isOneTimeKeyboard = false;

@@ -48,7 +48,7 @@ public class ShoppingListProcess extends Process{
                     item = commandValue[1];
                     DBUtil.executeSQL("delete from ShoppingList where item='" +  item + "'");
                     getBot().getShoppingList().remove(item);
-                    getBot().sendAnswerCallbackQuery(item + " gelöscht.", false, update.getCallbackQuery());
+                    getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
                     getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
                 }catch (Exception e){
                     LogUtil.logError(null, e);
@@ -74,6 +74,7 @@ public class ShoppingListProcess extends Process{
                 break;
             case "Hinzufügen":
                 message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                status = AWAITING_INPUT.add;
                 break;
         }
         getBot().setBusy(false);
@@ -89,7 +90,15 @@ public class ShoppingListProcess extends Process{
 
     @Override
     public String getCommandIfPossible(Update update) {
-        return status == AWAITING_INPUT.add ? "add" : "";
+        if(status == AWAITING_INPUT.add){
+            return "add";
+        }else{
+            if(update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("remove")){
+                return "remove";
+            }
+        }
+
+        return update.getMessage().getText();
     }
 
     enum AWAITING_INPUT{

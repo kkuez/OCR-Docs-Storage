@@ -94,11 +94,12 @@ public class GetBonsProcess extends Process{
 
     @Override
     public String getCommandIfPossible(Update update) {
+        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  getBot().getMassageFromUpdate(update).getText();
         if(update.hasCallbackQuery()){
-            if (update.getCallbackQuery().getData().startsWith("selectMonth")){
+            if (updateText.startsWith("selectMonth")){
                 return "selectMonth";
             }else{
-                if (update.getCallbackQuery().getData().startsWith("selectYear")){
+                if (updateText.startsWith("selectYear")){
                     return "selectYear";
                 }
             }
