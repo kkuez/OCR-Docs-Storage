@@ -98,7 +98,7 @@ public class ShoppingListProcess extends Process{
             }
         }
 
-        return update.getMessage().getText();
+        return !update.hasCallbackQuery() ? update.getMessage().getText() : "";
     }
 
     enum AWAITING_INPUT{
