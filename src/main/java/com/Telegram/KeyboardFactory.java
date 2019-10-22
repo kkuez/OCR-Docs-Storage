@@ -142,7 +142,7 @@ public class KeyboardFactory {
                 keyboard.add(keyboardShoppingListFirstRow);
                 KeyboardRow keyboardShoppingListSecondRow = createKeyBoardRow(new String[]{"Liste anzeigen", "Liste Löschen"});
                 keyboard.add(keyboardShoppingListSecondRow);
-                KeyboardRow keyboardShoppingListThirdRow = createKeyBoardRow(new String[]{"Start"});
+                KeyboardRow keyboardShoppingListThirdRow = createKeyBoardRow(new String[]{"Standardliste: Optionen", "Start"});
                 keyboard.add(keyboardShoppingListThirdRow);
                 break;
             case StandardList:

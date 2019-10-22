@@ -354,6 +354,10 @@ public class Bot extends TelegramLongPollingBot {
         if(textGivenByUser != null) {
             String input = textGivenByUser;
             switch (input){
+                case "Standardliste: Optionen":
+                processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""), false);
+                break;
                 case "start":
                 case "Start":
                     processToReturn = new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
