@@ -47,8 +47,6 @@ import java.util.*;
 
 public class Bot extends TelegramLongPollingBot {
 
-    private Boolean isBusy;
-
     private List<String> shoppingList;
 
     private Reporter progressReporter;
@@ -58,7 +56,6 @@ public class Bot extends TelegramLongPollingBot {
     public Bot(Map<Integer, User> allowedUsersMap) {
         this.allowedUsersMap = allowedUsersMap;
         shoppingList = DBUtil.getShoppingListFromDB();
-        setBusy(false);
         progressReporter = new ProgressReporter() {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
@@ -121,6 +118,7 @@ public class Bot extends TelegramLongPollingBot {
     public void processUpdateReceveived(Update update) throws Exception{
         int currentUserID;
         String textGivenByUser;
+        boolean isBusy = allowedUsersMap.get(getMassageFromUpdate(update).getFrom().getId()).isBusy();
         if(update.hasCallbackQuery()){
             currentUserID = update.getCallbackQuery().getFrom().getId();
             textGivenByUser = update.getCallbackQuery().getData();
@@ -136,7 +134,7 @@ public class Bot extends TelegramLongPollingBot {
                     allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
                     allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
                 } else {
-                    if (getBusy()) {
+                    if (isBusy) {
                         sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
                     } else {
                         if (update.hasMessage() && update.getMessage().hasPhoto()) {
@@ -174,8 +172,9 @@ public class Bot extends TelegramLongPollingBot {
         ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
             @Override
             public void run() {
-                Process process = allowedUsersMap.get(update.getMessage().getFrom().getId()).getProcess();
-                setBusy(true);
+                User user = allowedUsersMap.get(update.getMessage().getFrom().getId());
+                Process process = user.getProcess();
+                user.setBusy(true);
                 File largestPhoto = null;
                 List<PhotoSize> photoList = update.getMessage().getPhoto();
                 photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
@@ -221,7 +220,7 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg("Fertig.", update,  null, true, false);
                 }
                 LogUtil.log("Processed " + document.getOriginalFileName());
-                setBusy(false);
+                user.setBusy(false);
             }
         });
     }
@@ -241,6 +240,7 @@ public class Bot extends TelegramLongPollingBot {
 
     public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
         SendPhoto sendPhoto = null;
+        User user = allowedUsersMap.get(update.getMessage().getFrom().getId());
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
             sendPhoto.setCaption(caption);
@@ -260,7 +260,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(sendPhoto);
         } catch (TelegramApiException e) {
-            setBusy(false);
+            user.setBusy(false);
             sendMsg("Fehler, Aktion abgebrochen.",update,  null, true, false);
             LogUtil.logError(null, e);
         }
@@ -387,8 +387,9 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public void abortProcess(Update update, int currentUserID){
-        if(allowedUsersMap.get(currentUserID).getProcess() != null) {
-            this.setBusy(false);
+        User user = allowedUsersMap.get(currentUserID);
+        if(user.getProcess() != null) {
+            user.setBusy(false);
             allowedUsersMap.get(currentUserID).getProcess().close();
             String processName = allowedUsersMap.get(currentUserID).getProcess().getProcessName();
             LogUtil.log("User " + allowedUsersMap.get(currentUserID).getName() + " aborts " + allowedUsersMap.get(currentUserID).getProcess().getProcessName() + " Process.");
@@ -642,11 +643,5 @@ public class Bot extends TelegramLongPollingBot {
         this.shoppingList = shoppingList;
     }
 
-    public Boolean getBusy() {
-        return isBusy;
-    }
-
-    public void setBusy(Boolean busy) {
-        isBusy = busy;
     }
 }

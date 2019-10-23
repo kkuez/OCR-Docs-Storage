@@ -15,6 +15,8 @@ public class User {
     private Process process = null;
 
     boolean aboutToUploadFile = false;
+
+    private boolean isBusy = false;
     //NO InlineKeyboards!
     private ReplyKeyboard keyboardContext = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Start, false, false, "");
 
@@ -25,6 +27,14 @@ public class User {
     };
 
     //GETTER SETTER
+
+    public boolean isBusy() {
+        return isBusy;
+    }
+
+    public void setBusy(boolean busy) {
+        isBusy = busy;
+    }
 
     public ReplyKeyboard getKeyboardContext() {
         return keyboardContext;
