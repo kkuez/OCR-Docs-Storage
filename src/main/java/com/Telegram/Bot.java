@@ -55,8 +55,8 @@ public class Bot extends TelegramLongPollingBot {
 
     Map<Integer, User> allowedUsersMap;
 
-    public Bot() {
-        allowedUsersMap = ObjectHub.getInstance().getAllowedUsersMap();
+    public Bot(Map<Integer, User> allowedUsersMap) {
+        this.allowedUsersMap = allowedUsersMap;
         shoppingList = DBUtil.getShoppingListFromDB();
         setBusy(false);
         progressReporter = new ProgressReporter() {
@@ -98,32 +98,26 @@ public class Bot extends TelegramLongPollingBot {
                 abortProcess(update, currentUserID);
             }
         }else{
-            textGivenByUser = update.getMessage().getText();
             currentUserID = update.getMessage().getFrom().getId();
             userName = update.getMessage().getFrom().getFirstName();
         }
-        Process process = null;
+
+        //Check if user is in System
         if(allowedUsersMap.get(currentUserID) == null){
-           allowedUsersMap.put(currentUserID, new User(currentUserID, userName));
+            allowedUsersMap.put(currentUserID, new User(currentUserID, userName));
             sendMsg("Hallo " + userName + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", update, null, true, false);
             allowedUsersMap.get(currentUserID).setProcess(new NewUserRegProcess(this, (ProgressReporter) progressReporter));
             return;
         }
-
-        if(allowedUsersMap.keySet().contains(currentUserID)){
-            try {
-                processUpdateReceveived(update);
-            }catch (Exception e){
-                LogUtil.logError(null, e);
-                LogUtil.log("Update added to perform later...");
-                ObjectHub.getInstance().getTaskshub().getTasksToDo().add(new UpdateTask(update, this, new NextPerformanceStrategy()));
-            }
-        }else{
-            if(process != null && process.getClass().equals(NewUserRegProcess.class)){
-                process.performNextStep(textGivenByUser, update, allowedUsersMap);
-            }
+        try {
+            processUpdateReceveived(update);
+        }catch (Exception e){
+            LogUtil.logError(null, e);
+            LogUtil.log("Update added to perform later...");
+            ObjectHub.getInstance().getTaskshub().getTasksToDo().add(new UpdateTask(update, this, new NextPerformanceStrategy()));
         }
     }
+
     public void processUpdateReceveived(Update update) throws Exception{
         int currentUserID;
         String textGivenByUser;
@@ -136,45 +130,27 @@ public class Bot extends TelegramLongPollingBot {
         }
         Process process = allowedUsersMap.get(currentUserID).getProcess();
 
-            try {
-                if (textGivenByUser != null) {
-                    String input = textGivenByUser;
-                    if (process == null) {
-                        allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
-                        allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
-                        if (input.startsWith("Bon eingeben")) {
-                            allowedUsersMap.get(currentUserID).setAboutToUploadFile(true);
-                            sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
-                        }
-                    } else {
-                        if (getBusy()) {
-                            sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
-                        } else {
-                            if (input.startsWith("Japp") || input.startsWith("confirm")) {
-                                process.performNextStep("Japp", update, allowedUsersMap);
-                            } else {
-                                if (input.startsWith("Nee") || input.startsWith("deny")) {
-                                    process.performNextStep("Nee", update, allowedUsersMap);
-                                } else {
-                                    process.performNextStep(input, update, allowedUsersMap);
-                                    allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (update.hasMessage() && update.getMessage().hasPhoto()) {
+        try {
+                if (process == null) {
+                    //Set process if null
+                    allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
+                    allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                } else {
                     if (getBusy()) {
                         sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
                     } else {
-                        sendMsg("Verarbeite Bild...", update, null, true, false);
-                        processPhoto(update);
-
+                        if (update.hasMessage() && update.getMessage().hasPhoto()) {
+                                sendMsg("Verarbeite Bild...", update, null, true, false);
+                                processPhoto(update);
+                        }else{
+                                process.performNextStep(textGivenByUser, update, allowedUsersMap);
+                                allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
                     }
                     }
-            } catch (Exception e) {
-                LogUtil.logError(null, e);
-                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            LogUtil.logError(null, e);
+            throw new RuntimeException();
         }
     }
 
@@ -219,7 +195,7 @@ public class Bot extends TelegramLongPollingBot {
                 } catch (IOException e) {
                     LogUtil.logError(largestPhoto.getAbsolutePath(), e);
                 }
-                Boolean forceBon = update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().contains("eatbon") || allowedUsersMap.get(update.getMessage().getFrom().getId()).isAboutToUploadFile();
+
 
                 Set<String> tags = null;
                 if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
@@ -229,13 +205,11 @@ public class Bot extends TelegramLongPollingBot {
                 Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
                 try {
 
-                    if((TessUtil.checkIfBon(document.getContent()) || forceBon) && this != null){
+                    if((TessUtil.checkIfBon(document.getContent()) || process instanceof BonProcess)){
                         float sum = TessUtil.getLastNumber(document.getContent());
                         Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
-                        process = new BonProcess(bon, Bot.this, document, (ProgressReporter) progressReporter, allowedUsersMap);
-                       allowedUsersMap.get(update.getMessage().getFrom().getId()).setProcess(process);
-                        allowedUsersMap.get(update.getMessage().getFrom().getId()).setAboutToUploadFile(false);
-
+                        BonProcess bonProcess = (BonProcess) process;
+                        bonProcess.setBon(bon);
                     }
                 } catch (Exception e) {
                     LogUtil.logError(null, e);
@@ -265,7 +239,7 @@ public class Bot extends TelegramLongPollingBot {
         return tags;
     }
 
-     public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
+    public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
         SendPhoto sendPhoto = null;
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
@@ -274,8 +248,8 @@ public class Bot extends TelegramLongPollingBot {
                 //Japp nee
                 sendPhoto.setReplyMarkup(possibleKeyBoardOrNull);
                 if(!(possibleKeyBoardOrNull instanceof InlineKeyboardMarkup)){
-                allowedUsersMap.get(getMassageFromUpdate(update).getFrom().getId()).setKeyboardContext(possibleKeyBoardOrNull);
-            }
+                    allowedUsersMap.get(getMassageFromUpdate(update).getFrom().getId()).setKeyboardContext(possibleKeyBoardOrNull);
+                }
             }
         } catch (FileNotFoundException e) {
             LogUtil.logError(imagePath, e);
@@ -330,10 +304,14 @@ public class Bot extends TelegramLongPollingBot {
         if(textGivenByUser != null) {
             String input = textGivenByUser;
             switch (input){
+                case "Bon eingeben":
+                    sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                    processToReturn = new BonProcess(this, (ProgressReporter) progressReporter);
+                    break;
                 case "Standardliste: Optionen":
-                processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
-                sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""), false);
-                break;
+                    processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                    sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""), false);
+                    break;
                 case "start":
                 case "Start":
                     processToReturn = new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
@@ -426,10 +404,10 @@ public class Bot extends TelegramLongPollingBot {
                 simpleEditMessage("Abgebrochen", update, KeyboardFactory.KeyBoardType.NoButtons);
                 sendAnswerCallbackQuery("Abgebrochen",  false, update.getCallbackQuery());
             } catch (TelegramApiException e) {
-LogUtil.logError(e.getMessage(), e);
+                LogUtil.logError(e.getMessage(), e);
             }
         }
-        }
+    }
 
 
     public  Message sendKeyboard(String s, Update update, ReplyKeyboard replyKeyboard, boolean isReply){

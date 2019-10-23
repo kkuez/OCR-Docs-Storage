@@ -35,6 +35,10 @@ public class DBUtil {
         return documentList;
     }
 
+    public static Document getDocumentForID(int id) {
+        return DBUtil.showDocumentsFromSQLExpression("select * from Documents where id =" + id + "").get(0);
+    }
+
     public static Set<String> getFilePathOfDocsContainedInDB() {
         Set<String> filePathSet = new HashSet<>();
         List<Document> documentList = showDocumentsFromSQLExpression("select * from Documents");

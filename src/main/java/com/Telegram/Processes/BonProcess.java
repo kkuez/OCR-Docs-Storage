@@ -23,15 +23,11 @@ public class BonProcess extends Process {
 
     private Bon bon;
 
-    public BonProcess(Bon bon, Bot bot, Document document, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
+    public BonProcess(Bot bot, ProgressReporter progressReporter){
         super(progressReporter);
-        this.bon = bon;
         setBot(bot);
-        this.document = document;
-        currentStep = Steps.Start;
+        currentStep = Steps.enterBon;
     }
-
-
 
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
@@ -95,6 +91,13 @@ public class BonProcess extends Process {
                     message = getBot().sendMsg("Die Zahl verstehe ich nicht :(", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 }
                 break;
+                default:
+                    if(currentStep == Steps.enterBon){
+                        currentStep = Steps.Start;
+                        this.document = DBUtil.getDocumentForID(bon.getBelongsToDocument());
+                        performNextStep("Start", update, allowedUsersMap);
+                    }
+                    break;
         }
         if(message != null){
             getSentMessages().add(message);
@@ -112,6 +115,24 @@ public class BonProcess extends Process {
     }
 
     private enum Steps{
-        Start, isSum, EnterRightSum
+        Start, enterBon, isSum, EnterRightSum
     }
+
+    //GETTER SETTER
+    public Steps getCurrentStep() {
+        return currentStep;
+    }
+
+    public void setCurrentStep(Steps currentStep) {
+        this.currentStep = currentStep;
+    }
+
+    public Bon getBon() {
+        return bon;
+    }
+
+    public void setBon(Bon bon) {
+        this.bon = bon;
+    }
+
 }
