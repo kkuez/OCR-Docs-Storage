@@ -39,6 +39,7 @@ public class GetBonsProcess extends Process{
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         String[] commandValue = deserializeInput(update);
         Message message = null;
+        User user = allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId());
         switch (commandValue[0]){
             case "selectMonth":
                 if(TimeUtil.getMonthMap().keySet().contains(commandValue[1])) {
@@ -52,7 +53,7 @@ public class GetBonsProcess extends Process{
             case "selectYear":
                 if(TimeUtil.getYearsSet().contains(commandValue[1])){
                     year = commandValue[1];
-                    getBot().setBusy(true);
+                    user.setBusy(true);
                     String parsedDate = month + "." + year;
                             List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
                             for(Document document : documentList){
@@ -73,7 +74,7 @@ public class GetBonsProcess extends Process{
                             }
                             getBot().sendMsg("Fertig: " + documentList.size() + " Bilder geholt.", update, null, false, false);
                     close();
-                    getBot().setBusy(false);
+                    user.setBusy(false);
                 }else{
                     message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
                 }

@@ -22,7 +22,7 @@ public class StandardListProcess extends Process {
     public StandardListProcess(ProgressReporter progressReporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         this.setBot(bot);
-        getBot().setBusy(true);
+        allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId()).setBusy(true);
         performNextStep("-", update,  allowedUsersMap);
     }
 
@@ -70,7 +70,7 @@ public class StandardListProcess extends Process {
                 status = AWAITING_INPUT.add;
                 break;
         }
-        getBot().setBusy(false);
+        allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId()).setBusy(false);
         if(message != null){
             getSentMessages().add(message);
         }

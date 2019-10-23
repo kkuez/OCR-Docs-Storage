@@ -642,6 +642,4 @@ public class Bot extends TelegramLongPollingBot {
     public void setShoppingList(List<String> shoppingList) {
         this.shoppingList = shoppingList;
     }
-
-    }
 }

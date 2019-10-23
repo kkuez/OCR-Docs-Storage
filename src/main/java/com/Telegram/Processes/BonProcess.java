@@ -33,13 +33,14 @@ public class BonProcess extends Process {
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         String[] commandValue = deserializeInput(update);
         Message message = null;
+        User user = allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId());
         switch (commandValue[0]){
             case "abort":
                 getBot().abortProcess(update, getBot().getMassageFromUpdate(update).getFrom().getId());
                 break;
             case "Start":
                 if(commandValue[1].equals("confirm")) {
-                    getBot().setBusy(true);
+                    user.setBusy(true);
                     //In Bonfolder kompieren nachdem der User bestätigt hat dass Dok ein Bon ist.
                     File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
                     try {
@@ -52,7 +53,7 @@ public class BonProcess extends Process {
                     document.setOriginFile(newOriginalFilePath);
                     message = getBot().askBoolean("Endsumme " + bon.getSum() + "?", update,  true);
                     currentStep = Steps.isSum;
-                    getBot().setBusy(false);
+                    user.setBusy(false);
                 }else{
                     if(commandValue[1].equals("deny")) {
                         getBot().simpleEditMessage("Ok :)", update, null);

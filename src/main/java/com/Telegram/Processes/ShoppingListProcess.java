@@ -17,10 +17,14 @@ public class ShoppingListProcess extends Process{
 
     private AWAITING_INPUT status = null;
 
+    User user;
+
+
     public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
+        user = allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId());
         this.setBot(bot);
-        getBot().setBusy(true);
+        user.setBusy(true);
         performNextStep("-", update,  allowedUsersMap);
     }
 
@@ -89,7 +93,7 @@ public class ShoppingListProcess extends Process{
                 message = getBot().simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
                 break;
         }
-        getBot().setBusy(false);
+        user.setBusy(false);
         if(message != null){
             getSentMessages().add(message);
         }

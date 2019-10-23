@@ -29,6 +29,7 @@ public class GetPicsProcess extends Process {
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         String[] commandValue = deserializeInput(update);
+        User user = allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId());
         switch (commandValue[0]){
             case "abort":
                 getBot().abortProcess(update, getBot().getMassageFromUpdate(update).getFrom().getId());
@@ -49,7 +50,7 @@ public class GetPicsProcess extends Process {
                 }
 
                 List<Message> messages = getBot().sendMediaMsg(update, true, inputMediaList);
-                getBot().setBusy(false);
+                user.setBusy(false);
 
                 if(messages.size() > 0){
                     getBot().sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", update, null, true, false);
@@ -59,7 +60,7 @@ public class GetPicsProcess extends Process {
                 default:
                     Message message = getBot().sendMsg("Wonach soll gesucht werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     currentStep = Step.getPics;
-                    getBot().setBusy(false);
+                    user.setBusy(false);
                     getSentMessages().add(message);
                     break;
         }
