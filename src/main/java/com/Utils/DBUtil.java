@@ -183,9 +183,9 @@ public class DBUtil {
         return filesSizeOfNewFile > 0;
     }
 
-     private static Set<Bon> getBonsfromDB(){
+     public static List<Bon> getBonsfromDB(){
 
-        Set<Bon> bonSet = new HashSet<>();
+         List<Bon> bonSet = new ArrayList<>();
         try {
             Statement statement = getConnection().createStatement();
             statement = getConnection().createStatement();

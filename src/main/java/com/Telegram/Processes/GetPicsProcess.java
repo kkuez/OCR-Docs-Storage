@@ -67,7 +67,7 @@ public class GetPicsProcess extends Process {
 
     @Override
     public String getProcessName() {
-        return "Get-Pics " + searchTerm;
+        return "Get-Pics für Suchterm " + searchTerm;
     }
 
     @Override

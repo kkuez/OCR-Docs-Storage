@@ -2,17 +2,21 @@ package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.ObjectHub;
+import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.DBUtil;
+import com.Utils.ExecutorUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class GetBonsProcess extends Process{
     private Steps currentStep;
@@ -21,8 +25,11 @@ public class GetBonsProcess extends Process{
 
     private String year;
 
+    Map<Integer, User> allowedUsersMap;
+
     public GetBonsProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
+        this.allowedUsersMap = allowedUsersMap;
         setBot(bot);
         currentStep = Steps.Start;
         performNextStep("" , update, allowedUsersMap);
@@ -47,20 +54,16 @@ public class GetBonsProcess extends Process{
                     year = commandValue[1];
                     getBot().setBusy(true);
                     String parsedDate = month + "." + year;
-                    ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
-                        @Override
-                        public void run() {
                             List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
                             for(Document document : documentList){
                                 if(DBUtil.countDocuments("Bons", "where belongsToDocument =" + document.getId()) == 0){
                                     documentList.remove(document);
                                 }
                             }
-                            documentList.forEach(document1 -> {
-                                String possibleCaption = " ";
-                                if(ObjectHub.getInstance().getAllowedUsersMap().keySet().contains(document1.getUser())){
-                                    possibleCaption = "Von " + ObjectHub.getInstance().getAllowedUsersMap().get(document1.getUser()).getName();
-                                }
+                    Map<Integer, Float> bonIdMap = new HashMap<>();
+                    DBUtil.getBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
+                    documentList.forEach(document1 -> {
+                        String possibleCaption = "Von " + allowedUsersMap.get(document1.getUser()).getName() + ": " + bonIdMap.get(document1.getId()) + "€";
                                 getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
                             });
                             try {
@@ -69,8 +72,6 @@ public class GetBonsProcess extends Process{
                                 e.printStackTrace();
                             }
                             getBot().sendMsg("Fertig: " + documentList.size() + " Bilder geholt.", update, null, false, false);
-                        }
-                    });
                     close();
                     getBot().setBusy(false);
                 }else{
