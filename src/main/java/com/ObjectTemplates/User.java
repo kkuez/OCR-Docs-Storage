@@ -1,8 +1,11 @@
 package com.ObjectTemplates;
 
 import com.Telegram.Bot;
+import com.Telegram.KeyboardFactory;
 import com.Telegram.Processes.Process;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 public class User {
     private int id;
@@ -12,6 +15,8 @@ public class User {
     private Process process = null;
 
     boolean aboutToUploadFile = false;
+    //NO InlineKeyboards!
+    private ReplyKeyboard keyboardContext = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Start, false, false, "");
 
     public void deleteProcessEventually(Bot bot, Update update){
         if(process != null && process.getDeleteLater()){
@@ -20,6 +25,14 @@ public class User {
     };
 
     //GETTER SETTER
+
+    public ReplyKeyboard getKeyboardContext() {
+        return keyboardContext;
+    }
+
+    public void setKeyboardContext(ReplyKeyboard keyboardContext) {
+        this.keyboardContext = keyboardContext;
+    }
 
     public boolean isAboutToUploadFile() {
         return aboutToUploadFile;

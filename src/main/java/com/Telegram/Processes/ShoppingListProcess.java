@@ -9,6 +9,7 @@ import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.*;
 
@@ -40,7 +41,15 @@ public class ShoppingListProcess extends Process{
                 String item = commandValue[1];
                 getBot().getShoppingList().add(item);
                 DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
-                message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                if(update.hasCallbackQuery()){
+                    try {
+                        getBot().sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                }
                 getSentMessages().add(message);
                 break;
             case "remove":
@@ -73,8 +82,11 @@ public class ShoppingListProcess extends Process{
                 message = getBot().sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
                 break;
             case "Hinzufügen":
-                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.ShoppingList_Add, false, true);
                 status = AWAITING_INPUT.add;
+                break;
+            case"Standardliste anzeigen":
+                message = getBot().simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
                 break;
         }
         getBot().setBusy(false);
@@ -90,12 +102,16 @@ public class ShoppingListProcess extends Process{
 
     @Override
     public String getCommandIfPossible(Update update) {
+        if(update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("Standardliste anzeigen")){
+            return "Standardliste anzeigen";
+        }else{
         if(status == AWAITING_INPUT.add){
             return "add";
         }else{
             if(update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("remove")){
                 return "remove";
             }
+        }
         }
 
         return !update.hasCallbackQuery() ? update.getMessage().getText() : "";

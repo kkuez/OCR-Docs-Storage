@@ -39,7 +39,7 @@ public class BonProcess extends Process {
         Message message = null;
         switch (commandValue[0]){
             case "abort":
-                getBot().abortProcess(update, allowedUsersMap, getBot().getMassageFromUpdate(update).getFrom().getId());
+                getBot().abortProcess(update, getBot().getMassageFromUpdate(update).getFrom().getId());
                 break;
             case "Start":
                 if(commandValue[1].equals("confirm")) {

@@ -32,7 +32,7 @@ public class UpdateTask implements Task {
     @Override
     public void run() {
         try {
-            bot.processUpdateReceveived(update, ObjectHub.getInstance().getAllowedUsersMap());
+            bot.processUpdateReceveived(update);
             successFullyExecuted = true;
         } catch (Exception e) {
             e.printStackTrace();

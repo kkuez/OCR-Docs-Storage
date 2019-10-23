@@ -31,7 +31,7 @@ public class GetPicsProcess extends Process {
         String[] commandValue = deserializeInput(update);
         switch (commandValue[0]){
             case "abort":
-                getBot().abortProcess(update, allowedUsersMap, getBot().getMassageFromUpdate(update).getFrom().getId());
+                getBot().abortProcess(update, getBot().getMassageFromUpdate(update).getFrom().getId());
                 break;
             case "getPics":
                 List<Document> listOfDocs;

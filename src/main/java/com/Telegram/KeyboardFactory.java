@@ -70,6 +70,10 @@ public class KeyboardFactory {
                 shoppingList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
                 endKeyboard.add(DONE_ROW);
                 break;
+            case ShoppingList_Add:
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Standardiste anzeigen", "Standardliste anzeigen")));
+                endKeyboard.add(DONE_ROW);
+                break;
             case StandardList_Current:
                 List<String> standardList = DBUtil.getStandardListFromDB();
                 standardList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
@@ -182,7 +186,7 @@ public class KeyboardFactory {
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
+        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();

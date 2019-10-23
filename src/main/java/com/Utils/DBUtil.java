@@ -77,19 +77,19 @@ public class DBUtil {
     }
 
     public static List<String> getStandardListFromDB(){
-        List<String> shoppingList = new ArrayList<>();
+        List<String> standardList = new ArrayList<>();
         Statement statement = null;
         try {
             statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");
             while (rs.next()) {
-                shoppingList.add(rs.getString("item"));
+                standardList.add(rs.getString("item"));
             }
             statement.close();
         } catch (SQLException e) {
-            LogUtil.logError("SELECT * FROM StandartList", e);
+            LogUtil.logError("SELECT * FROM StandardList", e);
         }
-        return shoppingList;
+        return standardList;
     }
 
     public static void addToShoppingList(String item){

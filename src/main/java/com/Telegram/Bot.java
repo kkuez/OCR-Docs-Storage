@@ -14,7 +14,9 @@ import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import com.Utils.TessUtil;
 import org.apache.commons.io.FileUtils;
+import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
@@ -22,7 +24,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -31,7 +32,6 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
-import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -53,8 +53,10 @@ public class Bot extends TelegramLongPollingBot {
 
     private Reporter progressReporter;
 
+    Map<Integer, User> allowedUsersMap;
+
     public Bot() {
-        Map<Integer, User> allowedUsersMap = ObjectHub.getInstance().getAllowedUsersMap();
+        allowedUsersMap = ObjectHub.getInstance().getAllowedUsersMap();
         shoppingList = DBUtil.getShoppingListFromDB();
         setBusy(false);
         progressReporter = new ProgressReporter() {
@@ -84,7 +86,6 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
-        Map<Integer, User> allowedUsersMap = ObjectHub.getInstance().getAllowedUsersMap();
         printUpdateData(update);
         int currentUserID;
         String userName;
@@ -94,7 +95,7 @@ public class Bot extends TelegramLongPollingBot {
             userName = update.getCallbackQuery().getFrom().getFirstName();
             textGivenByUser = update.getCallbackQuery().getData();
             if (textGivenByUser.equals("abort")){
-                abortProcess(update, allowedUsersMap, currentUserID);
+                abortProcess(update, currentUserID);
             }
         }else{
             textGivenByUser = update.getMessage().getText();
@@ -111,7 +112,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if(allowedUsersMap.keySet().contains(currentUserID)){
             try {
-                processUpdateReceveived(update, allowedUsersMap);
+                processUpdateReceveived(update);
             }catch (Exception e){
                 LogUtil.logError(null, e);
                 LogUtil.log("Update added to perform later...");
@@ -123,18 +124,15 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
     }
-    public void processUpdateReceveived(Update update, Map<Integer, User> allowedUsersMap) throws Exception{
+    public void processUpdateReceveived(Update update) throws Exception{
         int currentUserID;
-        String userName;
         String textGivenByUser;
         if(update.hasCallbackQuery()){
             currentUserID = update.getCallbackQuery().getFrom().getId();
-            userName = update.getCallbackQuery().getFrom().getFirstName();
             textGivenByUser = update.getCallbackQuery().getData();
         }else{
             textGivenByUser = update.getMessage().getText();
             currentUserID = update.getMessage().getFrom().getId();
-            userName = update.getMessage().getFrom().getFirstName();
         }
         Process process = allowedUsersMap.get(currentUserID).getProcess();
 
@@ -142,7 +140,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (textGivenByUser != null) {
                     String input = textGivenByUser;
                     if (process == null) {
-                        allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update, allowedUsersMap));
+                        allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
                         allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
                         if (input.startsWith("Bon eingeben")) {
                             allowedUsersMap.get(currentUserID).setAboutToUploadFile(true);
@@ -169,16 +167,11 @@ public class Bot extends TelegramLongPollingBot {
                     if (getBusy()) {
                         sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
                     } else {
-                        if(process != null && process.isAwaitsInput()){
-                            process.setAwaitsInput(false);
-                            process.performNextStep("comingPic", update, allowedUsersMap);
-                            allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
-                        }else {
-                            sendMsg("Verarbeite Bild...", update, null, true, false);
-                            processPhoto(update, allowedUsersMap);
-                        }
+                        sendMsg("Verarbeite Bild...", update, null, true, false);
+                        processPhoto(update);
+
                     }
-                }
+                    }
             } catch (Exception e) {
                 LogUtil.logError(null, e);
                 throw new RuntimeException();
@@ -201,7 +194,7 @@ public class Bot extends TelegramLongPollingBot {
         LogUtil.log(printBuilder.toString());
     }
 
-    private void processPhoto(Update update, Map<Integer, User> allowedUsersMap){
+    private void processPhoto(Update update){
         ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
             @Override
             public void run() {
@@ -272,34 +265,17 @@ public class Bot extends TelegramLongPollingBot {
         return tags;
     }
 
-    public void sendDocumentFromURL(Update update, String imagePath, String caption, ReplyKeyboardMarkup possibleKeyBoardOrNull){
-        SendDocument sendDocument = null;
-        try {
-            sendDocument = new SendDocument().setDocument(caption, new FileInputStream(new File(imagePath)));
-            sendDocument.setCaption(caption);
-            if(possibleKeyBoardOrNull != null){
-                sendDocument.setReplyMarkup(possibleKeyBoardOrNull);
-            }
-        } catch (FileNotFoundException e) {
-            LogUtil.logError(imagePath, e);
-        }
-        sendDocument.setChatId(update.getMessage().getChatId());
-        try {
-            execute(sendDocument);
-        } catch (TelegramApiException e) {
-            LogUtil.logError(null, e);
-            sendMsg("Fehler, Aktion abgebrochen.",update,  null, true, false);
-            setBusy(false);
-        }
-    }
-
-    public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
+     public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
         SendPhoto sendPhoto = null;
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
             sendPhoto.setCaption(caption);
             if(possibleKeyBoardOrNull != null){
+                //Japp nee
                 sendPhoto.setReplyMarkup(possibleKeyBoardOrNull);
+                if(!(possibleKeyBoardOrNull instanceof InlineKeyboardMarkup)){
+                allowedUsersMap.get(getMassageFromUpdate(update).getFrom().getId()).setKeyboardContext(possibleKeyBoardOrNull);
+            }
             }
         } catch (FileNotFoundException e) {
             LogUtil.logError(imagePath, e);
@@ -347,7 +323,7 @@ public class Bot extends TelegramLongPollingBot {
         return null; // Just in case
     }
 
-    private Process fetchCommandOrNull(Update update, Map<Integer, User> allowedUsersMap){
+    private Process fetchCommandOrNull(Update update){
         String textGivenByUser = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
 
         Process processToReturn = null;
@@ -384,20 +360,21 @@ public class Bot extends TelegramLongPollingBot {
                 case "Löschen":
                 case "Liste anzeigen":
                 case "Liste Löschen":
-                    processToReturn = new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
-                    break;
-                case "Standardlisten-Optionen":
-                    sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.StandardList, true, false);
-                    break;
-                case "Standardliste anzeigen":
-                case "Item hinzufügen":
-                case "Item löschen":
-                    processToReturn = new StandardListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                    if(!update.hasCallbackQuery()) {
+                        if (allowedUsersMap.get(update.getMessage().getFrom().getId()).getKeyboardContext().equals(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.ShoppingList, false, false, ""))) {
+                            processToReturn = new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                        } else {
+                            if (allowedUsersMap.get(update.getMessage().getFrom().getId()).getKeyboardContext().equals(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""))) {
+                                processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                            }
+                        }
+                    }
                     break;
             }
         }
         return processToReturn;
     }
+
     /**
      * This method returns the bot's name, which was specified during registration.
      * @return bot name
@@ -431,7 +408,7 @@ public class Bot extends TelegramLongPollingBot {
         });
     }
 
-    public void abortProcess(Update update, Map<Integer, User> allowedUsersMap, int currentUserID){
+    public void abortProcess(Update update, int currentUserID){
         if(allowedUsersMap.get(currentUserID).getProcess() != null) {
             this.setBusy(false);
             allowedUsersMap.get(currentUserID).getProcess().close();
@@ -463,6 +440,9 @@ LogUtil.logError(e.getMessage(), e);
             sendMessage.setReplyToMessageId(getMassageFromUpdate(update).getMessageId());
         }
         sendMessage.setReplyMarkup(replyKeyboard);
+        if(!(replyKeyboard instanceof InlineKeyboardMarkup)){
+            allowedUsersMap.get(getMassageFromUpdate(update).getFrom().getId()).setKeyboardContext(replyKeyboard);
+        }
         sendMessage.setText(s);
 
         Message messageToReturn = null;
@@ -627,7 +607,7 @@ LogUtil.logError(e.getMessage(), e);
         } catch (TelegramApiException e) {
             LogUtil.logError(null, e);
             sendMsg("Zuviele Dokumente gefunden für den Begriff... Abgebrochen.",  update, null, false, false);
-            abortProcess(update, ObjectHub.getInstance().getAllowedUsersMap(), update.getMessage().getFrom().getId());
+            abortProcess(update, update.getMessage().getFrom().getId());
         }
 
         return messageToReturn;
@@ -646,7 +626,11 @@ LogUtil.logError(e.getMessage(), e);
             sendMessage.setReplyToMessageId(message.getMessageId());
         }
         if(keyBoardTypeOrNull != null){
-            sendMessage.setReplyMarkup(KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard, callbackValuePrefix));
+            ReplyKeyboard replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard, callbackValuePrefix);
+            sendMessage.setReplyMarkup(replyKeyboard);
+            if(!inlineKeyboard){
+                allowedUsersMap.get(update.getMessage().getFrom().getId()).setKeyboardContext(replyKeyboard);
+            }
         }
         sendMessage.setText(s);
         Message messageToReturn = null;
@@ -669,55 +653,6 @@ LogUtil.logError(e.getMessage(), e);
         answerCallbackQuery.setText(text);
         execute(answerCallbackQuery);
     }
-    public void deleteSLIDESHOWMESSAGE(Message message){
-        EditMessageMedia editMessageMedia = new EditMessageMedia();
-        editMessageMedia.setChatId(message.getChatId());
-        editMessageMedia.setMedia(new InputMediaPhoto());
-        editMessageMedia.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.NoButtons, true, false));
-        editMessageMedia.setMessageId(message.getMessageId());
-    try {
-            execute(editMessageMedia);
-        } catch (TelegramApiException e) {
-            LogUtil.logError("", e);
-        }
-    }
-
-    public Message sendOrEditSLIDESHOWMESSAGE(String text, Item item,  Update update){
-        Message messageToReturn = getMassageFromUpdate(update);
-        try(FileInputStream photoPath =  new FileInputStream(item.getPicturePath())){
-        if(update.hasCallbackQuery() && update.getCallbackQuery().getMessage().hasPhoto()){
-                //edit Fall
-                EditMessageMedia editMessageMedia = new EditMessageMedia();
-                editMessageMedia.setChatId(messageToReturn.getChatId());
-                InputMediaPhoto inputMediaPhoto = new InputMediaPhoto();
-                inputMediaPhoto.setMedia(item.getPicturePath(), item.getName());
-                inputMediaPhoto.setCaption(!text.equals("") || text != null ? text : item.getName());
-                editMessageMedia.setMedia(inputMediaPhoto);
-                editMessageMedia.getMedia().setCaption(item.getName());
-                editMessageMedia.setMessageId(messageToReturn.getMessageId());
-                editMessageMedia.setReplyMarkup(messageToReturn.getReplyMarkup());
-                execute(editMessageMedia);
-                messageToReturn = update.getCallbackQuery().getMessage();
-                sendAnswerCallbackQuery(text, false, update.getCallbackQuery());
-        }else{
-            //firsche Nachricht
-            SendPhoto sendPhoto = new SendPhoto();
-                sendPhoto.setPhoto(item.getName(), photoPath);
-                sendPhoto.setChatId(getMassageFromUpdate(update).getChatId());
-                sendPhoto.setReplyMarkup(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.SlideShow, true, false));
-                sendPhoto.setCaption(item.getName());
-               messageToReturn = execute(sendPhoto);
-        }
-        } catch (FileNotFoundException e) {
-            LogUtil.logError("", e);
-        } catch (IOException e) {
-            LogUtil.logError("", e);
-        } catch (TelegramApiException e) {
-            LogUtil.logError("", e);
-        }
-        return messageToReturn;
-    }
-
     //GETTER SETTER
 
 

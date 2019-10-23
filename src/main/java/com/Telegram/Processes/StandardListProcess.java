@@ -9,6 +9,7 @@ import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class StandardListProcess extends Process {
             case "add":
                 String item = commandValue[1];
                 DBUtil.executeSQL("insert into StandardList(item) Values ('" + item + "')");
-                message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                    message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
                 getSentMessages().add(message);
                 break;
             case "remove":
@@ -91,7 +92,9 @@ public class StandardListProcess extends Process {
 
     @Override
     public String getCommandIfPossible(Update update) {
-        return !update.hasCallbackQuery() ? update.getMessage().getText() : "";
+        String prefix = !update.hasCallbackQuery() ? update.getMessage().getText() : "";
+        prefix = status == AWAITING_INPUT.add ? "add" : prefix;
+        return prefix;
     }
 
     enum AWAITING_INPUT{
