@@ -34,10 +34,10 @@ public abstract class Process {
 
     public abstract String getProcessName();
 
-    public List<Message> sentMessages = new ArrayList<>();
+    private List<Message> sentMessages = new ArrayList<>();
 
 
-    public void clearButtons(){
+    private void clearButtons(){
         for(Message message : getSentMessages()){
             if(message != null){
             getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons, "");
@@ -49,7 +49,7 @@ public abstract class Process {
         setDeleteLater(true);
     }
 
-    public String[] deserializeInput(Update update){
+    String[] deserializeInput(Update update){
         String command = getCommandIfPossible(update);
         String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  getBot().getMassageFromUpdate(update).getText();
         String value = updateText.replace(command, "");

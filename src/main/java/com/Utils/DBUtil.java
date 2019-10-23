@@ -96,15 +96,7 @@ public class DBUtil {
         return standardList;
     }
 
-    public static void addToShoppingList(String item){
-        executeSQL("insert into ShoppingList (item) Values ('" + item + "')");
-    }
-
-    public static void removeFromShoppingList(String item){
-        executeSQL("delete from ShoppingList where item='" + item + "'");
-    }
-
-    public static void insertDocumentToDB(Document document){
+  public static void insertDocumentToDB(Document document){
         if(document.getClass().equals(Image.class)){
             lastProcessedDoc = document;
         }

@@ -68,7 +68,7 @@ public class TessUtil {
                 .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());
         ControllerUtil.fillTable(tableView, documentObservableList, tableColumns, propertyValueFactories);
         LogUtil.log(counterProcessedFiles.get() + " Files stored.");
-//FIXME Tags werden nach dem verarbeiten nicht in der tableview angezeigt
+//      FIXME Tags werden nach dem verarbeiten nicht in der tableview angezeigt
         return documentSet;
     }
 

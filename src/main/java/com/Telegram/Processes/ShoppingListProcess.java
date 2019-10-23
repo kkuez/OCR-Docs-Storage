@@ -77,7 +77,7 @@ public class ShoppingListProcess extends Process{
                 break;
             case "Liste Löschen":
                 DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
-                getBot().setShoppingList(new ArrayList<String>());
+                getBot().setShoppingList(new ArrayList<>());
                 getBot().sendMsg("Einkaufsliste gelöscht :)", update, null, false, false);
                 close();
                 break;
