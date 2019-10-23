@@ -17,7 +17,7 @@ public class User {
     boolean aboutToUploadFile = false;
 
     private boolean isBusy = false;
-    //NO InlineKeyboards!
+    //NO InlineKeyboards! important to seperat input of the to List processes.
     private ReplyKeyboard keyboardContext = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Start, false, false, "");
 
     public void deleteProcessEventually(Bot bot, Update update){

@@ -179,10 +179,12 @@ public class Bot extends TelegramLongPollingBot {
                 List<PhotoSize> photoList = update.getMessage().getPhoto();
                 photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
                 Collections.reverse(photoList);
+                //Get largest picture
                 String filePath = getFilePath(photoList.get(0));
                 largestPhoto = downloadPhotoByFilePath(filePath);
 
                 if(DBUtil.isFilePresent(largestPhoto)){
+                    //Is File already stored...?
                     LogUtil.log("File already present: " + largestPhoto.getName());
                     sendMsg("Bild schon vorhanden.", update, null, true, false);
                     return;
@@ -195,7 +197,6 @@ public class Bot extends TelegramLongPollingBot {
                     LogUtil.logError(largestPhoto.getAbsolutePath(), e);
                 }
 
-
                 Set<String> tags = null;
                 if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
                     tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
@@ -203,7 +204,6 @@ public class Bot extends TelegramLongPollingBot {
 
                 Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
                 try {
-
                     if((TessUtil.checkIfBon(document.getContent()) || process instanceof BonProcess)){
                         float sum = TessUtil.getLastNumber(document.getContent());
                         Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
@@ -226,6 +226,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private Set<String> parseTags(String input){
+        //Tags have to be input by Caption
         input = input.toLowerCase().replace("tag ", "");
         Set<String> tags = new HashSet<>();
         while (input.contains(",")){
@@ -245,10 +246,10 @@ public class Bot extends TelegramLongPollingBot {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
             sendPhoto.setCaption(caption);
             if(possibleKeyBoardOrNull != null){
-                //Japp nee
                 sendPhoto.setReplyMarkup(possibleKeyBoardOrNull);
                 if(!(possibleKeyBoardOrNull instanceof InlineKeyboardMarkup)){
-                    allowedUsersMap.get(getMassageFromUpdate(update).getFrom().getId()).setKeyboardContext(possibleKeyBoardOrNull);
+                    //In case of an Inlinekeyboard it will not be stored as keyboardcontext
+                    user.setKeyboardContext(possibleKeyBoardOrNull);
                 }
             }
         } catch (FileNotFoundException e) {

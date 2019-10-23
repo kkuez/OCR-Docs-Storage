@@ -36,6 +36,7 @@ public abstract class Process {
 
     public List<Message> sentMessages = new ArrayList<>();
 
+
     public void clearButtons(){
         for(Message message : getSentMessages()){
             if(message != null){
