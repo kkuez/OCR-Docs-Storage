@@ -21,7 +21,7 @@ public class RegularTaskStrategy extends OneTimeTaskStrategy {
         {
             minuteToPerform += minutesFrequency;
             hourToPerform += hoursFrequency;
-            dateToPerform = LocalDate.now().plusDays(daysFrequency).toString();
+            timeToPerform = LocalDate.now().plusDays(daysFrequency).toString();
         }
     }
 

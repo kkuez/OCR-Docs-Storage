@@ -1,53 +1,29 @@
 package com.Misc.TaskHandling.Strategies;
 
-public class OneTimeTaskStrategy implements TaskStrategy {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-    int minuteToPerform = 99;
+public abstract class OneTimeTaskStrategy implements TaskStrategy {
 
-    int hourToPerform = 99;
-
-    String dateToPerform;
+    LocalDateTime timeToPerform;
 
     public OneTimeTaskStrategy(){}
 
-    public OneTimeTaskStrategy(int minuteToPerform, int hourToPerform, String dateToPerform){
-        this.minuteToPerform = minuteToPerform;
-        this.hourToPerform = hourToPerform;
-        this.dateToPerform = dateToPerform;
+    public OneTimeTaskStrategy(int year, int month, int day){
+        this.timeToPerform = LocalDateTime.of(year, month, day, 0,0);
     }
 
-    public OneTimeTaskStrategy( int hourToPerform, String dateToPerform){
-        this.hourToPerform = hourToPerform;
-        this.dateToPerform = dateToPerform;
-    }
-
-    public OneTimeTaskStrategy(String dateToPerform){
-        this.dateToPerform = dateToPerform;
+    public OneTimeTaskStrategy(int hourToPerform, int minuteToPerform, int year, int month, int day){
+        this.timeToPerform = LocalDateTime.of(year, month, day, hourToPerform, minuteToPerform);
     }
 
     @Override
-    public boolean performNow(int currentMinute, int currentHour, String currentDate) {
-        if(dateToPerform.equals(currentDate)){
-            if(minuteToPerform == 99 && hourToPerform == 99){
-                doAfterExecute();
-                return true;
-            }else{
-                if(hourToPerform == currentHour){
-                    if(minuteToPerform == 99){
-                        doAfterExecute();
-                        return true;
-                    }else{
-                        if(minuteToPerform == currentMinute){
-                            doAfterExecute();
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        doAfterExecute();
-        return false;
+    public void perform() {
+
     }
 
-    private void doAfterExecute(){}
+    @Override
+    public boolean timeIsNow(LocalDateTime localDateTime) {
+        return timeToPerform.equals(localDateTime);
+    }
 }

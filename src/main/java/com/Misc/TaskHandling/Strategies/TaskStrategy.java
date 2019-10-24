@@ -1,7 +1,10 @@
 package com.Misc.TaskHandling.Strategies;
 
+import java.time.LocalDateTime;
+
 public interface TaskStrategy {
 
-     boolean performNow(int currentMinute, int currentHour, String currentDate);
+     void perform();
 
+     boolean timeIsNow(LocalDateTime localDateTime);
 }

@@ -5,8 +5,7 @@ import com.Utils.LogUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Taskshub implements Runnable {
 
@@ -31,7 +30,7 @@ public class Taskshub implements Runnable {
             refreshTimes();
             LogUtil.log("System: Trying to perform LaterTasks (" + tasksToDo.size() + " in List)");
             for (Task task : tasksToDo) {
-                if (task.getTaskStrategy().performNow(currentMinute, currentHour, currentDate)) {
+                if (task.getTaskStrategy().perform(currentMinute, currentHour, currentDate)) {
                     task.run();
                     if (task.isSuccessFullyExecuted()) {
                         task.deleteFromList(tasksToDo);
@@ -54,9 +53,8 @@ public class Taskshub implements Runnable {
     }
 
 
+
     //GETTER SETTER
-
-
 
     public boolean isLoopActive() {
         return loopActive;
@@ -66,8 +64,5 @@ public class Taskshub implements Runnable {
         this.loopActive = loopActive;
     }
 
-    public List<Task> getTasksToDo() {
-        return tasksToDo;
-    }
 
 }

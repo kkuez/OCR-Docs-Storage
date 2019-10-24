@@ -29,19 +29,6 @@ public class IOUtil {
         return originFilePath;
     }
 
-    public static File createFileOrNull(String content, String absolutePathAndName){
-        File result = new File(absolutePathAndName);
-        try {
-            if(result.exists()){
-                FileUtils.writeStringToFile(result, content, "UTF-8");
-            }
-        } catch (IOException e) {
-            LogUtil.logError(result.getAbsolutePath(), e);
-        }
-        return result.exists() ? result : null;
-    }
-
-
 
     public static Collection<File> createFileSetBySize(Collection<File> inputFiles){
         //Method to make sure only absolute different files in size will be processed
@@ -49,7 +36,4 @@ public class IOUtil {
         inputFiles.forEach(file -> fileMap.putIfAbsent(FileUtils.sizeOf(file), file));
         return fileMap.values();
     }
-
-
-
 }

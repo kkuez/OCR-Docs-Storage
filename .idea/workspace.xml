@@ -3,9 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/NextPerformanceStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/NextPerformanceStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/OneTimeTaskStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/OneTimeTaskStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/RegularTaskStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/RegularTaskStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/TaskStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/Strategies/TaskStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Misc/TaskHandling/UpdateTask.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Taskshub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Taskshub.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetPicsProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/IOUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/IOUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TimeUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TimeUtil.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +37,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="StandardList" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -205,13 +211,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Added StartKeyboard to Bot.">
-      <created>1568922414311</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1568922414311</updated>
     </task>
     <task id="LOCAL-00009" summary="Neue .jar.">
       <created>1568961948465</created>
@@ -549,7 +548,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571906882692</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="Media send method now relies on Media as input.">
+      <created>1571917922759</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1571917922759</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -586,7 +592,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="More stability in Processes by ensuring decent input." />
     <MESSAGE value="Fix no abort button for uploading Bon Process." />
     <MESSAGE value="Fixed Bug aborting null when no process in user." />
     <MESSAGE value="Fix button load when abort." />
@@ -611,7 +616,8 @@
     <MESSAGE value="Refactored." />
     <MESSAGE value="Refactoring." />
     <MESSAGE value="Fixed many Bugs." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed many Bugs." />
+    <MESSAGE value="Media send method now relies on Media as input." />
+    <option name="LAST_COMMIT_MESSAGE" value="Media send method now relies on Media as input." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/OCR$_bot.ic" NAME="-bot Coverage Results" MODIFIED="1570021043459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

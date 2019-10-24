@@ -2,8 +2,6 @@ package com.Telegram;
 
 import com.Controller.Reporter.ProgressReporter;
 import com.Controller.Reporter.Reporter;
-import com.Misc.TaskHandling.Strategies.NextPerformanceStrategy;
-import com.Misc.TaskHandling.UpdateTask;
 import com.ObjectTemplates.User;
 import com.Telegram.Processes.*;
 import com.Telegram.Processes.Process;
@@ -14,9 +12,7 @@ import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 import com.Utils.TessUtil;
 import org.apache.commons.io.FileUtils;
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
@@ -34,7 +30,6 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
@@ -109,9 +104,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             processUpdateReceveived(update);
         }catch (Exception e){
-            LogUtil.logError(null, e);
-            LogUtil.log("Update added to perform later...");
-            ObjectHub.getInstance().getTaskshub().getTasksToDo().add(new UpdateTask(update, this, new NextPerformanceStrategy()));
+            LogUtil.logError("Couldn't process update.", e);
         }
     }
 
@@ -138,8 +131,8 @@ public class Bot extends TelegramLongPollingBot {
                         sendMsg("Verarbeite Bild...", update, null, true, false);
                         processPhoto(update);
                     }else{
-                    allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
-                    allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                        allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
+                        allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
                     }
                 } else {
                     if (update.hasMessage() && update.getMessage().hasPhoto()) {
@@ -348,7 +341,7 @@ public class Bot extends TelegramLongPollingBot {
                         if (isStadardListConText) {
                             processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
                         } else {
-                                processToReturn = new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                            processToReturn = new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
                         }
                     }
                     break;
@@ -374,10 +367,10 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotToken() {
         return ObjectHub.getInstance().getProperties().getProperty("tgBotToken");
     }
-public User getNonBotUserFromUpdate(Update update){
+    public User getNonBotUserFromUpdate(Update update){
         int userId = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
         return allowedUsersMap.get(userId);
-}
+    }
 
     public void abortProcess(Update update){
         User user = getNonBotUserFromUpdate(update);
@@ -391,7 +384,7 @@ public User getNonBotUserFromUpdate(Update update){
                 if(update.hasCallbackQuery()) {
                     sendAnswerCallbackQuery(processName + " abgebrochen.", false, update.getCallbackQuery());
                 }
-                } catch (TelegramApiException e) {
+            } catch (TelegramApiException e) {
                 LogUtil.logError("Abort done, messaging about abort failed.", e);
             }
         }else{
