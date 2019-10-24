@@ -1,53 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fix when abort no progress is indicated.">
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Archiver.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Archiver.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Misc/TaskHandling/UpdateTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Misc/TaskHandling/UpdateTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/ObjectHub$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/ObjectHub$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/ObjectHub.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/ObjectHub.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/ObjectTemplates/Bon.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/ObjectTemplates/Bon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/ObjectTemplates/Document.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/ObjectTemplates/Document.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/ObjectTemplates/Image.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/ObjectTemplates/Image.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/ObjectTemplates/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/ObjectTemplates/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Bot$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Bot$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Bot$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Bot$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Bot$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Bot$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Bot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Bot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/KeyboardFactory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/KeyboardFactory$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/KeyboardFactory$KeyBoardType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/KeyboardFactory$KeyBoardType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/KeyboardFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/KeyboardFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/BonProcess$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/BonProcess$Steps.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/BonProcess$Steps.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/BonProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/BonProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/GetBonsProcess$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/GetBonsProcess$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/GetBonsProcess$Steps.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/GetBonsProcess$Steps.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/GetBonsProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/GetBonsProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/GetPicsProcess$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/GetPicsProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/GetPicsProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/NewUserRegProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/NewUserRegProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/Process.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/Process.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/RemoveLastProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/RemoveLastProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/SearchProcess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/ShoppingListProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/ShoppingListProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/StartProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/StartProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/SumProcess$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/SumProcess$Steps.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Telegram/Processes/SumProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Telegram/Processes/SumProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Utils/BotUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Utils/DBUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Utils/DBUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Utils/IOUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Utils/IOUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Utils/TessUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Utils/TessUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/com/Utils/TimeUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/com/Utils/TimeUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/Process.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/SumProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/SumProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Telegram/Processes/GetPicsProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/DBUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/MessageUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Utils/TessUtil.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,6 +16,9 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Main__gui.ic" NAME="Main -gui Coverage Results" MODIFIED="1569146224853" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Unnamed.ic" NAME="Unnamed Coverage Results" MODIFIED="1568452261989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="OCR" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -244,20 +205,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Removed prepareDB Method from DBUtil.">
-      <created>1568905146335</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1568905146335</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Added StartKeyboard to Bot.">
-      <created>1568919098329</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1568919098329</updated>
     </task>
     <task id="LOCAL-00008" summary="Added StartKeyboard to Bot.">
       <created>1568922414311</created>
@@ -588,7 +535,21 @@
       <option name="project" value="LOCAL" />
       <updated>1571864643895</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="Refactoring.">
+      <created>1571865154319</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1571865154319</updated>
+    </task>
+    <task id="LOCAL-00056" summary="Fixed many Bugs.">
+      <created>1571906882691</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1571906882692</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -625,7 +586,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix language wrong parsed from properties file." />
     <MESSAGE value="More stability in Processes by ensuring decent input." />
     <MESSAGE value="Fix no abort button for uploading Bon Process." />
     <MESSAGE value="Fixed Bug aborting null when no process in user." />
@@ -648,45 +608,10 @@
     <MESSAGE value="StandardList in ShoppingList kinda stable." />
     <MESSAGE value="User now contains busy boolean.&#10;&#10;In case bot blocks if another user wants to perform stuff." />
     <MESSAGE value="isbusy now accessed in User in every class." />
-    <MESSAGE value="Refactoring." />
     <MESSAGE value="Refactored." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java</url>
-          <line>69</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/BonProcess.java</url>
-          <line>79</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/ExecutorUtil.java</url>
-          <line>14</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/TimeUtil.java</url>
-          <line>31</line>
-          <option name="timeStamp" value="57" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Utils/TimeUtil.java</url>
-          <line>42</line>
-          <option name="timeStamp" value="58" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Telegram/Processes/ShoppingListProcess.java</url>
-          <line>86</line>
-          <option name="timeStamp" value="111" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Refactoring." />
+    <MESSAGE value="Fixed many Bugs." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed many Bugs." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/OCR$_bot.ic" NAME="-bot Coverage Results" MODIFIED="1570021043459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

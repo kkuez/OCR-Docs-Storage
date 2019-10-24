@@ -543,22 +543,8 @@ public User getNonBotUserFromUpdate(Update update){
     }
 
     public  synchronized List<Message> sendMediaMsg(Update update,  boolean isReply,  List<InputMedia> inputMediaList) {
-        if(inputMediaList.size() == 0){
-            sendMsg("Keine Dokumente gefunden für den Begriff.",  update, null, false, false);
-            return new ArrayList<>();
-        }
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
-        List<InputMedia> toBeRemovedList = new ArrayList<>();
-        for(InputMedia inputMedia : inputMediaList){
-            if(inputMedia instanceof InputMediaDocument){
-                //If inputmedia is a document instead of a picture, send it and remove it from the inputmedialist.
-                //TODO make methods for every Inputmedia subclass
-                sendDocument(update, true, (InputMediaDocument) inputMedia);
-                toBeRemovedList.add(inputMedia);
-            }
-        }
-        inputMediaList.removeAll(toBeRemovedList);
 
         SendMediaGroup sendMediaGroup = new SendMediaGroup();
         sendMediaGroup.setMedia(inputMediaList);

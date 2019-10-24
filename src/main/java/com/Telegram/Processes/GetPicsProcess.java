@@ -39,14 +39,24 @@ public class GetPicsProcess extends Process {
                     searchTerm = commandValue[1];
                     listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
 
+                if(listOfDocs.size() == 0){
+                    getBot().sendMsg("Keine Dokumente gefunden für den Begriff.",  update, null, false, false);
+                    close();
+                    break;
+                }
                 List<InputMedia> inputMediaList = new ArrayList<>();
-
                 for(Document document1 : listOfDocs){
                     Set<String> photoEndings = Set.of("png", "PNG", "jpg", "JPG", "jpeg", "JPEG");
                     String fileExtension = document1.getOriginalFileName().substring(document1.getOriginalFileName().indexOf(".")).replace(".", "");
                     InputMedia media = photoEndings.contains(fileExtension) ? new InputMediaPhoto() : new InputMediaDocument();
                     media.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
-                    inputMediaList.add(media);
+                    //Filter for Documents in mediaList.
+                    if(media instanceof InputMediaDocument){
+                        //If inputmedia is a document instead of a picture, send it and remove it from the inputmedialist.
+                        getBot().sendDocument(update, true, (InputMediaDocument) media);
+                    }else{
+                        inputMediaList.add(media);
+                    }
                 }
 
                 List<Message> messages = getBot().sendMediaMsg(update, true, inputMediaList);

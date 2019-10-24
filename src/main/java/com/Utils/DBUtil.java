@@ -118,7 +118,6 @@ public class DBUtil {
             while (rs.next()) {
                 tagSet.add(rs.getString("Tag"));
             }
-
             statement.close();
         } catch (SQLException e) {
             LogUtil.logError("SELECT Tag FROM Tags where belongsToDocument=" + document.getId(), e);
@@ -129,7 +128,6 @@ public class DBUtil {
     public static void executeSQL(String sqlStatement) {
         try {
             Statement statement = getConnection().createStatement();
-
             statement.executeUpdate(sqlStatement);
             statement.close();
         } catch (SQLException e) {
