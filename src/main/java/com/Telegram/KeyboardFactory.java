@@ -2,6 +2,7 @@ package com.Telegram;
 
 import com.Utils.DBUtil;
 import com.Utils.LogUtil;
+import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.Utils.TimeUtil.getMonthMap;
 
 public class KeyboardFactory {
 
@@ -114,6 +117,43 @@ public class KeyboardFactory {
         endKeyboard.add(DONE_ROW);
         inlineKeyboardMarkup.setKeyboard(endKeyboard);
         return inlineKeyboardMarkup;
+    }
+
+    public static List<List<InlineKeyboardButton>> createInlineKeyboardForYearMonth(int year, int month){
+        List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
+        List<Integer> numberOfDays = TimeUtil.getDaysInMonthOfYear(year).get(month);
+        List<String> daysInLastRowList = new ArrayList<>();
+        for(Integer dayNumber: numberOfDays){
+            if(dayNumber > 28){
+                daysInLastRowList.add(dayNumber + "");
+            }
+        }
+        List<String> firstRowKeys = List.of("1", "2", "3", "4", "5", "6", "7");
+        List<String> firstRowValues = makeValueList(firstRowKeys, "day");
+        List<String> secondRowKeys = List.of("8", "9", "10", "11", "12", "13", "14");
+        List<String> secondRowValues = makeValueList(secondRowKeys, "day");
+        List<String> thirdRowKeys = List.of("15", "16", "17", "18", "19", "20", "21");
+        List<String> thirdRowValues = makeValueList(thirdRowKeys, "day");
+        List<String> fourthRowKeys = List.of("22", "23", "24", "25", "26", "27", "28");
+        List<String> fourthRowValues = makeValueList(fourthRowKeys, "day");
+        List<String> fifthRowKeys = List.of((String[]) daysInLastRowList.toArray()));
+        List<String> fifthRowValues = makeValueList(fifthRowKeys, "day");
+        endKeyboard.add(createInlineKeyboardRow(firstRowKeys, firstRowValues));
+        endKeyboard.add(createInlineKeyboardRow(secondRowKeys, secondRowValues));
+        endKeyboard.add(createInlineKeyboardRow(thirdRowKeys, thirdRowValues));
+        endKeyboard.add(createInlineKeyboardRow(fourthRowKeys, fourthRowValues));
+        endKeyboard.add(createInlineKeyboardRow(fifthRowKeys, fifthRowValues));
+        return endKeyboard;
+    }
+
+//TODO die Methode überall implementieren
+    private static List<String> makeValueList(List<String> keyList, String prefix){
+List<String> valueList = new ArrayList<>();
+for (String key: keyList){
+    valueList.add(prefix + key);
+}
+return valueList;
+
     }
 
     private static List<KeyboardRow> createKeyBoard(KeyBoardType keyBoardType){
