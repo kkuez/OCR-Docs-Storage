@@ -22,8 +22,8 @@ public class ShoppingListProcess extends Process{
 
     public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
-        user = allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId());
         this.setBot(bot);
+        user = getBot().getNonBotUserFromUpdate(update);
         user.setBusy(true);
         performNextStep("-", update,  allowedUsersMap);
     }

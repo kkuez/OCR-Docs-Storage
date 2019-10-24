@@ -39,7 +39,7 @@ public class GetBonsProcess extends Process{
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         String[] commandValue = deserializeInput(update);
         Message message = null;
-        User user = allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId());
+        User user = getBot().getNonBotUserFromUpdate(update);
         switch (commandValue[0]){
             case "selectMonth":
                 if(TimeUtil.getMonthMap().keySet().contains(commandValue[1])) {

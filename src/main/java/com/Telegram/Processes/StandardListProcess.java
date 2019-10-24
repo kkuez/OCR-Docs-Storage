@@ -22,7 +22,7 @@ public class StandardListProcess extends Process {
     public StandardListProcess(ProgressReporter progressReporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         this.setBot(bot);
-        allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId()).setBusy(true);
+        getBot().getNonBotUserFromUpdate(update).setBusy(true);
         performNextStep("-", update,  allowedUsersMap);
     }
 
@@ -42,7 +42,7 @@ public class StandardListProcess extends Process {
                     item = commandValue[1];
                     DBUtil.executeSQL("delete from StandardList where item='" +  item + "'");
                     getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
-                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
+                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.StandardList_Current, "remove");
                 }catch (Exception e){
                     LogUtil.logError(null, e);
                 }
@@ -70,7 +70,7 @@ public class StandardListProcess extends Process {
                 status = AWAITING_INPUT.add;
                 break;
         }
-        allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId()).setBusy(false);
+        getBot().getNonBotUserFromUpdate(update).setBusy(false);
         if(message != null){
             getSentMessages().add(message);
         }

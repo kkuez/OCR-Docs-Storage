@@ -41,7 +41,7 @@ public class SumProcess extends Process{
             case "selectYear":
                 year = commandValue[1];
                 if(TimeUtil.getYearsSet().contains(year)) {
-                    allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId()).setBusy(true);
+                    getBot().getNonBotUserFromUpdate(update).setBusy(true);
                     String parsedDate = month + "." + year;
                     float sumOfMonth = DBUtil.getSumMonth(parsedDate);
                     try {
@@ -50,7 +50,7 @@ public class SumProcess extends Process{
                         e.printStackTrace();
                     }
                     getBot().sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, update, null, false, false);
-                    allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId()).setBusy(false);
+                    getBot().getNonBotUserFromUpdate(update).setBusy(false);
                     close();
                 }else{
                     message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");

@@ -29,10 +29,10 @@ public class GetPicsProcess extends Process {
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
         String[] commandValue = deserializeInput(update);
-        User user = allowedUsersMap.get(getBot().getMassageFromUpdate(update).getFrom().getId());
+        User user = getBot().getNonBotUserFromUpdate(update);
         switch (commandValue[0]){
             case "abort":
-                getBot().abortProcess(update, getBot().getMassageFromUpdate(update).getFrom().getId());
+                getBot().abortProcess(update);
                 break;
             case "getPics":
                 List<Document> listOfDocs;
