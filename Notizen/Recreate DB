@@ -9,4 +9,6 @@ create Table Tags(belongsToDocument INTEGER, Tag TEXT);
 Drop Table ShoppingList;
 create Table ShoppingList(item TEXT);
 Drop Table StandardList;
-create Table StandardList(item TEXT)
+create Table StandardList(item TEXT);
+Drop Table CalendarTasks;
+create Table CalendarTasks(year INTEGER, month INTEGER, day INTEGER, hour INTEGER, minute INTEGER, name TEXT, user TEXT);

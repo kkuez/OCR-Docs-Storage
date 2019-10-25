@@ -30,6 +30,7 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
@@ -329,6 +330,14 @@ public class Bot extends TelegramLongPollingBot {
                 case "Bon-Optionen":
                     sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Bons, true, false);
                     break;
+                case "Kalender-Optionen":
+                    sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Calendar, true, false);
+                    break;
+                case "Termine anzeige":
+                case "Termin hinzufügen":
+                case "Termin löschen":
+                    processToReturn = new CalenderProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                    break;
                 case "Einkaufslisten-Optionen":
                     sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
                     break;
@@ -462,6 +471,10 @@ public class Bot extends TelegramLongPollingBot {
         return simpleEditMessage(text,  message, keyBoardTypeOrNull, "");
     }
     public  Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackPrefix){
+        List<List<InlineKeyboardButton>> inputKeyboard = KeyboardFactory.createInlineKeyboard(keyBoardTypeOrNull, callbackPrefix);
+        return simpleEditMessage(text, message, inputKeyboard, callbackPrefix);
+    }
+    public  Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard, String callbackPrefix){
 
         if(!message.hasText()){
             if(message.hasPhoto() && message.getCaption() != null){
@@ -472,18 +485,19 @@ public class Bot extends TelegramLongPollingBot {
             editMessageText.setChatId(message.getChatId());
             editMessageText.setMessageId(message.getMessageId());
             editMessageText.setText(text);
-            editMessageText.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, true, false, callbackPrefix));
+
+            editMessageText.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(inputKeyboard));
             try {
                 execute(editMessageText);
             } catch (TelegramApiException e) {
                 LogUtil.logError("Couldn't edit message text.", e);
             }
         }
-        if(keyBoardTypeOrNull != null && message.hasReplyMarkup()) {
+        if(inputKeyboard != null && message.hasReplyMarkup()) {
             EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
             editMessageReplyMarkup.setChatId(message.getChatId());
             editMessageReplyMarkup.setMessageId(message.getMessageId());
-            editMessageReplyMarkup.setReplyMarkup((InlineKeyboardMarkup) KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, true, false, callbackPrefix));
+            editMessageReplyMarkup.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(inputKeyboard));
             try {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {

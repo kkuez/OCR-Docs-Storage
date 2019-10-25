@@ -10,11 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.Utils.TimeUtil.getMonthMap;
 
 public class KeyboardFactory {
 
@@ -43,7 +40,7 @@ public class KeyboardFactory {
         }
     }
 
-    private static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType, String valuePrefixOrNull){
+    public static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType, String valuePrefixOrNull){
         List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
         switch (keyBoardType){
             case Done:
@@ -74,13 +71,23 @@ public class KeyboardFactory {
                 endKeyboard.add(DONE_ROW);
                 break;
             case ShoppingList_Add:
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Standardiste anzeigen", "Standardliste anzeigen")));
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Standardliste anzeigen", "Standardliste anzeigen")));
                 endKeyboard.add(DONE_ROW);
                 break;
             case StandardList_Current:
                 List<String> standardList = DBUtil.getStandardListFromDB();
                 standardList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
                 endKeyboard.add(DONE_ROW);
+                break;
+            case Calendar_Choose_Strategy:
+                endKeyboard.add(createInlineKeyboardRow(List.of("Einmaliger Termin"), List.of("chooseStrategyoneTime")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("Wiederholter Termin"), List.of("chooseStrategyregular")));
+                endKeyboard.add(ABORT_ROW);
+                break;
+            case User_Choose:
+                endKeyboard.add(createInlineKeyboardRow(List.of("Für mich"), List.of("forMe")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("Für Alle"), List.of("forAll")));
+                endKeyboard.add(ABORT_ROW);
                 break;
         }
         return endKeyboard;
@@ -136,7 +143,7 @@ public class KeyboardFactory {
         List<String> thirdRowValues = makeValueList(thirdRowKeys, "day");
         List<String> fourthRowKeys = List.of("22", "23", "24", "25", "26", "27", "28");
         List<String> fourthRowValues = makeValueList(fourthRowKeys, "day");
-        List<String> fifthRowKeys = List.of((String[]) daysInLastRowList.toArray()));
+        List<String> fifthRowKeys = daysInLastRowList;
         List<String> fifthRowValues = makeValueList(fifthRowKeys, "day");
         endKeyboard.add(createInlineKeyboardRow(firstRowKeys, firstRowValues));
         endKeyboard.add(createInlineKeyboardRow(secondRowKeys, secondRowValues));
@@ -210,6 +217,8 @@ return valueList;
                 keyboard.add(keyboardStartFourthRow);
                 KeyboardRow keyboardStartSeventhRow = createKeyBoardRow(new String[]{"Einkaufslisten-Optionen"});
                 keyboard.add(keyboardStartSeventhRow);
+                KeyboardRow keyboardStartEightRow = createKeyBoardRow(new String[]{"Kalender-Optionen"});
+                keyboard.add(keyboardStartEightRow);
                 break;
             case Bons:
                 KeyboardRow keyboardBonsFirstRow = createKeyBoardRow(new String[]{"Bon eingeben"});
@@ -221,12 +230,22 @@ return valueList;
                 KeyboardRow keyboardBonsFourthRow = createKeyBoardRow(new String[]{"Start"});
                 keyboard.add(keyboardBonsFourthRow);
                 break;
+            case Calendar:
+                KeyboardRow keyboardCalendarFirstRow = createKeyBoardRow(new String[]{"Termine anzeige"});
+                keyboard.add(keyboardCalendarFirstRow);
+                KeyboardRow keyboardCalendarSecondRow = createKeyBoardRow(new String[]{"Termin hinzufügen"});
+                keyboard.add(keyboardCalendarSecondRow);
+                KeyboardRow keyboardCalendarThirdRow = createKeyBoardRow(new String[]{"Termin löschen"});
+                keyboard.add(keyboardCalendarThirdRow);
+                KeyboardRow keyboardCalendarFourthRow = createKeyBoardRow(new String[]{"Start"});
+                keyboard.add(keyboardCalendarFourthRow);
+                break;
         }
         return keyboard;
     }
 
     public enum KeyBoardType{
-        Boolean, Calendar_Month, Calendar_Year, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
+        User_Choose, Boolean,  Calendar, Calendar_Month, Calendar_Year, Calendar_Choose_Strategy, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();

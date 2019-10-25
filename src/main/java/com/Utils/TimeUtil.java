@@ -38,7 +38,18 @@ public class TimeUtil {
         YearMonth yearMonthObject = YearMonth.of(year, month);
         return yearMonthObject.lengthOfMonth();
     }
-    public static Map<String, String> getMonthMap() {
+
+    public static Map<Integer, String> getMonthMapIntKeys() {
+        Map<Integer, String> returnMap = new HashMap<>();
+        String[] monthArray = new String[]{"JAN", "FEB","MÄR","APR","MAI", "JUN","JUL","AUG","SEP", "OKT","NOV","DEZ"};
+        for(int i =1; i<13;i++){
+            String addZeroOrNot = i< 10 ? "0" : "";
+            returnMap.put(i, monthArray[i - 1]);
+        }
+        return returnMap;
+    }
+
+    public static Map<String, String> getMonthMapStringKeys() {
         String[] monthArray =new String[]{"JAN", "FEB","MÄR","APR","MAI", "JUN","JUL","AUG","SEP", "OKT","NOV","DEZ"};
         for(int i =1; i<13;i++){
             String addZeroOrNot = i< 10 ? "0" : "";

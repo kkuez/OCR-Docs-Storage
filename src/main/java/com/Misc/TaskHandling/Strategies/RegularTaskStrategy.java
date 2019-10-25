@@ -16,16 +16,18 @@ public class RegularTaskStrategy extends OneTimeTaskStrategy {
         this.daysFrequency = daysFrequency;
     }
 
-    private void setNextPerformTime(){
-        if(minuteToPerform != 99)
-        {
-            minuteToPerform += minutesFrequency;
-            hourToPerform += hoursFrequency;
-            timeToPerform = LocalDate.now().plusDays(daysFrequency).toString();
-        }
+    @Override
+    public void perform() {
+
     }
 
+    @Override
+    public String getStrategyName() {
+        return null;
+    }
+
+
     private void doAfterExecute(){
-        setNextPerformTime();
+
     }
 }

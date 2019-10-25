@@ -31,8 +31,8 @@ public class SumProcess extends Process{
         String[] commandValue = deserializeInput(update);
         switch (commandValue[0]){
             case "selectMonth":
-                if(TimeUtil.getMonthMap().containsKey(commandValue[1])) {
-                    month = TimeUtil.getMonthMap().get(commandValue[1]);
+                if(TimeUtil.getMonthMapStringKeys().containsKey(commandValue[1])) {
+                    month = TimeUtil.getMonthMapStringKeys().get(commandValue[1]);
                     message =  getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
                 }else{
                     message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");

@@ -6,5 +6,5 @@ public interface TaskStrategy {
 
      void perform();
 
-     boolean timeIsNow(LocalDateTime localDateTime);
+     String getStrategyName();
 }

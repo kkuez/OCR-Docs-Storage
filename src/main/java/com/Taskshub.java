@@ -30,12 +30,12 @@ public class Taskshub implements Runnable {
             refreshTimes();
             LogUtil.log("System: Trying to perform LaterTasks (" + tasksToDo.size() + " in List)");
             for (Task task : tasksToDo) {
-                if (task.getTaskStrategy().perform(currentMinute, currentHour, currentDate)) {
+             /*   if (task.getTaskStrategy().perform()) {
                     task.run();
                     if (task.isSuccessFullyExecuted()) {
                         task.deleteFromList(tasksToDo);
                     }
-                }
+                }*/
             }
         }
     }
@@ -64,5 +64,11 @@ public class Taskshub implements Runnable {
         this.loopActive = loopActive;
     }
 
+    public List<Task> getTasksToDo() {
+        return tasksToDo;
+    }
 
+    public void setTasksToDo(List<Task> tasksToDo) {
+        this.tasksToDo = tasksToDo;
+    }
 }

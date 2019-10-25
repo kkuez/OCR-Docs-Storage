@@ -1,29 +1,28 @@
 package com.Misc.TaskHandling.Strategies;
 
+import com.Misc.TaskHandling.Task;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public abstract class OneTimeTaskStrategy implements TaskStrategy {
 
-    LocalDateTime timeToPerform;
+    private String name;
+
+    Task task;
 
     public OneTimeTaskStrategy(){}
 
-    public OneTimeTaskStrategy(int year, int month, int day){
-        this.timeToPerform = LocalDateTime.of(year, month, day, 0,0);
-    }
-
-    public OneTimeTaskStrategy(int hourToPerform, int minuteToPerform, int year, int month, int day){
-        this.timeToPerform = LocalDateTime.of(year, month, day, hourToPerform, minuteToPerform);
-    }
-
     @Override
-    public void perform() {
+    public abstract void perform();
 
+    //GETTER SETTER
+
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public boolean timeIsNow(LocalDateTime localDateTime) {
-        return timeToPerform.equals(localDateTime);
+    public void setName(String name) {
+        this.name = name;
     }
 }

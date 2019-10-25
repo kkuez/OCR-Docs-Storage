@@ -1,13 +1,10 @@
 package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
-import com.ObjectHub;
-import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.DBUtil;
-import com.Utils.ExecutorUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,7 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class GetBonsProcess extends Process{
     private Steps currentStep;
@@ -42,8 +38,8 @@ public class GetBonsProcess extends Process{
         User user = getBot().getNonBotUserFromUpdate(update);
         switch (commandValue[0]){
             case "selectMonth":
-                if(TimeUtil.getMonthMap().keySet().contains(commandValue[1])) {
-                    month = TimeUtil.getMonthMap().get(commandValue[1]);
+                if(TimeUtil.getMonthMapStringKeys().keySet().contains(commandValue[1])) {
+                    month = TimeUtil.getMonthMapStringKeys().get(commandValue[1]);
                 message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
                 currentStep = Steps.selectYear;
             }else{

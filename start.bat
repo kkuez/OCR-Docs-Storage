@@ -1,1 +1,1 @@
-java -cp "OCR-1.0-SNAPSHOT.jar;external_libs/*" com.Main
+java -cp "target/OCR-1.0-SNAPSHOT.jar;lib/*" com.Main -gui
