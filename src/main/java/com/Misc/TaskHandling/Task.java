@@ -1,5 +1,6 @@
 package com.Misc.TaskHandling;
 
+import com.Misc.TaskHandling.Strategies.SimpleCalendarOneTimeStrategy;
 import com.Misc.TaskHandling.Strategies.TaskStrategy;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
@@ -25,9 +26,15 @@ public class Task {
     private List<User> userList = new ArrayList<>();
 
     public Task(User user, Bot bot){}
+    public Task(List<User> userList, Bot bot, LocalDateTime localDateTime, String actionName){
+        this.userList = userList;
+        this.bot = bot;
+        this.time = localDateTime;
+        this.name = actionName;
+    }
 
-    public void perform(){
-        taskStrategy.perform();
+    public boolean perform(){
+       return taskStrategy.perform();
     }
 
     public boolean timeIsNow(LocalDateTime localDateTime) {
@@ -45,9 +52,9 @@ public class Task {
 
          int minute = time.getMinute();
 
-        String user = userList.size() > 0 ? "ALL" : userList.get(0).getName();
+        String user = userList.size() > 0 ? "ALL" : userList.get(0).getId() + "");
 
-        return "insert into Documents (year, month, day, hour, minute, name, user) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + name + "', '" + user + "')";
+        return "insert into Documents (year, month, day, hour, minute, name, user, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + name + "', '" + user + "', '" + taskStrategy.getType() +")";
     }
 
     //GETTER SETTER

@@ -575,6 +575,28 @@ public class Bot extends TelegramLongPollingBot {
     public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
         return sendMsg(s, update, keyBoardTypeOrNull, "", isReply, inlineKeyboard);
     }
+    public synchronized Message sendSimpleMsg(String s, long chatID, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean inlineKeyboard){
+        boolean isOneTimeKeyboard = false;
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(chatID);
+        if(keyBoardTypeOrNull != null){
+            ReplyKeyboard replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard, "");
+            sendMessage.setReplyMarkup(replyKeyboard);
+            if(!inlineKeyboard){
+                //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.
+                allowedUsersMap.get(chatID).setKeyboardContext(replyKeyboard);
+            }
+        }
+        sendMessage.setText(s);
+        Message messageToReturn = null;
+        try {
+            messageToReturn = execute(sendMessage);
+        } catch (TelegramApiException e) {
+            LogUtil.logError("Failed to send message.", e);
+        }
+        return messageToReturn;
+    }
     public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
         boolean isOneTimeKeyboard = false;
         Message message = getMassageFromUpdate(update);

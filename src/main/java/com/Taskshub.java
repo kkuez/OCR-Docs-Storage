@@ -1,5 +1,6 @@
 package com;
 
+import com.Misc.TaskHandling.Strategies.RegularTaskStrategy;
 import com.Misc.TaskHandling.Task;
 import com.Utils.LogUtil;
 
@@ -28,15 +29,21 @@ public class Taskshub implements Runnable {
                 e.printStackTrace();
             }
             refreshTimes();
-            LogUtil.log("System: Trying to perform LaterTasks (" + tasksToDo.size() + " in List)");
+
+            List<Task> toBeRemovedList = new ArrayList<>();
             for (Task task : tasksToDo) {
-             /*   if (task.getTaskStrategy().perform()) {
-                    task.run();
-                    if (task.isSuccessFullyExecuted()) {
-                        task.deleteFromList(tasksToDo);
-                    }
-                }*/
+             boolean success = task.perform();
+             //if successfully performed and is NOT a regular task, remove from list
+             if(success){
+                 StringBuilder usersString = new StringBuilder();
+                 task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
+                 LogUtil.log("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
+                 if(!(task.getTaskStrategy() instanceof RegularTaskStrategy)) {
+                     toBeRemovedList.add(task);
+                 }
+             }
             }
+            tasksToDo.removeAll(toBeRemovedList);
         }
     }
 

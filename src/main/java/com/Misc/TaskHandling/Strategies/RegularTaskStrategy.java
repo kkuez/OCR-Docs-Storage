@@ -17,8 +17,13 @@ public class RegularTaskStrategy extends OneTimeTaskStrategy {
     }
 
     @Override
-    public void perform() {
+    public String getType() {
+        return "RegularTaskStrategy";
+    }
 
+    @Override
+    public boolean perform() {
+    return true;
     }
 
     @Override

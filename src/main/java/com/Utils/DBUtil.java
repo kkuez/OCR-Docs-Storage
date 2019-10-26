@@ -1,14 +1,20 @@
 package com.Utils;
 
+import com.Misc.TaskHandling.Strategies.SimpleCalendarOneTimeStrategy;
+import com.Misc.TaskHandling.Strategies.TaskStrategy;
+import com.Misc.TaskHandling.Task;
 import com.ObjectHub;
 import com.ObjectTemplates.Bon;
 import com.ObjectTemplates.Document;
 import com.ObjectTemplates.Image;
 import com.ObjectTemplates.User;
+import com.Telegram.Bot;
 import org.apache.commons.io.FileUtils;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class DBUtil {
@@ -175,6 +181,42 @@ public class DBUtil {
         int filesSizeOfNewFile = countDocuments("Documents" ,"where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
 
         return filesSizeOfNewFile > 0;
+    }
+
+    public static List<Task> getTasksFromDB(Bot bot){
+        List<Task> taskList = new ArrayList<>();
+        try {
+            Statement statement = getConnection().createStatement();
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select * from Bons");
+            while (rs.next()) {
+                LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
+                String strategyType = rs.getString("strategyType");
+                List<User> userList = new ArrayList<>();
+                if(rs.getString("user").equals("ALL")){
+                    userList.addAll(getAllowedUsersMap().values());
+                }else{
+                    userList.add(getAllowedUsersMap().get(Integer.parseInt(rs.getString("user"))));
+                }
+
+                Task task = new Task(userList, bot, time, rs.getString("name"));
+                switch (strategyType){
+                    case "SimpleCalendarOneTimeStrategy":
+                        TaskStrategy taskStrategy = new SimpleCalendarOneTimeStrategy(task);
+                        task.setTaskStrategy(taskStrategy);
+                        break;
+                }
+taskList.add(task);
+            }
+            statement.close();
+        } catch (SQLException e) {
+            LogUtil.logError("select * from Task", e);
+        }
+        return taskList;
+    }
+
+    public static void insertTaskToDB(Task task){
+        DBUtil.executeSQL(task.getInsertDBString());
     }
 
      public static List<Bon> getBonsfromDB(){
