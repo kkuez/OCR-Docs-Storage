@@ -216,7 +216,7 @@ public class DBUtil {
                         task.setTaskStrategy(taskStrategy);
                         break;
                 }
-taskList.add(task);
+                taskList.add(task);
             }
             statement.close();
         } catch (SQLException e) {

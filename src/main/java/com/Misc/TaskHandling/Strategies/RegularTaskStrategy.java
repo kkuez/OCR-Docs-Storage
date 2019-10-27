@@ -16,10 +16,6 @@ public class RegularTaskStrategy extends OneTimeTaskStrategy {
         this.daysFrequency = daysFrequency;
     }
 
-    @Override
-    public String getType() {
-        return "RegularTaskStrategy";
-    }
 
     @Override
     public boolean perform() {

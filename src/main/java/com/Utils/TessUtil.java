@@ -170,16 +170,8 @@ public class TessUtil {
 
     private static Tesseract getTesseract() {
         Tesseract instance = new Tesseract();
-        String datapath = "";
-        if(ObjectHub.getInstance().getInputArgs().containsKey("tessdata")){
-            datapath = ObjectHub.getInstance().getInputArgs().get("tessdata");
-            LogUtil.log("Alternative datapath set.");
-        }else{
-            datapath = ObjectHub.getInstance().getProperties().getProperty("tessData");
-        }
-
+        String datapath =  ObjectHub.getInstance().getProperties().getProperty("tessData");
         instance.setDatapath(datapath);
-
         instance.setLanguage(ObjectHub.getInstance().getProperties().getProperty("tessLang"));
         instance.setHocr(true);
         return instance;
