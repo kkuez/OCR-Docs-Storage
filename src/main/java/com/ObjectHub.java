@@ -32,7 +32,7 @@ public class ObjectHub {
 
     private Map<Update, Bot> performUpdateLaterMap;
 
-    private Taskshub taskshub;
+    private TasksRunnable tasksRunnable;
 
     private ObjectHub() {
         properties = new CustomProperties();
@@ -61,7 +61,7 @@ public class ObjectHub {
                 }
                 allowedUsersMap = DBUtil.getAllowedUsersMap();
                 performUpdateLaterMap = new HashMap<>();
-                taskshub = new Taskshub();
+                tasksRunnable = new TasksRunnable();
             }
         });
         thread.start();
@@ -79,8 +79,8 @@ public class ObjectHub {
 
 
 
-    public Taskshub getTaskshub() {
-        return taskshub;
+    public TasksRunnable getTasksRunnable() {
+        return tasksRunnable;
     }
 
     public Bot getBot() {

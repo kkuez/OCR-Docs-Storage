@@ -1,14 +1,10 @@
 package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
-import com.Misc.TaskHandling.Strategies.OneTimeTaskStrategy;
-import com.Misc.TaskHandling.Strategies.RegularTaskStrategy;
 import com.Misc.TaskHandling.Strategies.SimpleCalendarOneTimeStrategy;
-import com.Misc.TaskHandling.Strategies.TaskStrategy;
 import com.Misc.TaskHandling.Task;
 import com.ObjectHub;
 import com.ObjectTemplates.User;
-import com.Taskshub;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
 import com.Utils.DBUtil;
@@ -18,8 +14,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class CalenderProcess extends Process {
@@ -98,7 +92,7 @@ public class CalenderProcess extends Process {
                 task.getUserList().add(user);
                 DBUtil.executeSQL(task.getInsertDBString());
                 getSentMessages().add(message);
-                ObjectHub.getInstance().getTaskshub().getTasksToDo().add(task);
+                ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
                 close();
                 getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
                 break;
@@ -106,7 +100,7 @@ public class CalenderProcess extends Process {
                 allowedUsersMap.values().forEach(user1 -> task.getUserList().add(user1));
                 DBUtil.executeSQL(task.getInsertDBString());
                 getSentMessages().add(message);
-                ObjectHub.getInstance().getTaskshub().getTasksToDo().add(task);
+                ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
                 close();
                 getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
                 break;

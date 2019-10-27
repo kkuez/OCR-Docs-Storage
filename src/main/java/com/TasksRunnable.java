@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Taskshub implements Runnable {
+public class TasksRunnable implements Runnable {
 
     private List<Task> tasksToDo = new ArrayList<>();
 
@@ -31,18 +31,20 @@ public class Taskshub implements Runnable {
             refreshTimes();
 
             List<Task> toBeRemovedList = new ArrayList<>();
+            LocalDateTime localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
             for (Task task : tasksToDo) {
-             boolean success = task.perform();
-             //if successfully performed and is NOT a regular task, remove from list
-             if(success){
-                 StringBuilder usersString = new StringBuilder();
-                 task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
-                 LogUtil.log("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
-                 if(!(task.getTaskStrategy() instanceof RegularTaskStrategy)) {
-                     toBeRemovedList.add(task);
-                 }
-             }
-            }
+                if(task.timeIsNow(localDateTimeNow)){
+                    boolean success = task.perform();
+                    //if successfully performed and is NOT a regular task, remove from list
+                    if(success){
+                        StringBuilder usersString = new StringBuilder();
+                        task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
+                        LogUtil.log("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
+                        if(!(task.getTaskStrategy() instanceof RegularTaskStrategy)) {
+                            toBeRemovedList.add(task);
+                        }
+                    }
+                }}
             tasksToDo.removeAll(toBeRemovedList);
         }
     }
