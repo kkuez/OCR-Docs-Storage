@@ -116,11 +116,11 @@ public class CalenderProcess extends Process {
                 StringBuilder messageOfTasks = new StringBuilder();
                 List<Task> taskList = DBUtil.getTasksFromDB(getBot());
                 for(Task task: taskList){
-                    messageOfTasks.append(task.getTime().toString().replace("T", " um ") + " Uhr:\n");
+                    messageOfTasks.append("\n" + task.getTime().toString().replace("T", " um ") + " Uhr:\n");
                     messageOfTasks.append(task.getName() + "\n");
                     task.getUserList().forEach(user1 -> messageOfTasks.append(", " + user1.getName()));
                 }
-                String messageString = messageOfTasks.toString().replaceFirst(", ", "");
+                String messageString = messageOfTasks.toString().replaceFirst(", ", "").replaceFirst("\n", "");
                 getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false);
                 close();
                 break;
