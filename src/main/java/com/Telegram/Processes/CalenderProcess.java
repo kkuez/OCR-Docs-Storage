@@ -11,9 +11,11 @@ import com.Utils.DBUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +45,10 @@ public class CalenderProcess extends Process {
         String[] commandValue = deserializeInput(update);
         Message message = null;
         switch (commandValue[0]){
+            case "done":
+                getBot().sendMsg("Ok :)", update, null, false, false);
+                close();
+                break;
             case "chooseStrategy":
                 task = new Task(user, getBot());
                 switch (commandValue[1]){
@@ -121,11 +127,36 @@ public class CalenderProcess extends Process {
                 getBot().sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy,"chooseStrategy", true, true);
                 break;
             case "Termin löschen":
+                List<String> taskNames = new ArrayList<>();
+                DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames.add(task1.getName()));
+                ReplyKeyboard listKeyboard = KeyboardFactory.getInlineKeyboardForList(taskNames, "deleteTask");
+                message = getBot().sendKeyboard("Welchen Termin willst du löschen?", update, listKeyboard, false);
                 break;
-                default:
+            case "deleteTask":
+                Task taskToRemove = null;
+                for(Task task: DBUtil.getTasksFromDB(getBot())){
+                    if(task.getName().equals(commandValue[1])){
+                        taskToRemove = task;
+                        break;
+                    }
+                }
+                if(taskToRemove != null){
+                    DBUtil.removeTask(taskToRemove);
+                    try {
+                        getBot().sendAnswerCallbackQuery(taskToRemove.getName() + " gelöscht :)", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    List<String> taskNames1 = new ArrayList<>();
+                    DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames1.add(task1.getName()));
+                    ReplyKeyboard listKeyboard1 = KeyboardFactory.getInlineKeyboardForList(taskNames1, "deleteTask");
+                    message = getBot().simpleEditMessage("Welchen Termin willst du löschen?", getBot().getMassageFromUpdate(update), listKeyboard1, "deleteTask");
+                }
+                break;
+            default:
                 task.setName(commandValue[0]);
-                    message = getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear",false, true );
-                    break;
+                message = getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear",false, true );
+                break;
         }
         getBot().getNonBotUserFromUpdate(update).setBusy(false);
         if(message != null){
@@ -140,33 +171,44 @@ public class CalenderProcess extends Process {
 
     @Override
     public String getCommandIfPossible(Update update) {
-            String inputString = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
-            if(inputString.startsWith("Termin")){
-                return inputString;
-            }else{
-                if(inputString.startsWith("chooseName")){
+        String inputString = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
+        if (inputString.startsWith("Termin")) {
+            return inputString;
+        } else {
+            if (inputString.startsWith("deleteTask")) {
+                return "deleteTask";
+            } else {
+                if (inputString.startsWith("chooseName")) {
                     return "chooseName";
-                }else {
-                    if (inputString.startsWith("chooseStrategy")){
-                    return "chooseStrategy";
-                }else {
-                    if (inputString.startsWith("chooseYear")){
-                    return "chooseYear";
-                }else {
-                    if (inputString.startsWith("chooseMonth")){
-                    return "chooseMonth";
-                }else {
-                    if (inputString.startsWith("day")){
-                    return "day";
-                }else {
-                    if (inputString.startsWith("forMe")){
-                    return "forMe";
-                }else {
-                    if (inputString.startsWith("forAll")){
-                        {
-                }
+                } else {
+                    if (inputString.startsWith("chooseStrategy")) {
+                        return "chooseStrategy";
+                    } else {
+                        if (inputString.startsWith("chooseYear")) {
+                            return "chooseYear";
+                        } else {
+                            if (inputString.startsWith("chooseMonth")) {
+                                return "chooseMonth";
+                            } else {
+                                if (inputString.startsWith("day")) {
+                                    return "day";
+                                } else {
+                                    if (inputString.startsWith("forMe")) {
+                                        return "forMe";
+                                    } else {
+                                        if (inputString.startsWith("forAll")) {
+                                            {
+                                            }
 
-            }}}}}}}}
-        return inputString;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return inputString;
+        }
     }
 }

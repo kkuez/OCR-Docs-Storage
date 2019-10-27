@@ -33,6 +33,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -475,6 +476,12 @@ public class Bot extends TelegramLongPollingBot {
         return simpleEditMessage(text, message, inputKeyboard, callbackPrefix);
     }
     public  Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard, String callbackPrefix){
+        String prefix = callbackPrefix != null ? callbackPrefix : "";
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(inputKeyboard);
+        return simpleEditMessage(text, message, inlineKeyboardMarkup, callbackPrefix);
+    }
+    public  Message simpleEditMessage(String text, Message message, ReplyKeyboard inputKeyboard, String callbackPrefix){
 
         if(!message.hasText()){
             if(message.hasPhoto() && message.getCaption() != null){
@@ -486,9 +493,9 @@ public class Bot extends TelegramLongPollingBot {
             editMessageText.setMessageId(message.getMessageId());
             editMessageText.setText(text);
 
-            editMessageText.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(inputKeyboard));
+            editMessageText.setReplyMarkup((InlineKeyboardMarkup) inputKeyboard);
             try {
-                execute(editMessageText);
+               execute(editMessageText);
             } catch (TelegramApiException e) {
                 LogUtil.logError("Couldn't edit message text.", e);
             }
@@ -497,7 +504,7 @@ public class Bot extends TelegramLongPollingBot {
             EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
             editMessageReplyMarkup.setChatId(message.getChatId());
             editMessageReplyMarkup.setMessageId(message.getMessageId());
-            editMessageReplyMarkup.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(inputKeyboard));
+            editMessageReplyMarkup.setReplyMarkup((InlineKeyboardMarkup) inputKeyboard);
             try {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {
