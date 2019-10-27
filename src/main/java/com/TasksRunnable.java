@@ -2,6 +2,8 @@ package com;
 
 import com.Misc.TaskHandling.Strategies.RegularTaskStrategy;
 import com.Misc.TaskHandling.Task;
+import com.Telegram.Bot;
+import com.Utils.DBUtil;
 import com.Utils.LogUtil;
 
 import java.time.LocalDate;
@@ -20,19 +22,16 @@ public class TasksRunnable implements Runnable {
 
     private String currentDate;
 
+    private Bot bot;
+
     private void loop() {
         loopActive = true;
         while (loopActive) {
-            try {
-                Thread.sleep(60000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            refreshTimes();
+            tasksToDo = DBUtil.getTasksFromDB(bot);
 
-            List<Task> toBeRemovedList = new ArrayList<>();
-            LocalDateTime localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
+            LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
+                localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
                 if(task.timeIsNow(localDateTimeNow)){
                     boolean success = task.perform();
                     //if successfully performed and is NOT a regular task, remove from list
@@ -41,11 +40,16 @@ public class TasksRunnable implements Runnable {
                         task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
                         LogUtil.log("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
                         if(!(task.getTaskStrategy() instanceof RegularTaskStrategy)) {
-                            toBeRemovedList.add(task);
+                            DBUtil.removeTask(task);
                         }
                     }
-                }}
-            tasksToDo.removeAll(toBeRemovedList);
+                }
+            }
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -64,6 +68,11 @@ public class TasksRunnable implements Runnable {
 
 
     //GETTER SETTER
+
+
+    public void setBot(Bot bot) {
+        this.bot = bot;
+    }
 
     public boolean isLoopActive() {
         return loopActive;

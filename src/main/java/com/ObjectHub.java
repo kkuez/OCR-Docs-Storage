@@ -46,10 +46,9 @@ public class ObjectHub {
 
         executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));
 
-        initLater();
     }
 
-    private void initLater(){
+    public void initLater(){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -62,6 +61,8 @@ public class ObjectHub {
                 allowedUsersMap = DBUtil.getAllowedUsersMap();
                 performUpdateLaterMap = new HashMap<>();
                 tasksRunnable = new TasksRunnable();
+                tasksRunnable.setBot(getBot());
+                tasksRunnable.run();
             }
         });
         thread.start();

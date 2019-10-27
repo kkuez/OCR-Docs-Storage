@@ -109,6 +109,16 @@ public class DBUtil {
         DBUtil.executeSQL(document.getInsertDBString());
     }
 
+    public static void removeTask(Task task){
+        int year = task.getTime().getYear();
+        int month = task.getTime().getMonth().getValue();
+        int day = task.getTime().getDayOfMonth();
+        int hour = task.getTime().getHour();
+        int minute = task.getTime().getMinute();
+
+        executeSQL("delete from CalendarTasks where name='" + task.getName() + "' AND year=" + year + " AND month=" + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
+    }
+
     public static void removeLastProcressedDocument(){
         executeSQL("delete from Documents where id=" + lastProcessedDoc.getId() + "");
         executeSQL("delete from Bons where belongsToDocument=" + lastProcessedDoc.getId() + "");
@@ -188,7 +198,7 @@ public class DBUtil {
         try {
             Statement statement = getConnection().createStatement();
             statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from Bons");
+            ResultSet rs = statement.executeQuery("select * from CalendarTasks");
             while (rs.next()) {
                 LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
                 String strategyType = rs.getString("strategyType");

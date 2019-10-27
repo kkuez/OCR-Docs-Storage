@@ -49,8 +49,8 @@ public class Bot extends TelegramLongPollingBot {
 
     Map<Integer, User> allowedUsersMap;
 
-    public Bot(Map<Integer, User> allowedUsersMap) {
-        this.allowedUsersMap = allowedUsersMap;
+    public Bot() {
+        this.allowedUsersMap = DBUtil.getAllowedUsersMap();
         shoppingList = DBUtil.getShoppingListFromDB();
         progressReporter = new ProgressReporter() {
             @Override
@@ -638,6 +638,14 @@ public class Bot extends TelegramLongPollingBot {
     }
     //GETTER SETTER
 
+
+    public Map<Integer, User> getAllowedUsersMap() {
+        return allowedUsersMap;
+    }
+
+    public void setAllowedUsersMap(Map<Integer, User> allowedUsersMap) {
+        this.allowedUsersMap = allowedUsersMap;
+    }
 
     public List<String> getShoppingList() {
         return shoppingList;

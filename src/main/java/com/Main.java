@@ -12,7 +12,6 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
-        ObjectHub.getInstance().setInputArgs(args);
 
         for(String s : args){
             if(s.equals("-gui")){
@@ -37,19 +36,20 @@ public class Main {
         }
         }
     private static boolean activateTGBot(Bot inputBotOrNull) throws TelegramApiRequestException {
-        LogUtil.log("System: Activate Bot");
         Bot bot = null;
         try {
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotApi = new TelegramBotsApi();
-            bot = inputBotOrNull == null ? new Bot(ObjectHub.getInstance().getAllowedUsersMap()) : inputBotOrNull;
+            bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
             ObjectHub.getInstance().setBot(bot);
+            ObjectHub.getInstance().initLater();
             telegramBotApi.registerBot(bot);
         } catch (TelegramApiRequestException e) {
             LogUtil.logError(null, e);
             LogUtil.log("Failed activating ");
             throw e;
         }
+        LogUtil.log("System: Activated Bot");
         return true;
     }
 
