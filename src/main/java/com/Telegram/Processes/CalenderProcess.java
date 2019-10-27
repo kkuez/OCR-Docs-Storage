@@ -56,6 +56,7 @@ public class CalenderProcess extends Process {
                         task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task));
                         break;
                     case "regular":
+                        //TODO hinzufügen!!
                         //task.setTaskStrategy(new RegularTaskStrategy(task));
                         break;
                 }

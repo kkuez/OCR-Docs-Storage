@@ -81,7 +81,8 @@ public class KeyboardFactory {
                 break;
             case Calendar_Choose_Strategy:
                 endKeyboard.add(createInlineKeyboardRow(List.of("Einmaliger Termin"), List.of("chooseStrategyoneTime")));
-                endKeyboard.add(createInlineKeyboardRow(List.of("Wiederholter Termin"), List.of("chooseStrategyregular")));
+                //TODO hinzufügen
+               // endKeyboard.add(createInlineKeyboardRow(List.of("Wiederholter Termin"), List.of("chooseStrategyregular")));
                 endKeyboard.add(ABORT_ROW);
                 break;
             case User_Choose:
