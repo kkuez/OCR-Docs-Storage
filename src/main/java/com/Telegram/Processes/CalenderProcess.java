@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 public class CalenderProcess extends Process {
@@ -105,6 +106,16 @@ public class CalenderProcess extends Process {
                 getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
                 break;
             case "Termine anzeige":
+                StringBuilder messageOfTasks = new StringBuilder();
+                List<Task> taskList = DBUtil.getTasksFromDB(getBot());
+                for(Task task: taskList){
+                    messageOfTasks.append(task.getTime().toString().replace("T", ", ") + ":\n");
+                    messageOfTasks.append(task.getName() + "\n");
+                    task.getUserList().forEach(user1 -> messageOfTasks.append(", " + user1.getName()));
+                }
+                String messageString = messageOfTasks.toString().replaceFirst(", ", "");
+                getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false);
+                close();
                 break;
             case "Termin hinzufügen":
                 getBot().sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy,"chooseStrategy", true, true);
