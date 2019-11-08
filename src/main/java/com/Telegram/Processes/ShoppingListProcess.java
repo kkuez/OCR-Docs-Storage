@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.*;
 
@@ -90,7 +91,15 @@ public class ShoppingListProcess extends Process{
                 status = AWAITING_INPUT.add;
                 break;
             case"Standardliste anzeigen":
-                message = getBot().simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
+                try {
+                    message = getBot().simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
+                } catch (TelegramApiException e) {
+                    if(((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                        LogUtil.log("Message not edited, no need.");
+                    }else{
+                        LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+                    }
+                }
                 break;
         }
         user.setBusy(false);

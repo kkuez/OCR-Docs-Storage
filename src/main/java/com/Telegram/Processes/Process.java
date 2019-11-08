@@ -5,8 +5,11 @@ import com.ObjectTemplates.Document;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
+import com.Utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public abstract class Process {
 
     private boolean awaitsInput = false;
 
-    public abstract void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap);
+    public abstract void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) throws TelegramApiException;
 
     public abstract String getProcessName();
 
@@ -38,11 +41,25 @@ public abstract class Process {
 
 
     private void clearButtons(){
+        int caughtMessages = 0;
         for(Message message : getSentMessages()){
             if(message != null){
-            getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons, "");
-        }}
-}
+                try {
+                    getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons, "");
+                } catch (TelegramApiException e) {
+                    if(((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                        caughtMessages++;
+                        LogUtil.log("Message not edited, no need.");
+                    }else{
+                        LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+                    }
+                }
+            }
+        }
+        if(caughtMessages > 0){
+            LogUtil.log(caughtMessages + " messages caught.");
+        }
+    }
 
     public void close(){
         clearButtons();

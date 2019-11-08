@@ -4,6 +4,7 @@ import com.Controller.Reporter.ProgressReporter;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Utils.DBUtil;
+import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -21,12 +22,22 @@ public class SumProcess extends Process{
     public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
-        Message message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
-        getSentMessages().add(message);
-        performNextStep("", update, allowedUsersMap);
+        Message message = null;
+        try {
+            message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
+            getSentMessages().add(message);
+            performNextStep("", update, allowedUsersMap);
+        } catch (TelegramApiException e) {
+            if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                LogUtil.log("Message not edited, no need.");
+            }else{
+                LogUtil.logError(((TelegramApiException) e).getLocalizedMessage(), e);
+            }
+        }
+
     }
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) throws TelegramApiException{
         Message message = null;
         String[] commandValue = deserializeInput(update);
         switch (commandValue[0]){

@@ -8,6 +8,7 @@ import com.ObjectTemplates.User;
 import com.Telegram.Bot;
 import com.Telegram.KeyboardFactory;
 import com.Utils.DBUtil;
+import com.Utils.LogUtil;
 import com.Utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -36,11 +37,19 @@ public class CalenderProcess extends Process {
     public CalenderProcess(ProgressReporter reporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap) {
         super(reporter);
         setBot(bot);
-        performNextStep("Termin hinzufügen", update, allowedUsersMap);
+        try {
+            performNextStep("Termin hinzufügen", update, allowedUsersMap);
+        } catch (TelegramApiException e) {
+            if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                LogUtil.log("Message not edited, no need.");
+            }else{
+                LogUtil.logError(((TelegramApiException) e).getLocalizedMessage(), e);
+            }
+        }
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) throws TelegramApiException{
         User user = getBot().getNonBotUserFromUpdate(update);
         String[] commandValue = deserializeInput(update);
         Message message = null;

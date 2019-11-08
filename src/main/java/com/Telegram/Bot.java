@@ -432,7 +432,7 @@ public class Bot extends TelegramLongPollingBot {
         return messageToReturn;
     }
 
-    public  Message askBoolean(String question, Update update,boolean isReply){
+    public  Message askBoolean(String question, Update update,boolean isReply) throws TelegramApiException{
         Message message = null;
         if(update.hasCallbackQuery()){
             message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Boolean);
@@ -441,7 +441,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         return message;
     }
-    public  Message askMonth(String question, Update update,  boolean isReply, String callbackPrefix) {
+    public  Message askMonth(String question, Update update,  boolean isReply, String callbackPrefix)  throws TelegramApiException{
         Message message = null;
         if (update.hasCallbackQuery()) {
             message = simpleEditMessage(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month, callbackPrefix);
@@ -463,25 +463,25 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     //Convenience method to have one edit method for everything
-    public  Message simpleEditMessage(String text,  Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callBackPrefix){
+    public  Message simpleEditMessage(String text,  Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callBackPrefix) throws TelegramApiException{
         Message message = getMassageFromUpdate(update);
         return simpleEditMessage(text,  message, keyBoardTypeOrNull, callBackPrefix);
     }
-    public  Message simpleEditMessage(String text,  Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull){
+    public  Message simpleEditMessage(String text,  Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull) throws TelegramApiException{
         Message message = getMassageFromUpdate(update);
         return simpleEditMessage(text,  message, keyBoardTypeOrNull, "");
     }
-    public  Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackPrefix){
+    public  Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackPrefix) throws TelegramApiException{
         List<List<InlineKeyboardButton>> inputKeyboard = KeyboardFactory.createInlineKeyboard(keyBoardTypeOrNull, callbackPrefix);
         return simpleEditMessage(text, message, inputKeyboard, callbackPrefix);
     }
-    public  Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard, String callbackPrefix){
+    public  Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard, String callbackPrefix) throws TelegramApiException{
         String prefix = callbackPrefix != null ? callbackPrefix : "";
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(inputKeyboard);
         return simpleEditMessage(text, message, inlineKeyboardMarkup, callbackPrefix);
     }
-    public  Message simpleEditMessage(String text, Message message, ReplyKeyboard inputKeyboard, String callbackPrefix){
+    public  Message simpleEditMessage(String text, Message message, ReplyKeyboard inputKeyboard, String callbackPrefix) throws TelegramApiException {
 
         if(!message.hasText()){
             if(message.hasPhoto() && message.getCaption() != null){
@@ -497,7 +497,7 @@ public class Bot extends TelegramLongPollingBot {
             try {
                execute(editMessageText);
             } catch (TelegramApiException e) {
-                LogUtil.logError("Couldn't edit message text.", e);
+                throw e;
             }
         }
         if(inputKeyboard != null && message.hasReplyMarkup()) {
@@ -508,17 +508,13 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {
-                if(((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
-                    LogUtil.log("Message not edited, no need.");
-                }else{
-                    LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
-                }
+                throw e;
             }
         }
         return message;
     }
 
-    public Message askYear(String question, Update update, boolean isReply, String callbackPrefix){
+    public Message askYear(String question, Update update, boolean isReply, String callbackPrefix) throws TelegramApiException{
         Message message = null;
         if (update.hasCallbackQuery()) {
             message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Year, callbackPrefix);
