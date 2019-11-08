@@ -24,17 +24,11 @@ import java.util.regex.Pattern;
 
 public class TessUtil {
 
-    private static Pattern datePattern;
+    private static Pattern datePattern = Pattern.compile("\\s*(3[01]|[12][0-9]|0?[1-9])\\.(1[012]|0?[1-9])\\.((?:19|20)\\d{2})\\s*");
 
-    private static Pattern germanDatePattern;
+    private static Pattern germanDatePattern = Pattern.compile("\\d\\.\\d\\.\\d\\d\\d\\d");
 
-    private static Pattern numberPattern;
-
-    private static void compilePatterns(){
-        datePattern = Pattern.compile("\\s*(3[01]|[12][0-9]|0?[1-9])\\.(1[012]|0?[1-9])\\.((?:19|20)\\d{2})\\s*");
-        germanDatePattern = Pattern.compile("\\d\\.\\d\\.\\d\\d\\d\\d");
-        numberPattern = Pattern.compile("\\d*\\.\\d*|\\d");
-    }
+    private static Pattern numberPattern = Pattern.compile("((\\d\\d|\\d)(,|\\.)\\d\\d)");
 
     public static Set<Document> processFolder(File folder, Bot bot, TableView tableView, TableColumn[] tableColumns,
                                               PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter) {
@@ -122,9 +116,6 @@ public class TessUtil {
 
     public static String getFirstDate(String documentData) throws Exception{
 
-        if(datePattern == null || germanDatePattern == null){
-            compilePatterns();
-        }
         String date = getDateWithPattern(datePattern, documentData);
         if(date == null){
             date = getDateWithPattern(germanDatePattern, documentData);
@@ -149,9 +140,7 @@ public class TessUtil {
         return date;
     }
     public static float getLastNumber(String content){
-        if(numberPattern == null){
-            compilePatterns();
-        }
+
         Matcher matcher = numberPattern.matcher(content);
         List<String> numberList = new ArrayList<>();
 
@@ -171,9 +160,9 @@ public class TessUtil {
     private static Tesseract getTesseract() {
         Tesseract instance = new Tesseract();
         String datapath =  ObjectHub.getInstance().getProperties().getProperty("tessData");
+        instance.setHocr(Boolean.parseBoolean(ObjectHub.getInstance().getProperties().getProperty("tessHTML")));
         instance.setDatapath(datapath);
         instance.setLanguage(ObjectHub.getInstance().getProperties().getProperty("tessLang"));
-        instance.setHocr(true);
         return instance;
     }
 }

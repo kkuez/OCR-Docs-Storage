@@ -130,7 +130,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (process == null) {
                     //Set process if null
                     if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                        sendMsg("Verarbeite Bild...", update, null, true, false);
+                        Message message = sendMsg("Verarbeite Bild...", update, null, true, false);
                         processPhoto(update);
                     }else{
                         allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
@@ -138,7 +138,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 } else {
                     if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                        sendMsg("Verarbeite Bild...", update, null, true, false);
+                        Message message = sendMsg("Verarbeite Bild...", update, null, true, false);
                         processPhoto(update);
                     }else{
                         process.performNextStep(textGivenByUser, update, allowedUsersMap);
@@ -151,7 +151,6 @@ public class Bot extends TelegramLongPollingBot {
             throw new RuntimeException();
         }
     }
-
 
     private void printUpdateData(Update update){
         StringBuilder printBuilder;
