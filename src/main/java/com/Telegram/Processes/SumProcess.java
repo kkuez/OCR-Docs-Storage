@@ -54,13 +54,16 @@ public class SumProcess extends Process{
                 if(TimeUtil.getYearsSet().contains(year)) {
                     getBot().getNonBotUserFromUpdate(update).setBusy(true);
                     String parsedDate = month + "." + year;
-                    float sumOfMonth = DBUtil.getSumMonth(parsedDate);
+                    float sumOfMonthAll = DBUtil.getSumMonth(parsedDate, null);
+                    User user = allowedUsersMap.get(update.getCallbackQuery().getFrom().getId());
+                    float sumOfMonthForCurrentUser = DBUtil.getSumMonth(parsedDate, user);
+                    String messageToSend = "Summe alle: " + month + "/" + year + ":\n" + sumOfMonthAll + "\nSumme " + user.getName() + " "+ month + "/" + year + ": " + sumOfMonthForCurrentUser;
                     try {
-                        getBot().sendAnswerCallbackQuery("Summe " + month + "/" + year + ":\n" + sumOfMonth, false, update.getCallbackQuery());
+                        getBot().sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                    getBot().sendMsg("Summe " + month + "/" + year + ":\n" + sumOfMonth, update, null, false, false);
+                    getBot().sendMsg(messageToSend, update, null, false, false);
                     getBot().getNonBotUserFromUpdate(update).setBusy(false);
                     close();
                 }else{

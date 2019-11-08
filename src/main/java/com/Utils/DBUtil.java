@@ -151,7 +151,7 @@ public class DBUtil {
         }
     }
 
-    public static float getSumMonth(String monthAndYear){
+    public static float getSumMonth(String monthAndYear, User userOrNull){
         //TODO schlampig
         List<Document> documentList = getDocumentsForMonthAndYear(monthAndYear);
 
@@ -162,7 +162,11 @@ public class DBUtil {
 
         for(Document document : documentList){
             if(bonIdMap.keySet().contains(document.getId())){
-                resultSum += bonIdMap.get(document.getId());
+                if(userOrNull == null) {
+                    resultSum += bonIdMap.get(document.getId());
+                }else{
+                    resultSum += userOrNull.getId() == document.getUser() ? bonIdMap.get(document.getId()) : 0;
+                }
             }
         }
         return resultSum;
