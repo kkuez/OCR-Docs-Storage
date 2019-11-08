@@ -18,7 +18,6 @@ public class SumProcess extends Process{
 
     private String year;
 
-
     public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
@@ -34,8 +33,8 @@ public class SumProcess extends Process{
                 LogUtil.logError(((TelegramApiException) e).getLocalizedMessage(), e);
             }
         }
-
     }
+
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) throws TelegramApiException{
         Message message = null;
@@ -57,7 +56,7 @@ public class SumProcess extends Process{
                     float sumOfMonthAll = DBUtil.getSumMonth(parsedDate, null);
                     User user = allowedUsersMap.get(update.getCallbackQuery().getFrom().getId());
                     float sumOfMonthForCurrentUser = DBUtil.getSumMonth(parsedDate, user);
-                    String messageToSend = "Summe alle: " + month + "/" + year + ":\n" + sumOfMonthAll + "\nSumme " + user.getName() + " "+ month + "/" + year + ": " + sumOfMonthForCurrentUser;
+                    String messageToSend = month + "/" + year +  "\nSumme alle: " + sumOfMonthAll + "\nSumme " + user.getName() + ": " + sumOfMonthForCurrentUser;
                     try {
                         getBot().sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {

@@ -39,7 +39,6 @@ public abstract class Process {
 
     private List<Message> sentMessages = new ArrayList<>();
 
-
     private void clearButtons(){
         int caughtMessages = 0;
         for(Message message : getSentMessages()){
@@ -47,9 +46,8 @@ public abstract class Process {
                 try {
                     getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons, "");
                 } catch (TelegramApiException e) {
-                    if(((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                    if(e.getMessage().equals("Error editing message reply markup")){
                         caughtMessages++;
-                        LogUtil.log("Message not edited, no need.");
                     }else{
                         LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
                     }

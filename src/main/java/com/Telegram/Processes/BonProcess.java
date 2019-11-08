@@ -32,10 +32,11 @@ public class BonProcess extends Process {
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) throws TelegramApiException{
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap){
         String[] commandValue = deserializeInput(update);
         Message message = null;
         User user = getBot().getNonBotUserFromUpdate(update);
+        try {
             switch (commandValue[0]) {
                 case "abort":
                     getBot().abortProcess(update);
@@ -58,8 +59,8 @@ public class BonProcess extends Process {
                         user.setBusy(false);
                     } else {
                         if (commandValue[1].equals("deny")) {
-                            getBot().simpleEditMessage("Ok :)", update, null);
-                            setDeleteLater(true);
+                            message = getBot().simpleEditMessage("Ok :)", update, KeyboardFactory.KeyBoardType.NoButtons);
+                            close();
                         } else {
                             message = getBot().simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
                         }
@@ -102,6 +103,13 @@ public class BonProcess extends Process {
                     }
                     break;
             }
+        } catch (TelegramApiException e) {
+            if(e.getMessage().equals("Error editing message reply markup")){
+                LogUtil.log("1 message not changed.");
+            }else{
+                LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+            }
+        }
         if(message != null){
             getSentMessages().add(message);
         }
