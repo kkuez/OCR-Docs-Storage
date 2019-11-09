@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,120 +54,128 @@ public class CalenderProcess extends Process {
         User user = getBot().getNonBotUserFromUpdate(update);
         String[] commandValue = deserializeInput(update);
         Message message = null;
-        switch (commandValue[0]){
-            case "done":
-                getBot().sendMsg("Ok :)", update, null, false, false);
-                close();
-                break;
-            case "chooseStrategy":
-                task = new Task(user, getBot());
-                switch (commandValue[1]){
-                    case "oneTime":
-                        task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task));
-                        break;
-                    case "regular":
-                        //TODO hinzufügen!!
-                        //task.setTaskStrategy(new RegularTaskStrategy(task));
-                        break;
-                }
-                try {
-                    getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-                message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
-                break;
-            case "chooseYear":
-                year = Integer.parseInt(commandValue[1]);
-                try {
-                    getBot().sendAnswerCallbackQuery(year + " gewählt.", false, update.getCallbackQuery());
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-                message = getBot().simpleEditMessage("Welche Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth");
-                break;
-            case "chooseMonth":
-                month = Integer.parseInt(TimeUtil.getMonthMapStringKeys().get(commandValue[1]));
-                try {
-                    getBot().sendAnswerCallbackQuery(month + " gewählt.", false, update.getCallbackQuery());
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-                message = getBot().simpleEditMessage("Welcher Tag?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
-                break;
-            case "day":
-                day = Integer.parseInt(commandValue[1]);
-                try {
-                    getBot().sendAnswerCallbackQuery(day + " gewählt.", false, update.getCallbackQuery());
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-                LocalDateTime localDateTime = LocalDateTime.of(year, month, day, 4, 0);
-                task.setTime(localDateTime);
-                message = getBot().simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
-                break;
-            case "forMe":
-                task.getUserList().add(user);
-                DBUtil.executeSQL(task.getInsertDBString());
-                getSentMessages().add(message);
-                ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
-                close();
-                getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
-                break;
-            case "forAll":
-                allowedUsersMap.values().forEach(user1 -> task.getUserList().add(user1));
-                DBUtil.executeSQL(task.getInsertDBString());
-                getSentMessages().add(message);
-                ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
-                close();
-                getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
-                break;
-            case "Termine anzeige":
-                StringBuilder messageOfTasks = new StringBuilder();
-                List<Task> taskList = DBUtil.getTasksFromDB(getBot());
-                for(Task task: taskList){
-                    messageOfTasks.append("\n" + task.getTime().toString().replace("T", " um ") + " Uhr:\n");
-                    messageOfTasks.append(task.getName() + "\n");
-                    task.getUserList().forEach(user1 -> messageOfTasks.append(", " + user1.getName()));
-                }
-                String messageString = messageOfTasks.toString().replaceFirst(", ", "").replaceFirst("\n", "");
-                getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false);
-                close();
-                break;
-            case "Termin hinzufügen":
-                getBot().sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy,"chooseStrategy", true, true);
-                break;
-            case "Termin löschen":
-                List<String> taskNames = new ArrayList<>();
-                DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames.add(task1.getName()));
-                ReplyKeyboard listKeyboard = KeyboardFactory.getInlineKeyboardForList(taskNames, "deleteTask");
-                message = getBot().sendKeyboard("Welchen Termin willst du löschen?", update, listKeyboard, false);
-                break;
-            case "deleteTask":
-                Task taskToRemove = null;
-                for(Task task: DBUtil.getTasksFromDB(getBot())){
-                    if(task.getName().equals(commandValue[1])){
-                        taskToRemove = task;
-                        break;
+        try {
+            switch (commandValue[0]) {
+                case "done":
+                    getBot().sendMsg("Ok :)", update, null, false, false);
+                    close();
+                    break;
+                case "chooseStrategy":
+                    task = new Task(user, getBot());
+                    switch (commandValue[1]) {
+                        case "oneTime":
+                            task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task));
+                            break;
+                        case "regular":
+                            //TODO hinzufügen!!
+                            //task.setTaskStrategy(new RegularTaskStrategy(task));
+                            break;
                     }
-                }
-                if(taskToRemove != null){
-                    DBUtil.removeTask(taskToRemove);
                     try {
-                        getBot().sendAnswerCallbackQuery(taskToRemove.getName() + " gelöscht :)", false, update.getCallbackQuery());
+                        getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                    List<String> taskNames1 = new ArrayList<>();
-                    DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames1.add(task1.getName()));
-                    ReplyKeyboard listKeyboard1 = KeyboardFactory.getInlineKeyboardForList(taskNames1, "deleteTask");
-                    message = getBot().simpleEditMessage("Welchen Termin willst du löschen?", getBot().getMassageFromUpdate(update), listKeyboard1, "deleteTask");
-                }
-                break;
-            default:
-                task.setName(commandValue[0]);
-                message = getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear",false, true );
-                break;
+                    message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+                    break;
+                case "chooseYear":
+                    year = Integer.parseInt(commandValue[1]);
+                    try {
+                        getBot().sendAnswerCallbackQuery(year + " gewählt.", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    message = getBot().simpleEditMessage("Welche Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth");
+                    break;
+                case "chooseMonth":
+                    month = Integer.parseInt(TimeUtil.getMonthMapStringKeys().get(commandValue[1]));
+                    try {
+                        getBot().sendAnswerCallbackQuery(month + " gewählt.", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    message = getBot().simpleEditMessage("Welcher Tag?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
+                    break;
+                case "day":
+                    day = Integer.parseInt(commandValue[1]);
+                    try {
+                        getBot().sendAnswerCallbackQuery(day + " gewählt.", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    LocalDateTime localDateTime = LocalDateTime.of(year, month, day, 4, 0);
+                    task.setTime(localDateTime);
+                    message = getBot().simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
+                    break;
+                case "forMe":
+                    task.getUserList().add(user);
+                    DBUtil.executeSQL(task.getInsertDBString());
+                    getSentMessages().add(message);
+                    ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
+                    close();
+                    getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
+                    break;
+                case "forAll":
+                    allowedUsersMap.values().forEach(user1 -> task.getUserList().add(user1));
+                    DBUtil.executeSQL(task.getInsertDBString());
+                    getSentMessages().add(message);
+                    ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
+                    close();
+                    getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
+                    break;
+                case "Termine anzeige":
+                    StringBuilder messageOfTasks = new StringBuilder();
+                    List<Task> taskList = DBUtil.getTasksFromDB(getBot());
+                    for (Task task : taskList) {
+                        messageOfTasks.append("\n" + task.getTime().toString().replace("T", " um ") + " Uhr:\n");
+                        messageOfTasks.append(task.getName() + "\n");
+                        task.getUserList().forEach(user1 -> messageOfTasks.append(", " + user1.getName()));
+                    }
+                    String messageString = messageOfTasks.toString().replaceFirst(", ", "").replaceFirst("\n", "");
+                    getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false);
+                    close();
+                    break;
+                case "Termin hinzufügen":
+                    getBot().sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy, "chooseStrategy", true, true);
+                    break;
+                case "Termin löschen":
+                    List<String> taskNames = new ArrayList<>();
+                    DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames.add(task1.getName()));
+                    ReplyKeyboard listKeyboard = KeyboardFactory.getInlineKeyboardForList(taskNames, "deleteTask");
+                    message = getBot().sendKeyboard("Welchen Termin willst du löschen?", update, listKeyboard, false);
+                    break;
+                case "deleteTask":
+                    Task taskToRemove = null;
+                    for (Task task : DBUtil.getTasksFromDB(getBot())) {
+                        if (task.getName().equals(commandValue[1])) {
+                            taskToRemove = task;
+                            break;
+                        }
+                    }
+                    if (taskToRemove != null) {
+                        DBUtil.removeTask(taskToRemove);
+                        try {
+                            getBot().sendAnswerCallbackQuery(taskToRemove.getName() + " gelöscht :)", false, update.getCallbackQuery());
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                        List<String> taskNames1 = new ArrayList<>();
+                        DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames1.add(task1.getName()));
+                        ReplyKeyboard listKeyboard1 = KeyboardFactory.getInlineKeyboardForList(taskNames1, "deleteTask");
+                        message = getBot().simpleEditMessage("Welchen Termin willst du löschen?", getBot().getMassageFromUpdate(update), listKeyboard1, "deleteTask");
+                    }
+                    break;
+                default:
+                    task.setName(commandValue[0]);
+                    message = getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
+                    break;
+            }
+        }catch (TelegramApiException e) {
+            if(e.getMessage().equals("Error editing message reply markup")){
+                LogUtil.log("1 message not changed.");
+            }else{
+                LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+            }
         }
         getBot().getNonBotUserFromUpdate(update).setBusy(false);
         if(message != null){
