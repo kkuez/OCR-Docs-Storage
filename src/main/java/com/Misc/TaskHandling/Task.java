@@ -52,7 +52,7 @@ public class Task {
 
          int minute = time.getMinute();
 
-        String user = userList.size() > 0 ? "ALL" : userList.get(0).getId() + "";
+        String user = userList.size() > 1 ? "ALL" : userList.get(0).getId() + "";
 
         return "insert into CalendarTasks (year, month, day, hour, minute, name, user, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + name + "', '" + user + "', '" + taskStrategy.getType() +"')";
     }
