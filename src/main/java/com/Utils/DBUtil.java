@@ -152,7 +152,6 @@ public class DBUtil {
     }
 
     public static float getSumMonth(String monthAndYear, User userOrNull){
-        //TODO schlampig
         List<Document> documentList = getDocumentsForMonthAndYear(monthAndYear);
 
         Map<Integer, Float> bonIdMap = new HashMap<>();
