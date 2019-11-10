@@ -604,6 +604,14 @@ public class Bot extends TelegramLongPollingBot {
         return messageToReturn;
     }
     public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
+
+        ReplyKeyboard replyKeyboard = null;
+        if(keyBoardTypeOrNull != null){
+        replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, false, callbackValuePrefix);
+        }
+        return sendMsg(s, update, replyKeyboard, callbackValuePrefix, isReply, inlineKeyboard);
+    }
+    public  synchronized Message sendMsg(String s, Update update, ReplyKeyboard replyKeyboard, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
         boolean isOneTimeKeyboard = false;
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
@@ -613,8 +621,7 @@ public class Bot extends TelegramLongPollingBot {
         if(isReply){
             sendMessage.setReplyToMessageId(message.getMessageId());
         }
-        if(keyBoardTypeOrNull != null){
-            ReplyKeyboard replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard, callbackValuePrefix);
+        if(replyKeyboard != null){
             sendMessage.setReplyMarkup(replyKeyboard);
             if(!inlineKeyboard){
                 //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.
