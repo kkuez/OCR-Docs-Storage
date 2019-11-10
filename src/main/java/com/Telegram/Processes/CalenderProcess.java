@@ -67,19 +67,37 @@ public class CalenderProcess extends Process {
                     switch (commandValue[1]) {
                         case "oneTime":
                             type = "oneTime";
+                            try {
+                                getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                            message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
                             break;
                         case "regular":
                             type = "regular";
                             //TODO hinzufügen!!
                             //task.setTaskStrategy(new RegularTaskStrategy(task));
+                            try {
+                                getBot().sendAnswerCallbackQuery("Art wählen", false, update.getCallbackQuery());
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                            message = getBot().simpleEditMessage("Einheit?", update, KeyboardFactory.KeyBoardType.Calendar_Regular_Choose_Unit);
                             break;
                     }
-                    try {
-                        getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+                    break;
+                case "daily":
+                    type = "regularDaily";
+                    break;
+                case "weekly":
+                    type = "regularWeekly";//TODO ausfüllen
+                    break;
+                case "monthly":
+                    type = "regularMonthly";
+                    break;
+                case "yearly":
+                    type = "regularYearly";
                     break;
                 case "chooseYear":
                     year = Integer.parseInt(commandValue[1]);
@@ -106,8 +124,14 @@ public class CalenderProcess extends Process {
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                    LocalDateTime localDateTime = LocalDateTime.of(year, month, day, 4, 0);
-                    task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime));
+                    if(type.equals("oneTime")) {
+                        LocalDateTime localDateTime = LocalDateTime.of(year, month, day, 4, 0);
+                        task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime));
+                    }else{
+                        if(type.startsWith("regular")){
+
+                        }
+                    }
                     message = getBot().simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
                     break;
                 case "forMe":

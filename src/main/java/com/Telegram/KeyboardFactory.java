@@ -81,8 +81,14 @@ public class KeyboardFactory {
                 break;
             case Calendar_Choose_Strategy:
                 endKeyboard.add(createInlineKeyboardRow(List.of("Einmaliger Termin"), List.of("chooseStrategyoneTime")));
-                //TODO hinzufügen
-               // endKeyboard.add(createInlineKeyboardRow(List.of("Wiederholter Termin"), List.of("chooseStrategyregular")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("Regelmäßiger Termin"), List.of("chooseStrategyregular")));
+                endKeyboard.add(ABORT_ROW);
+                break;
+            case Calendar_Regular_Choose_Unit:
+                endKeyboard.add(createInlineKeyboardRow(List.of("Täglich"), List.of("daily")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("Wöchentlich"), List.of("weekly")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("Monatlich"), List.of("monthly")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("Jährlich"), List.of("yearly")));
                 endKeyboard.add(ABORT_ROW);
                 break;
             case User_Choose:
@@ -246,7 +252,7 @@ return valueList;
     }
 
     public enum KeyBoardType{
-        User_Choose, Boolean,  Calendar, Calendar_Month, Calendar_Year, Calendar_Choose_Strategy, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
+        User_Choose, Boolean,  Calendar, Calendar_Month, Calendar_Year, Calendar_Choose_Strategy, Calendar_Regular_Choose_Unit, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();
