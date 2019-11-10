@@ -10,8 +10,6 @@ import java.util.List;
 
 public class Task {
 
-    private LocalDateTime time;
-
     private TaskStrategy taskStrategy;
 
     private String name;
@@ -21,10 +19,9 @@ public class Task {
     private List<User> userList = new ArrayList<>();
 
     public Task(User user, Bot bot){}
-    public Task(List<User> userList, Bot bot, LocalDateTime localDateTime, String actionName){
+    public Task(List<User> userList, Bot bot, String actionName){
         this.userList = userList;
         this.bot = bot;
-        this.time = localDateTime;
         this.name = actionName;
     }
 
@@ -33,34 +30,14 @@ public class Task {
     }
 
     public boolean timeIsNow(LocalDateTime localDateTime) {
-        return time.equals(localDateTime);
+        return taskStrategy.timeIsNow(localDateTime);
     }
 
     public String getInsertDBString(){
-         int year = time.getYear();
-
-         int month = time.getMonth().getValue();
-
-         int day = time.getDayOfMonth();
-
-         int hour = time.getHour();
-
-         int minute = time.getMinute();
-
-        String user = userList.size() > 1 ? "ALL" : userList.get(0).getId() + "";
-
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + name + "', '" + user + "', '" + taskStrategy.getType() +"')";
-    }
+        return taskStrategy.getInsertDBString();
+   }
 
     //GETTER SETTER
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
 
     public TaskStrategy getTaskStrategy() {
         return taskStrategy;

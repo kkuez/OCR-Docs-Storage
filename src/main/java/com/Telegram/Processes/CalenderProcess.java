@@ -35,6 +35,8 @@ public class CalenderProcess extends Process {
 
     private Task task;
 
+    private String type;
+
     public CalenderProcess(ProgressReporter reporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap) {
         super(reporter);
         setBot(bot);
@@ -64,9 +66,10 @@ public class CalenderProcess extends Process {
                     task = new Task(user, getBot());
                     switch (commandValue[1]) {
                         case "oneTime":
-                            task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task));
+                            type = "oneTime";
                             break;
                         case "regular":
+                            type = "regular";
                             //TODO hinzufügen!!
                             //task.setTaskStrategy(new RegularTaskStrategy(task));
                             break;
@@ -104,7 +107,7 @@ public class CalenderProcess extends Process {
                         e.printStackTrace();
                     }
                     LocalDateTime localDateTime = LocalDateTime.of(year, month, day, 4, 0);
-                    task.setTime(localDateTime);
+                    task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime));
                     message = getBot().simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
                     break;
                 case "forMe":
@@ -127,7 +130,7 @@ public class CalenderProcess extends Process {
                     StringBuilder messageOfTasks = new StringBuilder();
                     List<Task> taskList = DBUtil.getTasksFromDB(getBot());
                     for (Task task : taskList) {
-                        messageOfTasks.append("\n" + task.getTime().toString().replace("T", " um ") + " Uhr:\n");
+                        messageOfTasks.append("\n" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr:\n");
                         messageOfTasks.append(task.getName() + "\n");
                         task.getUserList().forEach(user1 -> messageOfTasks.append(", " + user1.getName()));
                     }

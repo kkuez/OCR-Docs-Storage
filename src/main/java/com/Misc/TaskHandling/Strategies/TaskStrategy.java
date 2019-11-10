@@ -7,5 +7,11 @@ public interface TaskStrategy {
 
      boolean perform();
 
+     boolean timeIsNow(LocalDateTime localDateTime);
+
+     String getInsertDBString();
+
      String getStrategyName();
+
+     LocalDateTime getTime();
 }

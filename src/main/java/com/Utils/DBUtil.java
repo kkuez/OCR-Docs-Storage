@@ -110,11 +110,11 @@ public class DBUtil {
     }
 
     public static void removeTask(Task task){
-        int year = task.getTime().getYear();
-        int month = task.getTime().getMonth().getValue();
-        int day = task.getTime().getDayOfMonth();
-        int hour = task.getTime().getHour();
-        int minute = task.getTime().getMinute();
+        int year = task.getTaskStrategy().getTime().getYear();
+        int month = task.getTaskStrategy().getTime().getMonth().getValue();
+        int day = task.getTaskStrategy().getTime().getDayOfMonth();
+        int hour = task.getTaskStrategy().getTime().getHour();
+        int minute = task.getTaskStrategy().getTime().getMinute();
 
         executeSQL("delete from CalendarTasks where name='" + task.getName() + "' AND year=" + year + " AND month=" + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
     }
@@ -212,10 +212,10 @@ public class DBUtil {
                     userList.add(getAllowedUsersMap().get(Integer.parseInt(rs.getString("user"))));
                 }
 
-                Task task = new Task(userList, bot, time, rs.getString("name"));
+                Task task = new Task(userList, bot, rs.getString("name"));
                 switch (strategyType){
                     case "SimpleCalendarOneTimeStrategy":
-                        TaskStrategy taskStrategy = new SimpleCalendarOneTimeStrategy(task);
+                        TaskStrategy taskStrategy = new SimpleCalendarOneTimeStrategy(task, time);
                         task.setTaskStrategy(taskStrategy);
                         break;
                 }

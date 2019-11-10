@@ -1,34 +1,25 @@
 package com.Misc.TaskHandling.Strategies;
 
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
 
-public class RegularTaskStrategy extends OneTimeTaskStrategy {
+public abstract class RegularTaskStrategy implements TaskStrategy {
 
-    int daysFrequency = 0;
 
-    int hoursFrequency = 0;
-
-    int minutesFrequency = 0;
-
-    public RegularTaskStrategy(int minutesFrequency, int hoursFrequency, int daysFrequency){
-        this.minutesFrequency = minutesFrequency;
-        this.hoursFrequency = hoursFrequency;
-        this.daysFrequency = daysFrequency;
+    public RegularTaskStrategy(){
     }
 
 
     @Override
-    public boolean perform() {
-    return true;
-    }
+    public abstract String getType();
 
     @Override
-    public String getStrategyName() {
-        return null;
-    }
+    public abstract boolean perform();
 
+    @Override
+    public abstract String getStrategyName();
 
-    private void doAfterExecute(){
+    public abstract TimeUnit getExecutionTimeUnit();
 
-    }
+    public abstract void doAfterExecute();
 }
