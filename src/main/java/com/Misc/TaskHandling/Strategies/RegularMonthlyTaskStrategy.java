@@ -8,11 +8,6 @@ import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
 public class RegularMonthlyTaskStrategy extends RegularTaskStrategy {
-    int min;
-
-    int hour;
-
-    int day;
 
     public RegularMonthlyTaskStrategy(Task task, int day){
         this.task = task;

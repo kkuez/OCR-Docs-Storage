@@ -9,10 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 public class RegularDailyTaskStrategy extends RegularTaskStrategy {
 
-    int min;
-
-    int hour;
-
     public RegularDailyTaskStrategy(Task task){
         this.task = task;
         min = 0;

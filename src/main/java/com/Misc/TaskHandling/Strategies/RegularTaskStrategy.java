@@ -6,9 +6,9 @@ import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 public abstract class RegularTaskStrategy implements TaskStrategy {
-    int min;
+    int min = 0;
 
-    int hour;
+    int hour = 0;
 
     int day;
 

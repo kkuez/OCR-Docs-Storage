@@ -156,25 +156,28 @@ public class CalenderProcess extends Process {
                     StringBuilder messageOfTasks = new StringBuilder();
                     List<Task> taskList = DBUtil.getTasksFromDB(getBot());
                     for (Task task : taskList) {
+                        messageOfTasks.append("\n-----------------\n");
                         if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
-                            messageOfTasks.append("\n" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr:\n");
+                            messageOfTasks.append("Am " + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr:\n");
                         }else{
                             switch (task.getTaskStrategy().getType()){
                                 case "RegularDailyTaskStrategy":
-                                    messageOfTasks.append("\nTäglich:\n");
+                                    messageOfTasks.append("Täglich:\n");
                                     break;
                                 case "RegularMonthlyTaskStrategy":
-                                    messageOfTasks.append("\nMonatlich, jeden " + ((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay() + ".:\n");
+                                    messageOfTasks.append("Monatlich, jeden " + ((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay() + ".:\n");
                                     break;
                                 case "RegularYearlyTaskStrategy":
-                                    messageOfTasks.append("\nJährlich, jeden " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth() + " Monat am " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay() + ".:\n");
+                                    messageOfTasks.append("Jährlich, jeden " + TimeUtil.getMonthMapIntKeys().get(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth()) + " am " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay() + ".:\n");
                                     break;
                             }
                         }
                         messageOfTasks.append(task.getName() + "\n");
-                        task.getUserList().forEach(user1 -> messageOfTasks.append(", " + user1.getName()));
+                        StringBuilder userString = new StringBuilder();
+                        task.getUserList().forEach(user1 -> userString.append(", " + user1.getName()));
+                        messageOfTasks.append(userString.toString().replaceFirst(", ", ""));
                     }
-                    String messageString = messageOfTasks.toString().replaceFirst(", ", "").replaceFirst("\n", "");
+                    String messageString = messageOfTasks.toString().replaceFirst("\n-----------------\n", "");
                     getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false);
                     close();
                     break;
