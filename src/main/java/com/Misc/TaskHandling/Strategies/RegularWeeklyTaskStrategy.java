@@ -10,22 +10,12 @@ public class RegularWeeklyTaskStrategy extends RegularTaskStrategy {
     }
 
     @Override
-    public boolean perform() {
-        return false;
-    }
-
-    @Override
     public boolean timeIsNow(LocalDateTime localDateTime) {
         return false;
     }
 
     @Override
     public String getInsertDBString() {
-        return null;
-    }
-
-    @Override
-    public String getStrategyName() {
         return null;
     }
 

@@ -14,9 +14,6 @@ public abstract class OneTimeTaskStrategy implements TaskStrategy {
     public OneTimeTaskStrategy(){}
 
     @Override
-    public abstract boolean perform();
-
-    @Override
     public String getType() {
         return "OneTimeTaskStrategy";
     }

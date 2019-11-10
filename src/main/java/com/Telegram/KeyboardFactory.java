@@ -86,7 +86,6 @@ public class KeyboardFactory {
                 break;
             case Calendar_Regular_Choose_Unit:
                 endKeyboard.add(createInlineKeyboardRow(List.of("Täglich"), List.of("daily")));
-                endKeyboard.add(createInlineKeyboardRow(List.of("Wöchentlich"), List.of("weekly")));
                 endKeyboard.add(createInlineKeyboardRow(List.of("Monatlich"), List.of("monthly")));
                 endKeyboard.add(createInlineKeyboardRow(List.of("Jährlich"), List.of("yearly")));
                 endKeyboard.add(ABORT_ROW);

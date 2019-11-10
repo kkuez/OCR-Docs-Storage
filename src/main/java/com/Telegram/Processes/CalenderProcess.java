@@ -1,7 +1,7 @@
 package com.Telegram.Processes;
 
 import com.Controller.Reporter.ProgressReporter;
-import com.Misc.TaskHandling.Strategies.SimpleCalendarOneTimeStrategy;
+import com.Misc.TaskHandling.Strategies.*;
 import com.Misc.TaskHandling.Task;
 import com.ObjectHub;
 import com.ObjectTemplates.User;
@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class CalenderProcess extends Process {
 
     private int month;
 
-    private int day;
+    private int day = 0;
 
     private int hour;
 
@@ -76,28 +77,41 @@ public class CalenderProcess extends Process {
                             break;
                         case "regular":
                             type = "regular";
-                            //TODO hinzufügen!!
-                            //task.setTaskStrategy(new RegularTaskStrategy(task));
                             try {
-                                getBot().sendAnswerCallbackQuery("Art wählen", false, update.getCallbackQuery());
+                                getBot().sendAnswerCallbackQuery("Wann?", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
                                 e.printStackTrace();
                             }
-                            message = getBot().simpleEditMessage("Einheit?", update, KeyboardFactory.KeyBoardType.Calendar_Regular_Choose_Unit);
+                            message = getBot().simpleEditMessage("Wann?", update, KeyboardFactory.KeyBoardType.Calendar_Regular_Choose_Unit);
                             break;
                     }
                     break;
                 case "daily":
                     type = "regularDaily";
-                    break;
-                case "weekly":
-                    type = "regularWeekly";//TODO ausfüllen
+                    try {
+                        getBot().sendAnswerCallbackQuery("Täglich gewählt.", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
                     break;
                 case "monthly":
                     type = "regularMonthly";
+                    try {
+                        getBot().sendAnswerCallbackQuery("Monatlich gewählt.", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
                     break;
                 case "yearly":
                     type = "regularYearly";
+                    try {
+                        getBot().sendAnswerCallbackQuery("Jährlich gewählt.", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
                     break;
                 case "chooseYear":
                     year = Integer.parseInt(commandValue[1]);
@@ -119,20 +133,7 @@ public class CalenderProcess extends Process {
                     break;
                 case "day":
                     day = Integer.parseInt(commandValue[1]);
-                    try {
-                        getBot().sendAnswerCallbackQuery(day + " gewählt.", false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    if(type.equals("oneTime")) {
-                        LocalDateTime localDateTime = LocalDateTime.of(year, month, day, 4, 0);
-                        task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime));
-                    }else{
-                        if(type.startsWith("regular")){
-
-                        }
-                    }
-                    message = getBot().simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
+                    message = askForWhom(update);
                     break;
                 case "forMe":
                     task.getUserList().add(user);
@@ -154,7 +155,21 @@ public class CalenderProcess extends Process {
                     StringBuilder messageOfTasks = new StringBuilder();
                     List<Task> taskList = DBUtil.getTasksFromDB(getBot());
                     for (Task task : taskList) {
-                        messageOfTasks.append("\n" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr:\n");
+                        if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
+                            messageOfTasks.append("\n" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr:\n");
+                        }else{
+                            switch (task.getTaskStrategy().getType()){
+                                case "RegularDailyTaskStrategy":
+                                    messageOfTasks.append("\nTäglich:\n");
+                                    break;
+                                case "RegularMonthlyTaskStrategy":
+                                    messageOfTasks.append("\nMonatlich, jeden " + ((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay() + ".:\n");
+                                    break;
+                                case "RegularYearlyTaskStrategy":
+                                    messageOfTasks.append("\nJährlich, jeden " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth() + " Monat am " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay() + ".:\n");
+                                    break;
+                            }
+                        }
                         messageOfTasks.append(task.getName() + "\n");
                         task.getUserList().forEach(user1 -> messageOfTasks.append(", " + user1.getName()));
                     }
@@ -194,7 +209,20 @@ public class CalenderProcess extends Process {
                     break;
                 default:
                     task.setName(commandValue[0]);
-                    message = getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
+                    switch (type){
+                        case "oneTime":
+                            message = getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
+                            break;
+                        case "regularDaily":
+                            message = askForWhom(update);
+                            break;
+                        case "regularMonthly":
+                            message = getBot().sendMsg("Welcher Tag?", update, KeyboardFactory.createInlineKeyboardForYearMonth(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue()), "chooseMonth", false, true);
+                            break;
+                        case "regularYearly":
+                            message = getBot().sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseYear", false, true);
+                            break;
+                    }
                     break;
             }
         }catch (TelegramApiException e) {
@@ -208,6 +236,28 @@ public class CalenderProcess extends Process {
         if(message != null){
             getSentMessages().add(message);
         }
+    }
+
+    private Message askForWhom(Update update) throws TelegramApiException {
+            if(update.hasCallbackQuery()){
+            getBot().sendAnswerCallbackQuery(day + " gewählt.", false, update.getCallbackQuery());
+            }
+        switch (type){
+            case "oneTime":
+                LocalDateTime localDateTime = LocalDateTime.of(year, month, day, 4, 0);
+                task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime));
+                return getBot().simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
+            case "regularDaily":
+                task.setTaskStrategy(new RegularDailyTaskStrategy(task));
+                break;
+            case "regularMonthly":
+                task.setTaskStrategy(new RegularMonthlyTaskStrategy(task, day));
+                break;
+            case "regularYearly":
+                task.setTaskStrategy(new RegularYearlyTaskStrategy(task, day, month));
+                break;
+        }
+        return getBot().sendMsg("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser", false, true);
     }
 
     @Override
@@ -243,9 +293,21 @@ public class CalenderProcess extends Process {
                                         return "forMe";
                                     } else {
                                         if (inputString.startsWith("forAll")) {
-                                            {
-                                            }
 
+                                        } else {
+                                            if (inputString.startsWith("daily")) {
+                                                return "daily";
+                                            } else {
+                                                if (inputString.startsWith("monthly")) {
+                                                    return "monthly";
+                                                } else {
+                                                    if (inputString.startsWith("yearly")) {
+                                                        {
+                                                            return "yearly";
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }

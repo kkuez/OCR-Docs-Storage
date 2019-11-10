@@ -1,7 +1,6 @@
 package com.Utils;
 
-import com.Misc.TaskHandling.Strategies.SimpleCalendarOneTimeStrategy;
-import com.Misc.TaskHandling.Strategies.TaskStrategy;
+import com.Misc.TaskHandling.Strategies.*;
 import com.Misc.TaskHandling.Task;
 import com.ObjectHub;
 import com.ObjectTemplates.Bon;
@@ -66,7 +65,6 @@ public class DBUtil {
         } catch (SQLException e) {
             LogUtil.logError("select * from AllowedUsers", e);
         }
-
         return userMap;
     }
 
@@ -203,7 +201,6 @@ public class DBUtil {
             statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("select * from CalendarTasks");
             while (rs.next()) {
-                LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
                 String strategyType = rs.getString("strategyType");
                 List<User> userList = new ArrayList<>();
                 if(rs.getString("user").equals("ALL")){
@@ -213,12 +210,24 @@ public class DBUtil {
                 }
 
                 Task task = new Task(userList, bot, rs.getString("name"));
+                TaskStrategy taskStrategy = null;
                 switch (strategyType){
                     case "SimpleCalendarOneTimeStrategy":
-                        TaskStrategy taskStrategy = new SimpleCalendarOneTimeStrategy(task, time);
+                        LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
+                        taskStrategy = new SimpleCalendarOneTimeStrategy(task, time);
                         task.setTaskStrategy(taskStrategy);
                         break;
+                    case "RegularDailyTaskStrategy":
+                        taskStrategy = new RegularDailyTaskStrategy(task);
+                        break;
+                    case "RegularMonthlyTaskStrategy":
+                        taskStrategy = new RegularMonthlyTaskStrategy(task, rs.getInt("day"));
+                        break;
+                    case "RegularYearlyTaskStrategy":
+                        taskStrategy = new RegularYearlyTaskStrategy(task, rs.getInt("day"), rs.getInt("month"));
+                        break;
                 }
+                task.setTaskStrategy(taskStrategy);
                 taskList.add(task);
             }
             statement.close();

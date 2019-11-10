@@ -403,7 +403,11 @@ public class Bot extends TelegramLongPollingBot {
                     sendAnswerCallbackQuery("Abgebrochen",  false, update.getCallbackQuery());
                 }
             } catch (TelegramApiException e) {
-                LogUtil.logError("Abort done, messaging about abort failed.", e);
+                if(e.getMessage().equals("Error editing message reply markup")){
+                    LogUtil.log("Message not edited.");
+                }else{
+                    LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+                }
             }
         }
     }

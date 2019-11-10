@@ -18,15 +18,6 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeTaskStrategy {
     }
 
     @Override
-    public boolean perform() {
-        for(User user : task.getUserList()){
-            String userName = user.getName();
-            task.getBot().sendSimpleMsg("Hey " + userName + ",\n " + task.getName(), user.getId(), KeyboardFactory.KeyBoardType.NoButtons, true);
-        }
-    return true;
-    }
-
-    @Override
     public boolean timeIsNow(LocalDateTime localDateTime) {
             return time.equals(localDateTime);
     }
@@ -46,18 +37,12 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeTaskStrategy {
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
         return "insert into CalendarTasks (year, month, day, hour, minute, name, user, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + task.getName() + "', '" + user + "', '" + getType() +"')";
-
     }
 
 
     @Override
     public String getType() {
         return "SimpleCalendarOneTimeStrategy";
-    }
-
-    @Override
-    public String getStrategyName() {
-        return "Einmaliger Termin";
     }
 
     public LocalDateTime getTime() {

@@ -3,6 +3,7 @@ package com.Misc.TaskHandling;
 import com.Misc.TaskHandling.Strategies.TaskStrategy;
 import com.ObjectTemplates.User;
 import com.Telegram.Bot;
+import com.Telegram.KeyboardFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,7 +27,11 @@ public class Task {
     }
 
     public boolean perform(){
-       return taskStrategy.perform();
+        for(User user : getUserList()){
+            String userName = user.getName();
+            getBot().sendSimpleMsg("Hey " + userName + ",\n " + getName(), user.getId(), KeyboardFactory.KeyBoardType.NoButtons, true);
+        }
+        return true;
     }
 
     public boolean timeIsNow(LocalDateTime localDateTime) {
