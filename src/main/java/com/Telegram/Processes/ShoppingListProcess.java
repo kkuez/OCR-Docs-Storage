@@ -30,11 +30,11 @@ public class ShoppingListProcess extends Process{
     }
 
     private void sendShoppingList(Update update){
-        StringBuilder listeBuilder = new StringBuilder("Aktuelle Einkaufsliste:\n");
+        StringBuilder listeBuilder = new StringBuilder("*Aktuelle Einkaufsliste:*\n");
         for(int i = 0;i<getBot().getShoppingList().size();i++){
             listeBuilder.append( i + ": " + getBot().getShoppingList().get(i) + "\n");
         }
-        getBot().sendMsg(listeBuilder.toString(), update, null, false, false);
+        getBot().sendMsg(listeBuilder.toString(), update, null, false, false, Bot.ParseMode.Markdown);
     }
 
     @Override

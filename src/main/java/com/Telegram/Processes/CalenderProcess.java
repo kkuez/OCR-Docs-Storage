@@ -158,27 +158,27 @@ public class CalenderProcess extends Process {
                     for (Task task : taskList) {
                         messageOfTasks.append("\n-----------------\n");
                         if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
-                            messageOfTasks.append("Am " + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr:\n");
+                            messageOfTasks.append("Am *" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr*:\n");
                         }else{
                             switch (task.getTaskStrategy().getType()){
                                 case "RegularDailyTaskStrategy":
-                                    messageOfTasks.append("Täglich:\n");
+                                    messageOfTasks.append("*Täglich*:\n");
                                     break;
                                 case "RegularMonthlyTaskStrategy":
-                                    messageOfTasks.append("Monatlich, jeden " + ((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay() + ".:\n");
+                                    messageOfTasks.append("*Monatlich, jeden " + ((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay() + ".*:\n");
                                     break;
                                 case "RegularYearlyTaskStrategy":
-                                    messageOfTasks.append("Jährlich, jeden " + TimeUtil.getMonthMapIntKeys().get(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth()) + " am " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay() + ".:\n");
+                                    messageOfTasks.append("*Jährlich, jeden " + TimeUtil.getMonthMapIntKeys().get(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth()) + " am " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay() + ".*:\n");
                                     break;
                             }
                         }
                         messageOfTasks.append(task.getName() + "\n");
                         StringBuilder userString = new StringBuilder();
                         task.getUserList().forEach(user1 -> userString.append(", " + user1.getName()));
-                        messageOfTasks.append(userString.toString().replaceFirst(", ", ""));
+                        messageOfTasks.append("_" + userString.toString().replaceFirst(", ", "") + "_");
                     }
                     String messageString = messageOfTasks.toString().replaceFirst("\n-----------------\n", "");
-                    getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false);
+                    getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false, Bot.ParseMode.Markdown);
                     close();
                     break;
                 case "Termin hinzufügen":
@@ -221,7 +221,7 @@ public class CalenderProcess extends Process {
                             message = askForWhom(update);
                             break;
                         case "regularMonthly":
-                            message = getBot().sendMsg("Welcher Tag?", update, new InlineKeyboardMarkup().setKeyboard(KeyboardFactory.createInlineKeyboardForYearMonth(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue())), "day", false, true);
+                            message = getBot().sendMsg("Welcher Tag?", update, new InlineKeyboardMarkup().setKeyboard(KeyboardFactory.createInlineKeyboardForYearMonth(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue())), "day", false, true, Bot.ParseMode.None);
                             break;
                         case "regularYearly":
                             message = getBot().sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth", false, true);

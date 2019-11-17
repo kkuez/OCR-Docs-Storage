@@ -125,7 +125,8 @@ public class Bot extends TelegramLongPollingBot {
 
         try {
             if (isBusy) {
-                sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
+                Message message = sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
+                process.getSentMessages().add(message);
             } else {
                 if (process == null) {
                     //Set process if null
@@ -186,6 +187,8 @@ public class Bot extends TelegramLongPollingBot {
                     //Is File already stored...?
                     LogUtil.log("File already present: " + largestPhoto.getName());
                     sendMsg("Bild schon vorhanden.", update, null, true, false);
+                    user.setBusy(false);
+                    process.close();
                     return;
                 }
 
@@ -484,7 +487,7 @@ public class Bot extends TelegramLongPollingBot {
         inlineKeyboardMarkup.setKeyboard(inputKeyboard);
         return simpleEditMessage(text, message, inlineKeyboardMarkup, callbackPrefix);
     }
-    public  Message simpleEditMessage(String text, Message message, ReplyKeyboard inputKeyboard, String callbackPrefix) throws TelegramApiException {
+    public Message simpleEditMessage(String text, Message message, ReplyKeyboard inputKeyboard, String callbackPrefix) throws TelegramApiException {
 
         if(!message.hasText()){
             if(message.hasPhoto() && message.getCaption() != null){
@@ -503,7 +506,7 @@ public class Bot extends TelegramLongPollingBot {
                 throw e;
             }
         }
-        if(inputKeyboard != null && message.hasReplyMarkup()) {
+        if(inputKeyboard != null && message.hasReplyMarkup() && !message.getReplyMarkup().equals(inputKeyboard)) {
             EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
             editMessageReplyMarkup.setChatId(message.getChatId());
             editMessageReplyMarkup.setMessageId(message.getMessageId());
@@ -511,6 +514,9 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {
+                if(e.getMessage().equals("Error editing message reply markup")){
+                    return message;
+                }
                 throw e;
             }
         }
@@ -578,8 +584,51 @@ public class Bot extends TelegramLongPollingBot {
         }
         return messageToReturn;
     }
+
     public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
-        return sendMsg(s, update, keyBoardTypeOrNull, "", isReply, inlineKeyboard);
+        return sendMsg(s, update, keyBoardTypeOrNull, "", isReply, inlineKeyboard, ParseMode.None);
+    }
+    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
+        return sendMsg(s, update, keyBoardTypeOrNull, "", isReply, inlineKeyboard, parseModeOrNull);
+    }
+    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
+        return sendMsg(s, update, keyBoardTypeOrNull, callbackValuePrefix, isReply, inlineKeyboard, ParseMode.None);
+    }
+    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
+        ReplyKeyboard replyKeyboard = null;
+        if(keyBoardTypeOrNull != null){
+        replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, false, callbackValuePrefix);
+        }
+        return sendMsg(s, update, replyKeyboard, callbackValuePrefix, isReply, inlineKeyboard, parseModeOrNull);
+    }
+    public  synchronized Message sendMsg(String s, Update update, ReplyKeyboard replyKeyboard, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
+        boolean isOneTimeKeyboard = false;
+        Message message = getMassageFromUpdate(update);
+        long chatID = message.getChatId();
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(chatID);
+        if(isReply){
+            sendMessage.setReplyToMessageId(message.getMessageId());
+        }
+        if(parseModeOrNull != null && parseModeOrNull != ParseMode.None){
+            sendMessage.setParseMode(parseModeOrNull.name());
+        }
+        if(replyKeyboard != null){
+            sendMessage.setReplyMarkup(replyKeyboard);
+            if(!inlineKeyboard){
+                //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.
+                allowedUsersMap.get(update.getMessage().getFrom().getId()).setKeyboardContext(replyKeyboard);
+            }
+        }
+        sendMessage.setText(s);
+        Message messageToReturn = null;
+        try {
+            messageToReturn = execute(sendMessage);
+        } catch (TelegramApiException e) {
+            LogUtil.logError("Failed to send message.", e);
+        }
+        return messageToReturn;
     }
     public synchronized Message sendSimpleMsg(String s, long chatID, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean inlineKeyboard){
         boolean isOneTimeKeyboard = false;
@@ -592,40 +641,6 @@ public class Bot extends TelegramLongPollingBot {
             if(!inlineKeyboard){
                 //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.
                 allowedUsersMap.get(chatID).setKeyboardContext(replyKeyboard);
-            }
-        }
-        sendMessage.setText(s);
-        Message messageToReturn = null;
-        try {
-            messageToReturn = execute(sendMessage);
-        } catch (TelegramApiException e) {
-            LogUtil.logError("Failed to send message.", e);
-        }
-        return messageToReturn;
-    }
-    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
-
-        ReplyKeyboard replyKeyboard = null;
-        if(keyBoardTypeOrNull != null){
-        replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, false, callbackValuePrefix);
-        }
-        return sendMsg(s, update, replyKeyboard, callbackValuePrefix, isReply, inlineKeyboard);
-    }
-    public  synchronized Message sendMsg(String s, Update update, ReplyKeyboard replyKeyboard, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
-        boolean isOneTimeKeyboard = false;
-        Message message = getMassageFromUpdate(update);
-        long chatID = message.getChatId();
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(chatID);
-        if(isReply){
-            sendMessage.setReplyToMessageId(message.getMessageId());
-        }
-        if(replyKeyboard != null){
-            sendMessage.setReplyMarkup(replyKeyboard);
-            if(!inlineKeyboard){
-                //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.
-                allowedUsersMap.get(update.getMessage().getFrom().getId()).setKeyboardContext(replyKeyboard);
             }
         }
         sendMessage.setText(s);
@@ -666,5 +681,9 @@ public class Bot extends TelegramLongPollingBot {
 
     public void setShoppingList(List<String> shoppingList) {
         this.shoppingList = shoppingList;
+    }
+
+    public enum ParseMode{ //https://core.telegram.org/bots/api#formatting-options
+        None, Markdown, HTML
     }
 }
