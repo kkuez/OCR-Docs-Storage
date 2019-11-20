@@ -189,6 +189,7 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg("Bild schon vorhanden.", update, null, true, false);
                     user.setBusy(false);
                     process.close();
+                    user.setProcess(null);
                     return;
                 }
 
@@ -506,7 +507,7 @@ public class Bot extends TelegramLongPollingBot {
                 throw e;
             }
         }
-        if(inputKeyboard != null && message.hasReplyMarkup() && !message.getReplyMarkup().equals(inputKeyboard)) {
+        if(inputKeyboard != null && message.hasReplyMarkup()) {
             EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
             editMessageReplyMarkup.setChatId(message.getChatId());
             editMessageReplyMarkup.setMessageId(message.getMessageId());
@@ -515,6 +516,7 @@ public class Bot extends TelegramLongPollingBot {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {
                 if(e.getMessage().equals("Error editing message reply markup")){
+                    LogUtil.logError("Couldn't change ReplyMarkup.", e);
                     return message;
                 }
                 throw e;
