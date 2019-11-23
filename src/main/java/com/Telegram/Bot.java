@@ -90,6 +90,8 @@ public class Bot extends TelegramLongPollingBot {
             textGivenByUser = update.getCallbackQuery().getData();
             if (textGivenByUser.equals("abort")){
                 abortProcess(update);
+                allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                return;
             }
         }else{
             currentUserID = update.getMessage().getFrom().getId();
@@ -308,12 +310,13 @@ public class Bot extends TelegramLongPollingBot {
         if(textGivenByUser != null) {
             switch (textGivenByUser){
                 case "Bon eingeben":
-                    sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     processToReturn = new BonProcess(this, (ProgressReporter) progressReporter);
+                    Message message = sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                    processToReturn.getSentMessages().add(message);
                     break;
                 case "Standardliste: Optionen":
                     processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
-                    sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""), false);
+                    message = sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""), false);
                     break;
                 case "start":
                 case "Start":
@@ -332,10 +335,10 @@ public class Bot extends TelegramLongPollingBot {
                     processToReturn = new RemoveLastProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
                     break;
                 case "Bon-Optionen":
-                    sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Bons, true, false);
+                    message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Bons, true, false);
                     break;
                 case "Kalender-Optionen":
-                    sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Calendar, true, false);
+                    message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Calendar, true, false);
                     break;
                 case "Termine anzeige":
                 case "Termin hinzufügen":
@@ -343,7 +346,7 @@ public class Bot extends TelegramLongPollingBot {
                     processToReturn = new CalenderProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
                     break;
                 case "Einkaufslisten-Optionen":
-                    sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
+                    message = sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
                     break;
                 case "Hinzufügen":
                 case "Löschen":

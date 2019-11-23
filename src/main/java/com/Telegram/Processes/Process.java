@@ -69,20 +69,27 @@ public abstract class Process {
         String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  getBot().getMassageFromUpdate(update).getText();
         String value = updateText.replace(command, "");
 
+
+        //Normaly its command => Processstep, value => value. Sometimes there are "stepindependet" values to perform, these are set here.
         if(update.hasCallbackQuery()){
              updateText = update.getCallbackQuery().getData();
+            if(updateText.startsWith("abort")){
+                command = "abort";
+                value = updateText.replace(command, "");
+            }else{
             if(updateText.startsWith("remove")){
                 command = "remove";
                 value = updateText.replace(command, "");
-            }else{
-                if(updateText.startsWith("add")){
+            }else {
+                if (updateText.startsWith("add")) {
                     command = "add";
                     value = updateText.replace(command, "");
-                }else{
-                    if(updateText.startsWith("done")){
+                } else {
+                    if (updateText.startsWith("done")) {
                         command = "done";
                     }
                 }
+            }
             }
         }
         return new String[]{command, value};
