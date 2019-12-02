@@ -1,5 +1,6 @@
 package com.Controller;
 
+import com.ObjectHub;
 import com.ObjectTemplates.Document;
 import com.Utils.LogUtil;
 import javafx.fxml.FXML;
@@ -35,7 +36,8 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
 
     public void showImage() {
         try {
-            Desktop.getDesktop().open(document.getOriginFile());
+            String remotePath = document.getOriginFile().getPath().replace(ObjectHub.getInstance().getProperties().getProperty("projectFolderOnHost"), ObjectHub.getInstance().getProperties().getProperty("pathToRemoteProjectFolder"));
+            Desktop.getDesktop().open(new File(remotePath));
             closeWindow();
         } catch (IOException e) {
             LogUtil.logError(null, e);

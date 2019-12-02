@@ -19,4 +19,6 @@ tgBotToken=
 pwForNewUsers=Nuss
 projectFolderOnHost=
 alternativePathToArchive=
+//Path to remote folder. will be replaced with localpath when fetching docs in GUI.
+pathToRemoteProjectFolder=
 
