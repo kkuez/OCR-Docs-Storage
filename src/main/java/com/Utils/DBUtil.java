@@ -84,6 +84,22 @@ public class DBUtil {
         return shoppingList;
     }
 
+    public static List<String> getMemoListFromDB(){
+        List<String> memoList = new ArrayList<>();
+        Statement statement = null;
+        try {
+            statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Memos");
+            while (rs.next()) {
+                memoList.add(rs.getString("item"));
+            }
+            statement.close();
+        } catch (SQLException e) {
+            LogUtil.logError("SELECT * FROM Memos", e);
+        }
+        return memoList;
+    }
+
     public static List<String> getStandardListFromDB(){
         List<String> standardList = new ArrayList<>();
         Statement statement = null;

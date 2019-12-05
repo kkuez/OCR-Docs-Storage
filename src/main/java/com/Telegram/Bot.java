@@ -345,12 +345,20 @@ public class Bot extends TelegramLongPollingBot {
                 case "Termin löschen":
                     processToReturn = new CalenderProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
                     break;
+                case "Memo-Optionen":
+                    message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Memo, true, false);
+                    break;
+                case "Memos anzeige":
+                case "Memo hinzufügen":
+                case "Memos löschen":
+                    processToReturn = new MemoProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                    break;
                 case "Einkaufslisten-Optionen":
                     message = sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
                     break;
                 case "Hinzufügen":
                 case "Löschen":
-                case "Liste anzeigen":
+                case "Einkaufsliste anzeigen":
                 case "Liste Löschen":
                     if(!update.hasCallbackQuery()) {
                         boolean isStadardListConText = allowedUsersMap.get(update.getMessage().getFrom().getId()).getKeyboardContext().equals(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""));

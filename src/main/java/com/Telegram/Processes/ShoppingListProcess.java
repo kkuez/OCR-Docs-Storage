@@ -20,7 +20,6 @@ public class ShoppingListProcess extends Process{
 
     User user;
 
-
     public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         this.setBot(bot);
@@ -72,7 +71,7 @@ public class ShoppingListProcess extends Process{
                 getBot().sendMsg("Ok :)", update, null, false, false);
                 close();
                 break;
-            case "Liste anzeigen":
+            case "Einkaufsliste anzeigen":
                 sendShoppingList(update);
                 close();
                 break;

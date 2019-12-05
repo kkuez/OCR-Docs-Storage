@@ -1,8 +1,6 @@
 #!!!NEEDED!!!Path to SQLite DB
 dbPath=
 threads=4
-#!!!NEEDED!!!Path to local archive folder. Create it yourself!
-localArchivePath=
 #Stores last in Gui browser inputFolder. No need to feel in manually
 lastInputPath=
 #!!!NEEDED!!!Path to tessData Files
@@ -17,8 +15,9 @@ tessHTML=false
 tgBotToken=
 #!!!NEEDED!!!PW
 pwForNewUsers=Nuss
+//Path written by Host system in DB
 projectFolderOnHost=
 alternativePathToArchive=
-//Path to remote folder. will be replaced with localpath when fetching docs in GUI.
-pathToRemoteProjectFolder=
+//Path to remote folder, seen from local system. Will be replaced with localpath when fetching docs in GUI.
+pathToProjectFolder=
 

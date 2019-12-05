@@ -51,7 +51,7 @@ public class StandardListProcess extends Process {
                 getBot().sendMsg("Ok :)", update, null, false, false);
                 close();
                 break;
-            case "Liste anzeigen":
+            case "Einkaufsliste anzeigen":
                 sendStandardList(update);
                 close();
                 break;

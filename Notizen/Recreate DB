@@ -12,3 +12,5 @@ Drop Table StandardList;
 create Table StandardList(item TEXT);
 Drop Table CalendarTasks;
 create Table CalendarTasks(year INTEGER, month INTEGER, day INTEGER, hour INTEGER, minute INTEGER, name TEXT, user TEXT, strategyType TEXT);
+Drop Table Memos;
+create Table Memos(item TEXT);

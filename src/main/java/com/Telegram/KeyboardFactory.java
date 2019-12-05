@@ -197,7 +197,7 @@ return valueList;
                 case ShoppingList:
                 KeyboardRow keyboardShoppingListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen", "Löschen"});
                 keyboard.add(keyboardShoppingListFirstRow);
-                KeyboardRow keyboardShoppingListSecondRow = createKeyBoardRow(new String[]{"Liste anzeigen", "Liste Löschen"});
+                KeyboardRow keyboardShoppingListSecondRow = createKeyBoardRow(new String[]{"Einkaufsliste anzeigen", "Liste Löschen"});
                 keyboard.add(keyboardShoppingListSecondRow);
                 KeyboardRow keyboardShoppingListThirdRow = createKeyBoardRow(new String[]{"Standardliste: Optionen", "Start"});
                 keyboard.add(keyboardShoppingListThirdRow);
@@ -205,7 +205,7 @@ return valueList;
             case StandardList:
                 KeyboardRow keyboardStandardListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen", "Löschen"});
                 keyboard.add(keyboardStandardListFirstRow);
-                KeyboardRow keyboardStandardListSecondRow = createKeyBoardRow(new String[]{"Liste anzeigen"});
+                KeyboardRow keyboardStandardListSecondRow = createKeyBoardRow(new String[]{"Einkaufsliste anzeigen"});
                 keyboard.add(keyboardStandardListSecondRow);
                 KeyboardRow keyboardStandardListThirdRow = createKeyBoardRow(new String[]{"Start"});
                 keyboard.add(keyboardStandardListThirdRow);
@@ -213,7 +213,7 @@ return valueList;
             case Start:
                 KeyboardRow keyboardStartFirstRow = createKeyBoardRow(new String[]{"Bon eingeben"});
                 keyboard.add(keyboardStartFirstRow);
-                KeyboardRow keyboardStartEigthRow = createKeyBoardRow(new String[]{"Liste anzeigen"});
+                KeyboardRow keyboardStartEigthRow = createKeyBoardRow(new String[]{"Einkaufsliste anzeigen"});
                 keyboard.add(keyboardStartEigthRow);
                 KeyboardRow keyboardStartSecondRow = createKeyBoardRow(new String[]{"Hole Bilder, Dokumente"});
                 keyboard.add(keyboardStartSecondRow);
@@ -223,8 +223,10 @@ return valueList;
                 keyboard.add(keyboardStartFourthRow);
                 KeyboardRow keyboardStartSeventhRow = createKeyBoardRow(new String[]{"Einkaufslisten-Optionen"});
                 keyboard.add(keyboardStartSeventhRow);
-                KeyboardRow keyboardStartEightRow = createKeyBoardRow(new String[]{"Kalender-Optionen"});
+                KeyboardRow keyboardStartEightRow = createKeyBoardRow(new String[]{"Memo-Optionen"});
                 keyboard.add(keyboardStartEightRow);
+                KeyboardRow keyboardStartNinthRow = createKeyBoardRow(new String[]{"Kalender-Optionen"});
+                keyboard.add(keyboardStartNinthRow);
                 break;
             case Bons:
                 KeyboardRow keyboardBonsFirstRow = createKeyBoardRow(new String[]{"Bon eingeben"});
@@ -246,12 +248,22 @@ return valueList;
                 KeyboardRow keyboardCalendarFourthRow = createKeyBoardRow(new String[]{"Start"});
                 keyboard.add(keyboardCalendarFourthRow);
                 break;
+            case Memo:
+                KeyboardRow keyboardMemoFirstRow = createKeyBoardRow(new String[]{"Memos anzeigen"});
+                keyboard.add(keyboardMemoFirstRow);
+                KeyboardRow keyboardMemoSecondRow = createKeyBoardRow(new String[]{"Memo hinzufügen"});
+                keyboard.add(keyboardMemoSecondRow);
+                KeyboardRow keyboardMemoThirdRow = createKeyBoardRow(new String[]{"Memos löschen"});
+                keyboard.add(keyboardMemoThirdRow);
+                KeyboardRow keyboardMemoFourthRow = createKeyBoardRow(new String[]{"Start"});
+                keyboard.add(keyboardMemoFourthRow);
+                break;
         }
         return keyboard;
     }
 
     public enum KeyBoardType{
-        User_Choose, Boolean,  Calendar, Calendar_Month, Calendar_Year, Calendar_Choose_Strategy, Calendar_Regular_Choose_Unit, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
+        Memo, User_Choose, Boolean,  Calendar, Calendar_Month, Calendar_Year, Calendar_Choose_Strategy, Calendar_Regular_Choose_Unit, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();
