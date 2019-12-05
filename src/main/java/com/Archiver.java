@@ -32,7 +32,7 @@ public class Archiver {
 
     public Archiver(Properties properties) {
         documentList = new ArrayList<>();
-        archiveFolder = new File(properties.getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
+        archiveFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv", LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
         if(!archiveFolder.exists()){
             archiveFolder.mkdir();
         }
@@ -65,7 +65,7 @@ public class Archiver {
 
     public void archive(String nameOfArchive) {
         LogUtil.log("Gui: " + "Create Zip-Archive");
-        File tempForZip = new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"), "temp");
+        File tempForZip = new File(ObjectHub.getInstance().getArchiver().archiveFolder, "temp");
         tempForZip.mkdir();
 
         documentList.forEach(document -> {
@@ -76,7 +76,7 @@ public class Archiver {
             }
         });
         zipDir(tempForZip, nameOfArchive);
-        File zippedDir = new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"), nameOfArchive + ".zip");
+        File zippedDir = new File(ObjectHub.getInstance().getArchiver().archiveFolder, nameOfArchive + ".zip");
         try {
             FileUtils.copyFile(zippedDir, new File(ObjectHub.getInstance().getArchiver().getZipFolder(), nameOfArchive + ".zip"));
             FileUtils.deleteDirectory(tempForZip);
@@ -87,7 +87,7 @@ public class Archiver {
     }
 
     private void zipDir(File dir, String nameOfArchive) {
-        ZipUtil.pack(dir, new File(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"), nameOfArchive + ".zip"));
+        ZipUtil.pack(dir, new File(ObjectHub.getInstance().getArchiver().archiveFolder, nameOfArchive + ".zip"));
     }
 
     // GETTER SETTER

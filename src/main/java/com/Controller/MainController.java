@@ -46,9 +46,6 @@ public class MainController extends SingleDocumentController {
     private Button processButton;
 
     @FXML
-    private Button archiveButton;
-
-    @FXML
     TextField nameOfProjectTextField;
 
     @FXML
@@ -103,7 +100,7 @@ public class MainController extends SingleDocumentController {
         };
 
         LogUtil.log("Gui: " + "Init Gui.");
-        archivePathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("localArchivePath"));
+        archivePathLabel.setText(ObjectHub.getInstance().getArchiver().getArchiveFolder().getAbsolutePath());
         inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
         mainTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -184,11 +181,6 @@ public class MainController extends SingleDocumentController {
     public void chooseButtonInputPath() {
         String inputPath = choosePath(inputPathLabel);
         ObjectHub.getInstance().getProperties().setProperty("lastInputPath", inputPath);
-    }
-
-    public void archiveButtonInputPath() {
-        String archivePath = choosePath(archivePathLabel);
-        ObjectHub.getInstance().getProperties().setProperty("localArchivePath", archivePath);
     }
 
     private String choosePath(Label label) {

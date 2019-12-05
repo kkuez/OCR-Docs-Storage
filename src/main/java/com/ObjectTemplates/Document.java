@@ -1,15 +1,12 @@
 package com.ObjectTemplates;
 
-import com.ObjectHub;
 import com.Utils.DBUtil;
 import com.Utils.IOUtil;
+import com.Misc.OperatingSys;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public abstract class Document{
@@ -45,8 +42,7 @@ public abstract class Document{
         }
 
         String originFilePath = originFile.getAbsolutePath();
-        originFilePath = IOUtil.makePathHostRelative(originFilePath);
-        originFilePath = IOUtil.convertFilePathOSDependent(originFilePath);
+        originFilePath = IOUtil.convertFilePathOSDependent(originFilePath, OperatingSys.Linux);
 
         return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBUtil.countDocuments("Documents", "") + ", '" +
                 content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";

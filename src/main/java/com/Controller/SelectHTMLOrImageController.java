@@ -1,7 +1,9 @@
 package com.Controller;
 
+import com.Misc.OperatingSys;
 import com.ObjectHub;
 import com.ObjectTemplates.Document;
+import com.Utils.IOUtil;
 import com.Utils.LogUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -36,7 +38,11 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
 
     public void showImage() {
         try {
-            String remotePath = document.getOriginFile().getPath().replace(ObjectHub.getInstance().getProperties().getProperty("projectFolderOnHost"), ObjectHub.getInstance().getProperties().getProperty("pathToRemoteProjectFolder"));
+            String remotePath = document.getOriginFile().getPath().replace(ObjectHub.getInstance().getProperties().getProperty("projectFolderOnHost"), ObjectHub.getInstance().getProperties().getProperty("pathToProjectFolder"));
+            String operatingS = System.getProperty("os.name");
+            OperatingSys operatingSys = operatingS.contains("indows") ? OperatingSys.Windows : null;
+            operatingSys = operatingS.contains("inux") ? OperatingSys.Linux : operatingSys;
+            remotePath = IOUtil.convertFilePathOSDependent(remotePath, operatingSys);
             Desktop.getDesktop().open(new File(remotePath));
             closeWindow();
         } catch (IOException e) {

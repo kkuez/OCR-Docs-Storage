@@ -1,25 +1,34 @@
 package com.Utils;
 
+import com.Misc.OperatingSys;
 import com.ObjectHub;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class IOUtil {
 
-    public static final String OS = System.getProperty("os.name").startsWith("Linux") ? "Linux" : "Windows";
+    public static final String LOCAL_OS = System.getProperty("os.name").startsWith("Linux") ? "Linux" : "Windows";
 
     public static final String alternativePathToArchive = ObjectHub.getInstance().getProperties().getProperty("alternativePathToArchive");
 
     public static final String projectFolderOnHost = ObjectHub.getInstance().getProperties().getProperty("projectFolderOnHost");
 
-    public static String convertFilePathOSDependent(String originFilePath){
-        if(!IOUtil.OS.equals("Linux")){
-            return originFilePath.replace("\\", "/").replace("//", "/");
+    public static String convertFilePathOSDependent(String filePath, OperatingSys targetOS){
+
+        if(targetOS == OperatingSys.Linux && !filePath.startsWith("/")){
+            filePath = filePath.replace("\\", "/").replace("//", "/");
+        }else{
+            if(targetOS == OperatingSys.Windows && !filePath.startsWith("\\\\")){
+                filePath = filePath.replace("/", "\\");
+                while(!filePath.startsWith("\\\\")) {
+                    filePath = filePath = "\\" + filePath;
+                }
+            }
+            
         }
-        return originFilePath;
+        return filePath;
     }
 
     public static String makePathHostRelative(String originFilePath){
@@ -37,3 +46,4 @@ public class IOUtil {
         return fileMap.values();
     }
 }
+
