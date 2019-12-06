@@ -348,7 +348,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "Memo-Optionen":
                     message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Memo, true, false);
                     break;
-                case "Memos anzeige":
+                case "Memos anzeigen":
                 case "Memo hinzufügen":
                 case "Memos löschen":
                     processToReturn = new MemoProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
@@ -527,7 +527,7 @@ public class Bot extends TelegramLongPollingBot {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {
                 if(e.getMessage().equals("Error editing message reply markup")){
-                    LogUtil.logError("Couldn't change ReplyMarkup.", e);
+                    LogUtil.log("Couldn't change ReplyMarkup for 1 message.");
                     return message;
                 }
                 throw e;

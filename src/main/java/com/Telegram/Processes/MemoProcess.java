@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.List;
 import java.util.Map;
 
 public class MemoProcess extends Process {
@@ -27,6 +28,11 @@ public class MemoProcess extends Process {
         this.setBot(bot);
         this.allowedUsersMap = allowedUsersMap;
         user = getBot().getNonBotUserFromUpdate(update);
+        try {
+            performNextStep("", update, allowedUsersMap);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -35,7 +41,8 @@ public class MemoProcess extends Process {
         String[] commandValue = deserializeInput(update);
         switch (commandValue[0]){
             case "Memos anzeigen":
-
+                sendMemoList(update);
+                close();
                 break;
             case "Memos löschen":
                 inputType = InputType.remove;
@@ -88,9 +95,22 @@ public class MemoProcess extends Process {
         } else {
             if(inputType == InputType.add){
                 return "add";
+            }else{
+                if(inputType == InputType.remove){
+                    return "remove";
+                }
             }
             }
         return null;
+    }
+
+    private void sendMemoList(Update update){
+        List<String> memoList = DBUtil.getMemoListFromDB();
+        StringBuilder listeBuilder = new StringBuilder("*Aktuelle Memos:*\n");
+        for(int i = 0;i<memoList.size();i++){
+            listeBuilder.append( i + ": " + memoList.get(i) + "\n");
+        }
+        getBot().sendMsg(listeBuilder.toString(), update, null, false, false, Bot.ParseMode.Markdown);
     }
 
     enum InputType{
