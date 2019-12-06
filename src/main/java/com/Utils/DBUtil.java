@@ -84,18 +84,18 @@ public class DBUtil {
         return shoppingList;
     }
 
-    public static List<String> getMemoListFromDB(){
+    public static List<String> getMemoListFromDB(Bot bot, Update update){
         List<String> memoList = new ArrayList<>();
-        Statement statement = null;
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Memos");
+        User user = bot.getNonBotUserFromUpdate(update);
+        try(Statement statement = getConnection().createStatement();
+        ResultSet rs = statement.executeQuery("SELECT * FROM Memos where user=" + user.getId())) {
+
             while (rs.next()) {
                 memoList.add(rs.getString("item"));
             }
             statement.close();
         } catch (SQLException e) {
-            LogUtil.logError("SELECT * FROM Memos", e);
+            LogUtil.logError("SELECT * FROM Memos where user=" + user.getId() + ")", e);
         }
         return memoList;
     }

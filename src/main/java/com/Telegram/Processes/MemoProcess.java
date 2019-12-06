@@ -46,7 +46,7 @@ public class MemoProcess extends Process {
                 break;
             case "Memos löschen":
                 inputType = InputType.remove;
-                ReplyKeyboard memoListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getMemoListFromDB(), "remove");
+                ReplyKeyboard memoListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getMemoListFromDB(getBot(), update), "remove");
                 message = getBot().sendKeyboard("Was soll gelöscht werden?", update, memoListKeyboard, false);
                 break;
             case "Memo hinzufügen":
@@ -55,7 +55,7 @@ public class MemoProcess extends Process {
                 break;
             case "add":
                 String item = commandValue[1];
-                DBUtil.executeSQL("insert into Memos(item) Values ('" + item + "')");
+                DBUtil.executeSQL("insert into Memos(item, user) Values ('" + item + "', " + user.getId() + ")");
                 message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
                 getSentMessages().add(message);
                 break;
@@ -64,7 +64,7 @@ public class MemoProcess extends Process {
                     item = commandValue[1];
                     DBUtil.executeSQL("delete from Memos where item='" +  item + "'");
                     getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
-                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.getInlineKeyboardForList(DBUtil.getMemoListFromDB(), "remove"), "remove");
+                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.getInlineKeyboardForList(DBUtil.getMemoListFromDB(getBot(), update), "remove"), "remove");
                 }catch (Exception e){
                     LogUtil.logError(null, e);
                 }
@@ -105,7 +105,7 @@ public class MemoProcess extends Process {
     }
 
     private void sendMemoList(Update update){
-        List<String> memoList = DBUtil.getMemoListFromDB();
+        List<String> memoList = DBUtil.getMemoListFromDB(getBot(), update);
         StringBuilder listeBuilder = new StringBuilder("*Aktuelle Memos:*\n");
         for(int i = 0;i<memoList.size();i++){
             listeBuilder.append( i + ": " + memoList.get(i) + "\n");
