@@ -34,7 +34,7 @@ public class TimeUtil {
         }
         return monthMap;
     }
-    private static int getdaysOfMonthCount(int year, int month){
+    public static int getdaysOfMonthCount(int year, int month){
         YearMonth yearMonthObject = YearMonth.of(year, month);
         return yearMonthObject.lengthOfMonth();
     }
