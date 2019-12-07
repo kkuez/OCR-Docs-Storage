@@ -3,6 +3,7 @@ package com;
 import com.Controller.StartApplication;
 import com.Telegram.Bot;
 import com.Utils.LogUtil;
+import com.network.ListenerThread;
 import javafx.application.Application;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -18,10 +19,10 @@ public class Main {
                 launchGui(args);
             }
             if(s.equals("-bot")){
-                boolean successfullyActivated = false;
-                while(!successfullyActivated){
+                Bot bot = null;
+                while(bot == null){
                     try {
-                        successfullyActivated = activateTGBot(null);
+                        bot = activateTGBot(null);
                     } catch (TelegramApiRequestException e) {
                         e.printStackTrace();
                         LogUtil.log("Waiting 30s and try again...");
@@ -31,11 +32,13 @@ public class Main {
                             ex.printStackTrace();
                         }
                     }
+                    ListenerThread listenerThread = new ListenerThread(bot);
+                    listenerThread.start();
                 }
             }
         }
         }
-    private static boolean activateTGBot(Bot inputBotOrNull) throws TelegramApiRequestException {
+    private static Bot activateTGBot(Bot inputBotOrNull) throws TelegramApiRequestException {
         Bot bot = null;
         try {
             ApiContextInitializer.init();
@@ -50,7 +53,7 @@ public class Main {
             throw e;
         }
         LogUtil.log("System: Activated Bot");
-        return true;
+        return bot;
     }
 
 
