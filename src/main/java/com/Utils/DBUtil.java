@@ -166,21 +166,16 @@ public class DBUtil {
     }
 
     public static float getSumMonth(String monthAndYear, User userOrNull){
-        List<Document> documentList = getDocumentsForMonthAndYear(monthAndYear);
-
-        Map<Integer, Float> bonIdMap = new HashMap<>();
-        getBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
-
         float resultSum = 0f;
+        String plusUserString = userOrNull == null ? "" :" AND USER=" + userOrNull.getId();
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + monthAndYear.replace("-", ".") + "%'" + plusUserString)){
 
-        for(Document document : documentList){
-            if(bonIdMap.keySet().contains(document.getId())){
-                if(userOrNull == null) {
-                    resultSum += bonIdMap.get(document.getId());
-                }else{
-                    resultSum += userOrNull.getId() == document.getUser() ? bonIdMap.get(document.getId()) : 0;
-                }
+            while (rs.next()) {
+                resultSum += Float.parseFloat(rs.getString("sum"));
             }
+        } catch (SQLException e) {
+            LogUtil.logError("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + monthAndYear.replace("-", ".") + "%'", e);
         }
         return resultSum;
     }
