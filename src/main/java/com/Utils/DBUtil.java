@@ -52,16 +52,14 @@ public class DBUtil {
     }
 
     public static Map<Integer, User> getAllowedUsersMap(){
-        Statement statement = null;
         Map<Integer, User> userMap = new HashMap<>();
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from AllowedUsers");
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
+
             while (rs.next()) {
                 User user = new User(rs.getInt("id"), rs.getString("name"));
                 userMap.put(rs.getInt("id"), user);
             }
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("select * from AllowedUsers", e);
         }
@@ -70,14 +68,12 @@ public class DBUtil {
 
     public static List<String> getShoppingListFromDB(){
         List<String> shoppingList = new ArrayList<>();
-        Statement statement = null;
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");
+        try(Statement  statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");) {
+
             while (rs.next()) {
                 shoppingList.add(rs.getString("item"));
             }
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("SELECT * FROM ShoppingList", e);
         }
@@ -102,14 +98,12 @@ public class DBUtil {
 
     public static List<String> getStandardListFromDB(){
         List<String> standardList = new ArrayList<>();
-        Statement statement = null;
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");) {
+
             while (rs.next()) {
                 standardList.add(rs.getString("item"));
             }
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("SELECT * FROM StandardList", e);
         }
@@ -141,14 +135,12 @@ public class DBUtil {
 
     public static Set<String> getTagsForDocument(Document document){
         Set<String> tagSet = new HashSet<>();
-        Statement statement = null;
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());) {
+
             while (rs.next()) {
                 tagSet.add(rs.getString("Tag"));
             }
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("SELECT Tag FROM Tags where belongsToDocument=" + document.getId(), e);
         }
@@ -156,10 +148,8 @@ public class DBUtil {
     }
 
     public static void executeSQL(String sqlStatement) {
-        try {
-            Statement statement = getConnection().createStatement();
+        try(Statement statement = getConnection().createStatement();) {
             statement.executeUpdate(sqlStatement);
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError(sqlStatement, e);
         }
@@ -182,17 +172,15 @@ public class DBUtil {
 
     public static List<Document> getDocumentsForMonthAndYear(String monthAndYear){
         List<Document> documentList = new ArrayList<>();
-        Statement statement = null;
-        try {
-            statement = getConnection().createStatement();
+        try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear.replace("-", ".") + "%' AND originalFile like '%Bons%'");
-            documentList = new ArrayList<>();
+        ) {
+           documentList = new ArrayList<>();
             while (rs.next()) {
                 Document document = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
                 document.setUser(rs.getInt("user"));
                 documentList.add(document);
             }
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("SELECT * FROM Documents WHERE date like '%" + monthAndYear + "%' AND originalFile like '%Bons%'", e);
         }
@@ -207,10 +195,9 @@ public class DBUtil {
 
     public static List<Task> getTasksFromDB(Bot bot){
         List<Task> taskList = new ArrayList<>();
-        try {
-            Statement statement = getConnection().createStatement();
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from CalendarTasks");
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
+
             while (rs.next()) {
                 String strategyType = rs.getString("strategyType");
                 List<User> userList = new ArrayList<>();
@@ -241,7 +228,6 @@ public class DBUtil {
                 task.setTaskStrategy(taskStrategy);
                 taskList.add(task);
             }
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("select * from Task", e);
         }
@@ -252,17 +238,15 @@ public class DBUtil {
         DBUtil.executeSQL(task.getInsertDBString());
     }
 
-     public static List<Bon> getBonsfromDB(){
+     public static List<Bon> getBonsfromDB(String specifySQLStringOrNull){
 
-         List<Bon> bonSet = new ArrayList<>();
-        try {
-            Statement statement = getConnection().createStatement();
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from Bons");
+        String addString = specifySQLStringOrNull == null ? "" : specifySQLStringOrNull;
+        List<Bon> bonSet = new ArrayList<>();
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select * from Bons " + addString);) {
             while (rs.next()) {
                 bonSet.add(new Bon(rs.getInt("belongsToDocument"), rs.getFloat("sum")));
             }
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("select * from Bons", e);
         }
@@ -271,17 +255,14 @@ public class DBUtil {
 
 
     public static List<Document> getDocumentsByTag(String tag){
-        Statement statement = null;
         List<Integer> documentIds = new ArrayList<>();
         List<Document> documentList = new ArrayList<>();
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");
+        try(Statement statement = getConnection().createStatement();
+        ResultSet rs = statement.executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");) {
+
             while (rs.next()) {
                 documentIds.add(rs.getInt("belongsToDocument"));
             }
-
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("select belongsToDocument from Tags where Tag like '%" + tag + "%'", e);
         }
@@ -290,15 +271,13 @@ public class DBUtil {
                     .showDocumentsFromSQLExpression("select * from Documents where id=" + id + ""));
         }
         return documentList;
-
     }
 
     public static List<Document> showDocumentsFromSQLExpression(String sqlExpression) {
-        Statement statement = null;
         List<Document> documentList = new ArrayList<>();
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery(sqlExpression);
+        try(Statement statement = getConnection().createStatement();
+        ResultSet rs = statement.executeQuery(sqlExpression);) {
+
             documentList = new ArrayList<>();
             while (rs.next()) {
                 //TODO auch pdfs eigene klasse schreiben
@@ -307,7 +286,6 @@ public class DBUtil {
                 documentList.add(image);
             }
 
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError(sqlExpression, e);
         }
@@ -315,16 +293,13 @@ public class DBUtil {
     }
 
     public static int countDocuments(String tableName, String sqlAddition){
-        Statement statement = null;
         int count = 0;
-        try {
-            statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);) {
+
             while (rs.next()) {
                 count = rs.getInt("Count(*)");
             }
-
-            statement.close();
         } catch (SQLException e) {
             LogUtil.logError("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition, e);
         }
