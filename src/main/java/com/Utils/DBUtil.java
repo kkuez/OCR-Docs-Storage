@@ -170,6 +170,24 @@ public class DBUtil {
         return resultSum;
     }
 
+    public static Map<Integer, String> getQRItemMap(){
+        Map<Integer, String> itemMap = new HashMap<>();
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select * from QRItems");) {
+
+            while (rs.next()) {
+                itemMap.put(rs.getInt("itemNumber"), rs.getString("itemMapped"));
+            }
+        } catch (SQLException e) {
+            LogUtil.logError("select * from QRItems", e);
+        }
+        return itemMap;
+    }
+
+    public static void updateQRItem(Integer itemNumer, String itemName){
+        executeSQL("UPDATE QRItems Set itemMapped=\"" + itemName +"\" where itemNumber=" + itemNumer);
+    }
+
     public static List<Document> getDocumentsForMonthAndYear(String monthAndYear){
         List<Document> documentList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();

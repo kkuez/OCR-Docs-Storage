@@ -95,6 +95,14 @@ public class KeyboardFactory {
                 endKeyboard.add(createInlineKeyboardRow(List.of("Für Alle"), List.of("forAll")));
                 endKeyboard.add(ABORT_ROW);
                 break;
+            case QRItems:
+                Map<Integer, String> itemsMap = DBUtil.getQRItemMap();
+                int itemCount = itemsMap.size();
+                for(int i = 1;i<itemCount + 1;i++){
+                    endKeyboard.add(createInlineKeyboardRow(List.of("Item" + i + ": " + itemsMap.get(i)), List.of("" + i)));
+                }
+                endKeyboard.add(ABORT_ROW);
+                break;
         }
         return endKeyboard;
     }
@@ -227,6 +235,8 @@ return valueList;
                 keyboard.add(keyboardStartEightRow);
                 KeyboardRow keyboardStartNinthRow = createKeyBoardRow(new String[]{"Kalender-Optionen"});
                 keyboard.add(keyboardStartNinthRow);
+                KeyboardRow keyboardStartTenthRow = createKeyBoardRow(new String[]{"QR-Item mappen"});
+                keyboard.add(keyboardStartTenthRow);
                 break;
             case Bons:
                 KeyboardRow keyboardBonsFirstRow = createKeyBoardRow(new String[]{"Bon eingeben"});
@@ -263,7 +273,7 @@ return valueList;
     }
 
     public enum KeyBoardType{
-        Memo, User_Choose, Boolean,  Calendar, Calendar_Month, Calendar_Year, Calendar_Choose_Strategy, Calendar_Regular_Choose_Unit, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
+        QRItems, Memo, User_Choose, Boolean,  Calendar, Calendar_Month, Calendar_Year, Calendar_Choose_Strategy, Calendar_Regular_Choose_Unit, Start, ShoppingList, ShoppingList_Current, ShoppingList_Add, Abort, Bons, NoButtons, Done, StandardList, StandardList_Current
     }
     private static KeyboardRow createKeyBoardRow(String[] namesOfButtons){
         KeyboardRow keyboardRow = new KeyboardRow();

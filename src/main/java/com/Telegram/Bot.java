@@ -309,6 +309,9 @@ public class Bot extends TelegramLongPollingBot {
         Process processToReturn = null;
         if(textGivenByUser != null) {
             switch (textGivenByUser){
+                case "QR-Item mappen":
+                    processToReturn = new MapQRItemProcess(this, (ProgressReporter) progressReporter, update);
+                    break;
                 case "Bon eingeben":
                     processToReturn = new BonProcess(this, (ProgressReporter) progressReporter);
                     Message message = sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
