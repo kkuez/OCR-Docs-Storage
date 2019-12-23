@@ -47,6 +47,9 @@ public class ListenerThread extends Thread {
             Map<Integer, String> itemMap = DBUtil.getQRItemMap();
             int itemNumber = Integer.parseInt(incomingString.replace(addListCMDItemNr, ""));
             String item = itemMap.get(itemNumber);
+            if(item.equals("-")){
+                return;
+            }
             bot.getShoppingList().add(item);
             DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
         }else {
