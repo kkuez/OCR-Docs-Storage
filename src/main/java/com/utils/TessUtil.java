@@ -116,9 +116,9 @@ public class TessUtil {
 
     public static String getFirstDate(String documentData) throws Exception{
 
-        String date = getDateWithPattern(datePattern, documentData);
+        String date = getDateWithPatternOrNull(datePattern, documentData);
         if(date == null){
-            date = getDateWithPattern(germanDatePattern, documentData);
+            date = getDateWithPatternOrNull(germanDatePattern, documentData);
         }
         if(date == null){
             DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
@@ -128,14 +128,13 @@ public class TessUtil {
         return date;
     }
 
-    private static String getDateWithPattern(Pattern pattern, String string){
+    private static String getDateWithPatternOrNull(Pattern pattern, String string){
         Matcher matcher = pattern.matcher(string);
 
         String date = null;
-        while(matcher.find()){
+        if(matcher.find()){
             date = matcher.group();
             //Always take first found date, since presumably its the one in the documents header
-            break;
         }
         return date;
     }
