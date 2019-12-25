@@ -12,10 +12,16 @@ public class Image extends Document implements Comparable<Image>{
         this.setOriginFile(originalFile);
     }
 
-    public boolean equals(Document document) throws ClassCastException{
-        if(document == null){
+    @Override
+    public boolean equals(Object obj) throws ClassCastException{
+        if(obj == null){
             throw new NullPointerException();
         }
+        if(!obj.getClass().equals(Document.class)){
+            return false;
+        }
+        Document document = (Document) obj;
+
 
         Image inputImage = (Image) document;
 
