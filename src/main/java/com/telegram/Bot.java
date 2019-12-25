@@ -260,7 +260,7 @@ public class Bot extends TelegramLongPollingBot {
             LogUtil.logError(imagePath, e);
             return;
         }
-        long chatID = update.hasMessage() ? update.getMessage().getChatId() : update.getCallbackQuery().getFrom().getId();
+        long chatID = update.hasMessage() ? update.getMessage().getChatId() : (long)update.getCallbackQuery().getFrom().getId();
         sendPhoto.setChatId(chatID);
         try {
             execute(sendPhoto);

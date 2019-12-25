@@ -330,7 +330,8 @@ public class DBUtil {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
             }
         } catch (SQLException e) {
-            LogUtil.logError("jdbc:sqlite:" + dbFile.getAbsolutePath(), e);
+            LogUtil.logError("Could not create Connection jdbc:sqlite:" + dbFile.getAbsolutePath(), e);
+            System.exit(2);
         }
 
         return connection;
