@@ -1,8 +1,6 @@
-package com.Misc.TaskHandling.Strategies;
+package com.misc.taskHandling.strategies;
 
-import com.Misc.TaskHandling.Task;
-import com.ObjectTemplates.User;
-import com.Telegram.KeyboardFactory;
+import com.misc.taskHandling.Task;
 
 import java.time.LocalDateTime;
 

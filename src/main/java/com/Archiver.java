@@ -1,7 +1,7 @@
 package com;
 
-import com.ObjectTemplates.Document;
-import com.Utils.LogUtil;
+import com.objectTemplates.Document;
+import com.utils.LogUtil;
 import org.apache.commons.io.FileUtils;
 import org.zeroturnaround.zip.ZipUtil;
 

@@ -1,8 +1,8 @@
 package com;
 
-import com.Controller.StartApplication;
-import com.Telegram.Bot;
-import com.Utils.LogUtil;
+import com.controller.StartApplication;
+import com.telegram.Bot;
+import com.utils.LogUtil;
 import com.network.ListenerThread;
 import javafx.application.Application;
 import org.telegram.telegrambots.ApiContextInitializer;

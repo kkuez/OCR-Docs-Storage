@@ -1,13 +1,13 @@
-package com.Utils;
+package com.utils;
 
-import com.Misc.TaskHandling.Strategies.*;
-import com.Misc.TaskHandling.Task;
+import com.misc.taskHandling.strategies.*;
+import com.misc.taskHandling.Task;
 import com.ObjectHub;
-import com.ObjectTemplates.Bon;
-import com.ObjectTemplates.Document;
-import com.ObjectTemplates.Image;
-import com.ObjectTemplates.User;
-import com.Telegram.Bot;
+import com.objectTemplates.Bon;
+import com.objectTemplates.Document;
+import com.objectTemplates.Image;
+import com.objectTemplates.User;
+import com.telegram.Bot;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

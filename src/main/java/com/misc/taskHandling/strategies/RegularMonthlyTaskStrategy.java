@@ -7,36 +7,34 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
-public class RegularDailyTaskStrategy extends RegularTaskStrategy {
+public class RegularMonthlyTaskStrategy extends RegularTaskStrategy {
 
-    public RegularDailyTaskStrategy(Task task){
+    public RegularMonthlyTaskStrategy(Task task, int day){
         this.task = task;
         min = 0;
         hour = 4;
+        this.day = day;
     }
-
     @Override
     public String getType() {
-        return "RegularDailyTaskStrategy";
+        return "RegularMonthlyTaskStrategy";
     }
 
     @Override
     public boolean timeIsNow(LocalDateTime localDateTime) {
-        return localDateTime.equals(LocalDateTime.of(LocalDate.now(), LocalTime.of(hour, min)));
+        return localDateTime.equals(LocalDateTime.of(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), day), LocalTime.of(hour, min)));
+
     }
 
     @Override
-    public String getInsertDBString(){
+    public String getInsertDBString() {
         int year = 99;
 
         int month = 99;
 
-        int day = 99;
-
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
         return "insert into CalendarTasks (year, month, day, hour, minute, name, user, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user + "', '" + getType() +"')";
-
     }
 
     @Override

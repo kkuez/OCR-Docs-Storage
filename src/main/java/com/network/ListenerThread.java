@@ -1,8 +1,8 @@
 package com.network;
 
-import com.Telegram.Bot;
-import com.Utils.DBUtil;
-import com.Utils.LogUtil;
+import com.telegram.Bot;
+import com.utils.DBUtil;
+import com.utils.LogUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;

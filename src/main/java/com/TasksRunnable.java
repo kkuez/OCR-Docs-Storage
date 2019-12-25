@@ -1,10 +1,10 @@
 package com;
 
-import com.Misc.TaskHandling.Strategies.RegularTaskStrategy;
-import com.Misc.TaskHandling.Task;
-import com.Telegram.Bot;
-import com.Utils.DBUtil;
-import com.Utils.LogUtil;
+import com.misc.taskHandling.strategies.RegularTaskStrategy;
+import com.misc.taskHandling.Task;
+import com.telegram.Bot;
+import com.utils.DBUtil;
+import com.utils.LogUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

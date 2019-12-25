@@ -1,6 +1,5 @@
-package com.ObjectTemplates;
+package com.objectTemplates;
 
-import javax.validation.constraints.Null;
 import java.io.File;
 
 public class Image extends Document implements Comparable<Image>{

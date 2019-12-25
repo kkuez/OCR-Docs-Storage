@@ -1,11 +1,11 @@
 package com;
 
-import com.Controller.MainController;
-import com.Misc.CustomProperties;
-import com.ObjectTemplates.User;
-import com.Telegram.Bot;
-import com.Utils.DBUtil;
-import com.Utils.LogUtil;
+import com.controller.MainController;
+import com.misc.CustomProperties;
+import com.objectTemplates.User;
+import com.telegram.Bot;
+import com.utils.DBUtil;
+import com.utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.FileInputStream;
