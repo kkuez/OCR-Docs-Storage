@@ -1,11 +1,11 @@
-package com.Telegram.Processes;
+package com.telegram.processes;
 
-import com.Controller.Reporter.ProgressReporter;
-import com.ObjectTemplates.Document;
-import com.ObjectTemplates.User;
-import com.Telegram.Bot;
-import com.Telegram.KeyboardFactory;
-import com.Utils.LogUtil;
+import com.controller.reporter.ProgressReporter;
+import com.objectTemplates.Document;
+import com.objectTemplates.User;
+import com.telegram.Bot;
+import com.telegram.KeyboardFactory;
+import com.utils.LogUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;

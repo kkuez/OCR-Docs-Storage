@@ -1,15 +1,15 @@
-package com.Telegram.Processes;
+package com.telegram.processes;
 
-import com.Controller.Reporter.ProgressReporter;
-import com.Misc.TaskHandling.Strategies.*;
-import com.Misc.TaskHandling.Task;
+import com.controller.reporter.ProgressReporter;
+import com.misc.taskHandling.strategies.*;
+import com.misc.taskHandling.Task;
 import com.ObjectHub;
-import com.ObjectTemplates.User;
-import com.Telegram.Bot;
-import com.Telegram.KeyboardFactory;
-import com.Utils.DBUtil;
-import com.Utils.LogUtil;
-import com.Utils.TimeUtil;
+import com.objectTemplates.User;
+import com.telegram.Bot;
+import com.telegram.KeyboardFactory;
+import com.utils.DBUtil;
+import com.utils.LogUtil;
+import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;

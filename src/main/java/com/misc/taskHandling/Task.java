@@ -1,9 +1,9 @@
-package com.Misc.TaskHandling;
+package com.misc.taskHandling;
 
-import com.Misc.TaskHandling.Strategies.TaskStrategy;
-import com.ObjectTemplates.User;
-import com.Telegram.Bot;
-import com.Telegram.KeyboardFactory;
+import com.misc.taskHandling.strategies.TaskStrategy;
+import com.objectTemplates.User;
+import com.telegram.Bot;
+import com.telegram.KeyboardFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

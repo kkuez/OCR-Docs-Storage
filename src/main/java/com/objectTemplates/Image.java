@@ -12,7 +12,6 @@ public class Image extends Document implements Comparable<Image>{
         this.setOriginFile(originalFile);
     }
 
-    @Override
     public boolean equals(Document document) throws ClassCastException{
         if(document == null){
             throw new NullPointerException();

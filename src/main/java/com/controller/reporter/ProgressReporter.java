@@ -1,6 +1,6 @@
-package com.Controller.Reporter;
+package com.controller.reporter;
 
-import com.Misc.ProgressManager;
+import com.misc.ProgressManager;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface ProgressReporter extends Reporter {

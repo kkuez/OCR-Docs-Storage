@@ -1,4 +1,4 @@
-package com.Misc.TaskHandling.Strategies;
+package com.misc.taskHandling.strategies;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;

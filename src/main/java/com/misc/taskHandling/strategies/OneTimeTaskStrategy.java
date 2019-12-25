@@ -1,6 +1,6 @@
-package com.Misc.TaskHandling.Strategies;
+package com.misc.taskHandling.strategies;
 
-import com.Misc.TaskHandling.Task;
+import com.misc.taskHandling.Task;
 
 public abstract class OneTimeTaskStrategy implements TaskStrategy {
 

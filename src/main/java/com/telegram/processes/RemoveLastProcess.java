@@ -1,9 +1,9 @@
-package com.Telegram.Processes;
+package com.telegram.processes;
 
-import com.Controller.Reporter.ProgressReporter;
-import com.ObjectTemplates.User;
-import com.Telegram.Bot;
-import com.Utils.DBUtil;
+import com.controller.reporter.ProgressReporter;
+import com.objectTemplates.User;
+import com.telegram.Bot;
+import com.utils.DBUtil;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Map;

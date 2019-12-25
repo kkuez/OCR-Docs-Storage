@@ -26,11 +26,6 @@ public class Bon extends Document {
         return "insert into Bons (belongsToDocument, sum) Values (" + belongsToDocument + ", " + sum + ")";
     }
 
-    @Override
-    public boolean equals(Document document) {
-        return false;
-    }
-
 
     //GETTER SETTER
     public float getSum() {
