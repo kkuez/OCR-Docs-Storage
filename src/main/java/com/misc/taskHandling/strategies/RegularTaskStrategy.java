@@ -17,7 +17,7 @@ public abstract class RegularTaskStrategy implements TaskStrategy {
 
     Task task;
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     public RegularTaskStrategy(){
     }

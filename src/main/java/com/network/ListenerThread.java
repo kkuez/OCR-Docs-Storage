@@ -15,16 +15,17 @@ import java.util.Scanner;
 
 public class ListenerThread extends Thread {
 
-    public static boolean networkRun = true;
+    private boolean networkRun;
     private static String addListCMD = "<addList>";
     private static String addListCMDItemNr = "<addList>Item#";
     private Bot bot;
     private static int socketPort = 55555;
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     public ListenerThread(Bot bot){
      this.bot = bot;
      this.setName("networkListener");
+     this.networkRun = true;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class ListenerThread extends Thread {
                     processIncomingStream(incomingScan.next());
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Failed activating bot", e);;
             }
         }
     }

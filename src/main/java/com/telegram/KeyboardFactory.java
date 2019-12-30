@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class KeyboardFactory {
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     private static List<InlineKeyboardButton> DONE_ROW = createInlineKeyboardRow(Map.of("Fertig", "done"));
 

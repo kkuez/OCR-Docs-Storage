@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class DBUtil {
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     private static Connection connection = null;
 
     static File dbFile = new File(ObjectHub.getInstance().getProperties().getProperty("dbPath"));
 
-    public static Document lastProcessedDoc;
+    private static Document lastProcessedDoc = null;
 
     public static List<Document> getDocumentsForSearchTerm(String searchTerm) {
         Map<File, Document> documentMap = new HashMap<>();

@@ -7,7 +7,7 @@ import java.time.YearMonth;
 import java.util.*;
 
 public class TimeUtil {
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     static Map<String, String> monthMap = new HashMap<>();
 

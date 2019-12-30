@@ -18,7 +18,7 @@ import java.util.Map;
 
 public abstract class Process {
 
-    public static Logger logger = Main.logger;
+    public static final Logger logger = Main.getLogger();
 
     public Process(ProgressReporter reporter){
         progressReporter = reporter;
@@ -27,8 +27,6 @@ public abstract class Process {
     private ProgressReporter progressReporter;
 
     private Bot bot;
-
-    public Document document;
 
     private Boolean hasStarted = false;
 
@@ -144,13 +142,6 @@ public abstract class Process {
         this.bot = bot;
     }
 
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
-    }
 
     public Boolean getHasStarted() {
         return hasStarted;

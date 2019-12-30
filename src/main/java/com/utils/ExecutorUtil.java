@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class ExecutorUtil {
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     public static void blockUntilExecutorIsDone(Executor executor, int tasksToFinish) throws InterruptedException {
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;

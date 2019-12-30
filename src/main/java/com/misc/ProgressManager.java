@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 
 public class ProgressManager {
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     private int totalSteps;
 

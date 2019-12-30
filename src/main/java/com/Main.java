@@ -5,7 +5,6 @@ import com.telegram.Bot;
 
 import com.network.ListenerThread;
 import javafx.application.Application;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.*;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -15,18 +14,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Properties;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Main {
 
-    public static Logger logger;
+    private static Logger logger;
 
     public static void main(String[] args) {
         // write your code here
-        logger = createLogger();
+         logger = createLogger();
 
         logger.info("\n\nStarting.");
         for(String s : args){
@@ -92,10 +89,15 @@ public class Main {
         File logFile = new File(logFolder, LocalDate.now().toString().replace(".", "-").replace(":", "_") + ".log");
         if(!logFile.exists()){
             try {
-                logFile.createNewFile();
+                boolean logFileSuccess = logFile.createNewFile();
+                if(!logFileSuccess){
+                    throw new RuntimeException("Failed to create logFile.");
+                }
                 System.out.println("Logfile: " + logFile.getAbsolutePath());
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Failed activating bot", e);
+            }catch (RuntimeException ex) {
+                logger.error(ex);
             }
         }
         return logFile.getAbsolutePath();
@@ -109,7 +111,7 @@ public class Main {
         try {
             logFileAppender = new FileAppender(layout, getLogFile(), true);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed activating bot", e);;
             System.exit(2);
         }
         logger.addAppender(logFileAppender);
@@ -117,5 +119,9 @@ public class Main {
     }
         private static void launchGui(String[] args){
             Application.launch(StartApplication.class, args);
+        }
+
+        public static Logger getLogger(){
+        return logger;
         }
 }

@@ -267,7 +267,7 @@ public class MainController extends SingleDocumentController {
                             pdPageContentStream.showText(user.getName() + ": " + userSumMap.get(user));
                             pdPageContentStream.newLine();
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            logger.error("Failed activating bot", e);;
                         }
                     });
                     pdPageContentStream.endText();
@@ -276,7 +276,7 @@ public class MainController extends SingleDocumentController {
                     document.save(fileToSave);
                     Desktop.getDesktop().open(fileToSave);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Failed activating bot", e);;
                 }
             }
         };

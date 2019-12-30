@@ -75,7 +75,7 @@ public class GetBonsProcess extends Process{
                             try {
                                 getBot().sendAnswerCallbackQuery("Fertig", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
-                                e.printStackTrace();
+                                logger.error("Failed activating bot", e);;
                             }
                             getBot().sendMsg("Fertig: " + documentList.size() + " Bilder geholt.", update, null, false, false);
                     close();

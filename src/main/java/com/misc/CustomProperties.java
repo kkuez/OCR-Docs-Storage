@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class CustomProperties extends Properties {
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     @Override
     public synchronized Object setProperty(String key, String value) {

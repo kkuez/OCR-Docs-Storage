@@ -51,7 +51,7 @@ public class Bot extends TelegramLongPollingBot {
 
     Map<Integer, User> allowedUsersMap;
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     public Bot() {
         this.allowedUsersMap = DBUtil.getAllowedUsersMap();

@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.*;
 
 public class IOUtil {
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     public static final String LOCAL_OS = System.getProperty("os.name").startsWith("Linux") ? "Linux" : "Windows";
 

@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 public abstract class ControllerStrategy{
 
     // GETTER SETTER
-    public static Logger logger = Main.logger;
+    public final static Logger logger = Main.getLogger();
 
     public abstract Stage getPreparedStage();
 

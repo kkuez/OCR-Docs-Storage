@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Task {
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     private TaskStrategy taskStrategy;
 

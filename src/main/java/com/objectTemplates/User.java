@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 public class User {
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     private int id;
 

@@ -4,7 +4,7 @@ import com.Main;
 import org.apache.log4j.Logger;
 
 public abstract class Controller {
-     public static Logger logger = Main.logger;
+     public static final Logger logger = Main.getLogger();
 
      abstract void closeWindow();
 }

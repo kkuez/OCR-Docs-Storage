@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import java.util.List;
 
 public class ControllerUtil {
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     public static ObservableList<Document> createObservableList(List<Document> documentList) {
         ObservableList<Document> observableList = FXCollections.observableArrayList();

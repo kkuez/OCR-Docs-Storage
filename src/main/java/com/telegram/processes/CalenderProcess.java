@@ -72,7 +72,7 @@ public class CalenderProcess extends Process {
                             try {
                                 getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
-                                e.printStackTrace();
+                                logger.error("Failed activating bot", e);;
                             }
                             message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
                             break;
@@ -81,7 +81,7 @@ public class CalenderProcess extends Process {
                             try {
                                 getBot().sendAnswerCallbackQuery("Wann?", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
-                                e.printStackTrace();
+                                logger.error("Failed activating bot", e);;
                             }
                             message = getBot().simpleEditMessage("Wann?", update, KeyboardFactory.KeyBoardType.Calendar_Regular_Choose_Unit);
                             break;
@@ -92,7 +92,7 @@ public class CalenderProcess extends Process {
                     try {
                         getBot().sendAnswerCallbackQuery("Täglich gewählt.", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
-                        e.printStackTrace();
+                        logger.error("Failed activating bot", e);;
                     }
                     message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
                     break;
@@ -101,7 +101,7 @@ public class CalenderProcess extends Process {
                     try {
                         getBot().sendAnswerCallbackQuery("Monatlich gewählt.", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
-                        e.printStackTrace();
+                        logger.error("Failed activating bot", e);;
                     }
                     message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
                     break;
@@ -110,7 +110,7 @@ public class CalenderProcess extends Process {
                     try {
                         getBot().sendAnswerCallbackQuery("Jährlich gewählt.", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
-                        e.printStackTrace();
+                        logger.error("Failed activating bot", e);;
                     }
                     message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
                     break;
@@ -119,7 +119,7 @@ public class CalenderProcess extends Process {
                     try {
                         getBot().sendAnswerCallbackQuery(year + " gewählt.", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
-                        e.printStackTrace();
+                        logger.error("Failed activating bot", e);;
                     }
                     message = getBot().simpleEditMessage("Welche Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth");
                     break;
@@ -128,7 +128,7 @@ public class CalenderProcess extends Process {
                     try {
                         getBot().sendAnswerCallbackQuery(month + " gewählt.", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
-                        e.printStackTrace();
+                        logger.error("Failed activating bot", e);;
                     }
                     message = getBot().simpleEditMessage("Welcher Tag?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
                     break;
@@ -203,7 +203,7 @@ public class CalenderProcess extends Process {
                         try {
                             getBot().sendAnswerCallbackQuery(taskToRemove.getName() + " gelöscht :)", false, update.getCallbackQuery());
                         } catch (TelegramApiException e) {
-                            e.printStackTrace();
+                            logger.error("Failed activating bot", e);;
                         }
                         List<String> taskNames1 = new ArrayList<>();
                         DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames1.add(task1.getName()));

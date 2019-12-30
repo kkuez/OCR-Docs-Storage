@@ -49,7 +49,7 @@ public class ShoppingListProcess extends Process{
                     try {
                         getBot().sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
-                        e.printStackTrace();
+                        logger.error("Failed activating bot", e);;
                     }
                 }else{
                     message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);

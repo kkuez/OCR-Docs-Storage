@@ -19,7 +19,7 @@ public class ObjectHub {
 
     private static ObjectHub instance = null;
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     private MainController mainController;
 
@@ -43,7 +43,7 @@ public class ObjectHub {
         try {
             properties.load(new FileInputStream(root + "setup.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed activating bot", e);;
         }
         archiver = new Archiver(properties);
 

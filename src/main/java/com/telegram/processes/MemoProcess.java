@@ -31,7 +31,7 @@ public class MemoProcess extends Process {
         try {
             performNextStep("", update, allowedUsersMap);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            logger.error("Failed activating bot", e);;
         }
     }
 

@@ -13,7 +13,7 @@ import java.util.*;
 
 public class TasksRunnable implements Runnable {
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     private List<Task> tasksToDo = new ArrayList<>();
 

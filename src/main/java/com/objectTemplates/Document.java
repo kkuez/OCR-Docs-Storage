@@ -13,7 +13,7 @@ import java.util.Set;
 
 public abstract class Document{
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     private String date;
 

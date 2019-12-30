@@ -7,7 +7,7 @@ import java.io.File;
 
 public class Project {
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
 
     private File location;

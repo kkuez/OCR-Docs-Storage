@@ -7,7 +7,7 @@ import java.io.File;
 
 public class Item {
 
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     String name;
 

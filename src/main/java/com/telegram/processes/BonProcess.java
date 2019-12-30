@@ -3,6 +3,7 @@ package com.telegram.processes;
 import com.controller.reporter.ProgressReporter;
 import com.ObjectHub;
 import com.objectTemplates.Bon;
+import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
@@ -23,6 +24,8 @@ public class BonProcess extends Process {
     private Steps currentStep;
 
     private Bon bon;
+
+    private Document document;
 
     public BonProcess(Bot bot, ProgressReporter progressReporter){
         super(progressReporter);
@@ -143,6 +146,15 @@ public class BonProcess extends Process {
 
     public void setBon(Bon bon) {
         this.bon = bon;
+    }
+
+
+    public Document getDocument() {
+        return document;
+    }
+
+    public void setDocument(Document document) {
+        this.document = document;
     }
 
 }

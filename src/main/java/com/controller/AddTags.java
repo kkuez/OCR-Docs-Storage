@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AddTags extends SimpleSubmitController{
-    private static Logger logger = Main.logger;
+    private static Logger logger = Main.getLogger();
 
     @FXML
     TextField newTagTextField;
