@@ -85,6 +85,7 @@ public class ShoppingListProcess extends Process{
                 ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getShoppingListFromDB(), "remove");
                 message = getBot().sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
                 break;
+            case "Zu Einkaufsliste hinzufügen":
             case "Hinzufügen":
                 message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.ShoppingList_Add, false, true);
                 status = AWAITING_INPUT.add;

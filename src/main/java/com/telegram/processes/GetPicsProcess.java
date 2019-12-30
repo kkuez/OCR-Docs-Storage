@@ -68,7 +68,7 @@ public class GetPicsProcess extends Process {
                 close();
                 break;
                 default:
-                    Message message = getBot().sendMsg("Wonach soll gesucht werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                    Message message = getBot().sendMsg("Dein Suchbegriff:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     currentStep = Step.getPics;
                     user.setBusy(false);
                     getSentMessages().add(message);

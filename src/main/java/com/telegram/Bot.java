@@ -312,12 +312,15 @@ public class Bot extends TelegramLongPollingBot {
         Process processToReturn = null;
         if(textGivenByUser != null) {
             switch (textGivenByUser){
+                case "Weitere Optionen":
+                    Message message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.FurtherOptions, true, false);
+                    break;
                 case "QR-Item mappen":
                     processToReturn = new MapQRItemProcess(this, (ProgressReporter) progressReporter, update);
                     break;
                 case "Bon eingeben":
                     processToReturn = new BonProcess(this, (ProgressReporter) progressReporter);
-                    Message message = sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                    message = sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     processToReturn.getSentMessages().add(message);
                     break;
                 case "Standardliste: Optionen":
@@ -328,7 +331,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "Start":
                     processToReturn = new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
                     break;
-                case "Hole Bilder, Dokumente":
+                case "Dokumente suchen":
                     processToReturn = new GetPicsProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
                     break;
                 case "Summe von Bons":
@@ -363,6 +366,7 @@ public class Bot extends TelegramLongPollingBot {
                     message = sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
                     break;
                 case "Hinzufügen":
+                case "Zu Einkaufsliste hinzufügen":
                 case "Löschen":
                 case "Einkaufsliste anzeigen":
                 case "Liste Löschen":
