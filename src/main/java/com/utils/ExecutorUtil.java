@@ -12,18 +12,14 @@ public class ExecutorUtil {
 
     private static Logger logger = Main.logger;
 
-    public static void blockUntilExecutorIsDone(Executor executor, int tasksToFinish) {
+    public static void blockUntilExecutorIsDone(Executor executor, int tasksToFinish) throws InterruptedException {
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
 
         boolean isDone = threadPoolExecutor.getCompletedTaskCount() == tasksToFinish;
 
         while (!isDone) {
             isDone = threadPoolExecutor.getCompletedTaskCount() == tasksToFinish;
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                logger.error(null, e);;
-            }
+            Thread.sleep(500);
         }
         resetExecutor();
     }

@@ -11,13 +11,9 @@ public class TimeUtil {
 
     static Map<String, String> monthMap = new HashMap<>();
 
-    public static void waitUntilObjectsEqual(Object o1, Object o2){
+    public static void waitUntilObjectsEqual(Object o1, Object o2) throws InterruptedException {
         while(!o1.equals(o2)){
-            try {
                 Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 

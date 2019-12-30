@@ -28,6 +28,11 @@ public class Image extends Document implements Comparable<Image>{
         return inputImage.getDate().equals(getDate()) && inputImage.getContent().equals(getContent()) && inputImage.getOriginFile().equals(getOriginFile()) && inputImage.getOriginalFileName().equals(getOriginalFileName()) && inputImage.getTags().equals(getTags()) && inputImage.getId() == getId() && inputImage.getUser() == getUser() && inputImage.getInZipFile().equals(getInZipFile());
     }
 
+    @Override
+    public int hashCode(){
+        return toString().hashCode();
+    }
+
     // GETTER SETTER
 
     public String getImageAsBase64() {

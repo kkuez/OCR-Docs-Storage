@@ -27,7 +27,7 @@ public class TasksRunnable implements Runnable {
 
     private Bot bot;
 
-    private void loop() {
+    private void loop() throws InterruptedException {
         loopActive = true;
         while (loopActive) {
             tasksToDo = DBUtil.getTasksFromDB(bot);
@@ -48,17 +48,19 @@ public class TasksRunnable implements Runnable {
                     }
                 }
             }
-            try {
                 Thread.sleep(60000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
     public void run() {
-        loop();
+        try {
+            loop();
+        } catch (InterruptedException e) {
+            logger.error("Couldn't run CalendarTasks.", e);
+            Thread.currentThread().interrupt();
+            System.exit(2);
+        }
     }
 
     private void refreshTimes(){

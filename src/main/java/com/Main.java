@@ -44,6 +44,8 @@ public class Main {
                             Thread.sleep(30000);
                         } catch (InterruptedException ex) {
                             logger.error(ex);
+                            Thread.currentThread().interrupt();
+                            System.exit(2);
                         }
                     }
                     ListenerThread listenerThread = new ListenerThread(bot);

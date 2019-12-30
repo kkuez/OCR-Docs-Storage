@@ -58,7 +58,9 @@ public class ObjectHub {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
-                    logger.error(null, e);
+                    logger.error("Couldn't initialize ObjectHub.", e);
+                    Thread.currentThread().interrupt();
+                    System.exit(2);
                 }
                 allowedUsersMap = DBUtil.getAllowedUsersMap();
                 performUpdateLaterMap = new HashMap<>();
