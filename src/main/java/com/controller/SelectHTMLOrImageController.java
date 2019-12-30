@@ -4,7 +4,7 @@ import com.misc.OperatingSys;
 import com.ObjectHub;
 import com.objectTemplates.Document;
 import com.utils.IOUtil;
-import com.utils.LogUtil;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -32,7 +32,7 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
             Desktop.getDesktop().open(tempFile);
             closeWindow();
         } catch (IOException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
     }
 
@@ -46,7 +46,7 @@ public class SelectHTMLOrImageController extends SingleDocumentController {
             Desktop.getDesktop().open(new File(remotePath));
             closeWindow();
         } catch (IOException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
     }
 

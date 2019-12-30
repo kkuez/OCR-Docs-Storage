@@ -7,7 +7,7 @@ import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -48,7 +48,7 @@ public class BonProcess extends Process {
                         try {
                             FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
                         } catch (IOException e) {
-                            LogUtil.logError(document.getOriginFile().getAbsolutePath(), e);
+                            logger.error(document.getOriginFile().getAbsolutePath(), e);
                         }
                         FileUtils.deleteQuietly(document.getOriginFile());
                         DBUtil.executeSQL("update Documents set originalFile = '" + newOriginalFilePath + "' where originalFile = '" + document.getOriginFile().getAbsolutePath() + "'");
@@ -104,9 +104,9 @@ public class BonProcess extends Process {
             }
         } catch (TelegramApiException e) {
             if(e.getMessage().equals("Error editing message reply markup")){
-                LogUtil.log("1 message not changed.");
+                logger.info("1 message not changed.");
             }else{
-                LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+                logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
             }
         }
         if(message != null){

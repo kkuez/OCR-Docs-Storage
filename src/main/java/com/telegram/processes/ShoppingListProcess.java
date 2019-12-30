@@ -5,7 +5,7 @@ import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -64,7 +64,7 @@ public class ShoppingListProcess extends Process{
                     getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
                     getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
                 }catch (Exception e){
-                    LogUtil.logError(null, e);
+                    logger.error(null, e);
                 }
                 break;
             case "done":
@@ -94,9 +94,9 @@ public class ShoppingListProcess extends Process{
                     message = getBot().simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
                 } catch (TelegramApiException e) {
                     if(((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
-                        LogUtil.log("Message not edited, no need.");
+                        logger.info("Message not edited, no need.");
                     }else{
-                        LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+                        logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
                     }
                 }
                 break;

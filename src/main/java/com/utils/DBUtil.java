@@ -1,5 +1,6 @@
 package com.utils;
 
+import com.Main;
 import com.misc.taskHandling.strategies.*;
 import com.misc.taskHandling.Task;
 import com.ObjectHub;
@@ -9,6 +10,7 @@ import com.objectTemplates.Image;
 import com.objectTemplates.User;
 import com.telegram.Bot;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.File;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class DBUtil {
+    private static Logger logger = Main.logger;
 
     private static Connection connection = null;
 
@@ -61,7 +64,7 @@ public class DBUtil {
                 userMap.put(rs.getInt("id"), user);
             }
         } catch (SQLException e) {
-            LogUtil.logError("select * from AllowedUsers", e);
+            logger.error("select * from AllowedUsers", e);
         }
         return userMap;
     }
@@ -75,7 +78,7 @@ public class DBUtil {
                 shoppingList.add(rs.getString("item"));
             }
         } catch (SQLException e) {
-            LogUtil.logError("SELECT * FROM ShoppingList", e);
+            logger.error("SELECT * FROM ShoppingList", e);
         }
         return shoppingList;
     }
@@ -91,7 +94,7 @@ public class DBUtil {
             }
             statement.close();
         } catch (SQLException e) {
-            LogUtil.logError("SELECT * FROM Memos where user=" + user.getId() + ")", e);
+            logger.error("SELECT * FROM Memos where user=" + user.getId() + ")", e);
         }
         return memoList;
     }
@@ -105,7 +108,7 @@ public class DBUtil {
                 standardList.add(rs.getString("item"));
             }
         } catch (SQLException e) {
-            LogUtil.logError("SELECT * FROM StandardList", e);
+            logger.error("SELECT * FROM StandardList", e);
         }
         return standardList;
     }
@@ -142,7 +145,7 @@ public class DBUtil {
                 tagSet.add(rs.getString("Tag"));
             }
         } catch (SQLException e) {
-            LogUtil.logError("SELECT Tag FROM Tags where belongsToDocument=" + document.getId(), e);
+            logger.error("SELECT Tag FROM Tags where belongsToDocument=" + document.getId(), e);
         }
         return tagSet;
     }
@@ -151,7 +154,7 @@ public class DBUtil {
         try(Statement statement = getConnection().createStatement();) {
             statement.executeUpdate(sqlStatement);
         } catch (SQLException e) {
-            LogUtil.logError(sqlStatement, e);
+            logger.error(sqlStatement, e);
         }
     }
 
@@ -165,7 +168,7 @@ public class DBUtil {
                 resultSum += Float.parseFloat(rs.getString("sum"));
             }
         } catch (SQLException e) {
-            LogUtil.logError("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + monthAndYear.replace("-", ".") + "%'", e);
+            logger.error("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + monthAndYear.replace("-", ".") + "%'", e);
         }
         return resultSum;
     }
@@ -179,7 +182,7 @@ public class DBUtil {
                 itemMap.put(rs.getInt("itemNumber"), rs.getString("itemMapped"));
             }
         } catch (SQLException e) {
-            LogUtil.logError("select * from QRItems", e);
+            logger.error("select * from QRItems", e);
         }
         return itemMap;
     }
@@ -200,7 +203,7 @@ public class DBUtil {
                 documentList.add(document);
             }
         } catch (SQLException e) {
-            LogUtil.logError("SELECT * FROM Documents WHERE date like '%" + monthAndYear + "%' AND originalFile like '%Bons%'", e);
+            logger.error("SELECT * FROM Documents WHERE date like '%" + monthAndYear + "%' AND originalFile like '%Bons%'", e);
         }
         return documentList;
     }
@@ -247,7 +250,7 @@ public class DBUtil {
                 taskList.add(task);
             }
         } catch (SQLException e) {
-            LogUtil.logError("select * from Task", e);
+            logger.error("select * from Task", e);
         }
         return taskList;
     }
@@ -266,7 +269,7 @@ public class DBUtil {
                 bonSet.add(new Bon(rs.getInt("belongsToDocument"), rs.getFloat("sum")));
             }
         } catch (SQLException e) {
-            LogUtil.logError("select * from Bons", e);
+            logger.error("select * from Bons", e);
         }
         return bonSet;
     }
@@ -282,7 +285,7 @@ public class DBUtil {
                 documentIds.add(rs.getInt("belongsToDocument"));
             }
         } catch (SQLException e) {
-            LogUtil.logError("select belongsToDocument from Tags where Tag like '%" + tag + "%'", e);
+            logger.error("select belongsToDocument from Tags where Tag like '%" + tag + "%'", e);
         }
         for(Integer id : documentIds){
             documentList.addAll(DBUtil
@@ -305,7 +308,7 @@ public class DBUtil {
             }
 
         } catch (SQLException e) {
-            LogUtil.logError(sqlExpression, e);
+            logger.error(sqlExpression, e);
         }
         return documentList;
     }
@@ -319,7 +322,7 @@ public class DBUtil {
                 count = rs.getInt("Count(*)");
             }
         } catch (SQLException e) {
-            LogUtil.logError("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition, e);
+            logger.error("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition, e);
         }
         return count;
     }
@@ -330,7 +333,7 @@ public class DBUtil {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
             }
         } catch (SQLException e) {
-            LogUtil.logError("Could not create Connection jdbc:sqlite:" + dbFile.getAbsolutePath(), e);
+            logger.error("Could not create Connection jdbc:sqlite:" + dbFile.getAbsolutePath(), e);
             System.exit(2);
         }
 

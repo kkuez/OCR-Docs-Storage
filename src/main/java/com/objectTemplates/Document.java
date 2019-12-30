@@ -1,15 +1,19 @@
 package com.objectTemplates;
 
+import com.Main;
 import com.utils.DBUtil;
 import com.utils.IOUtil;
 import com.misc.OperatingSys;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Set;
 
 public abstract class Document{
+
+    private static Logger logger = Main.logger;
 
     private String date;
 

@@ -1,6 +1,12 @@
 package com.misc;
 
+import com.Main;
+import org.apache.log4j.Logger;
+
 public class ProgressManager {
+
+    private static Logger logger = Main.logger;
+
     private int totalSteps;
 
     private int currentStep;

@@ -1,8 +1,10 @@
 package com.network;
 
+import com.Main;
 import com.telegram.Bot;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +20,8 @@ public class ListenerThread extends Thread {
     private static String addListCMDItemNr = "<addList>Item#";
     private Bot bot;
     private static int socketPort = 55555;
+    private static Logger logger = Main.logger;
+
     public ListenerThread(Bot bot){
      this.bot = bot;
      this.setName("networkListener");
@@ -26,12 +30,12 @@ public class ListenerThread extends Thread {
     @Override
     public void run() {
         while(networkRun){
-            LogUtil.log("Start listening on Port "+ socketPort);
+            logger.info("Start listening on Port "+ socketPort);
             try(ServerSocket serverSocket = new ServerSocket(socketPort);
                 Socket client = serverSocket.accept();
                 Scanner incomingScan = new Scanner(client.getInputStream());
                 PrintWriter outgoingWriter = new PrintWriter(client.getOutputStream())) {
-                LogUtil.log("New Client connected: " + client.getInetAddress().getHostAddress());
+                logger.info("New Client connected: " + client.getInetAddress().getHostAddress());
                 while(incomingScan.hasNext()){
                     processIncomingStream(incomingScan.next());
                 }
@@ -42,7 +46,7 @@ public class ListenerThread extends Thread {
     }
 
     private void processIncomingStream(String incomingString){
-        LogUtil.log("Processing incoming Stream: " + incomingString);
+        logger.info("Processing incoming Stream: " + incomingString);
         if(incomingString.startsWith(addListCMDItemNr)){
             Map<Integer, String> itemMap = DBUtil.getQRItemMap();
             int itemNumber = Integer.parseInt(incomingString.replace(addListCMDItemNr, ""));

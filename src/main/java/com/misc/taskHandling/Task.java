@@ -1,15 +1,19 @@
 package com.misc.taskHandling;
 
+import com.Main;
 import com.misc.taskHandling.strategies.TaskStrategy;
 import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
+import org.apache.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Task {
+
+    private static Logger logger = Main.logger;
 
     private TaskStrategy taskStrategy;
 

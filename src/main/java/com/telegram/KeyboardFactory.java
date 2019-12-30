@@ -1,8 +1,10 @@
 package com.telegram;
 
+import com.Main;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
 import com.utils.TimeUtil;
+import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class KeyboardFactory {
+    private static Logger logger = Main.logger;
 
     private static List<InlineKeyboardButton> DONE_ROW = createInlineKeyboardRow(Map.of("Fertig", "done"));
 
@@ -24,7 +27,7 @@ public class KeyboardFactory {
             InlineKeyboardMarkup replyKeyboardInline = new InlineKeyboardMarkup();
             replyKeyboardInline.setKeyboard(createInlineKeyboard(keyBoardType, callbackValuePrefix));
             if(oneTimeKeyboard){
-                LogUtil.log("No oneTimeKeyboard possible for InlineKeyboard.");
+                logger.info("No oneTimeKeyboard possible for InlineKeyboard.");
             }
                 return replyKeyboardInline;
         }else {

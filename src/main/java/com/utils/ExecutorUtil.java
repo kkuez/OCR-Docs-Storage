@@ -1,6 +1,8 @@
 package com.utils;
 
+import com.Main;
 import com.ObjectHub;
+import org.apache.log4j.Logger;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -8,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class ExecutorUtil {
 
-
+    private static Logger logger = Main.logger;
 
     public static void blockUntilExecutorIsDone(Executor executor, int tasksToFinish) {
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
@@ -20,7 +22,7 @@ public class ExecutorUtil {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                LogUtil.logError(null, e);;
+                logger.error(null, e);;
             }
         }
         resetExecutor();

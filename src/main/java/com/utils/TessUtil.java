@@ -1,5 +1,6 @@
 package com.utils;
 
+import com.Main;
 import com.controller.reporter.ProgressReporter;
 import com.ObjectHub;
 import com.objectTemplates.Document;
@@ -12,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TessUtil {
+    private static Logger logger = Main.logger;
 
     private static Pattern datePattern = Pattern.compile("\\s*(3[01]|[12][0-9]|0?[1-9])\\.(1[012]|0?[1-9])\\.((?:19|20)\\d{2})\\s*");
 
@@ -61,13 +64,13 @@ public class TessUtil {
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());
         ControllerUtil.fillTable(tableView, documentObservableList, tableColumns, propertyValueFactories);
-        LogUtil.log(counterProcessedFiles.get() + " Files stored.");
+        logger.info(counterProcessedFiles.get() + " Files stored.");
 //      FIXME Tags werden nach dem verarbeiten nicht in der tableview angezeigt
         return documentSet;
     }
 
     public static Document processFile(File inputfile, int userID, Set<String> tagSet) {
-        LogUtil.log("Processing " + inputfile.getAbsolutePath());
+        logger.info("Processing " + inputfile.getAbsolutePath());
         Tesseract tesseract = getTesseract();
         Document document = null;
         try {
@@ -95,9 +98,9 @@ public class TessUtil {
 
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         } catch (Exception e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
         return document;
     }
@@ -150,7 +153,7 @@ public class TessUtil {
         try{
             lastNumer = Float.parseFloat(numberList.get(numberList.size() - 1).replace(",","."));
         }catch (Exception e){
-            LogUtil.logError(numberList.get(numberList.size() - 1).replace(",","."), e);
+            logger.error(numberList.get(numberList.size() - 1).replace(",","."), e);
         }
 
         return lastNumer;

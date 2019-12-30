@@ -5,7 +5,7 @@ import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
 import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -33,9 +33,9 @@ public class GetBonsProcess extends Process{
             performNextStep("" , update, allowedUsersMap);
         } catch (TelegramApiException e) {
             if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
-                LogUtil.log("Message not edited, no need.");
+                logger.info("Message not edited, no need.");
             }else{
-                LogUtil.logError(((TelegramApiException) e).getLocalizedMessage(), e);
+                logger.error(((TelegramApiException) e).getLocalizedMessage(), e);
             }
         }
     }

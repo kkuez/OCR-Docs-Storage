@@ -1,11 +1,12 @@
 package com.telegram.processes;
 
+import com.Main;
 import com.controller.reporter.ProgressReporter;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
-import com.utils.LogUtil;
+import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Process {
+
+    public static Logger logger = Main.logger;
 
     public Process(ProgressReporter reporter){
         progressReporter = reporter;
@@ -49,13 +52,13 @@ public abstract class Process {
                     if(e.getMessage().equals("Error editing message reply markup")){
                         caughtMessages++;
                     }else{
-                        LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+                        logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
                     }
                 }
             }
         }
         if(caughtMessages > 0){
-            LogUtil.log(caughtMessages + " messages caught.");
+            logger.info(caughtMessages + " messages caught.");
         }
     }
 

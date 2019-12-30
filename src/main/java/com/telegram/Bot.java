@@ -1,5 +1,6 @@
 package com.telegram;
 
+import com.Main;
 import com.controller.reporter.ProgressReporter;
 import com.controller.reporter.Reporter;
 import com.objectTemplates.User;
@@ -9,9 +10,10 @@ import com.ObjectHub;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
 import com.utils.TessUtil;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
@@ -48,6 +50,8 @@ public class Bot extends TelegramLongPollingBot {
     private Reporter progressReporter;
 
     Map<Integer, User> allowedUsersMap;
+
+    private static Logger logger = Main.logger;
 
     public Bot() {
         this.allowedUsersMap = DBUtil.getAllowedUsersMap();
@@ -107,7 +111,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             processUpdateReceveived(update);
         }catch (Exception e){
-            LogUtil.logError("Couldn't process update.", e);
+            logger.error("Couldn't process update.", e);
         }
     }
 
@@ -149,7 +153,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
             }
         } catch (Exception e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
             throw new RuntimeException();
         }
     }
@@ -166,7 +170,7 @@ public class Bot extends TelegramLongPollingBot {
             append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : "";
             printBuilder.append(append);
         }
-        LogUtil.log(printBuilder.toString());
+        logger.info(printBuilder.toString());
     }
 
     private void processPhoto(Update update){
@@ -186,7 +190,7 @@ public class Bot extends TelegramLongPollingBot {
 
                 if(DBUtil.isFilePresent(largestPhoto)){
                     //Is File already stored...?
-                    LogUtil.log("File already present: " + largestPhoto.getName());
+                    logger.info("File already present: " + largestPhoto.getName());
                     sendMsg("Bild schon vorhanden.", update, null, true, false);
                     user.setBusy(false);
                     process.close();
@@ -198,7 +202,7 @@ public class Bot extends TelegramLongPollingBot {
                 try {
                     FileUtils.copyFile(largestPhoto, targetFile);
                 } catch (IOException e) {
-                    LogUtil.logError(largestPhoto.getAbsolutePath(), e);
+                    logger.error(largestPhoto.getAbsolutePath(), e);
                 }
 
                 Set<String> tags = null;
@@ -215,7 +219,7 @@ public class Bot extends TelegramLongPollingBot {
                         bonProcess.setBon(bon);
                     }
                 } catch (Exception e) {
-                    LogUtil.logError(null, e);
+                    logger.error(null, e);
                 }
 
                 if (process != null && process.getClass().equals(BonProcess.class)) {
@@ -223,7 +227,7 @@ public class Bot extends TelegramLongPollingBot {
                 }else{
                     sendMsg("Fertig.", update,  null, true, false);
                 }
-                LogUtil.log("Processed " + document.getOriginalFileName());
+                logger.info("Processed " + document.getOriginalFileName());
                 user.setBusy(false);
             }
         });
@@ -257,7 +261,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
             }
         } catch (FileNotFoundException e) {
-            LogUtil.logError(imagePath, e);
+            logger.error(imagePath, e);
             return;
         }
         long chatID = update.hasMessage() ? update.getMessage().getChatId() : (long)update.getCallbackQuery().getFrom().getId();
@@ -267,7 +271,7 @@ public class Bot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             user.setBusy(false);
             sendMsg("Fehler, Aktion abgebrochen.",update,  null, true, false);
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
     }
 
@@ -276,7 +280,7 @@ public class Bot extends TelegramLongPollingBot {
             // Download the file calling AbsSender::downloadFile method
             return downloadFile(filePath);
         } catch (TelegramApiException e) {
-            LogUtil.logError(filePath, e);
+            logger.error(filePath, e);
         }
         return null;
     }
@@ -296,7 +300,7 @@ public class Bot extends TelegramLongPollingBot {
                 // We now have the file_path
                 return file.getFilePath();
             } catch (TelegramApiException e) {
-                LogUtil.logError(null, e);
+                logger.error(null, e);
             }
         }
         return null; // Just in case
@@ -403,7 +407,7 @@ public class Bot extends TelegramLongPollingBot {
         if(user.getProcess() != null) {
             user.setBusy(false);
             String processName = user.getProcess().getProcessName();
-            LogUtil.log("User " + user.getName() + " aborts " + user.getProcess().getProcessName() + " Process.");
+            logger.info("User " + user.getName() + " aborts " + user.getProcess().getProcessName() + " Process.");
             user.getProcess().close();
             try {
                 sendMsg(processName + " abgebrochen.", update, null, false, false);
@@ -411,7 +415,7 @@ public class Bot extends TelegramLongPollingBot {
                     sendAnswerCallbackQuery(processName + " abgebrochen.", false, update.getCallbackQuery());
                 }
             } catch (TelegramApiException e) {
-                LogUtil.logError("Abort done, messaging about abort failed.", e);
+                logger.error("Abort done, messaging about abort failed.", e);
             }
         }else{
             try {
@@ -421,9 +425,9 @@ public class Bot extends TelegramLongPollingBot {
                 }
             } catch (TelegramApiException e) {
                 if(e.getMessage().equals("Error editing message reply markup")){
-                    LogUtil.log("Message not edited.");
+                    logger.info("Message not edited.");
                 }else{
-                    LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+                    logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
                 }
             }
         }
@@ -447,7 +451,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             messageToReturn =  execute(sendMessage);
         } catch (TelegramApiException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
         return messageToReturn;
     }
@@ -478,7 +482,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             execute(editMessageCaption);
         } catch (TelegramApiException e) {
-            LogUtil.logError("Couldn't edit caption.", e);
+            logger.error("Couldn't edit caption.", e);
         }
     }
 
@@ -529,7 +533,7 @@ public class Bot extends TelegramLongPollingBot {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {
                 if(e.getMessage().equals("Error editing message reply markup")){
-                    LogUtil.log("Couldn't change ReplyMarkup for 1 message.");
+                    logger.info("Couldn't change ReplyMarkup for 1 message.");
                     return message;
                 }
                 throw e;
@@ -571,7 +575,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             messageToReturn = execute(sendDocument);
         } catch (TelegramApiException e) {
-            LogUtil.logError("Failed to send Document message.", e);
+            logger.error("Failed to send Document message.", e);
         }
         return messageToReturn;
     }
@@ -593,7 +597,7 @@ public class Bot extends TelegramLongPollingBot {
             }
             messageToReturn = execute(sendMediaGroup);
         } catch (TelegramApiException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
             sendMsg("Failed to send mediaGroup.",  update, null, false, false);
             abortProcess(update);
         }
@@ -641,7 +645,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             messageToReturn = execute(sendMessage);
         } catch (TelegramApiException e) {
-            LogUtil.logError("Failed to send message.", e);
+            logger.error("Failed to send message.", e);
         }
         return messageToReturn;
     }
@@ -663,7 +667,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             messageToReturn = execute(sendMessage);
         } catch (TelegramApiException e) {
-            LogUtil.logError("Failed to send message.", e);
+            logger.error("Failed to send message.", e);
         }
         return messageToReturn;
     }

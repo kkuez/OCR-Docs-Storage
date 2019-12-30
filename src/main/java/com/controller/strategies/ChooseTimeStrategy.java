@@ -3,7 +3,7 @@ package com.controller.strategies;
 import com.controller.ChooseTimeController;
 import com.controller.reporter.ChooseTimeReporter;
 import com.controller.reporter.Reporter;
-import com.utils.LogUtil;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,7 +30,7 @@ public class ChooseTimeStrategy extends ControllerStrategy {
             stage.setTitle("PDF erstellen=> Zeitpunkt wählen");
             stage.setScene(new Scene(root, 600, 350));
         } catch (IOException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
         return stage;
     }

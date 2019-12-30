@@ -1,8 +1,9 @@
 package com;
 
 import com.objectTemplates.Document;
-import com.utils.LogUtil;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.File;
@@ -15,6 +16,8 @@ import java.util.Properties;
 public class Archiver {
 
     private List<Document> documentList;
+
+    private static Logger logger = Main.logger;
 
     File archiveFolder;
 
@@ -64,7 +67,7 @@ public class Archiver {
     }
 
     public void archive(String nameOfArchive) {
-        LogUtil.log("Gui: " + "Create Zip-Archive");
+        logger.info("Gui: " + "Create Zip-Archive");
         File tempForZip = new File(ObjectHub.getInstance().getArchiver().archiveFolder, "temp");
         tempForZip.mkdir();
 
@@ -72,7 +75,7 @@ public class Archiver {
             try {
                 FileUtils.copyFile(document.getOriginFile(), new File(tempForZip, document.getOriginalFileName()));
             } catch (IOException e) {
-                LogUtil.logError(document.getOriginFile().getAbsolutePath(), e);
+                logger.error(document.getOriginFile().getAbsolutePath(), e);
             }
         });
         zipDir(tempForZip, nameOfArchive);
@@ -82,7 +85,7 @@ public class Archiver {
             FileUtils.deleteDirectory(tempForZip);
             FileUtils.deleteQuietly(zippedDir);
         } catch (IOException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
     }
 

@@ -1,6 +1,8 @@
 package com.misc.taskHandling.strategies;
 
+import com.Main;
 import com.misc.taskHandling.Task;
+import org.apache.log4j.Logger;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +16,8 @@ public abstract class RegularTaskStrategy implements TaskStrategy {
     int month;
 
     Task task;
+
+    private static Logger logger = Main.logger;
 
     public RegularTaskStrategy(){
     }

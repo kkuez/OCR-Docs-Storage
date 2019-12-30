@@ -1,12 +1,15 @@
 package com.utils;
 
+import com.Main;
+import org.apache.log4j.Logger;
+
 import java.time.YearMonth;
 import java.util.*;
 
 public class TimeUtil {
+    private static Logger logger = Main.logger;
 
     static Map<String, String> monthMap = new HashMap<>();
-
 
     public static void waitUntilObjectsEqual(Object o1, Object o2){
         while(!o1.equals(o2)){

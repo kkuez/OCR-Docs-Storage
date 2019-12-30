@@ -4,13 +4,16 @@ import com.misc.taskHandling.strategies.RegularTaskStrategy;
 import com.misc.taskHandling.Task;
 import com.telegram.Bot;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
+import org.apache.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class TasksRunnable implements Runnable {
+
+    private static Logger logger = Main.logger;
 
     private List<Task> tasksToDo = new ArrayList<>();
 
@@ -38,7 +41,7 @@ public class TasksRunnable implements Runnable {
                     if(success){
                         StringBuilder usersString = new StringBuilder();
                         task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
-                        LogUtil.log("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
+                        logger.info("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
                         if(!(task.getTaskStrategy() instanceof RegularTaskStrategy)) {
                             DBUtil.removeTask(task);
                         }

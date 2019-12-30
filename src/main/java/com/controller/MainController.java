@@ -108,7 +108,7 @@ public class MainController extends SingleDocumentController {
             }
         };
 
-        LogUtil.log("Gui: " + "Init Gui.");
+        logger.info("Gui: " + "Init Gui.");
         archivePathLabel.setText(ObjectHub.getInstance().getArchiver().getArchiveFolder().getAbsolutePath());
         inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
         mainTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -125,7 +125,7 @@ public class MainController extends SingleDocumentController {
     }
 
     public void prepareTagsBeforeProcessing(){
-        LogUtil.log("Gui: " + "Process new Files from Folder: " + inputPathLabel);
+        logger.info("Gui: " + "Process new Files from Folder: " + inputPathLabel);
         Reporter booleanReporter = new SubmitBooleanReporter() {
             @Override
             public void submitBoolean(boolean value) {
@@ -176,7 +176,7 @@ public class MainController extends SingleDocumentController {
         }
 
     public void search() {
-        LogUtil.log("Gui: " + "Performing search with Term '" + searchTermTextField.getText() + "'");
+        logger.info("Gui: " + "Performing search with Term '" + searchTermTextField.getText() + "'");
         List<Document> documentList = DBUtil.getDocumentsForSearchTerm(searchTermTextField.getText());
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(documentList);
@@ -207,7 +207,7 @@ public class MainController extends SingleDocumentController {
     }
 
     public void archive() {
-        LogUtil.log("Gui: " + "Archive "  + nameOfProjectTextField.getText());
+        logger.info("Gui: " + "Archive "  + nameOfProjectTextField.getText());
         ObjectHub.getInstance().getArchiver().archive(nameOfProjectTextField.getText());
     }
 

@@ -2,7 +2,7 @@ package com.controller.strategies;
 
 import com.controller.SingleDocumentController;
 import com.objectTemplates.Document;
-import com.utils.LogUtil;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,7 +30,7 @@ public class HTMLOrImageStrategy extends ControllerStrategy {
             stage.setTitle("Wählen der Dateiausgabe.");
             stage.setScene(new Scene(root, 200, 100));
         } catch (IOException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
         return stage;
     }

@@ -8,7 +8,7 @@ import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
 import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -46,9 +46,9 @@ public class CalenderProcess extends Process {
             performNextStep("Termin hinzufügen", update, allowedUsersMap);
         } catch (TelegramApiException e) {
             if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
-                LogUtil.log("Message not edited, no need.");
+                logger.info("Message not edited, no need.");
             }else{
-                LogUtil.logError(((TelegramApiException) e).getLocalizedMessage(), e);
+                logger.error(((TelegramApiException) e).getLocalizedMessage(), e);
             }
         }
     }
@@ -231,9 +231,9 @@ public class CalenderProcess extends Process {
             }
         }catch (TelegramApiException e) {
             if(e.getMessage().equals("Error editing message reply markup")){
-                LogUtil.log("1 message not changed.");
+                logger.info("1 message not changed.");
             }else{
-                LogUtil.logError(((TelegramApiRequestException) e).getApiResponse(), e);
+                logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
             }
         }
         getBot().getNonBotUserFromUpdate(update).setBusy(false);

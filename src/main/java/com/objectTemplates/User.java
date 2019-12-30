@@ -1,12 +1,17 @@
 package com.objectTemplates;
 
+import com.Main;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
 import com.telegram.processes.Process;
+import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 public class User {
+
+    private static Logger logger = Main.logger;
+
     private int id;
 
     private String name;

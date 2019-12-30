@@ -1,8 +1,13 @@
 package com.telegram;
 
+import com.Main;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 
 public class Item {
+
+    private static Logger logger = Main.logger;
 
     String name;
 

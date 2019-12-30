@@ -1,13 +1,16 @@
 package com.utils;
 
+import com.Main;
 import com.misc.OperatingSys;
 import com.ObjectHub;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.*;
 
 public class IOUtil {
+    private static Logger logger = Main.logger;
 
     public static final String LOCAL_OS = System.getProperty("os.name").startsWith("Linux") ? "Linux" : "Windows";
 

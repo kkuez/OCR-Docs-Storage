@@ -3,7 +3,7 @@ package com.controller.strategies;
 import com.controller.BooleanWindow;
 import com.controller.reporter.Reporter;
 import com.controller.reporter.SubmitBooleanReporter;
-import com.utils.LogUtil;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,7 +32,7 @@ public class BooleanWIndowStrategy extends ControllerStrategy {
             stage.setTitle("Sollen Tags erstellt werden?");
             stage.setScene(new Scene(root, 400, 300));
         } catch (IOException e) {
-            LogUtil.logError(null, e);
+            logger.error(null, e);
         }
         return stage;
     }

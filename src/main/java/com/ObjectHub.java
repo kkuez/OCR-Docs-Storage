@@ -5,7 +5,8 @@ import com.misc.CustomProperties;
 import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.utils.DBUtil;
-import com.utils.LogUtil;
+
+import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.FileInputStream;
@@ -17,6 +18,8 @@ import java.util.concurrent.Executors;
 public class ObjectHub {
 
     private static ObjectHub instance = null;
+
+    private static Logger logger = Main.logger;
 
     private MainController mainController;
 
@@ -45,7 +48,6 @@ public class ObjectHub {
         archiver = new Archiver(properties);
 
         executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));
-
     }
 
     public void initLater(){
@@ -56,7 +58,7 @@ public class ObjectHub {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
-                    LogUtil.logError(null, e);
+                    logger.error(null, e);
                 }
                 allowedUsersMap = DBUtil.getAllowedUsersMap();
                 performUpdateLaterMap = new HashMap<>();
