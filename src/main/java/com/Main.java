@@ -71,11 +71,13 @@ public class Main {
 
     private static String getLogFile(){
         Properties properties = new Properties();
-        String root = "";
+        File propertiesFile = new File(".", "setup.properties");
         try {
-            properties.load(new FileInputStream(root + "setup.properties"));
+            System.out.println("Properties: " + propertiesFile.getCanonicalPath());
+            properties.load(new FileInputStream(propertiesFile));
         } catch (IOException e) {
-            logger.error("Couldn't parse setup.properties", e);
+            e.printStackTrace();
+            System.exit(2);
         }
 
         File monthFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv",  LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
@@ -95,9 +97,11 @@ public class Main {
                 }
                 System.out.println("Logfile: " + logFile.getAbsolutePath());
             } catch (IOException e) {
-                logger.error("Failed activating bot", e);
+                e.printStackTrace();
+                System.exit(2);
             }catch (RuntimeException ex) {
-                logger.error(ex);
+                ex.printStackTrace();
+                System.exit(2);
             }
         }
         return logFile.getAbsolutePath();
