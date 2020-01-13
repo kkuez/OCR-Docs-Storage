@@ -264,6 +264,7 @@ public class DBUtil {
         String addString = specifySQLStringOrNull == null ? "" : specifySQLStringOrNull;
         List<Bon> bonSet = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
+                //TODO inner join mit documenten!
             ResultSet rs = statement.executeQuery("select * from Bons " + addString);) {
             while (rs.next()) {
                 bonSet.add(new Bon(rs.getInt("belongsToDocument"), rs.getFloat("sum")));
