@@ -265,16 +265,18 @@ return valueList;
                 keyboard.add(keyboardMemoFourthRow);
                 break;
             case FurtherOptions:
-                KeyboardRow keyboardFurtherFirstRow = createKeyBoardRow(new String[]{"Bon-Optionen"});
+                KeyboardRow keyboardFurtherFirstRow = createKeyBoardRow(new String[]{"QR-Item mappen"});
                 keyboard.add(keyboardFurtherFirstRow);
-                KeyboardRow keyboardFurtherSecondRow = createKeyBoardRow(new String[]{"Einkaufslisten-Optionen"});
+                KeyboardRow keyboardFurtherSecondRow = createKeyBoardRow(new String[]{"Bon-Optionen"});
                 keyboard.add(keyboardFurtherSecondRow);
-                KeyboardRow keyboardFurtherThirdRow = createKeyBoardRow(new String[]{"Memo-Optionen"});
+                KeyboardRow keyboardFurtherThirdRow = createKeyBoardRow(new String[]{"Einkaufslisten-Optionen"});
                 keyboard.add(keyboardFurtherThirdRow);
-                KeyboardRow keyboardFurtherFourthRow = createKeyBoardRow(new String[]{"Kalender-Optionen"});
+                KeyboardRow keyboardFurtherFourthRow = createKeyBoardRow(new String[]{"Memo-Optionen"});
                 keyboard.add(keyboardFurtherFourthRow);
-                KeyboardRow keyboardFurtherFifthRow = createKeyBoardRow(new String[]{"Start"});
+                KeyboardRow keyboardFurtherFifthRow = createKeyBoardRow(new String[]{"Kalender-Optionen"});
                 keyboard.add(keyboardFurtherFifthRow);
+                KeyboardRow keyboardFurtherSixthRow = createKeyBoardRow(new String[]{"Start"});
+                keyboard.add(keyboardFurtherSixthRow);
                 break;
         }
         return keyboard;
