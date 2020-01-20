@@ -23,7 +23,10 @@ public class Task {
 
     private List<User> userList = new ArrayList<>();
 
-    public Task(User user, Bot bot){}
+    public Task(User user, Bot bot){
+        this.bot = bot;
+        userList.add(user);
+    }
     public Task(List<User> userList, Bot bot, String actionName){
         this.userList = userList;
         this.bot = bot;

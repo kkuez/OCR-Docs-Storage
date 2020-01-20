@@ -1,7 +1,5 @@
 #Formatierunr für Tesserate
 export LC_ALL=C
-cd Repo/OCR-Docs-Storage
-git pull
-cd ..
-cd ..
-cp Repo/OCR-Docs-Storage/target/OCR-Storage.jar OCR-Storage.jar
+cd Dokumente/Projekte/OCR-Docs-Storage/
+sleep 30
+java -jar OCR-Storage.jar -bot

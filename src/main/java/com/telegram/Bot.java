@@ -1,8 +1,11 @@
 package com.telegram;
 
 import com.Main;
+import com.TasksRunnable;
 import com.controller.reporter.ProgressReporter;
 import com.controller.reporter.Reporter;
+import com.misc.taskHandling.PhotoTask;
+import com.misc.taskHandling.Task;
 import com.objectTemplates.User;
 import com.telegram.processes.*;
 import com.telegram.processes.Process;
@@ -42,6 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.Future;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -174,63 +178,63 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void processPhoto(Update update){
-        ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
-            @Override
-            public void run() {
-                User user = getNonBotUserFromUpdate(update);
-                Process process = user.getProcess();
-                user.setBusy(true);
-                File largestPhoto = null;
-                List<PhotoSize> photoList = update.getMessage().getPhoto();
-                photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
-                Collections.reverse(photoList);
-                //Get largest picture
-                String filePath = getFilePath(photoList.get(0));
-                largestPhoto = downloadPhotoByFilePath(filePath);
+        Future photoFuture = ObjectHub.getInstance().getExecutorService().submit(() -> {
+            User user = getNonBotUserFromUpdate(update);
+            Process process = user.getProcess();
+            user.setBusy(true);
+            File largestPhoto = null;
+            List<PhotoSize> photoList = update.getMessage().getPhoto();
+            photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
+            Collections.reverse(photoList);
+            //Get largest picture
+            String filePath = getFilePath(photoList.get(0));
+            largestPhoto = downloadPhotoByFilePath(filePath);
 
-                if(DBUtil.isFilePresent(largestPhoto)){
-                    //Is File already stored...?
-                    logger.info("File already present: " + largestPhoto.getName());
-                    sendMsg("Bild schon vorhanden.", update, null, true, false);
-                    user.setBusy(false);
-                    process.close();
-                    user.setProcess(null);
-                    return;
-                }
-
-                File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
-                try {
-                    FileUtils.copyFile(largestPhoto, targetFile);
-                } catch (IOException e) {
-                    logger.error(largestPhoto.getAbsolutePath(), e);
-                }
-
-                Set<String> tags = null;
-                if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
-                    tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
-                };
-
-                Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
-                try {
-                    if((TessUtil.checkIfBon(document.getContent()) || process instanceof BonProcess)){
-                        float sum = TessUtil.getLastNumber(document.getContent());
-                        Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
-                        BonProcess bonProcess = (BonProcess) process;
-                        bonProcess.setBon(bon);
-                    }
-                } catch (Exception e) {
-                    logger.error(null, e);
-                }
-
-                if (process != null && process.getClass().equals(BonProcess.class)) {
-                    sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true, ""));
-                }else{
-                    sendMsg("Fertig.", update,  null, true, false);
-                }
-                logger.info("Processed " + document.getOriginalFileName());
+            if(DBUtil.isFilePresent(largestPhoto)){
+                //Is File already stored...?
+                logger.info("File already present: " + largestPhoto.getName());
+                sendMsg("Bild schon vorhanden.", update, null, true, false);
                 user.setBusy(false);
+                process.close();
+                user.setProcess(null);
+                return;
             }
+
+            File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
+            try {
+                FileUtils.copyFile(largestPhoto, targetFile);
+            } catch (IOException e) {
+                logger.error(largestPhoto.getAbsolutePath(), e);
+            }
+
+            Set<String> tags = null;
+            if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
+                tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
+            };
+
+            Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
+            try {
+                if((TessUtil.checkIfBon(document.getContent()) || process instanceof BonProcess)){
+                    float sum = TessUtil.getLastNumber(document.getContent());
+                    Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
+                    BonProcess bonProcess = (BonProcess) process;
+                    bonProcess.setBon(bon);
+                }
+            } catch (Exception e) {
+                logger.error(null, e);
+            }
+
+            if (process != null && process.getClass().equals(BonProcess.class)) {
+                sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true, ""));
+            }else{
+                sendMsg("Fertig.", update,  null, true, false);
+            }
+            logger.info("Processed " + document.getOriginalFileName());
+            user.setBusy(false);
         });
+
+        Task photoAbortTask = new PhotoTask(allowedUsersMap.get(update.getMessage().getFrom().getId()), this, photoFuture);
+        ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(photoAbortTask);
     }
 
     private Set<String> parseTags(String input){
@@ -663,7 +667,7 @@ public class Bot extends TelegramLongPollingBot {
             sendMessage.setReplyMarkup(replyKeyboard);
             if(!inlineKeyboard){
                 //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.
-                allowedUsersMap.get(chatID).setKeyboardContext(replyKeyboard);
+                allowedUsersMap.get((int)chatID).setKeyboardContext(replyKeyboard);
             }
         }
         sendMessage.setText(s);

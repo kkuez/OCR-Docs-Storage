@@ -1,5 +1,6 @@
 Tesseract auf OS installieren!!
 
+
 export TESSDATA_PREFIX=$PATH:/myNewDir
 
 HACK wenn jvm crash:

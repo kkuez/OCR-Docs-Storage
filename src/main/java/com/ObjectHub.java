@@ -69,6 +69,7 @@ public class ObjectHub {
                 tasksRunnable.run();
             }
         });
+        thread.setName("TasksToDoThread");
         thread.start();
     }
     private Archiver archiver;

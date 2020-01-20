@@ -1,5 +1,6 @@
 package com;
 
+import com.google.inject.internal.cglib.core.$HashCodeCustomizer;
 import com.misc.taskHandling.strategies.RegularTaskStrategy;
 import com.misc.taskHandling.Task;
 import com.telegram.Bot;
@@ -15,7 +16,7 @@ public class TasksRunnable implements Runnable {
 
     private static Logger logger = Main.getLogger();
 
-    private List<Task> tasksToDo = new ArrayList<>();
+    private Set<Task> tasksToDo = new HashSet<>();
 
     private boolean loopActive;
 
@@ -30,8 +31,7 @@ public class TasksRunnable implements Runnable {
     private void loop() throws InterruptedException {
         loopActive = true;
         while (loopActive) {
-            tasksToDo = DBUtil.getTasksFromDB(bot);
-
+            tasksToDo.addAll(DBUtil.getTasksFromDB(bot));
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
                 localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
@@ -87,11 +87,11 @@ public class TasksRunnable implements Runnable {
         this.loopActive = loopActive;
     }
 
-    public List<Task> getTasksToDo() {
+    public Set<Task> getTasksToDo() {
         return tasksToDo;
     }
 
-    public void setTasksToDo(List<Task> tasksToDo) {
+    public void setTasksToDo(Set<Task> tasksToDo) {
         this.tasksToDo = tasksToDo;
     }
 }
