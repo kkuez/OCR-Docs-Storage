@@ -215,7 +215,7 @@ return valueList;
             case StandardList:
                 KeyboardRow keyboardStandardListFirstRow = createKeyBoardRow(new String[]{"Hinzufügen", "Löschen"});
                 keyboard.add(keyboardStandardListFirstRow);
-                KeyboardRow keyboardStandardListSecondRow = createKeyBoardRow(new String[]{"Einkaufsliste anzeigen"});
+                KeyboardRow keyboardStandardListSecondRow = createKeyBoardRow(new String[]{"Standardliste anzeigen"});
                 keyboard.add(keyboardStandardListSecondRow);
                 KeyboardRow keyboardStandardListThirdRow = createKeyBoardRow(new String[]{"Start"});
                 keyboard.add(keyboardStandardListThirdRow);
