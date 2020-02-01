@@ -65,7 +65,7 @@ public class CalenderProcess extends Process {
                     close();
                     break;
                 case "chooseStrategy":
-                    task = new Task(user, getBot());
+                    task = new Task(getBot());
                     switch (commandValue[1]) {
                         case "oneTime":
                             type = "oneTime";
