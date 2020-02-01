@@ -5,3 +5,13 @@ export TESSDATA_PREFIX=$PATH:/myNewDir
 
 HACK wenn jvm crash:
 export LC_ALL=C
+
+//SCRIPT ON STARTUP
+1. Fill out the script, pathes pw etc.
+2. install tmux
+3. open crontab -e
+4. choose nano
+5. add in the end of file
+@reboot tmux new -d -s nussBot 'sh /home/pi/Dokumente/Projekte/OCR-Docs-Storage/LaunchScript.sh'
+to launch the script in tmux on startup
+6. tmux a -t nussBot to attach to session
