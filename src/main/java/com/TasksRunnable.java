@@ -16,7 +16,7 @@ public class TasksRunnable implements Runnable {
 
     private static Logger logger = Main.getLogger();
 
-    private Set<Task> tasksToDo = new HashSet<>();
+    private List<Task> tasksToDo = new ArrayList<>();
 
     private boolean loopActive;
 
@@ -31,7 +31,7 @@ public class TasksRunnable implements Runnable {
     private void loop() throws InterruptedException {
         loopActive = true;
         while (loopActive) {
-            tasksToDo.addAll(DBUtil.getTasksFromDB(bot));
+            tasksToDo = DBUtil.getTasksFromDB(bot);
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
                 localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
@@ -87,11 +87,11 @@ public class TasksRunnable implements Runnable {
         this.loopActive = loopActive;
     }
 
-    public Set<Task> getTasksToDo() {
+    public List<Task> getTasksToDo() {
         return tasksToDo;
     }
 
-    public void setTasksToDo(Set<Task> tasksToDo) {
+    public void setTasksToDo(List<Task> tasksToDo) {
         this.tasksToDo = tasksToDo;
     }
 }
