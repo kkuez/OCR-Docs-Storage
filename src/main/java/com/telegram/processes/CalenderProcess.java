@@ -153,9 +153,14 @@ public class CalenderProcess extends Process {
                     getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
                     break;
                 case "Termine anzeige":
+                    int currentUserId = user.getId();
                     StringBuilder messageOfTasks = new StringBuilder();
                     List<Task> taskList = DBUtil.getTasksFromDB(getBot());
                     for (Task task : taskList) {
+                        boolean taskForCurrentUser = task.getUserList().stream().anyMatch(user1 -> user1.getId() == currentUserId);
+                        if(!taskForCurrentUser){
+                            continue;
+                        }
                         messageOfTasks.append("\n-----------------\n");
                         if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
                             messageOfTasks.append("Am *" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr*:\n");
