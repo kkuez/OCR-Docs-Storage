@@ -125,31 +125,34 @@ public class CalenderProcess extends Process {
                     break;
                 case "chooseYear":
                     year = Integer.parseInt(commandValue[1]);
+                    String question = "Welcher Monat?";
                     try {
-                        getBot().sendAnswerCallbackQuery(year + " gewählt.", false, update.getCallbackQuery());
+                        getBot().sendAnswerCallbackQuery(year + " gewählt. " + question, false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         logger.error("Failed activating bot", e);;
                     }
-                    message = getBot().simpleEditMessage("Welche Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth");
+                    message = getBot().simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth");
                     break;
                 case "chooseMonth":
                     month = Integer.parseInt(TimeUtil.getMonthMapStringKeys().get(commandValue[1]));
+                    question = "Welcher Tag?";
                     try {
-                        getBot().sendAnswerCallbackQuery(month + " gewählt.", false, update.getCallbackQuery());
+                        getBot().sendAnswerCallbackQuery(month + " gewählt. " + question, false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         logger.error("Failed activating bot", e);;
                     }
-                    message = getBot().simpleEditMessage("Welcher Tag?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
+                    message = getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
                     break;
                 case "chooseDay":
+                    question = "Zu welcher Stunde?";
                     day = Integer.parseInt(commandValue[1]);
                     if(type.equals("oneTimeWithTime")){
                         try {
-                            getBot().sendAnswerCallbackQuery(day + " gewählt.", false, update.getCallbackQuery());
+                            getBot().sendAnswerCallbackQuery(day + " gewählt. " + question, false, update.getCallbackQuery());
                         } catch (TelegramApiException e) {
                             logger.error("Failed activating bot", e);;
                         }
-                        message = getBot().simpleEditMessage("Zu welcher Stunde?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForHour(), "chooseHour");
+                        message = getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForHour(), "chooseHour");
                         break;
                     }
                      else{
@@ -162,12 +165,13 @@ public class CalenderProcess extends Process {
                     break;
                 case "chooseHour":
                     hour = Integer.parseInt(commandValue[1]);
+                    question = "Zu welcher Minute?";
                     try {
-                        getBot().sendAnswerCallbackQuery(hour + " gewählt.", false, update.getCallbackQuery());
+                        getBot().sendAnswerCallbackQuery(hour + " gewählt. " + question, false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         logger.error("Failed activating bot", e);;
                     }
-                    message = getBot().simpleEditMessage("Zu welcher Minute?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForMinute(), "chooseMinute");
+                    message = getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForMinute(), "chooseMinute");
                     break;
                  case "chooseMinute":
                     minute = Integer.parseInt(commandValue[1]);
