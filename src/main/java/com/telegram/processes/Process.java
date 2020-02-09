@@ -47,7 +47,7 @@ public abstract class Process {
                 try {
                     getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons, "");
                 } catch (TelegramApiException e) {
-                    if(e.getMessage().equals("Error editing message reply markup")){
+                    if(e.getMessage().equals("Error editing message reply markup") || e.getMessage().equals("Error editing message text")){
                         caughtMessages++;
                     }else{
                         logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
