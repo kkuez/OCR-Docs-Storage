@@ -159,7 +159,11 @@ public class CalenderProcess extends Process {
                             if(type.equals("oneTime")){
                             message = askForWhom(update);
                             break;
-                        }
+                        }else{
+                                if(type.equals("regularMonthly") || type.equals("regularYearly")){
+                                    message = askForWhom(update);
+                                }
+                            }
                     }
 
                     break;
