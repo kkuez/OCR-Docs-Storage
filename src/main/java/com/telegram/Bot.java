@@ -165,13 +165,13 @@ public class Bot extends TelegramLongPollingBot {
     private void printUpdateData(Update update){
         StringBuilder printBuilder;
         if(update.getMessage() == null){
-            printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getCallbackQuery().getFrom().getFirstName());
+            printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getCallbackQuery().getFrom().getFirstName() + " ");
             printBuilder.append(update.getCallbackQuery().getData());
         }else{
-            printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getMessage().getFrom().getFirstName());
+            printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getMessage().getFrom().getFirstName() + " ");
             String append = update.getMessage().hasPhoto() ? ", new Picture" : "";
             printBuilder.append(append);
-            append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : "";
+            append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : " ";
             printBuilder.append(append);
         }
         logger.info(printBuilder.toString());
