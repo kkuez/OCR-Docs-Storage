@@ -31,9 +31,9 @@ public class CalenderProcess extends Process {
 
     private int day = 0;
 
-    private int hour;
+    private int hour = 4;
 
-    private int minute;
+    private int minute = 0;
 
     private Task task;
 
@@ -69,6 +69,15 @@ public class CalenderProcess extends Process {
                     switch (commandValue[1]) {
                         case "oneTime":
                             type = "oneTime";
+                            try {
+                                getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
+                            } catch (TelegramApiException e) {
+                                logger.error("Failed activating bot", e);;
+                            }
+                            message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+                            break;
+                        case "oneTimeWithTime":
+                            type = "oneTimeWithTime";
                             try {
                                 getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
@@ -132,8 +141,36 @@ public class CalenderProcess extends Process {
                     }
                     message = getBot().simpleEditMessage("Welcher Tag?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
                     break;
-                case "day":
+                case "chooseDay":
                     day = Integer.parseInt(commandValue[1]);
+                    if(type.equals("oneTimeWithTime")){
+                        try {
+                            getBot().sendAnswerCallbackQuery(day + " gewählt.", false, update.getCallbackQuery());
+                        } catch (TelegramApiException e) {
+                            logger.error("Failed activating bot", e);;
+                        }
+                        message = getBot().simpleEditMessage("Zu welcher Stunde?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForHour(), "chooseHour");
+                        break;
+                    }
+                     else{
+                            if(type.equals("oneTime")){
+                            message = askForWhom(update);
+                            break;
+                        }
+                    }
+
+                    break;
+                case "chooseHour":
+                    hour = Integer.parseInt(commandValue[1]);
+                    try {
+                        getBot().sendAnswerCallbackQuery(hour + " gewählt.", false, update.getCallbackQuery());
+                    } catch (TelegramApiException e) {
+                        logger.error("Failed activating bot", e);;
+                    }
+                    message = getBot().simpleEditMessage("Zu welcher Minute?", getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForMinute(), "chooseMinute");
+                    break;
+                 case "chooseMinute":
+                    minute = Integer.parseInt(commandValue[1]);
                     message = askForWhom(update);
                     break;
                 case "forMe":
@@ -220,6 +257,7 @@ public class CalenderProcess extends Process {
                     task.setName(commandValue[0]);
                     switch (type){
                         case "oneTime":
+                        case "oneTimeWithTime":
                             message = getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
                             break;
                         case "regularDaily":
@@ -253,7 +291,8 @@ public class CalenderProcess extends Process {
             }
         switch (type){
             case "oneTime":
-                LocalDateTime localDateTime = LocalDateTime.of(year, month, day, 4, 0);
+            case "oneTimeWithTime":
+                LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
                 task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime));
                 return getBot().simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
             case "regularDaily":
@@ -295,8 +334,14 @@ public class CalenderProcess extends Process {
                             if (inputString.startsWith("chooseMonth")) {
                                 return "chooseMonth";
                             } else {
-                                if (inputString.startsWith("day")) {
-                                    return "day";
+                                if (inputString.startsWith("chooseDay")) {
+                                    return "chooseDay";
+                                } else {
+                                if (inputString.startsWith("chooseHour")) {
+                                    return "chooseHour";
+                                } else {
+                                if (inputString.startsWith("chooseMinute")) {
+                                    return "chooseMinute";
                                 } else {
                                     if (inputString.startsWith("forMe")) {
                                         return "forMe";
@@ -315,6 +360,8 @@ public class CalenderProcess extends Process {
                                                             return "yearly";
                                                         }
                                                     }
+                                                }
+                                            }
                                                 }
                                             }
                                         }

@@ -83,6 +83,7 @@ public class KeyboardFactory {
                 break;
             case Calendar_Choose_Strategy:
                 endKeyboard.add(createInlineKeyboardRow(List.of("Einmaliger Termin"), List.of("chooseStrategyoneTime")));
+                endKeyboard.add(createInlineKeyboardRow(List.of("Einmaliger Termin mit Uhrzeit"), List.of("chooseStrategyoneTimeWithTime")));
                 endKeyboard.add(createInlineKeyboardRow(List.of("Regelmäßiger Termin"), List.of("chooseStrategyregular")));
                 endKeyboard.add(ABORT_ROW);
                 break;
@@ -152,20 +153,51 @@ public class KeyboardFactory {
             }
         }
         List<String> firstRowKeys = List.of("1", "2", "3", "4", "5", "6", "7");
-        List<String> firstRowValues = makeValueList(firstRowKeys, "day");
+        List<String> firstRowValues = makeValueList(firstRowKeys, "chooseDay");
         List<String> secondRowKeys = List.of("8", "9", "10", "11", "12", "13", "14");
-        List<String> secondRowValues = makeValueList(secondRowKeys, "day");
+        List<String> secondRowValues = makeValueList(secondRowKeys, "chooseDay");
         List<String> thirdRowKeys = List.of("15", "16", "17", "18", "19", "20", "21");
-        List<String> thirdRowValues = makeValueList(thirdRowKeys, "day");
+        List<String> thirdRowValues = makeValueList(thirdRowKeys, "chooseDay");
         List<String> fourthRowKeys = List.of("22", "23", "24", "25", "26", "27", "28");
-        List<String> fourthRowValues = makeValueList(fourthRowKeys, "day");
+        List<String> fourthRowValues = makeValueList(fourthRowKeys, "chooseDay");
         List<String> fifthRowKeys = daysInLastRowList;
-        List<String> fifthRowValues = makeValueList(fifthRowKeys, "day");
+        List<String> fifthRowValues = makeValueList(fifthRowKeys, "chooseDay");
         endKeyboard.add(createInlineKeyboardRow(firstRowKeys, firstRowValues));
         endKeyboard.add(createInlineKeyboardRow(secondRowKeys, secondRowValues));
         endKeyboard.add(createInlineKeyboardRow(thirdRowKeys, thirdRowValues));
         endKeyboard.add(createInlineKeyboardRow(fourthRowKeys, fourthRowValues));
         endKeyboard.add(createInlineKeyboardRow(fifthRowKeys, fifthRowValues));
+        return endKeyboard;
+    }
+
+    public static List<List<InlineKeyboardButton>> createInlineKeyboardForHour(){
+        List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
+        List<String> firstRowKeys = List.of("1", "2", "3", "4", "5", "6");
+        List<String> firstRowValues = makeValueList(firstRowKeys, "chooseHour");
+        List<String> secondRowKeys = List.of("7", "8", "9", "10", "11", "12");
+        List<String> secondRowValues = makeValueList(secondRowKeys, "chooseHour");
+        List<String> thirdRowKeys = List.of("13", "14", "15", "16", "17", "18");
+        List<String> thirdRowValues = makeValueList(thirdRowKeys, "chooseHour");
+        List<String> fourthRowKeys = List.of("19", "20", "21", "22", "23", "24");
+        List<String> fourthRowValues = makeValueList(fourthRowKeys, "chooseHour");
+        endKeyboard.add(createInlineKeyboardRow(firstRowKeys, firstRowValues));
+        endKeyboard.add(createInlineKeyboardRow(secondRowKeys, secondRowValues));
+        endKeyboard.add(createInlineKeyboardRow(thirdRowKeys, thirdRowValues));
+        endKeyboard.add(createInlineKeyboardRow(fourthRowKeys, fourthRowValues));
+        return endKeyboard;
+    }
+
+    public static List<List<InlineKeyboardButton>> createInlineKeyboardForMinute(){
+        List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
+        List<String> firstRowKeys = List.of("0", "5", "10", "15");
+        List<String> firstRowValues = makeValueList(firstRowKeys, "chooseMinute");
+        List<String> secondRowKeys = List.of("20", "25", "30", "35");
+        List<String> secondRowValues = makeValueList(secondRowKeys, "chooseMinute");
+        List<String> thirdRowKeys = List.of("40", "45", "50", "55");
+        List<String> thirdRowValues = makeValueList(thirdRowKeys, "chooseMinute");
+        endKeyboard.add(createInlineKeyboardRow(firstRowKeys, firstRowValues));
+        endKeyboard.add(createInlineKeyboardRow(secondRowKeys, secondRowValues));
+        endKeyboard.add(createInlineKeyboardRow(thirdRowKeys, thirdRowValues));
         return endKeyboard;
     }
 
