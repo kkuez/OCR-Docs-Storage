@@ -61,221 +61,68 @@ public class CalenderProcess extends Process {
         try {
             switch (commandValue[0]) {
                 case "done":
-                    getBot().sendMsg("Ok :)", update, null, false, false);
-                    close();
+                    processDone(update);
                     break;
                 case "chooseStrategy":
-                    task = new Task(getBot());
-                    switch (commandValue[1]) {
-                        case "oneTime":
-                            type = "oneTime";
-                            try {
-                                getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
-                            } catch (TelegramApiException e) {
-                                logger.error("Failed activating bot", e);;
-                            }
-                            message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
-                            break;
-                        case "oneTimeWithTime":
-                            type = "oneTimeWithTime";
-                            try {
-                                getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
-                            } catch (TelegramApiException e) {
-                                logger.error("Failed activating bot", e);;
-                            }
-                            message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
-                            break;
-                        case "regular":
-                            type = "regular";
-                            try {
-                                getBot().sendAnswerCallbackQuery("Wann?", false, update.getCallbackQuery());
-                            } catch (TelegramApiException e) {
-                                logger.error("Failed activating bot", e);;
-                            }
-                            message = getBot().simpleEditMessage("Wann?", update, KeyboardFactory.KeyBoardType.Calendar_Regular_Choose_Unit);
-                            break;
-                    }
+                    message = processChooseStrategy(update, commandValue);
                     break;
                 case "daily":
-                    type = "regularDaily";
-                    try {
-                        getBot().sendAnswerCallbackQuery("Täglich gewählt.", false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        logger.error("Failed activating bot", e);;
-                    }
-                    message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+                    message = processDayly(update);
                     break;
                 case "monthly":
-                    type = "regularMonthly";
-                    try {
-                        getBot().sendAnswerCallbackQuery("Monatlich gewählt.", false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        logger.error("Failed activating bot", e);;
-                    }
-                    message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+                    message = processMonthly(update);
                     break;
                 case "yearly":
-                    type = "regularYearly";
-                    try {
-                        getBot().sendAnswerCallbackQuery("Jährlich gewählt.", false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        logger.error("Failed activating bot", e);;
-                    }
-                    message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+                    message = processYearly(update);
                     break;
                 case "chooseYear":
-                    year = Integer.parseInt(commandValue[1]);
-                    String question = "Welcher Monat?";
-                    try {
-                        getBot().sendAnswerCallbackQuery(year + " gewählt. " + question, false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        logger.error("Failed activating bot", e);;
-                    }
-                    message = getBot().simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth");
+                    message = processChooseYear(update, commandValue);
                     break;
                 case "chooseMonth":
-                    month = Integer.parseInt(TimeUtil.getMonthMapStringKeys().get(commandValue[1]));
-                    question = "Welcher Tag?";
-                    try {
-                        getBot().sendAnswerCallbackQuery(month + " gewählt. " + question, false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        logger.error("Failed activating bot", e);;
-                    }
-                    message = getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
+                    message = processChooseMonth(update, commandValue);
                     break;
                 case "chooseDay":
-                    question = "Zu welcher Stunde?";
-                    day = Integer.parseInt(commandValue[1]);
-                    if(type.equals("oneTimeWithTime")){
-                        try {
-                            getBot().sendAnswerCallbackQuery(day + " gewählt. " + question, false, update.getCallbackQuery());
-                        } catch (TelegramApiException e) {
-                            logger.error("Failed activating bot", e);;
-                        }
-                        message = getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForHour(), "chooseHour");
-                        break;
-                    }
-                     else{
-                            if(type.equals("oneTime")){
-                            message = askForWhom(update);
-                            break;
-                        }else{
-                                if(type.equals("regularMonthly") || type.equals("regularYearly")){
-                                    message = askForWhom(update);
-                                }
-                            }
-                    }
-
+                    message = processChooseDay(update, commandValue);
                     break;
                 case "chooseHour":
-                    hour = Integer.parseInt(commandValue[1]);
-                    question = "Zu welcher Minute?";
-                    try {
-                        getBot().sendAnswerCallbackQuery(hour + " gewählt. " + question, false, update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        logger.error("Failed activating bot", e);;
-                    }
-                    message = getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForMinute(), "chooseMinute");
+                    message = processChooseHour(update, commandValue);
                     break;
                  case "chooseMinute":
-                    minute = Integer.parseInt(commandValue[1]);
-                    message = askForWhom(update);
+                     message = processChooseMinute(update, commandValue);
                     break;
                 case "forMe":
-                    task.getUserList().add(user);
-                    DBUtil.executeSQL(task.getInsertDBString());
-                    getSentMessages().add(message);
-                    ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
-                    close();
-                    getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
+                    processForMe(update, user, message);
                     break;
                 case "forAll":
-                    allowedUsersMap.values().forEach(user1 -> task.getUserList().add(user1));
-                    DBUtil.executeSQL(task.getInsertDBString());
-                    getSentMessages().add(message);
-                    ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
-                    close();
-                    getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
+                    processForAll(update, allowedUsersMap, message);
                     break;
                 case "Termine anzeige":
-                    int currentUserId = user.getId();
-                    StringBuilder messageOfTasks = new StringBuilder();
-                    List<Task> taskList = DBUtil.getTasksFromDB(getBot());
-                    for (Task task : taskList) {
-                        boolean taskForCurrentUser = task.getUserList().stream().anyMatch(user1 -> user1.getId() == currentUserId);
-                        if(!taskForCurrentUser){
-                            continue;
-                        }
-                        messageOfTasks.append("\n-----------------\n");
-                        if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
-                            messageOfTasks.append("Am *" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr*:\n");
-                        }else{
-                            switch (task.getTaskStrategy().getType()){
-                                case "RegularDailyTaskStrategy":
-                                    messageOfTasks.append("*Täglich*:\n");
-                                    break;
-                                case "RegularMonthlyTaskStrategy":
-                                    messageOfTasks.append("*Monatlich, jeden " + ((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay() + ".*:\n");
-                                    break;
-                                case "RegularYearlyTaskStrategy":
-                                    messageOfTasks.append("*Jährlich, jeden " + TimeUtil.getMonthMapIntKeys().get(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth()) + " am " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay() + ".*:\n");
-                                    break;
-                            }
-                        }
-                        messageOfTasks.append(task.getName() + "\n");
-                        StringBuilder userString = new StringBuilder();
-                        task.getUserList().forEach(user1 -> userString.append(", " + user1.getName()));
-                        messageOfTasks.append("_" + userString.toString().replaceFirst(", ", "") + "_");
-                    }
-                    String messageString = messageOfTasks.toString().replaceFirst("\n-----------------\n", "");
-                    getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false, Bot.ParseMode.Markdown);
-                    close();
+                    processShowAppointments(update, user);
                     break;
                 case "Termin hinzufügen":
-                    getBot().sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy, "chooseStrategy", true, true);
+                    message = processAddAppointment(update);
                     break;
                 case "Termin löschen":
-                    List<String> taskNames = new ArrayList<>();
-                    DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames.add(task1.getName()));
-                    ReplyKeyboard listKeyboard = KeyboardFactory.getInlineKeyboardForList(taskNames, "deleteTask");
-                    message = getBot().sendKeyboard("Welchen Termin willst du löschen?", update, listKeyboard, false);
+                    message = processDeleteAppointment(update);
                     break;
                 case "deleteTask":
-                    Task taskToRemove = null;
-                    for (Task task : DBUtil.getTasksFromDB(getBot())) {
-                        if (task.getName().equals(commandValue[1])) {
-                            taskToRemove = task;
-                            break;
-                        }
-                    }
-                    if (taskToRemove != null) {
-                        DBUtil.removeTask(taskToRemove);
-                        try {
-                            getBot().sendAnswerCallbackQuery(taskToRemove.getName() + " gelöscht :)", false, update.getCallbackQuery());
-                        } catch (TelegramApiException e) {
-                            logger.error("Failed activating bot", e);;
-                        }
-                        List<String> taskNames1 = new ArrayList<>();
-                        DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames1.add(task1.getName()));
-                        ReplyKeyboard listKeyboard1 = KeyboardFactory.getInlineKeyboardForList(taskNames1, "deleteTask");
-                        message = getBot().simpleEditMessage("Welchen Termin willst du löschen?", getBot().getMassageFromUpdate(update), listKeyboard1, "deleteTask");
-                    }
+                   message = processDeleteTask(update, commandValue);
                     break;
                 default:
                     task.setName(commandValue[0]);
                     switch (type){
                         case "oneTime":
                         case "oneTimeWithTime":
-                            message = getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
+                            message = processOneTime(update);
                             break;
                         case "regularDaily":
                             message = askForWhom(update);
                             break;
                         case "regularMonthly":
-                            message = getBot().sendMsg("Welcher Tag?", update, new InlineKeyboardMarkup().setKeyboard(KeyboardFactory.createInlineKeyboardForYearMonth(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue())), "day", false, true, Bot.ParseMode.None);
+                            message = processRegularMonthly(update);
                             break;
                         case "regularYearly":
-                            message = getBot().sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth", false, true);
+                            message = processRegularYearly(update);
                             break;
                     }
                     break;
@@ -291,6 +138,236 @@ public class CalenderProcess extends Process {
         if(message != null){
             getSentMessages().add(message);
         }
+    }
+
+    private void processDone(Update update) {
+        getBot().sendMsg("Ok :)", update, null, false, false);
+        close();
+    }
+
+    private Message processChooseStrategy(Update update, String[] commandValue) throws TelegramApiException {
+        Message message = null;
+        task = new Task(getBot());
+        switch (commandValue[1]) {
+            case "oneTime":
+                type = "oneTime";
+                try {
+                    getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
+                } catch (TelegramApiException e) {
+                    logger.error("Failed activating bot", e);;
+                }
+                message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+                break;
+            case "oneTimeWithTime":
+                type = "oneTimeWithTime";
+                try {
+                    getBot().sendAnswerCallbackQuery("Bezeichnung wählen", false, update.getCallbackQuery());
+                } catch (TelegramApiException e) {
+                    logger.error("Failed activating bot", e);;
+                }
+                message = getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+                break;
+            case "regular":
+                type = "regular";
+                try {
+                    getBot().sendAnswerCallbackQuery("Wann?", false, update.getCallbackQuery());
+                } catch (TelegramApiException e) {
+                    logger.error("Failed activating bot", e);;
+                }
+                message = getBot().simpleEditMessage("Wann?", update, KeyboardFactory.KeyBoardType.Calendar_Regular_Choose_Unit);
+                break;
+        }
+        return message;
+    }
+
+    private Message processDayly(Update update) throws TelegramApiException {
+        type = "regularDaily";
+        try {
+            getBot().sendAnswerCallbackQuery("Täglich gewählt.", false, update.getCallbackQuery());
+        } catch (TelegramApiException e) {
+            logger.error("Failed activating bot", e);;
+        }
+        return getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+    }
+
+    private Message processMonthly(Update update) throws TelegramApiException {
+        type = "regularMonthly";
+        try {
+            getBot().sendAnswerCallbackQuery("Monatlich gewählt.", false, update.getCallbackQuery());
+        } catch (TelegramApiException e) {
+            logger.error("Failed activating bot", e);;
+        }
+        return getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+    }
+
+    private Message processYearly(Update update) throws TelegramApiException {
+        type = "regularYearly";
+        try {
+            getBot().sendAnswerCallbackQuery("Jährlich gewählt.", false, update.getCallbackQuery());
+        } catch (TelegramApiException e) {
+            logger.error("Failed activating bot", e);;
+        }
+        return getBot().simpleEditMessage("Bezeichnung wählen:", update, KeyboardFactory.KeyBoardType.Abort);
+    }
+
+    private Message processChooseYear(Update update, String[] commandValue) throws TelegramApiException {
+        year = Integer.parseInt(commandValue[1]);
+        String question = "Welcher Monat?";
+        try {
+            getBot().sendAnswerCallbackQuery(year + " gewählt. " + question, false, update.getCallbackQuery());
+        } catch (TelegramApiException e) {
+            logger.error("Failed activating bot", e);;
+        }
+        return getBot().simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth");
+    }
+
+    private Message processChooseMonth(Update update, String[] commandValue) throws TelegramApiException {
+        month = Integer.parseInt(TimeUtil.getMonthMapStringKeys().get(commandValue[1]));
+        String question = "Welcher Tag?";
+        try {
+            getBot().sendAnswerCallbackQuery(month + " gewählt. " + question, false, update.getCallbackQuery());
+        } catch (TelegramApiException e) {
+            logger.error("Failed activating bot", e);;
+        }
+        return getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
+    }
+
+    private Message processChooseDay(Update update, String[] commandValue) throws TelegramApiException {
+        Message message = null;
+        String question = "Zu welcher Stunde?";
+        day = Integer.parseInt(commandValue[1]);
+        if(type.equals("oneTimeWithTime")){
+            try {
+                getBot().sendAnswerCallbackQuery(day + " gewählt. " + question, false, update.getCallbackQuery());
+            } catch (TelegramApiException e) {
+                logger.error("Failed activating bot", e);;
+            }
+            message = getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForHour(), "chooseHour");
+        }else{
+            if(type.equals("oneTime")){
+                message = askForWhom(update);
+            }else{
+                if(type.equals("regularMonthly") || type.equals("regularYearly")){
+                    message = askForWhom(update);
+                }
+            }
+        }
+        return message;
+    }
+
+    private Message processChooseHour(Update update, String[] commandValue) throws TelegramApiException {
+        hour = Integer.parseInt(commandValue[1]);
+        String question = "Zu welcher Minute?";
+        try {
+            getBot().sendAnswerCallbackQuery(hour + " gewählt. " + question, false, update.getCallbackQuery());
+        } catch (TelegramApiException e) {
+            logger.error("Failed activating bot", e);;
+        }
+        return getBot().simpleEditMessage(question, getBot().getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForMinute(), "chooseMinute");
+    }
+
+    private Message processChooseMinute(Update update, String[] commandValue) throws TelegramApiException {
+        minute = Integer.parseInt(commandValue[1]);
+        return askForWhom(update);
+    }
+
+    private void processForMe(Update update, User user, Message message) throws TelegramApiException {
+        task.getUserList().add(user);
+        DBUtil.executeSQL(task.getInsertDBString());
+        getSentMessages().add(message);
+        ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
+        close();
+        getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
+    }
+
+    private void processForAll(Update update, Map<Integer, User> allowedUsersMap, Message message) throws TelegramApiException {
+        allowedUsersMap.values().forEach(user1 -> task.getUserList().add(user1));
+        DBUtil.executeSQL(task.getInsertDBString());
+        getSentMessages().add(message);
+        ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
+        close();
+        getBot().simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
+    }
+
+    private void processShowAppointments(Update update, User user){
+        int currentUserId = user.getId();
+        StringBuilder messageOfTasks = new StringBuilder();
+        List<Task> taskList = DBUtil.getTasksFromDB(getBot());
+        for (Task task : taskList) {
+            boolean taskForCurrentUser = task.getUserList().stream().anyMatch(user1 -> user1.getId() == currentUserId);
+            if(!taskForCurrentUser){
+                continue;
+            }
+            messageOfTasks.append("\n-----------------\n");
+            if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
+                messageOfTasks.append("Am *" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr*:\n");
+            }else{
+                switch (task.getTaskStrategy().getType()){
+                    case "RegularDailyTaskStrategy":
+                        messageOfTasks.append("*Täglich*:\n");
+                        break;
+                    case "RegularMonthlyTaskStrategy":
+                        messageOfTasks.append("*Monatlich, jeden " + ((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay() + ".*:\n");
+                        break;
+                    case "RegularYearlyTaskStrategy":
+                        messageOfTasks.append("*Jährlich, jeden " + TimeUtil.getMonthMapIntKeys().get(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth()) + " am " + ((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay() + ".*:\n");
+                        break;
+                }
+            }
+            messageOfTasks.append(task.getName() + "\n");
+            StringBuilder userString = new StringBuilder();
+            task.getUserList().forEach(user1 -> userString.append(", " + user1.getName()));
+            messageOfTasks.append("_" + userString.toString().replaceFirst(", ", "") + "_");
+        }
+        String messageString = messageOfTasks.toString().replaceFirst("\n-----------------\n", "");
+        getBot().sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false, Bot.ParseMode.Markdown);
+        close();
+    }
+    private Message processAddAppointment(Update update){
+        return getBot().sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy, "chooseStrategy", true, true);
+    }
+
+    private Message processDeleteAppointment(Update update){
+        List<String> taskNames = new ArrayList<>();
+        DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames.add(task1.getName()));
+        ReplyKeyboard listKeyboard = KeyboardFactory.getInlineKeyboardForList(taskNames, "deleteTask");
+        return getBot().sendKeyboard("Welchen Termin willst du löschen?", update, listKeyboard, false);
+    }
+
+    private Message processDeleteTask(Update update, String[] commandValue) throws TelegramApiException {
+        Message message = null;
+        Task taskToRemove = null;
+        for (Task task : DBUtil.getTasksFromDB(getBot())) {
+            if (task.getName().equals(commandValue[1])) {
+                taskToRemove = task;
+                break;
+            }
+        }
+        if (taskToRemove != null) {
+            DBUtil.removeTask(taskToRemove);
+            try {
+                getBot().sendAnswerCallbackQuery(taskToRemove.getName() + " gelöscht :)", false, update.getCallbackQuery());
+            } catch (TelegramApiException e) {
+                logger.error("Failed activating bot", e);;
+            }
+            List<String> taskNames1 = new ArrayList<>();
+            DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames1.add(task1.getName()));
+            ReplyKeyboard listKeyboard1 = KeyboardFactory.getInlineKeyboardForList(taskNames1, "deleteTask");
+            message = getBot().simpleEditMessage("Welchen Termin willst du löschen?", getBot().getMassageFromUpdate(update), listKeyboard1, "deleteTask");
+        }
+        return message;
+    }
+
+    private Message processOneTime(Update update){
+        return getBot().sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
+    }
+
+    private Message processRegularMonthly(Update update){
+        return getBot().sendMsg("Welcher Tag?", update, new InlineKeyboardMarkup().setKeyboard(KeyboardFactory.createInlineKeyboardForYearMonth(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue())), "day", false, true, Bot.ParseMode.None);
+    }
+
+    private Message processRegularYearly(Update update){
+        return getBot().sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth", false, true);
     }
 
     private Message askForWhom(Update update) throws TelegramApiException {
