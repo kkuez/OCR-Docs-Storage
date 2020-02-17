@@ -67,7 +67,7 @@ public class GetBonsProcess extends Process{
                                 }
                             }
                     Map<Integer, Float> bonIdMap = new HashMap<>();
-                    DBUtil.getBonsfromDB(null).forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
+                    DBUtil.getAllBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
                     documentList.forEach(document1 -> {
                         String possibleCaption = "Von " + allowedUsersMap.get(document1.getUser()).getName() + ": " + bonIdMap.get(document1.getId()) + "€";
                                 getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);

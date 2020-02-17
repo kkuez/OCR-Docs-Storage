@@ -259,20 +259,19 @@ public class DBUtil {
         DBUtil.executeSQL(task.getInsertDBString());
     }
 
-     public static List<Bon> getBonsfromDB(String specifySQLStringOrNull){
+    public static List<Bon> getAllBonsfromDB(){
+        List<Bon> bonList = new ArrayList<>(50);
 
-        String addString = specifySQLStringOrNull == null ? "" : specifySQLStringOrNull;
-        List<Bon> bonSet = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
-                //TODO inner join mit documenten!
-            ResultSet rs = statement.executeQuery("select * from Bons " + addString);) {
+                ResultSet rs = statement.executeQuery("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument")){
             while (rs.next()) {
-                bonSet.add(new Bon(rs.getInt("belongsToDocument"), rs.getFloat("sum")));
+                File originalFile = new File(rs.getString("originalFile"));
+                bonList.add(new Bon(rs.getString("content"), originalFile, rs.getFloat("sum"), rs.getInt("belongsToDocument")));
             }
         } catch (SQLException e) {
-            logger.error("select * from Bons", e);
+            logger.error("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument", e);
         }
-        return bonSet;
+        return bonList;
     }
 
 
