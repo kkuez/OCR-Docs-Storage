@@ -134,8 +134,8 @@ public class ObjectHub {
 
         for(String s : inputArgs){
             if(s.contains("=")){
-                String key = s.substring(0, s.indexOf("="));
-                String value = s.substring(s.indexOf("=") + 1, s.length());
+                String key = s.substring(0, s.indexOf('='));
+                String value = s.substring(s.indexOf('=') + 1, s.length());
                 argsMap.put(key.toLowerCase(), value);
             }
         }

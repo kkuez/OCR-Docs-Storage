@@ -153,9 +153,9 @@ public class TessUtil {
         }
         float lastNumer = 0;
         try{
-            lastNumer = Float.parseFloat(numberList.get(numberList.size() - 1).replace(",","."));
+            lastNumer = Float.parseFloat(numberList.get(numberList.size() - 1).replace(',','.'));
         }catch (Exception e){
-            logger.error(numberList.get(numberList.size() - 1).replace(",","."), e);
+            logger.error(numberList.get(numberList.size() - 1).replace(',','.'), e);
         }
 
         return lastNumer;

@@ -87,7 +87,7 @@ public class BonProcess extends Process {
                 case "EnterRightSum":
                     float sum = 0f;
                     try {
-                        sum = Float.parseFloat(commandValue[1].replace(",", "."));
+                        sum = Float.parseFloat(commandValue[1].replace(',', '.'));
                         bon.setSum(sum);
                         DBUtil.insertDocumentToDB(bon);
                         DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');");

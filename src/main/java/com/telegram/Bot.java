@@ -200,7 +200,7 @@ public class Bot extends TelegramLongPollingBot {
                 return;
             }
 
-            File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace(".", "-").replace(":", "_") + filePath.replace("/", ""));
+            File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), LocalDateTime.now().toString().replace('.', '-').replace(':', '_') + filePath.replace("/", ""));
             try {
                 FileUtils.copyFile(largestPhoto, targetFile);
             } catch (IOException e) {
@@ -242,7 +242,7 @@ public class Bot extends TelegramLongPollingBot {
         input = input.toLowerCase().replace("tag ", "");
         Set<String> tags = new HashSet<>();
         while (input.contains(",")){
-            String tag = input.substring(0, input.indexOf(","));
+            String tag = input.substring(0, input.indexOf(','));
             tags.add(tag);
             input = input.replace(tag, "").replaceFirst(",", "");
         }

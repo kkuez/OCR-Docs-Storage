@@ -59,7 +59,7 @@ public class ListenerThread extends Thread {
             DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
         }else {
             if (incomingString.startsWith(addListCMD)) {
-                String item = incomingString.replace(addListCMD, "").replace("_", " ");
+                String item = incomingString.replace(addListCMD, "").replace('_', ' ');
                 bot.getShoppingList().add(item);
                 DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
             }

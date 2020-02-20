@@ -194,7 +194,7 @@ public class DBUtil {
     public static List<Document> getDocumentsForMonthAndYear(String monthAndYear){
         List<Document> documentList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear.replace("-", ".") + "%' AND originalFile like '%Bons%'");
+            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear.replace('-', '.') + "%' AND originalFile like '%Bons%'");
         ) {
            documentList = new ArrayList<>();
             while (rs.next()) {

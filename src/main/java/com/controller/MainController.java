@@ -250,7 +250,7 @@ public class MainController extends SingleDocumentController {
                     });
                     pdPageContentStream.endText();
                     pdPageContentStream.close();
-                    File fileToSave = new File(beginDate.toString().replace("'", "_") + " - " + endDate.toString().replace("'", "_") + ".pdf");
+                    File fileToSave = new File(beginDate.toString().replace('\'', '_') + " - " + endDate.toString().replace('\'', '_') + ".pdf");
                     document.save(fileToSave);
                     Desktop.getDesktop().open(fileToSave);
                 } catch (IOException e) {
