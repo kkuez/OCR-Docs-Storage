@@ -1,6 +1,5 @@
 package com;
 
-import com.google.inject.internal.cglib.core.$HashCodeCustomizer;
 import com.misc.taskHandling.strategies.RegularTaskStrategy;
 import com.misc.taskHandling.Task;
 import com.telegram.Bot;
@@ -8,7 +7,6 @@ import com.utils.DBUtil;
 
 import org.apache.log4j.Logger;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -19,12 +17,6 @@ public class TasksRunnable implements Runnable {
     private List<Task> tasksToDo = new ArrayList<>();
 
     private boolean loopActive;
-
-    private int currentMinute;
-
-    private int currentHour;
-
-    private String currentDate;
 
     private Bot bot;
 
@@ -62,15 +54,6 @@ public class TasksRunnable implements Runnable {
             System.exit(2);
         }
     }
-
-    private void refreshTimes(){
-        LocalDateTime localDateTime = LocalDateTime.now();
-        currentDate = LocalDate.now().toString();
-        currentHour = localDateTime.getHour();
-        currentMinute = localDateTime.getMinute();
-    }
-
-
 
     //GETTER SETTER
 

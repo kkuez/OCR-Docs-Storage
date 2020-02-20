@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class SimpleCalendarOneTimeStrategy extends OneTimeTaskStrategy {
 
-    Task task;
+    private Task task;
 
     private LocalDateTime time;
 

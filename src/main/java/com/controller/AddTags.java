@@ -28,8 +28,8 @@ public class AddTags extends SimpleSubmitController{
     @FXML
     Button addButton;
 
-    Set<String> tags;
-    Reporter reporter;
+    private Set<String> tags;
+    private Reporter reporter;
 
     public AddTags(){
         tags = new HashSet<>();
@@ -38,9 +38,7 @@ public class AddTags extends SimpleSubmitController{
     public void addTag(){
         tags.add(newTagTextField.getText());
         StringBuilder labelText = new StringBuilder();
-        tags.forEach(tag -> {
-            labelText.append(tag + ", ");
-        });
+        tags.forEach(tag -> labelText.append(tag + ", "));
         newTagLabel.setText(labelText.toString());
         newTagTextField.setText("");
     }
