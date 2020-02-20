@@ -5,7 +5,9 @@ import java.util.Collections;
 
 public class Bon extends Document {
 
-    int belongsToDocument;
+    private int belongsToDocument;
+
+    private float sum;
 
     public Bon(int belongsToDocument, float sum) {
         this.setTagSet(Collections.EMPTY_SET);
@@ -26,8 +28,8 @@ public class Bon extends Document {
         return "insert into Bons (belongsToDocument, sum) Values (" + belongsToDocument + ", " + sum + ")";
     }
 
-
     //GETTER SETTER
+
     public float getSum() {
         return sum;
     }
@@ -35,8 +37,6 @@ public class Bon extends Document {
     public void setSum(float sum) {
         this.sum = sum;
     }
-
-    float sum;
 
     public int getBelongsToDocument() {
         return belongsToDocument;

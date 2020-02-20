@@ -16,10 +16,7 @@ import java.util.Scanner;
 public class ListenerThread extends Thread {
 
     private boolean networkRun;
-    private static String addListCMD = "<addList>";
-    private static String addListCMDItemNr = "<addList>Item#";
     private Bot bot;
-    private static int socketPort = 55555;
     private static Logger logger = Main.getLogger();
 
     public ListenerThread(Bot bot){
@@ -31,6 +28,7 @@ public class ListenerThread extends Thread {
     @Override
     public void run() {
         while(networkRun){
+            int socketPort = 55555;
             logger.info("Start listening on Port "+ socketPort);
             try(ServerSocket serverSocket = new ServerSocket(socketPort);
                 Socket client = serverSocket.accept();
@@ -48,6 +46,7 @@ public class ListenerThread extends Thread {
 
     private void processIncomingStream(String incomingString){
         logger.info("Processing incoming Stream: " + incomingString);
+        String addListCMDItemNr = "<addList>Item#";
         if(incomingString.startsWith(addListCMDItemNr)){
             Map<Integer, String> itemMap = DBUtil.getQRItemMap();
             int itemNumber = Integer.parseInt(incomingString.replace(addListCMDItemNr, ""));
@@ -58,6 +57,7 @@ public class ListenerThread extends Thread {
             bot.getShoppingList().add(item);
             DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
         }else {
+            String addListCMD = "<addList>";
             if (incomingString.startsWith(addListCMD)) {
                 String item = incomingString.replace(addListCMD, "").replace('_', ' ');
                 bot.getShoppingList().add(item);

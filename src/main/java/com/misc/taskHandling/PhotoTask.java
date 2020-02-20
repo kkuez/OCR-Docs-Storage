@@ -12,10 +12,9 @@ import java.util.concurrent.Future;
 
 public class PhotoTask extends Task {
 
+    private Future photoFuture;
 
-    Future photoFuture = null;
-
-    public PhotoTask(User user, Bot bot, Future future) {
+    public PhotoTask(Bot bot, Future future) {
         super(bot);
         this.photoFuture = future;
         setTaskStrategy(new SimpleCalendarOneTimeStrategy(this, LocalDateTime.now().plusMinutes(3).withSecond(0).withNano(0)));

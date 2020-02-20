@@ -20,8 +20,6 @@ public class GetBonsProcess extends Process{
 
     private String month;
 
-    private String year;
-
     Map<Integer, User> allowedUsersMap;
 
     public GetBonsProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
@@ -57,7 +55,7 @@ public class GetBonsProcess extends Process{
             break;
             case "selectYear":
                 if(TimeUtil.getYearsSet().contains(commandValue[1])){
-                    year = commandValue[1];
+                    String year = commandValue[1];
                     user.setBusy(true);
                     String parsedDate = month + "." + year;
                             List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
