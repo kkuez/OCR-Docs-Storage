@@ -46,17 +46,13 @@ public class TessUtil {
         Set<Document> documentSet = new HashSet<>();
         absoluteDifferentFilesSet.forEach(file -> {
             if (!filePathSet.contains(file.getAbsolutePath())) {
-                ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if(!DBUtil.isFilePresent(file)) {
-                            Document document = processFile(file, 0, null);
-                            documentSet.add(document);
-                        }
-                        progressReporter.addStep(null);
-                        counterProcessedFiles.getAndIncrement();
+                ObjectHub.getInstance().getExecutorService().submit(() -> {
+                    if(!DBUtil.isFilePresent(file)) {
+                        Document document = processFile(file, 0, null);
+                        documentSet.add(document);
                     }
+                    progressReporter.addStep(null);
+                    counterProcessedFiles.getAndIncrement();
                 });
             }
         });

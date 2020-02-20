@@ -41,7 +41,7 @@ public class ListenerThread extends Thread {
                     processIncomingStream(incomingScan.next());
                 }
             } catch (IOException e) {
-                logger.error("Failed activating bot", e);;
+                logger.error("Failed activating bot", e);
             }
         }
     }

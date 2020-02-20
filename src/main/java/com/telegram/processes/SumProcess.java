@@ -62,7 +62,7 @@ public class SumProcess extends Process{
                         try {
                             getBot().sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());
                         } catch (TelegramApiException e) {
-                            logger.error("Failed activating bot", e);;
+                            logger.error("Failed activating bot", e);
                         }
                         getBot().sendMsg(messageToSend, update, null, false, false);
                         getBot().getNonBotUserFromUpdate(update).setBusy(false);

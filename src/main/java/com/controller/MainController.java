@@ -88,23 +88,13 @@ public class MainController extends SingleDocumentController {
             @Override
             public void addStep( Update updateOrNull) {
                 progressManager.addStep();
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressIndicator.setProgress(progressManager.getCurrentProgress());
-                    }
-                });
+                Platform.runLater(() -> progressIndicator.setProgress(progressManager.getCurrentProgress()));
             }
 
             @Override
             public void setStep(int step, Update updateOrNull) {
                 progressManager.setCurrentStep(step);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressIndicator.setProgress(progressManager.getCurrentProgress());
-                    }
-                });
+                Platform.runLater(() -> progressIndicator.setProgress(progressManager.getCurrentProgress()));
             }
         };
 
@@ -126,14 +116,11 @@ public class MainController extends SingleDocumentController {
 
     public void prepareTagsBeforeProcessing(){
         logger.info("Gui: " + "Process new Files from Folder: " + inputPathLabel);
-        Reporter booleanReporter = new SubmitBooleanReporter() {
-            @Override
-            public void submitBoolean(boolean value) {
-                if(!value){
-                    process(null);
-                }else{
-                    getTagsForProcessing();
-                }
+        Reporter booleanReporter = (SubmitBooleanReporter) value -> {
+            if(!value){
+                process(null);
+            }else{
+                getTagsForProcessing();
             }
         };
 
@@ -142,33 +129,24 @@ public class MainController extends SingleDocumentController {
 
 
     void getTagsForProcessing(){
-        Reporter reporter = new SubmitTagsReporter() {
-            @Override
-            public void submitTags(Set<String> tagSet) {
-                process(tagSet);
-            }
-        };
+        Reporter reporter = (SubmitTagsReporter) tagSet -> process(tagSet);
 
         ControllerUtil.createNewWindow(new SubmitTagsStrategy(reporter));
     }
 
 
     void process(Set<String> tagSet) {
-        ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
+        ObjectHub.getInstance().getExecutorService().submit(() -> {
+            Set<Document> documentSet = TessUtil.processFolder(new File(inputPathLabel.getText()), null,mainTableView,
+                    new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
+                    new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
+                            new PropertyValueFactory<Document, String>("date"),
+                            new PropertyValueFactory<Document, String>("tags") }, (ProgressReporter) progressReporter);
 
-            @Override
-            public void run() {
-                Set<Document> documentSet = TessUtil.processFolder(new File(inputPathLabel.getText()), null,mainTableView,
-                        new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
-                        new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
-                                new PropertyValueFactory<Document, String>("date"),
-                                new PropertyValueFactory<Document, String>("tags") }, (ProgressReporter) progressReporter);
-
-                if(tagSet != null){
-                    for(String tag : tagSet){
-                        for(Document document : documentSet){
-                            DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
-                        }
+            if(tagSet != null){
+                for(String tag : tagSet){
+                    for(Document document : documentSet){
+                        DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
                     }
                 }
             }
@@ -267,7 +245,7 @@ public class MainController extends SingleDocumentController {
                             pdPageContentStream.showText(user.getName() + ": " + userSumMap.get(user));
                             pdPageContentStream.newLine();
                         } catch (IOException e) {
-                            logger.error("Failed activating bot", e);;
+                            logger.error("Failed activating bot", e);
                         }
                     });
                     pdPageContentStream.endText();
@@ -276,7 +254,7 @@ public class MainController extends SingleDocumentController {
                     document.save(fileToSave);
                     Desktop.getDesktop().open(fileToSave);
                 } catch (IOException e) {
-                    logger.error("Failed activating bot", e);;
+                    logger.error("Failed activating bot", e);
                 }
             }
         };
