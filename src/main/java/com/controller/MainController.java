@@ -8,14 +8,12 @@ import com.objectTemplates.User;
 import com.utils.*;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -77,6 +75,9 @@ public class MainController extends SingleDocumentController {
 
     private Reporter progressReporter;
 
+    private static String GUI_INIT_STRING = "Gui: ";
+
+
     @FXML
     private void initialize() {
         progressReporter = new ProgressReporter() {
@@ -98,24 +99,20 @@ public class MainController extends SingleDocumentController {
             }
         };
 
-        logger.info("Gui: " + "Init Gui.");
+        logger.info(GUI_INIT_STRING + "Init Gui.");
         archivePathLabel.setText(ObjectHub.getInstance().getArchiver().getArchiveFolder().getAbsolutePath());
         inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
-        mainTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (mouseEvent.getClickCount() == 2) {
-                    Document selectedDocument = (Document) mainTableView.getSelectionModel().getSelectedItem();
-                    HTMLOrImageStrategy htmlOrImageStrategy = new HTMLOrImageStrategy(selectedDocument);
-                    ControllerUtil.createNewWindow(htmlOrImageStrategy);
-                }
+        mainTableView.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getClickCount() == 2) {
+                Document selectedDocument = (Document) mainTableView.getSelectionModel().getSelectedItem();
+                HTMLOrImageStrategy htmlOrImageStrategy = new HTMLOrImageStrategy(selectedDocument);
+                ControllerUtil.createNewWindow(htmlOrImageStrategy);
             }
         });
     }
 
     public void prepareTagsBeforeProcessing(){
-        logger.info("Gui: " + "Process new Files from Folder: " + inputPathLabel);
+        logger.info(GUI_INIT_STRING + "Process new Files from Folder: " + inputPathLabel);
         Reporter booleanReporter = (SubmitBooleanReporter) value -> {
             if(!value){
                 process(null);
@@ -154,7 +151,7 @@ public class MainController extends SingleDocumentController {
         }
 
     public void search() {
-        logger.info("Gui: " + "Performing search with Term '" + searchTermTextField.getText() + "'");
+        logger.info(GUI_INIT_STRING + "Performing search with Term '" + searchTermTextField.getText() + "'");
         List<Document> documentList = DBUtil.getDocumentsForSearchTerm(searchTermTextField.getText());
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(documentList);
@@ -185,77 +182,73 @@ public class MainController extends SingleDocumentController {
     }
 
     public void archive() {
-        logger.info("Gui: " + "Archive "  + nameOfProjectTextField.getText());
+        logger.info(GUI_INIT_STRING + "Archive "  + nameOfProjectTextField.getText());
         ObjectHub.getInstance().getArchiver().archive(nameOfProjectTextField.getText());
     }
 
     public void createPDF(){
-        ChooseTimeReporter chooseTimeReporter = new ChooseTimeReporter() {
-            @Override
-            public void submitTimes(LocalDate beginDate, LocalDate endDate) {
+        ChooseTimeReporter chooseTimeReporter = (beginDate, endDate) -> {
 
-                try(PDDocument document = new PDDocument()) {
-                    PDPage firstPage = new PDPage();
-                    document.addPage(firstPage);
-                    PDPageContentStream pdPageContentStream = new PDPageContentStream(document, firstPage);
-                    pdPageContentStream.beginText();
-                    pdPageContentStream.setFont( PDType1Font.COURIER_BOLD, 24 );
-                    pdPageContentStream.setLeading(14.5f);
-                    pdPageContentStream.newLineAtOffset(25, 725);
-                    pdPageContentStream.showText("Zusammenfassung " + beginDate.toString() + " - " + endDate.toString());
-                    List<LocalDate> relatedMonth = new LinkedList<>();
-                    relatedMonth.add(beginDate);
-                    int index = -1;
-                    //endDate = LocalDate.now().minusMonths(1).withDayOfMonth(TimeUtil.getdaysOfMonthCount(LocalDate.now().minusMonths(1).getYear(), LocalDate.now().minusMonths(1).getMonth().getValue()));
+            try(PDDocument document = new PDDocument()) {
+                PDPage firstPage = new PDPage();
+                document.addPage(firstPage);
+                PDPageContentStream pdPageContentStream = new PDPageContentStream(document, firstPage);
+                pdPageContentStream.beginText();
+                pdPageContentStream.setFont( PDType1Font.COURIER_BOLD, 24 );
+                pdPageContentStream.setLeading(14.5f);
+                pdPageContentStream.newLineAtOffset(25, 725);
+                pdPageContentStream.showText("Zusammenfassung " + beginDate.toString() + " - " + endDate.toString());
+                List<LocalDate> relatedMonth = new LinkedList<>();
+                relatedMonth.add(beginDate);
+                int index = -1;
+                pdPageContentStream.setFont( PDType1Font.COURIER, 16 );
+                LocalDate nextLocalDate = beginDate.withDayOfMonth(1);
+                Map<User, Float> userSumMap = new HashMap<>();
+                DBUtil.getAllowedUsersMap().values().forEach(user -> userSumMap.put(user, 0f));
+                pdPageContentStream.newLine();
+                float sumOfAll = 0f;
+                do{
+                    index++;
+                    nextLocalDate = beginDate.plusMonths(index).withDayOfMonth(TimeUtil.getdaysOfMonthCount(beginDate.plusMonths(index).getYear(), beginDate.plusMonths(index).getMonth().getValue()));
+                    pdPageContentStream.newLine();
+                    pdPageContentStream.newLine();
+                    pdPageContentStream.setFont( PDType1Font.COURIER_BOLD, 16 );
+                    pdPageContentStream.showText(nextLocalDate.toString());
                     pdPageContentStream.setFont( PDType1Font.COURIER, 16 );
-                    //LocalDate nextLocalDate = beginDate.plusMonths(index).withDayOfMonth(TimeUtil.getdaysOfMonthCount(beginDate.plusMonths(index).getYear(), beginDate.plusMonths(index).getMonth().getValue()));
-                    LocalDate nextLocalDate = beginDate.withDayOfMonth(1);
-                    Map<User, Float> userSumMap = new HashMap<>();
-                    DBUtil.getAllowedUsersMap().values().forEach(user -> userSumMap.put(user, 0f));
-                    pdPageContentStream.newLine();
-                    float sumOfAll = 0f;
-                    do{
-                        index++;
-                        nextLocalDate = beginDate.plusMonths(index).withDayOfMonth(TimeUtil.getdaysOfMonthCount(beginDate.plusMonths(index).getYear(), beginDate.plusMonths(index).getMonth().getValue()));
-                        pdPageContentStream.newLine();
-                        pdPageContentStream.newLine();
-                        pdPageContentStream.setFont( PDType1Font.COURIER_BOLD, 16 );
-                        pdPageContentStream.showText(nextLocalDate.toString());
-                        pdPageContentStream.setFont( PDType1Font.COURIER, 16 );
-                        float sumForMonth = 0f;
-                        for(User user : userSumMap.keySet()){
-                            pdPageContentStream.newLine();
-                            float sumForUser = DBUtil.getSumMonth(nextLocalDate.getMonth().getValue() + "-" + nextLocalDate.getYear(), user);
-                            sumForMonth += sumForUser;
-                            sumOfAll += sumForUser;
-                            userSumMap.put(user, userSumMap.get(user) + sumForUser);
-                            pdPageContentStream.showText(user.getName() + ": " + sumForUser);
-                        }
+                    float sumForMonth = 0f;
+                    for(Map.Entry<User, Float> entry : userSumMap.entrySet()){
 
                         pdPageContentStream.newLine();
-                        pdPageContentStream.showText("Gesamt: " + sumForMonth);
-                    }while(!nextLocalDate.withDayOfMonth(1).toString().equals(endDate.withDayOfMonth(1).toString()));
+                        float sumForUser = DBUtil.getSumMonth(nextLocalDate.getMonth().getValue() + "-" + nextLocalDate.getYear(), entry.getKey());
+                        sumForMonth += sumForUser;
+                        sumOfAll += sumForUser;
+                        userSumMap.put(entry.getKey(), entry.getValue() + sumForUser);
+                        pdPageContentStream.showText(entry.getKey().getName() + ": " + sumForUser);
+                    }
 
                     pdPageContentStream.newLine();
-                    pdPageContentStream.newLine();
-                    pdPageContentStream.showText("Alles in allem: " + sumOfAll);
-                    pdPageContentStream.newLine();
-                    userSumMap.keySet().forEach(user -> {
-                        try {
-                            pdPageContentStream.showText(user.getName() + ": " + userSumMap.get(user));
-                            pdPageContentStream.newLine();
-                        } catch (IOException e) {
-                            logger.error("Failed activating bot", e);
-                        }
-                    });
-                    pdPageContentStream.endText();
-                    pdPageContentStream.close();
-                    File fileToSave = new File(beginDate.toString().replace('\'', '_') + " - " + endDate.toString().replace('\'', '_') + ".pdf");
-                    document.save(fileToSave);
-                    Desktop.getDesktop().open(fileToSave);
-                } catch (IOException e) {
-                    logger.error("Failed activating bot", e);
-                }
+                    pdPageContentStream.showText("Gesamt: " + sumForMonth);
+                }while(!nextLocalDate.withDayOfMonth(1).toString().equals(endDate.withDayOfMonth(1).toString()));
+
+                pdPageContentStream.newLine();
+                pdPageContentStream.newLine();
+                pdPageContentStream.showText("Alles in allem: " + sumOfAll);
+                pdPageContentStream.newLine();
+                userSumMap.keySet().forEach(user -> {
+                    try {
+                        pdPageContentStream.showText(user.getName() + ": " + userSumMap.get(user));
+                        pdPageContentStream.newLine();
+                    } catch (IOException e) {
+                        logger.error("Failed activating bot", e);
+                    }
+                });
+                pdPageContentStream.endText();
+                pdPageContentStream.close();
+                File fileToSave = new File(beginDate.toString().replace('\'', '_') + " - " + endDate.toString().replace('\'', '_') + ".pdf");
+                document.save(fileToSave);
+                Desktop.getDesktop().open(fileToSave);
+            } catch (IOException e) {
+                logger.error("Failed activating bot", e);
             }
         };
 
