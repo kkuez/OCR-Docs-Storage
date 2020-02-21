@@ -57,7 +57,7 @@ public class DBUtil {
     public static Map<Integer, User> getAllowedUsersMap(){
         Map<Integer, User> userMap = new HashMap<>();
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from AllowedUsers")) {
+            ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
 
             while (rs.next()) {
                 User user = new User(rs.getInt("id"), rs.getString("name"));
@@ -72,7 +72,7 @@ public class DBUtil {
     public static List<String> getShoppingListFromDB(){
         List<String> shoppingList = new ArrayList<>();
         try(Statement  statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList")) {
+            ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");) {
 
             while (rs.next()) {
                 shoppingList.add(rs.getString("item"));
@@ -102,7 +102,7 @@ public class DBUtil {
     public static List<String> getStandardListFromDB(){
         List<String> standardList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM StandardList")) {
+            ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");) {
 
             while (rs.next()) {
                 standardList.add(rs.getString("item"));
@@ -139,7 +139,7 @@ public class DBUtil {
     public static Set<String> getTagsForDocument(Document document){
         Set<String> tagSet = new HashSet<>();
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId())) {
+            ResultSet rs = statement.executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());) {
 
             while (rs.next()) {
                 tagSet.add(rs.getString("Tag"));
@@ -151,7 +151,7 @@ public class DBUtil {
     }
 
     public static void executeSQL(String sqlStatement) {
-        try(Statement statement = getConnection().createStatement()) {
+        try(Statement statement = getConnection().createStatement();) {
             statement.executeUpdate(sqlStatement);
         } catch (SQLException e) {
             logger.error(sqlStatement, e);
@@ -176,7 +176,7 @@ public class DBUtil {
     public static Map<Integer, String> getQRItemMap(){
         Map<Integer, String> itemMap = new HashMap<>();
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from QRItems")) {
+            ResultSet rs = statement.executeQuery("select * from QRItems");) {
 
             while (rs.next()) {
                 itemMap.put(rs.getInt("itemNumber"), rs.getString("itemMapped"));
@@ -194,7 +194,7 @@ public class DBUtil {
     public static List<Document> getDocumentsForMonthAndYear(String monthAndYear){
         List<Document> documentList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear.replace('-', '.') + "%' AND originalFile like '%Bons%'")
+            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear.replace('-', '.') + "%' AND originalFile like '%Bons%'");
         ) {
            documentList = new ArrayList<>();
             while (rs.next()) {
@@ -217,7 +217,7 @@ public class DBUtil {
     public static List<Task> getTasksFromDB(Bot bot){
         List<Task> taskList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from CalendarTasks")) {
+            ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
 
             while (rs.next()) {
                 String strategyType = rs.getString("strategyType");
@@ -279,7 +279,7 @@ public class DBUtil {
         List<Integer> documentIds = new ArrayList<>();
         List<Document> documentList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
-        ResultSet rs = statement.executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'")) {
+        ResultSet rs = statement.executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");) {
 
             while (rs.next()) {
                 documentIds.add(rs.getInt("belongsToDocument"));
@@ -297,7 +297,7 @@ public class DBUtil {
     public static List<Document> showDocumentsFromSQLExpression(String sqlExpression) {
         List<Document> documentList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
-        ResultSet rs = statement.executeQuery(sqlExpression)) {
+        ResultSet rs = statement.executeQuery(sqlExpression);) {
 
             documentList = new ArrayList<>();
             while (rs.next()) {
@@ -316,7 +316,7 @@ public class DBUtil {
     public static int countDocuments(String tableName, String sqlAddition){
         int count = 0;
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition)) {
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);) {
 
             while (rs.next()) {
                 count = rs.getInt("Count(*)");

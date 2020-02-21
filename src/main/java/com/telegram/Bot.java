@@ -1,6 +1,7 @@
 package com.telegram;
 
 import com.Main;
+import com.TasksRunnable;
 import com.controller.reporter.ProgressReporter;
 import com.controller.reporter.Reporter;
 import com.misc.taskHandling.PhotoTask;
@@ -52,7 +53,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private Reporter progressReporter;
 
-    private Map<Integer, User> allowedUsersMap;
+    Map<Integer, User> allowedUsersMap;
 
     private static Logger logger = Main.getLogger();
 
@@ -118,7 +119,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private void processUpdateReceveived(Update update){
+    public void processUpdateReceveived(Update update) throws Exception{
         int currentUserID;
         String textGivenByUser;
         boolean isBusy = getNonBotUserFromUpdate(update).isBusy();
@@ -139,7 +140,7 @@ public class Bot extends TelegramLongPollingBot {
                 if (process == null) {
                     //Set process if null
                     if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                        sendMsg("Verarbeite Bild...", update, null, true, false);
+                        Message message = sendMsg("Verarbeite Bild...", update, null, true, false);
                         processPhoto(update);
                     }else{
                         allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
@@ -147,7 +148,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 } else {
                     if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                        sendMsg("Verarbeite Bild...", update, null, true, false);
+                        Message message = sendMsg("Verarbeite Bild...", update, null, true, false);
                         processPhoto(update);
                     }else{
                         process.performNextStep(textGivenByUser, update, allowedUsersMap);
@@ -181,7 +182,7 @@ public class Bot extends TelegramLongPollingBot {
             User user = getNonBotUserFromUpdate(update);
             Process process = user.getProcess();
             user.setBusy(true);
-            File largestPhoto;
+            File largestPhoto = null;
             List<PhotoSize> photoList = update.getMessage().getPhoto();
             photoList.sort(Comparator.comparing(PhotoSize::getFileSize));
             Collections.reverse(photoList);
@@ -189,7 +190,7 @@ public class Bot extends TelegramLongPollingBot {
             String filePath = getFilePath(photoList.get(0));
             largestPhoto = downloadPhotoByFilePath(filePath);
 
-            if(largestPhoto != null && DBUtil.isFilePresent(largestPhoto)){
+            if(DBUtil.isFilePresent(largestPhoto)){
                 //Is File already stored...?
                 logger.info("File already present: " + largestPhoto.getName());
                 sendMsg("Bild schon vorhanden.", update, null, true, false);
@@ -209,7 +210,7 @@ public class Bot extends TelegramLongPollingBot {
             Set<String> tags = null;
             if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
                 tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
-            }
+            };
 
             Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
             try {
@@ -232,7 +233,7 @@ public class Bot extends TelegramLongPollingBot {
             user.setBusy(false);
         });
 
-        Task photoAbortTask = new PhotoTask(this, photoFuture);
+        Task photoAbortTask = new PhotoTask(allowedUsersMap.get(update.getMessage().getFrom().getId()), this, photoFuture);
         ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(photoAbortTask);
     }
 
@@ -251,7 +252,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
-        SendPhoto sendPhoto;
+        SendPhoto sendPhoto = null;
         User user = getNonBotUserFromUpdate(update);
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
@@ -278,7 +279,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private java.io.File downloadPhotoByFilePath(String filePath) {
+    public java.io.File downloadPhotoByFilePath(String filePath) {
         try {
             // Download the file calling AbsSender::downloadFile method
             return downloadFile(filePath);
@@ -288,7 +289,7 @@ public class Bot extends TelegramLongPollingBot {
         return null;
     }
 
-    private String getFilePath(PhotoSize photo) {
+    public String getFilePath(PhotoSize photo) {
         Objects.requireNonNull(photo);
 
         if (photo.hasFilePath()) { // If the file_path is already present, we are done!
@@ -464,7 +465,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public  Message askBoolean(String question, Update update,boolean isReply) throws TelegramApiException{
-        Message message;
+        Message message = null;
         if(update.hasCallbackQuery()){
             message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Boolean);
         }else{
@@ -473,7 +474,7 @@ public class Bot extends TelegramLongPollingBot {
         return message;
     }
     public  Message askMonth(String question, Update update,  boolean isReply, String callbackPrefix)  throws TelegramApiException{
-        Message message;
+        Message message = null;
         if (update.hasCallbackQuery()) {
             message = simpleEditMessage(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month, callbackPrefix);
         } else {
@@ -481,7 +482,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         return message;
     }
-    private void editCaption(String text, Message message){
+    public  void editCaption(String text,  Message message){
         EditMessageCaption editMessageCaption = new EditMessageCaption();
         editMessageCaption.setChatId(message.getChatId() + "");
         editMessageCaption.setMessageId(message.getMessageId());
@@ -504,14 +505,15 @@ public class Bot extends TelegramLongPollingBot {
     }
     public  Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackPrefix) throws TelegramApiException{
         List<List<InlineKeyboardButton>> inputKeyboard = KeyboardFactory.createInlineKeyboard(keyBoardTypeOrNull, callbackPrefix);
-        return simpleEditMessage(text, message, inputKeyboard);
+        return simpleEditMessage(text, message, inputKeyboard, callbackPrefix);
     }
-    public  Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard) throws TelegramApiException{
+    public  Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard, String callbackPrefix) throws TelegramApiException{
+        String prefix = callbackPrefix != null ? callbackPrefix : "";
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(inputKeyboard);
-        return simpleEditMessage(text, message, inlineKeyboardMarkup);
+        return simpleEditMessage(text, message, inlineKeyboardMarkup, callbackPrefix);
     }
-    public Message simpleEditMessage(String text, Message message, ReplyKeyboard inputKeyboard) throws TelegramApiException {
+    public Message simpleEditMessage(String text, Message message, ReplyKeyboard inputKeyboard, String callbackPrefix) throws TelegramApiException {
 
         if(!message.hasText()){
             if(message.hasPhoto() && message.getCaption() != null){
@@ -553,7 +555,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public Message askYear(String question, Update update, boolean isReply, String callbackPrefix) throws TelegramApiException{
-        Message message;
+        Message message = null;
         if (update.hasCallbackQuery()) {
             message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Year, callbackPrefix);
         } else {
@@ -572,7 +574,7 @@ public class Bot extends TelegramLongPollingBot {
     /**
      *Documents cannot be send in groups like pictures
      */
-    public Message sendDocument(Update update,  boolean isReply,  InputMediaDocument inputMediaDocument){
+    public  Message sendDocument(Update update,  boolean isReply,  InputMediaDocument inputMediaDocument){
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
         SendDocument sendDocument = new SendDocument();
@@ -628,9 +630,10 @@ public class Bot extends TelegramLongPollingBot {
         if(keyBoardTypeOrNull != null){
         replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, false, callbackValuePrefix);
         }
-        return sendMsg(s, update, replyKeyboard, isReply, inlineKeyboard, parseModeOrNull);
+        return sendMsg(s, update, replyKeyboard, callbackValuePrefix, isReply, inlineKeyboard, parseModeOrNull);
     }
-    public  synchronized Message sendMsg(String s, Update update, ReplyKeyboard replyKeyboard, boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
+    public  synchronized Message sendMsg(String s, Update update, ReplyKeyboard replyKeyboard, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
+        boolean isOneTimeKeyboard = false;
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
         SendMessage sendMessage = new SendMessage();
