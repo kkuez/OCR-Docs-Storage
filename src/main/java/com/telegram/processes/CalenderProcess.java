@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -305,7 +306,8 @@ public class CalenderProcess extends Process {
             }
             messageOfTasks.append("\n-----------------\n");
              if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
-                 String germanDate = task.getTaskStrategy().getTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh.mm"));
+                 String min = task.getTaskStrategy().getTime().getMinute() == 0 ? "" : "." + task.getTaskStrategy().getTime().getMinute();
+                 String germanDate = task.getTaskStrategy().getTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy, ")) + task.getTaskStrategy().getTime().getHour() + min;
                  messageOfTasks.append("Am *" + germanDate + " Uhr*:\n");
             }else{
                 switch (task.getTaskStrategy().getType()){
