@@ -305,8 +305,8 @@ public class CalenderProcess extends Process {
             }
             messageOfTasks.append("\n-----------------\n");
              if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
-                 String germanDate = task.getTaskStrategy().getTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
-                messageOfTasks.append("Am *" + germanDate + " Uhr*:\n");
+                 String germanDate = task.getTaskStrategy().getTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh.mm"));
+                 messageOfTasks.append("Am *" + germanDate + " Uhr*:\n");
             }else{
                 switch (task.getTaskStrategy().getType()){
                     case "RegularDailyTaskStrategy":
