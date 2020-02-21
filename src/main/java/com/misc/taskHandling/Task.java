@@ -1,6 +1,7 @@
 package com.misc.taskHandling;
 
 import com.Main;
+import com.misc.taskHandling.strategies.OneTimeTaskStrategy;
 import com.misc.taskHandling.strategies.TaskStrategy;
 import com.objectTemplates.User;
 import com.telegram.Bot;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task {
+public class Task implements Comparable{
 
     private static Logger logger = Main.getLogger();
 
@@ -83,4 +84,17 @@ public class Task {
     }
 
     Task task;
+
+    @Override
+    public int compareTo(Object o) throws RuntimeException{
+        if(!o.getClass().equals(this.getClass())){
+            throw  new RuntimeException("Classes dont match!");
+        }
+        if(!(this.getTaskStrategy() instanceof OneTimeTaskStrategy) || !(((Task)o).getTaskStrategy() instanceof OneTimeTaskStrategy)){
+            return 1;
+        }
+
+        Task oTask = (Task) o;
+        return getTaskStrategy().getTime().compareTo(oTask.getTaskStrategy().getTime());
+    }
 }

@@ -20,6 +20,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -293,6 +294,8 @@ public class CalenderProcess extends Process {
         int currentUserId = user.getId();
         StringBuilder messageOfTasks = new StringBuilder();
         List<Task> taskList = DBUtil.getTasksFromDB(getBot());
+        Collections.sort(taskList);
+        Collections.reverse(taskList);
         for (Task task : taskList) {
             boolean taskForCurrentUser = task.getUserList().stream().anyMatch(user1 -> user1.getId() == currentUserId);
             if(!taskForCurrentUser){
