@@ -306,8 +306,11 @@ public class CalenderProcess extends Process {
             }
             messageOfTasks.append("\n-----------------\n");
              if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
-                 String min = task.getTaskStrategy().getTime().getMinute() == 0 ? "" : "." + task.getTaskStrategy().getTime().getMinute();
-                 String germanDate = task.getTaskStrategy().getTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy, ")) + task.getTaskStrategy().getTime().getHour() + min;
+                 LocalDateTime time = task.getTaskStrategy().getTime();
+                 String min = time.getMinute() == 0 ? "" : "." + time.getMinute();
+                 String date = time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, "));
+                 int hour = time.getHour();
+                 String germanDate = date + hour + min;
                  messageOfTasks.append("Am *" + germanDate + " Uhr*:\n");
             }else{
                 switch (task.getTaskStrategy().getType()){
