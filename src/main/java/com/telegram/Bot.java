@@ -350,7 +350,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "Bon-Optionen":
                     message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Bons, true, false);
                     break;
-                case "Kalender-Optionen":
+                case "Kalender":
                     message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Calendar, true, false);
                     break;
                 case "Termine anzeige":
