@@ -33,8 +33,6 @@ public class ObjectHub {
 
     private Bot bot;
 
-    private Map<Update, Bot> performUpdateLaterMap;
-
     private TasksRunnable tasksRunnable;
 
     private ObjectHub() {
@@ -43,7 +41,7 @@ public class ObjectHub {
         try {
             properties.load(new FileInputStream(root + "setup.properties"));
         } catch (IOException e) {
-            logger.error("Failed activating bot", e);;
+            logger.error("Failed activating bot", e);
         }
         archiver = new Archiver(properties);
 
@@ -51,23 +49,19 @@ public class ObjectHub {
     }
 
     public void initLater(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        Thread thread = new Thread(() -> {
 
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    logger.error("Couldn't initialize ObjectHub.", e);
-                    Thread.currentThread().interrupt();
-                    System.exit(2);
-                }
-                allowedUsersMap = DBUtil.getAllowedUsersMap();
-                performUpdateLaterMap = new HashMap<>();
-                tasksRunnable = new TasksRunnable();
-                tasksRunnable.setBot(getBot());
-                tasksRunnable.run();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                logger.error("Couldn't initialize ObjectHub.", e);
+                Thread.currentThread().interrupt();
+                System.exit(2);
             }
+            allowedUsersMap = DBUtil.getAllowedUsersMap();
+            tasksRunnable = new TasksRunnable();
+            tasksRunnable.setBot(getBot());
+            tasksRunnable.run();
         });
         thread.setName("TasksToDoThread");
         thread.start();
@@ -140,8 +134,8 @@ public class ObjectHub {
 
         for(String s : inputArgs){
             if(s.contains("=")){
-                String key = s.substring(0, s.indexOf("="));
-                String value = s.substring(s.indexOf("=") + 1, s.length());
+                String key = s.substring(0, s.indexOf('='));
+                String value = s.substring(s.indexOf('=') + 1, s.length());
                 argsMap.put(key.toLowerCase(), value);
             }
         }

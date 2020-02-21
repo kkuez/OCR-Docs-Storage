@@ -29,14 +29,10 @@ public class ControllerUtil {
             tableColumns[i].setCellValueFactory(propertyValueFactories[i]);
         }
 
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                tableView.getColumns().clear();
-                tableView.setItems(observableList);
-                tableView.getColumns().addAll(tableColumns);
-            }
+        Platform.runLater(() -> {
+            tableView.getColumns().clear();
+            tableView.setItems(observableList);
+            tableView.getColumns().addAll(tableColumns);
         });
     }
 

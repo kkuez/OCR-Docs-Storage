@@ -95,13 +95,13 @@ public class ChooseTimeController extends Controller{
             }
         }else{
             String beginDateString = specificTimeOneTextField.getText();
-            int month = Integer.parseInt(beginDateString.substring(0, beginDateString.indexOf("/")));
-            int year = Integer.parseInt(beginDateString.substring(beginDateString.indexOf("/") + 1));
+            int month = Integer.parseInt(beginDateString.substring(0, beginDateString.indexOf('/')));
+            int year = Integer.parseInt(beginDateString.substring(beginDateString.indexOf('/') + 1));
             startDate = LocalDate.of(year, month, 1);
 
             String endDateString = specificTimeTwoTextField.getText();
-            int monthEnd = Integer.parseInt(endDateString.substring(0, endDateString.indexOf("/")));
-            int yearEnd = Integer.parseInt(endDateString.substring(endDateString.indexOf("/") + 1));
+            int monthEnd = Integer.parseInt(endDateString.substring(0, endDateString.indexOf('/')));
+            int yearEnd = Integer.parseInt(endDateString.substring(endDateString.indexOf('/') + 1));
             endDate = LocalDate.of(yearEnd, monthEnd, TimeUtil.getdaysOfMonthCount(startDate.getYear(), startDate.getMonth().getValue()));
         }
 

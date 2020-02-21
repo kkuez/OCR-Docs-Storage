@@ -28,7 +28,7 @@ public class User {
         if(process != null && process.getDeleteLater()){
             process = null;
         }
-    };
+    }
 
     //GETTER SETTER
 

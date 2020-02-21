@@ -17,8 +17,6 @@ public class SumProcess extends Process{
 
     private String month;
 
-    private String year;
-
     public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
         super(progressReporter);
         setBot(bot);
@@ -51,7 +49,7 @@ public class SumProcess extends Process{
                     }
                     break;
                 case "selectYear":
-                    year = commandValue[1];
+                    String year = commandValue[1];
                     if (TimeUtil.getYearsSet().contains(year)) {
                         getBot().getNonBotUserFromUpdate(update).setBusy(true);
                         String parsedDate = month + "." + year;
@@ -62,7 +60,7 @@ public class SumProcess extends Process{
                         try {
                             getBot().sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());
                         } catch (TelegramApiException e) {
-                            logger.error("Failed activating bot", e);;
+                            logger.error("Failed activating bot", e);
                         }
                         getBot().sendMsg(messageToSend, update, null, false, false);
                         getBot().getNonBotUserFromUpdate(update).setBusy(false);

@@ -46,17 +46,13 @@ public class TessUtil {
         Set<Document> documentSet = new HashSet<>();
         absoluteDifferentFilesSet.forEach(file -> {
             if (!filePathSet.contains(file.getAbsolutePath())) {
-                ObjectHub.getInstance().getExecutorService().submit(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if(!DBUtil.isFilePresent(file)) {
-                            Document document = processFile(file, 0, null);
-                            documentSet.add(document);
-                        }
-                        progressReporter.addStep(null);
-                        counterProcessedFiles.getAndIncrement();
+                ObjectHub.getInstance().getExecutorService().submit(() -> {
+                    if(!DBUtil.isFilePresent(file)) {
+                        Document document = processFile(file, 0, null);
+                        documentSet.add(document);
                     }
+                    progressReporter.addStep(null);
+                    counterProcessedFiles.getAndIncrement();
                 });
             }
         });
@@ -157,9 +153,9 @@ public class TessUtil {
         }
         float lastNumer = 0;
         try{
-            lastNumer = Float.parseFloat(numberList.get(numberList.size() - 1).replace(",","."));
+            lastNumer = Float.parseFloat(numberList.get(numberList.size() - 1).replace(',','.'));
         }catch (Exception e){
-            logger.error(numberList.get(numberList.size() - 1).replace(",","."), e);
+            logger.error(numberList.get(numberList.size() - 1).replace(',','.'), e);
         }
 
         return lastNumer;

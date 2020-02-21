@@ -23,7 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
-         logger = createLogger();
+        logger = createLogger();
 
         logger.info("\n\nStarting.");
         for(String s : args){
@@ -35,22 +35,16 @@ public class Main {
                 while(bot == null){
                     try {
                         bot = activateTGBot(null);
+                        ListenerThread listenerThread = new ListenerThread(bot);
+                        listenerThread.start();
                     } catch (TelegramApiRequestException e) {
-                        logger.error("Waiting 30s and try again...", e);
-                        try {
-                            Thread.sleep(30000);
-                        } catch (InterruptedException ex) {
-                            logger.error(ex);
-                            Thread.currentThread().interrupt();
-                            System.exit(2);
-                        }
+                        logger.error("Couldnt start bot", e);
+                        System.exit(2);
                     }
-                    ListenerThread listenerThread = new ListenerThread(bot);
-                    listenerThread.start();
                 }
             }
         }
-        }
+    }
 
     private static Bot activateTGBot(Bot inputBotOrNull) throws TelegramApiRequestException {
         Bot bot = null;
@@ -115,7 +109,7 @@ public class Main {
         try {
             logFileAppender = new FileAppender(layout, getLogFile(), true);
         } catch (IOException e) {
-            logger.error("Failed activating bot", e);;
+            logger.error("Failed activating bot", e);
             System.exit(2);
         }
         logger.addAppender(logFileAppender);

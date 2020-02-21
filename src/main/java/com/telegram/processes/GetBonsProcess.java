@@ -20,8 +20,6 @@ public class GetBonsProcess extends Process{
 
     private String month;
 
-    private String year;
-
     Map<Integer, User> allowedUsersMap;
 
     public GetBonsProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
@@ -57,7 +55,7 @@ public class GetBonsProcess extends Process{
             break;
             case "selectYear":
                 if(TimeUtil.getYearsSet().contains(commandValue[1])){
-                    year = commandValue[1];
+                    String year = commandValue[1];
                     user.setBusy(true);
                     String parsedDate = month + "." + year;
                             List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
@@ -67,7 +65,7 @@ public class GetBonsProcess extends Process{
                                 }
                             }
                     Map<Integer, Float> bonIdMap = new HashMap<>();
-                    DBUtil.getBonsfromDB(null).forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
+                    DBUtil.getAllBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
                     documentList.forEach(document1 -> {
                         String possibleCaption = "Von " + allowedUsersMap.get(document1.getUser()).getName() + ": " + bonIdMap.get(document1.getId()) + "€";
                                 getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
@@ -75,7 +73,7 @@ public class GetBonsProcess extends Process{
                             try {
                                 getBot().sendAnswerCallbackQuery("Fertig", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
-                                logger.error("Failed activating bot", e);;
+                                logger.error("Failed activating bot", e);
                             }
                             getBot().sendMsg("Fertig: " + documentList.size() + " Bilder geholt.", update, null, false, false);
                     close();
