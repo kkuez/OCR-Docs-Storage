@@ -19,6 +19,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -302,8 +304,9 @@ public class CalenderProcess extends Process {
                 continue;
             }
             messageOfTasks.append("\n-----------------\n");
-            if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
-                messageOfTasks.append("Am *" + task.getTaskStrategy().getTime().toString().replace("T", " um ") + " Uhr*:\n");
+             if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {//TODO testen
+                 String germanDate = task.getTaskStrategy().getTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
+                messageOfTasks.append("Am *" + germanDate + " Uhr*:\n");
             }else{
                 switch (task.getTaskStrategy().getType()){
                     case "RegularDailyTaskStrategy":
