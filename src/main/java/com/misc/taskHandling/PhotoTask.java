@@ -14,8 +14,11 @@ public class PhotoTask extends Task {
 
     private Future photoFuture;
 
-    public PhotoTask(Bot bot, Future future) {
+    User user;
+
+    public PhotoTask(User user, Bot bot, Future future) {
         super(bot);
+        this.user = user;
         this.photoFuture = future;
         setTaskStrategy(new SimpleCalendarOneTimeStrategy(this, LocalDateTime.now().plusMinutes(3).withSecond(0).withNano(0)));
     }
@@ -24,9 +27,9 @@ public class PhotoTask extends Task {
     public boolean perform(){
         boolean successCanceling = photoFuture.cancel(true);
         if(successCanceling){
-            getBot().sendSimpleMsg("Abgebrochen, 3 Minuten vorbei :( Versuchs nochmal!", getUserList().get(0).getId(), KeyboardFactory.KeyBoardType.NoButtons, false);
-            getUserList().get(0).setBusy(false);
-            getUserList().get(0).setProcess(null);
+            getBot().sendSimpleMsg("Abgebrochen, 3 Minuten vorbei :( Versuchs nochmal!", user.getId(), KeyboardFactory.KeyBoardType.NoButtons, false);
+            user.setBusy(false);
+            user.setProcess(null);
         }
         return successCanceling;
     }
