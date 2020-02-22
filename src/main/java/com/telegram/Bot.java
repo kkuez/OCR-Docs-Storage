@@ -225,7 +225,8 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             if (process != null && process.getClass().equals(BonProcess.class)) {
-                sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true, ""));
+                Message message = sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true, ""));
+                user.getProcess().getSentMessages().add(message);
             }else{
                 sendMsg("Fertig.", update,  null, true, false);
             }
@@ -251,9 +252,10 @@ public class Bot extends TelegramLongPollingBot {
         return tags;
     }
 
-    public void sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
+    public Message sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
         SendPhoto sendPhoto = null;
         User user = getNonBotUserFromUpdate(update);
+        Message message = null;
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
             sendPhoto.setCaption(caption);
@@ -266,17 +268,18 @@ public class Bot extends TelegramLongPollingBot {
             }
         } catch (FileNotFoundException e) {
             logger.error(imagePath, e);
-            return;
+            return message;
         }
         long chatID = update.hasMessage() ? update.getMessage().getChatId() : (long)update.getCallbackQuery().getFrom().getId();
         sendPhoto.setChatId(chatID);
         try {
-            execute(sendPhoto);
+            message = execute(sendPhoto);
         } catch (TelegramApiException e) {
             user.setBusy(false);
             sendMsg("Fehler, Aktion abgebrochen.",update,  null, true, false);
             logger.error(null, e);
         }
+        return message;
     }
 
     public java.io.File downloadPhotoByFilePath(String filePath) {
