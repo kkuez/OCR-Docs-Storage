@@ -1,6 +1,7 @@
 package com.utils;
 
 import com.Main;
+import com.misc.taskHandling.TaskFactory;
 import com.misc.taskHandling.strategies.*;
 import com.misc.taskHandling.Task;
 import com.ObjectHub;
@@ -218,35 +219,8 @@ public class DBUtil {
         List<Task> taskList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
-
             while (rs.next()) {
-                String strategyType = rs.getString("strategyType");
-                List<User> userList = new ArrayList<>();
-                if(rs.getString("user").equals("ALL")){
-                    userList.addAll(getAllowedUsersMap().values());
-                }else{
-                    userList.add(getAllowedUsersMap().get(Integer.parseInt(rs.getString("user"))));
-                }
-
-                Task task = new Task(userList, bot, rs.getString("name"));
-                TaskStrategy taskStrategy = null;
-                switch (strategyType){
-                    case "SimpleCalendarOneTimeStrategy":
-                        LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
-                        taskStrategy = new SimpleCalendarOneTimeStrategy(task, time);
-                        task.setTaskStrategy(taskStrategy);
-                        break;
-                    case "RegularDailyTaskStrategy":
-                        taskStrategy = new RegularDailyTaskStrategy(task);
-                        break;
-                    case "RegularMonthlyTaskStrategy":
-                        taskStrategy = new RegularMonthlyTaskStrategy(task, rs.getInt("day"));
-                        break;
-                    case "RegularYearlyTaskStrategy":
-                        taskStrategy = new RegularYearlyTaskStrategy(task, rs.getInt("day"), rs.getInt("month"));
-                        break;
-                }
-                task.setTaskStrategy(taskStrategy);
+                Task task = TaskFactory.getTask(rs);
                 taskList.add(task);
             }
         } catch (SQLException e) {

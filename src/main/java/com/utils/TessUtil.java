@@ -107,8 +107,6 @@ public class TessUtil {
         return document;
     }
 
-
-
     public static boolean checkIfBon(String content){
         String[] bonTerms = new String[]{"netto", "mwst", "einkauf", "summe", "aldi", "netto", "penny", "rewe", "real", "lidl"};
         for(String term : bonTerms){

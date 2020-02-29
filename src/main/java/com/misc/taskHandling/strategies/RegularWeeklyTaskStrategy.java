@@ -17,6 +17,7 @@ public class RegularWeeklyTaskStrategy extends RegularTaskStrategy {
     @Override
     public String getInsertDBString() {
         return null;
+        //TODO implementieren die ganze Klasse ffs
     }
 
     @Override
@@ -27,10 +28,5 @@ public class RegularWeeklyTaskStrategy extends RegularTaskStrategy {
     @Override
     public TimeUnit getExecutionTimeUnit() {
         return null;
-    }
-
-    @Override
-    public void doAfterExecute() {
-
     }
 }

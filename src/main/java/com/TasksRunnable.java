@@ -35,6 +35,7 @@ public class TasksRunnable implements Runnable {
                         task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
                         logger.info("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
                         if(!(task.getTaskStrategy() instanceof RegularTaskStrategy)) {
+                            task.delete();
                             DBUtil.removeTask(task);
                         }
                     }

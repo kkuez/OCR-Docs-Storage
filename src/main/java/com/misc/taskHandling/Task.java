@@ -97,4 +97,8 @@ public class Task implements Comparable{
         Task oTask = (Task) o;
         return getTaskStrategy().getTime().compareTo(oTask.getTaskStrategy().getTime());
     }
+
+    public void delete() {
+        taskStrategy.delete(getName());
+    }
 }

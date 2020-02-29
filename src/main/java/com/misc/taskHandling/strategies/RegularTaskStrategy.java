@@ -27,8 +27,6 @@ public abstract class RegularTaskStrategy implements TaskStrategy {
 
     public abstract TimeUnit getExecutionTimeUnit();
 
-    public abstract void doAfterExecute();
-
     //GETTER SETTER
 
     public int getMin() {

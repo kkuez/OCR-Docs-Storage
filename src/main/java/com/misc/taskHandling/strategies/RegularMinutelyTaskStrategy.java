@@ -2,28 +2,23 @@ package com.misc.taskHandling.strategies;
 
 import com.misc.taskHandling.Task;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
-public class RegularMonthlyTaskStrategy extends RegularTaskStrategy {
+public class RegularMinutelyTaskStrategy extends RegularTaskStrategy {
 
-    public RegularMonthlyTaskStrategy(Task task, int day){
+    public RegularMinutelyTaskStrategy(Task task){
         this.task = task;
-        min = 0;
-        hour = 4;
-        this.day = day;
     }
+
     @Override
     public String getType() {
-        return "RegularMonthlyTaskStrategy";
+        return "RegularMinutelyTaskStrategy";
     }
 
     @Override
     public boolean timeIsNow(LocalDateTime localDateTime) {
-        return localDateTime.equals(LocalDateTime.of(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), day), LocalTime.of(hour, min)));
-
+        return true;
     }
 
     @Override
@@ -31,6 +26,8 @@ public class RegularMonthlyTaskStrategy extends RegularTaskStrategy {
         int year = 99;
 
         int month = 99;
+
+        int day = 99;
 
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
@@ -45,5 +42,10 @@ public class RegularMonthlyTaskStrategy extends RegularTaskStrategy {
     @Override
     public TimeUnit getExecutionTimeUnit() {
         return null;
+    }
+
+    @Override
+    public void delete(String taskName){
+
     }
 }
