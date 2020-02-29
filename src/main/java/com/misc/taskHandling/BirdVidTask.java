@@ -37,20 +37,44 @@ public class BirdVidTask extends Task {
         Collection<File> rawVids = FileUtils.listFiles(birdVidRawFolder, new String[]{"raw", "mjpeg"}, false);
         List<File> processedVids = new ArrayList<>(rawVids.size());
         rawVids.forEach(rawVid -> {
-            File processedvid = null;
+            File processedVid = null;
             try {
-                processedvid = convertStreamFile(rawVid);
-            } catch (IOException e) {
+                processedVid = convertStreamFile(rawVid);
+            } catch (IOException | InterruptedException e) {
                 logger.error(e);
             }
-            processedVids.add(processedvid);
+            processedVids.add(processedVid);
         });
 
         return true;
     }
 
-    private File convertStreamFile(File rawFile) throws IOException {
-        FFmpeg fFmpeg = new FFmpeg(rawFile.getAbsolutePath());
+    private File convertStreamFile(File rawFile) throws IOException, InterruptedException {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+
+        //Install fucking ffmpeg to path variable first!!
+        processBuilder.command("ffmpeg", "-i", rawFile.getAbsolutePath(), "-f", "mp4", rawFile.getParent() + File.separator + rawFile.getName() + ".mp4");
+        processBuilder.redirectOutput();
+        processBuilder.redirectError();
+        Process convertProcess = processBuilder.start();
+
+        while(convertProcess.isAlive()) {
+            if(convertProcess.getInputStream().available() > 0) {
+                String inputStream = new String(convertProcess.getInputStream().readAllBytes());
+                System.out.println(inputStream);
+            }
+            if(convertProcess.getErrorStream().available() > 0) {
+                String errorStream = new String(convertProcess.getErrorStream().readAllBytes());
+                System.out.println(errorStream);
+            }
+        }
+
+        return new File(rawFile.getParent(), rawFile.getName() + ".mp4");
+
+
+
+
+       /* FFmpeg fFmpeg = new FFmpeg(rawFile.getAbsolutePath());
 
         FFmpegBuilder fFmpegBuilder = new FFmpegBuilder()
                 .setInput(rawFile.getName())
@@ -74,6 +98,6 @@ public class BirdVidTask extends Task {
                 logger.error(e);
             }
         }
-        return new File(rawFile.getParent(), rawFile.getName() + ".mp4");
+        */
     }
 }
