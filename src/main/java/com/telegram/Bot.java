@@ -20,10 +20,7 @@ import org.apache.log4j.Logger;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
-import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -277,6 +274,26 @@ public class Bot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             user.setBusy(false);
             sendMsg("Fehler, Aktion abgebrochen.",update,  null, true, false);
+            logger.error(null, e);
+        }
+        return message;
+    }
+
+    public Message sendVideoFromURL(User user, String VideoPath, String caption){
+        SendVideo sendVideo = null;
+        Message message = null;
+        try {
+            sendVideo = new SendVideo().setVideo("SomeText", new FileInputStream(new File(VideoPath)));
+            sendVideo.setCaption(caption);
+        } catch (FileNotFoundException e) {
+            logger.error(VideoPath, e);
+            return message;
+        }
+        long chatID = user.getId();
+        sendVideo.setChatId(chatID);
+        try {
+            message = execute(sendVideo);
+        } catch (TelegramApiException e) {
             logger.error(null, e);
         }
         return message;

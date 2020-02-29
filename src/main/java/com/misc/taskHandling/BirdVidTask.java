@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,17 +36,23 @@ public class BirdVidTask extends Task {
         }
 
         Collection<File> rawVids = FileUtils.listFiles(birdVidRawFolder, new String[]{"raw", "mjpeg"}, false);
-        List<File> processedVids = new ArrayList<>(rawVids.size());
         rawVids.forEach(rawVid -> {
             File processedVid = null;
             try {
                 processedVid = convertStreamFile(rawVid);
+                File processedVidCopy = new File(processedVid.getParentFile().getParentFile().getAbsolutePath() + File.separator + "BirdVid", "Vogel_" + LocalDateTime.now().toString().replace(":", "-") + ".mp4");
+                FileUtils.copyFile(processedVid, processedVidCopy);
+                processedVid.delete();
+                rawVid.delete();
+
+                ObjectHub.getInstance().getAllowedUsersMap().values().forEach(user -> {
+                    getBot().sendVideoFromURL(user, processedVidCopy.getAbsolutePath(), "(:");
+                });
+
             } catch (IOException | InterruptedException e) {
                 logger.error(e);
             }
-            processedVids.add(processedVid);
         });
-
         return true;
     }
 
