@@ -27,84 +27,32 @@ public class BirdVidTask extends Task {
     }
 
     @Override
-    public boolean perform(){
-        File birdVidRawFolder = new File(ObjectHub.getInstance().getProperties().getProperty("birdVidRawFolder"));
-        File birdVidFolder = new File(birdVidRawFolder.getParentFile(), "BirdVid");
-
+    public boolean perform() {
+        File birdVidFolder = new File(ObjectHub.getInstance().getProperties().getProperty("birdVidFolder"));
         if(!birdVidFolder.exists()){
             birdVidFolder.mkdir();
         }
 
-        Collection<File> rawVids = FileUtils.listFiles(birdVidRawFolder, new String[]{"raw", "mjpeg"}, false);
-        rawVids.forEach(rawVid -> {
-            File processedVid = null;
-            try {
-                processedVid = convertStreamFile(rawVid);
-                File processedVidCopy = new File(processedVid.getParentFile().getParentFile().getAbsolutePath() + File.separator + "BirdVid", "Vogel_" + LocalDateTime.now().toString().replace(":", "-") + ".mp4");
-                FileUtils.copyFile(processedVid, processedVidCopy);
-                processedVid.delete();
-                rawVid.delete();
+        File sentbirdVidFolder = new File(birdVidFolder, "sent");
+        if(!sentbirdVidFolder.exists()){
+            sentbirdVidFolder.mkdir();
+        }
 
-                ObjectHub.getInstance().getAllowedUsersMap().values().forEach(user -> {
-                    getBot().sendVideoFromURL(user, processedVidCopy.getAbsolutePath(), "(:");
-                });
-
-            } catch (IOException | InterruptedException e) {
-                logger.error(e);
-            }
+        Collection<File> vids = FileUtils.listFiles(birdVidFolder, new String[]{"mp4"}, false);
+        for(File vid: vids){
+            ObjectHub.getInstance().getAllowedUsersMap().values().forEach(user -> {
+                getBot().sendVideoFromURL(user, vid.getAbsolutePath(), "(:");
+                logger.info(vid.getName() + " sent to " + user.getName());
         });
+            try {
+                FileUtils.copyFile(vid, new File(sentbirdVidFolder, vid.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            vid.delete();
+        }
         return true;
     }
 
-    private File convertStreamFile(File rawFile) throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder();
 
-        //Install fucking ffmpeg to path variable first!!
-        processBuilder.command("ffmpeg", "-i", rawFile.getAbsolutePath(), "-f", "mp4", rawFile.getParent() + File.separator + rawFile.getName() + ".mp4");
-        processBuilder.redirectOutput();
-        processBuilder.redirectError();
-        Process convertProcess = processBuilder.start();
-
-        while(convertProcess.isAlive()) {
-            if(convertProcess.getInputStream().available() > 0) {
-                String inputStream = new String(convertProcess.getInputStream().readAllBytes());
-                System.out.println(inputStream);
-            }
-            if(convertProcess.getErrorStream().available() > 0) {
-                String errorStream = new String(convertProcess.getErrorStream().readAllBytes());
-                System.out.println(errorStream);
-            }
-        }
-
-        return new File(rawFile.getParent(), rawFile.getName() + ".mp4");
-
-
-
-
-       /* FFmpeg fFmpeg = new FFmpeg(rawFile.getAbsolutePath());
-
-        FFmpegBuilder fFmpegBuilder = new FFmpegBuilder()
-                .setInput(rawFile.getName())
-                .addOutput(rawFile.getName() + ".mp4")
-                .setFormat("mp4")
-                .setTargetSize(rawFile.getTotalSpace())
-                .setVideoCodec("libx264")
-                .setStrict(FFmpegBuilder.Strict.EXPERIMENTAL)
-                .done();
-
-        FFmpegExecutor fFmpegExecutor = new FFmpegExecutor(fFmpeg);
-        FFmpegJob fFmpegJob = fFmpegExecutor.createTwoPassJob(fFmpegBuilder);
-
-        while(fFmpegJob.getState() != FFmpegJob.State.FINISHED){
-            if(fFmpegJob.getState() == FFmpegJob.State.FAILED){
-                break;
-            }
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                logger.error(e);
-            }
-        }
-        */
-    }
 }

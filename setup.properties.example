@@ -20,4 +20,4 @@ projectFolderOnHost=
 alternativePathToArchive=
 //Path to remote folder, seen from local system. Will be replaced with localpath when fetching docs in GUI.
 pathToProjectFolder=
-birdVidRawFolder=
+birdVidFolder=
