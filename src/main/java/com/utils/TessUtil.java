@@ -78,8 +78,9 @@ public class TessUtil {
         try {
             String result = tesseract.doOCR(inputfile);
             document = new Image(result, inputfile, DBUtil.countDocuments("Documents", "") );
-            String date = getFirstDate(result);
-            date = date == null ? LocalDate.now().toString() : date;
+
+            DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
+            String date = LocalDate.now().format(germanFormatter);
             document.setDate(date);
             document.setUser(userID);
             File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), document.getOriginalFileName());
@@ -87,7 +88,6 @@ public class TessUtil {
                 FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
             }
             document.setOriginFile(newOriginalFilePath);
-            document.setDate(getFirstDate(document.getContent()));
 
             DBUtil.insertDocumentToDB(document);
 
