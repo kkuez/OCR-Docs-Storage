@@ -1,14 +1,17 @@
 package com;
 
 import com.controller.StartApplication;
-import com.telegram.Bot;
-
 import com.network.ListenerThread;
+import com.telegram.Bot;
 import javafx.application.Application;
-import org.apache.log4j.*;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,34 +36,40 @@ public class Main {
             if(s.equals("-bot")){
                 Bot bot = null;
                 while(bot == null){
-                    try {
-                        bot = activateTGBot(null);
-                        ListenerThread listenerThread = new ListenerThread(bot);
-                        listenerThread.start();
-                    } catch (TelegramApiRequestException e) {
-                        logger.error("Couldnt start bot", e);
-                        System.exit(2);
-                    }
+                    bot = activateTGBot(null);
+                    ListenerThread listenerThread = new ListenerThread(bot);
+                    listenerThread.start();
                 }
             }
         }
     }
 
-    private static Bot activateTGBot(Bot inputBotOrNull) throws TelegramApiRequestException {
+    private static Bot activateTGBot(Bot inputBotOrNull) {
         Bot bot = null;
-        try {
+        bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
+        ObjectHub.getInstance().setBot(bot);
+        ObjectHub.getInstance().initLater();
+        BotSession botSession = null;
+        while(botSession == null) {
             ApiContextInitializer.init();
-            TelegramBotsApi telegramBotApi = new TelegramBotsApi();
-            bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
-            ObjectHub.getInstance().setBot(bot);
-            ObjectHub.getInstance().initLater();
-            telegramBotApi.registerBot(bot);
-        } catch (TelegramApiRequestException e) {
-            logger.error("Failed activating bot", e);
-            throw e;
+            try {
+                TelegramBotsApi telegramBotApi = new TelegramBotsApi();
+                botSession = telegramBotApi.registerBot(bot);
+            } catch (TelegramApiRequestException e) {
+                logger.error("Failed registering bot.\nTrying again in 30 seconds...", e);
+                pause(30);
+            }
         }
         logger.info("System: Activated Bot");
         return bot;
+    }
+
+    private static void pause(int seconds) {
+        try {
+            Thread.sleep((seconds * 1000));
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private static String getLogFile(){
@@ -109,7 +118,7 @@ public class Main {
         try {
             logFileAppender = new FileAppender(layout, getLogFile(), true);
         } catch (IOException e) {
-            logger.error("Failed activating bot", e);
+            logger.error("Failed initializing logger", e);
             System.exit(2);
         }
         logger.addAppender(logFileAppender);
