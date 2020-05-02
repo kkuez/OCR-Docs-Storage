@@ -45,13 +45,14 @@ public class Main {
     }
 
     private static Bot activateTGBot(Bot inputBotOrNull) {
+        System.out.println("Trying to initialize Telegram-Bot...");
+        ApiContextInitializer.init();
         Bot bot = null;
         bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
         ObjectHub.getInstance().setBot(bot);
         ObjectHub.getInstance().initLater();
         BotSession botSession = null;
         while(botSession == null) {
-            ApiContextInitializer.init();
             try {
                 TelegramBotsApi telegramBotApi = new TelegramBotsApi();
                 botSession = telegramBotApi.registerBot(bot);
