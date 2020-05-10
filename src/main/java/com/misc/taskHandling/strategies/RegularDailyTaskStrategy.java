@@ -22,7 +22,7 @@ public class RegularDailyTaskStrategy extends RegularTaskStrategy {
 
     @Override
     public boolean timeIsNow(LocalDateTime localDateTime) {
-        return localDateTime.equals(LocalDateTime.of(LocalDate.now(), LocalTime.of(hour, min)));
+        return localDateTime.equals(getTime());
     }
 
     @Override
@@ -41,7 +41,7 @@ public class RegularDailyTaskStrategy extends RegularTaskStrategy {
 
     @Override
     public LocalDateTime getTime() {
-        return null;
+        return LocalDateTime.of(LocalDate.now(), LocalTime.of(hour, min));
     }
 
     @Override

@@ -7,6 +7,9 @@ import org.apache.log4j.Logger;
 import java.util.concurrent.TimeUnit;
 
 public abstract class RegularTaskStrategy implements TaskStrategy {
+
+    Logger LOGGER = Logger.getLogger(RegularTaskStrategy.class);
+
     int min = 0;
 
     int hour = 0;
@@ -17,7 +20,7 @@ public abstract class RegularTaskStrategy implements TaskStrategy {
 
     Task task;
 
-    private static Logger logger = Main.getLogger();
+    public Logger logger = Main.getLogger();
 
     public RegularTaskStrategy(){
     }
@@ -26,6 +29,11 @@ public abstract class RegularTaskStrategy implements TaskStrategy {
     public abstract String getType();
 
     public abstract TimeUnit getExecutionTimeUnit();
+
+    public void delete(String taskName) {
+        //TODO
+        Logger.getLogger("Deletion of regular tasks not supported... yet :)");
+    };
 
     //GETTER SETTER
 

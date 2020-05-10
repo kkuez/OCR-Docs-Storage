@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RegularMinutelyTaskStrategy extends RegularTaskStrategy {
 
-    public RegularMinutelyTaskStrategy(Task task){
+    public RegularMinutelyTaskStrategy(Task task) {
         this.task = task;
     }
 
@@ -31,21 +31,16 @@ public class RegularMinutelyTaskStrategy extends RegularTaskStrategy {
 
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() +"')";
+        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "')";
     }
 
     @Override
     public LocalDateTime getTime() {
-        return null;
+        return LocalDateTime.now();
     }
 
     @Override
     public TimeUnit getExecutionTimeUnit() {
         return null;
-    }
-
-    @Override
-    public void delete(String taskName){
-
     }
 }

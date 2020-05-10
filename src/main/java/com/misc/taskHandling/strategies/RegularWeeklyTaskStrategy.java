@@ -2,6 +2,7 @@ package com.misc.taskHandling.strategies;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class RegularWeeklyTaskStrategy extends RegularTaskStrategy {
     @Override
@@ -22,7 +23,9 @@ public class RegularWeeklyTaskStrategy extends RegularTaskStrategy {
 
     @Override
     public LocalDateTime getTime() {
-        return null;
+        //TODO
+        logger.info("Get time of weekly not supported yet :(");
+        return LocalDateTime.now();
     }
 
     @Override

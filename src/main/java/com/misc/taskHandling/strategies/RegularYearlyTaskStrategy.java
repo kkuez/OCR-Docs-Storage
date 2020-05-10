@@ -23,7 +23,7 @@ public class RegularYearlyTaskStrategy extends RegularTaskStrategy {
 
     @Override
     public boolean timeIsNow(LocalDateTime localDateTime) {
-        return localDateTime.equals(LocalDateTime.of(LocalDate.of(LocalDate.now().getYear(), month, day), LocalTime.of(hour, min)));
+        return localDateTime.equals(getTime());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class RegularYearlyTaskStrategy extends RegularTaskStrategy {
 
     @Override
     public LocalDateTime getTime() {
-        return null;
+        return LocalDateTime.of(LocalDate.of(LocalDate.now().getYear(), month, day), LocalTime.of(hour, min));
     }
 
     @Override

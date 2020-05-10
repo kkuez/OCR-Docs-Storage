@@ -1,11 +1,9 @@
 package com.misc.taskHandling;
 
-import com.misc.taskHandling.strategies.OneTimeTaskStrategy;
 import com.misc.taskHandling.strategies.SimpleCalendarOneTimeStrategy;
 import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.Future;
