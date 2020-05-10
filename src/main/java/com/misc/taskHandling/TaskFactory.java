@@ -32,9 +32,6 @@ public class TaskFactory {
             case "Task":
                 task = new Task(userList, bot, rs.getString("name"));
                 break;
-            case "BirdVidTask":
-                task = new BirdVidTask(userList, bot, rs.getString("name"));
-                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + taskType);
         }
