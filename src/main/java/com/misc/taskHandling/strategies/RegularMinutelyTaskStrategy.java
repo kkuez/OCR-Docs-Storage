@@ -12,8 +12,8 @@ public class RegularMinutelyTaskStrategy extends RegularTaskStrategy {
     }
 
     @Override
-    public String getType() {
-        return "RegularMinutelyTaskStrategy";
+    public StrategyType getType() {
+        return StrategyType.MINUTELY;
     }
 
     @Override

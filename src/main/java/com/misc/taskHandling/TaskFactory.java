@@ -72,17 +72,17 @@ public class TaskFactory {
 
     public static StrategyType getStrategyTypeOrNull(String taskType) {
         switch (taskType){
-            case "SimpleCalendarOneTimeStrategy":
+            case "SIMPLECALENDAR_ONETIME":
                 return StrategyType.SIMPLECALENDAR_ONETIME;
-            case "RegularMinutelyTaskStrategy":
+            case "MINUTELY":
                 return StrategyType.MINUTELY;
-            case "RegularDailyTaskStrategy":
+            case "DAILY":
                 return StrategyType.DAILY;
-            case "RegularMonthlyTaskStrategy":
+            case "MONTHLY":
                 return StrategyType.MONTHLY;
-            case "RegularYearlyTaskStrategy":
+            case "YEARLY":
                 return StrategyType.YEARLY;
-            case "RegularWeekTaskStrategy":
+            case "WEEKLY":
                 return StrategyType.WEEKLY;
             default:
                 return null;

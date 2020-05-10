@@ -16,8 +16,8 @@ public class RegularDailyTaskStrategy extends RegularTaskStrategy {
     }
 
     @Override
-    public String getType() {
-        return "RegularDailyTaskStrategy";
+    public StrategyType getType() {
+        return StrategyType.DAILY;
     }
 
     @Override

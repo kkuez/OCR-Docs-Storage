@@ -17,8 +17,8 @@ public class RegularYearlyTaskStrategy extends RegularTaskStrategy {
         this.month = month;
     }
     @Override
-    public String getType() {
-        return "RegularYearlyTaskStrategy";
+    public StrategyType getType() {
+        return StrategyType.YEARLY;
     }
 
     @Override

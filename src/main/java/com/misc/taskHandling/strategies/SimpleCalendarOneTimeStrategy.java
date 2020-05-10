@@ -37,10 +37,9 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeTaskStrategy {
         return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + task.getName() + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() +"')";
     }
 
-
     @Override
-    public String getType() {
-        return "SimpleCalendarOneTimeStrategy";
+    public StrategyType getType() {
+        return StrategyType.SIMPLECALENDAR_ONETIME;
     }
 
     public LocalDateTime getTime() {

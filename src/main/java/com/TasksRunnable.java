@@ -37,6 +37,9 @@ public class TasksRunnable implements Runnable {
                         if(!(task.getTaskStrategy() instanceof RegularTaskStrategy)) {
                             task.delete();
                             DBUtil.removeTask(task);
+                        } else {
+                            //TODO der user wird NICHT benachrichtigt, auch das Keyboard mit den Items verändert sich nicht!!
+                            logger.info("Deletion of regular tasks not supported yet :(");
                         }
                     }
                 }

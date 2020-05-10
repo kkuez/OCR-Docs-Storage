@@ -5,8 +5,6 @@ import com.misc.taskHandling.Task;
 import com.utils.DBUtil;
 import org.apache.log4j.Logger;
 
-import java.time.LocalDateTime;
-
 public abstract class OneTimeTaskStrategy implements TaskStrategy {
     private static Logger logger = Main.getLogger();
 
@@ -17,8 +15,8 @@ public abstract class OneTimeTaskStrategy implements TaskStrategy {
     public OneTimeTaskStrategy(){}
 
     @Override
-    public String getType() {
-        return "OneTimeTaskStrategy";
+    public StrategyType getType() {
+        return StrategyType.ONETIME;
     }
 
     public void delete(String taskName){

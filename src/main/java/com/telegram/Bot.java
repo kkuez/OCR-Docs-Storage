@@ -549,7 +549,7 @@ public class Bot extends TelegramLongPollingBot {
             try {
                execute(editMessageText);
             } catch (TelegramApiException e) {
-                if(e.getMessage().equals("Error editing message reply markup")){
+                if(e.getMessage().equals("Error editing message reply markup") || e.getMessage().contains("Error editing message text")){
                     logger.info("Couldn't change ReplyMarkup for 1 message.");
                     return message;
                 }

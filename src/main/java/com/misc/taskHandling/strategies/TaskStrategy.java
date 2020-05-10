@@ -6,7 +6,7 @@ import com.utils.DBUtil;
 import java.time.LocalDateTime;
 
 public interface TaskStrategy {
-     String getType();
+     StrategyType getType();
 
      boolean timeIsNow(LocalDateTime localDateTime);
 

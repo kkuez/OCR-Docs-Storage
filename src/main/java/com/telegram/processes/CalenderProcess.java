@@ -314,13 +314,13 @@ public class CalenderProcess extends Process {
                  messageOfTasks.append("Am *").append(germanDate).append(" Uhr*:\n");
             }else{
                 switch (task.getTaskStrategy().getType()){
-                    case "RegularDailyTaskStrategy":
+                    case DAILY:
                         messageOfTasks.append("*Täglich*:\n");
                         break;
-                    case "RegularMonthlyTaskStrategy":
+                    case MONTHLY:
                         messageOfTasks.append("*Monatlich, jeden ").append(((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay()).append(".*:\n");
                         break;
-                    case "RegularYearlyTaskStrategy":
+                    case YEARLY:
                         messageOfTasks.append("*Jährlich, jeden ").append(TimeUtil.getMonthMapIntKeys().get(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth())).append(" am ").append(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay()).append(".*:\n");
                         break;
                 }

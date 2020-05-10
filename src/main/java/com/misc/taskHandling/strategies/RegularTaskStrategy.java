@@ -25,9 +25,6 @@ public abstract class RegularTaskStrategy implements TaskStrategy {
     public RegularTaskStrategy(){
     }
 
-    @Override
-    public abstract String getType();
-
     public abstract TimeUnit getExecutionTimeUnit();
 
     public void delete(String taskName) {

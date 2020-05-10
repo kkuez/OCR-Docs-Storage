@@ -2,12 +2,11 @@ package com.misc.taskHandling.strategies;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public class RegularWeeklyTaskStrategy extends RegularTaskStrategy {
     @Override
-    public String getType() {
-        return null;
+    public StrategyType getType() {
+        return StrategyType.WEEKLY;
     }
 
     @Override
