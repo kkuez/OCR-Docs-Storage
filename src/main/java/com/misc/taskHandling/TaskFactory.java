@@ -17,8 +17,11 @@ public class TaskFactory {
     private static Map<Integer, User> allowedUsersMap = ObjectHub.getInstance().getAllowedUsersMap();
     private static Bot bot = ObjectHub.getInstance().getBot();
 
+    private TaskFactory() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Task getTask(ResultSet rs) throws SQLException {
-        String strategyType = rs.getString("strategyType");
         List<User> userList = new ArrayList<>();
         if(rs.getString("user").equals("ALL")){
             userList.addAll(allowedUsersMap.values());
@@ -28,36 +31,61 @@ public class TaskFactory {
 
         Task task;
         String taskType = rs.getString("taskType");
-        switch (taskType){
-            case "Task":
-                task = new Task(userList, bot, rs.getString("name"));
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + taskType);
+        if ("Task".equals(taskType)) {
+            task = new Task(userList, bot, rs.getString("name"));
+        } else {
+            throw new IllegalStateException("Unexpected value: " + taskType);
         }
 
         TaskStrategy taskStrategy = null;
+
+        String strategyTypeString = rs.getString("strategyType");
+        StrategyType strategyType = getStrategyTypeOrNull(strategyTypeString);
+        if(strategyType == null) {
+            throw new RuntimeException("Couldnt parse StrategyType from DB: " + strategyTypeString);
+        }
+
         switch (strategyType){
-            case "SimpleCalendarOneTimeStrategy":
+            case SIMPLECALENDAR_ONETIME:
                 LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
                 taskStrategy = new SimpleCalendarOneTimeStrategy(task, time);
                 task.setTaskStrategy(taskStrategy);
                 break;
-            case "RegularMinutelyTaskStrategy":
+            case MINUTELY:
                 taskStrategy = new RegularMinutelyTaskStrategy(task);
                 break;
-            case "RegularDailyTaskStrategy":
+            case DAILY:
                 taskStrategy = new RegularDailyTaskStrategy(task);
                 break;
-            case "RegularMonthlyTaskStrategy":
+            case MONTHLY:
                 taskStrategy = new RegularMonthlyTaskStrategy(task, rs.getInt("day"));
                 break;
-            case "RegularYearlyTaskStrategy":
+            case YEARLY:
                 taskStrategy = new RegularYearlyTaskStrategy(task, rs.getInt("day"), rs.getInt("month"));
                 break;
+            default:
+                throw new RuntimeException("Couldnt parse StrategyType from DB: " + strategyTypeString);
         }
         task.setTaskStrategy(taskStrategy);
         return task;
     }
 
+    public static StrategyType getStrategyTypeOrNull(String taskType) {
+        switch (taskType){
+            case "SimpleCalendarOneTimeStrategy":
+                return StrategyType.SIMPLECALENDAR_ONETIME;
+            case "RegularMinutelyTaskStrategy":
+                return StrategyType.MINUTELY;
+            case "RegularDailyTaskStrategy":
+                return StrategyType.DAILY;
+            case "RegularMonthlyTaskStrategy":
+                return StrategyType.MONTHLY;
+            case "RegularYearlyTaskStrategy":
+                return StrategyType.YEARLY;
+            case "RegularWeekTaskStrategy":
+                return StrategyType.WEEKLY;
+            default:
+                return null;
+        }
+    }
 }
