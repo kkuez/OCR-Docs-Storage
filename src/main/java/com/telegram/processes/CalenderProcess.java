@@ -112,6 +112,9 @@ public class CalenderProcess extends Process {
                 case "deleteTask":
                    message = processDeleteTask(update, commandValue);
                     break;
+                case "-": //In case a faulty day was chosen by user
+                    getBot().sendAnswerCallbackQuery("Ungültiger Tag", false, update.getCallbackQuery());
+                    break;
                 default:
                     task.setName(commandValue[0]);
                     switch (type){
@@ -239,6 +242,10 @@ public class CalenderProcess extends Process {
     private Message processChooseDay(Update update, String[] commandValue) throws TelegramApiException {
         Message message = null;
         String question = "Zu welcher Stunde?";
+        if(commandValue[1].equals("-")) {
+            getBot().sendAnswerCallbackQuery("Ungültiger Tag", false, update.getCallbackQuery());
+            return null;
+        }
         day = Integer.parseInt(commandValue[1]);
         if(type.equals("oneTimeWithTime")){
             try {

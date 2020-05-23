@@ -134,7 +134,7 @@ public class MainController extends SingleDocumentController {
 
     void process(Set<String> tagSet) {
         ObjectHub.getInstance().getExecutorService().submit(() -> {
-            Set<Document> documentSet = TessUtil.processFolder(new File(inputPathLabel.getText()), null,mainTableView,
+            Set<Document> documentSet = TessUtil.processFolder(mainTableView,
                     new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                     new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
                             new PropertyValueFactory<Document, String>("date"),

@@ -4,6 +4,7 @@ import com.Main;
 import com.utils.DBUtil;
 
 import com.utils.TimeUtil;
+import org.apache.commons.collections.OrderedMap;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -11,9 +12,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class KeyboardFactory {
     private static Logger logger = Main.getLogger();
@@ -144,28 +146,49 @@ public class KeyboardFactory {
 
     public static List<List<InlineKeyboardButton>> createInlineKeyboardForYearMonth(int year, int month){
         List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
-        List<Integer> numberOfDays = TimeUtil.getDaysInMonthOfYear(year).get(month);
+        List<Integer> daysInMonth = TimeUtil.getDaysInMonthOfYear(year).get(month);
         List<String> daysInLastRowList = new ArrayList<>();
-        for(Integer dayNumber: numberOfDays){
+        for(Integer dayNumber: daysInMonth){
             if(dayNumber > 28){
                 daysInLastRowList.add(dayNumber + "");
             }
         }
-        List<String> firstRowKeys = List.of("1", "2", "3", "4", "5", "6", "7");
-        List<String> firstRowValues = makeValueList(firstRowKeys, "chooseDay");
-        List<String> secondRowKeys = List.of("8", "9", "10", "11", "12", "13", "14");
-        List<String> secondRowValues = makeValueList(secondRowKeys, "chooseDay");
-        List<String> thirdRowKeys = List.of("15", "16", "17", "18", "19", "20", "21");
-        List<String> thirdRowValues = makeValueList(thirdRowKeys, "chooseDay");
-        List<String> fourthRowKeys = List.of("22", "23", "24", "25", "26", "27", "28");
-        List<String> fourthRowValues = makeValueList(fourthRowKeys, "chooseDay");
-        List<String> fifthRowKeys = daysInLastRowList;
-        List<String> fifthRowValues = makeValueList(fifthRowKeys, "chooseDay");
-        endKeyboard.add(createInlineKeyboardRow(firstRowKeys, firstRowValues));
-        endKeyboard.add(createInlineKeyboardRow(secondRowKeys, secondRowValues));
-        endKeyboard.add(createInlineKeyboardRow(thirdRowKeys, thirdRowValues));
-        endKeyboard.add(createInlineKeyboardRow(fourthRowKeys, fourthRowValues));
-        endKeyboard.add(createInlineKeyboardRow(fifthRowKeys, fifthRowValues));
+
+        DayOfWeek firstDayOfWeek = LocalDate.of(year, month, 1).getDayOfWeek();
+
+        List<String> rowKeys = new ArrayList<>(7);
+        for(DayOfWeek dayOfWeek: DayOfWeek.values()) {
+            rowKeys.add("-");
+            if(firstDayOfWeek.equals(dayOfWeek)) {
+                break;
+            }
+        }
+
+        while(rowKeys.size() != 7) {
+            rowKeys.add(daysInMonth.get(0) + "");
+            daysInMonth.remove(0);
+
+        }
+
+        List<String> rowValues = makeValueList(rowKeys, "chooseDay");
+        endKeyboard.add(createInlineKeyboardRow(rowKeys, rowValues));
+
+
+        while(daysInMonth.size() > 0) {
+        rowKeys = new ArrayList<>(7);
+        rowValues = new ArrayList<>(7);
+
+        while(rowKeys.size() != 7) {
+                String dayInMonth = daysInMonth.size() > 0 ? daysInMonth.get(0) + "" : "-";
+                rowKeys.add(dayInMonth);
+                if(daysInMonth.size() > 0) {
+                    daysInMonth.remove(0);
+                }
+            }
+            rowValues = makeValueList(rowKeys, "chooseDay");
+            endKeyboard.add(createInlineKeyboardRow(rowKeys, rowValues));
+        }
+
         return endKeyboard;
     }
 
@@ -204,7 +227,7 @@ public class KeyboardFactory {
     private static List<String> makeValueList(List<String> keyList, String prefix){
 List<String> valueList = new ArrayList<>();
 for (String key: keyList){
-    valueList.add(prefix + key);
+    valueList.add(key == "-" ? prefix + "-" : prefix + key);
 }
 return valueList;
 
