@@ -158,10 +158,10 @@ public class KeyboardFactory {
 
         List<String> rowKeys = new ArrayList<>(7);
         for(DayOfWeek dayOfWeek: DayOfWeek.values()) {
-            rowKeys.add("-");
             if(firstDayOfWeek.equals(dayOfWeek)) {
                 break;
             }
+            rowKeys.add("-");
         }
 
         while(rowKeys.size() != 7) {
@@ -178,7 +178,7 @@ public class KeyboardFactory {
         rowKeys = new ArrayList<>(7);
         rowValues = new ArrayList<>(7);
 
-        while(rowKeys.size() != 7) {
+            while(rowKeys.size() != 7) {
                 String dayInMonth = daysInMonth.size() > 0 ? daysInMonth.get(0) + "" : "-";
                 rowKeys.add(dayInMonth);
                 if(daysInMonth.size() > 0) {
