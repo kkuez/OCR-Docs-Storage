@@ -16,6 +16,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -33,7 +34,7 @@ public class TessUtil {
 
     private static Pattern numberPattern = Pattern.compile("((\\d\\d|\\d)(,|\\.)\\d\\d)");
 
-    public static Set<Document> processFolder(File folder, Bot bot, TableView tableView, TableColumn[] tableColumns,
+    public static Set<Document> processFolder(TableView tableView, TableColumn[] tableColumns,
                                               PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter) {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
                 new String[] { "pdf", "PDF", "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
@@ -85,7 +86,12 @@ public class TessUtil {
             document.setUser(userID);
             File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), document.getOriginalFileName());
             if(!newOriginalFilePath.exists()) {
-                FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
+                try {
+                    File originFilePath = document.getOriginFile();
+                    FileUtils.copyFile(originFilePath, newOriginalFilePath);
+                } catch (IOException e) {
+                    logger.error("File couldnt be copied (" + newOriginalFilePath + " -> " + newOriginalFilePath + ")", e);
+                }
             }
             document.setOriginFile(newOriginalFilePath);
 
@@ -100,8 +106,6 @@ public class TessUtil {
 
             ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {
-            logger.error(null, e);
-        } catch (Exception e) {
             logger.error(null, e);
         }
         return document;
@@ -141,6 +145,7 @@ public class TessUtil {
         }
         return date;
     }
+
     public static float getLastNumber(String content){
 
         Matcher matcher = numberPattern.matcher(content);
@@ -149,14 +154,16 @@ public class TessUtil {
         while(matcher.find()){
             numberList.add(matcher.group());
         }
-        float lastNumer = 0;
-        try{
-            lastNumer = Float.parseFloat(numberList.get(numberList.size() - 1).replace(',','.'));
-        }catch (Exception e){
-            logger.error(numberList.get(numberList.size() - 1).replace(',','.'), e);
+        float lastNumber = 0;
+        if(!numberList.isEmpty()) {
+            String numberString = numberList.get(numberList.size() - 1);
+            try {
+                lastNumber = Float.parseFloat(numberString.replace(',', '.'));
+            } catch (Exception e) {
+                logger.error(numberString.replace(',', '.'), e);
+            }
         }
-
-        return lastNumer;
+        return lastNumber;
     }
 
     private static Tesseract getTesseract() {
