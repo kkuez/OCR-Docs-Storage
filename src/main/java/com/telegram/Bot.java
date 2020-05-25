@@ -699,7 +699,7 @@ public class Bot extends TelegramLongPollingBot {
         try {
             messageToReturn = execute(sendMessage);
         } catch (TelegramApiException e) {
-            logger.error("Failed to send message.", e);
+            logger.error("Failed to send message. (ChatId: )" + chatID != null ? chatID : "unknown.\n Message: " + s, e);
         }
         return messageToReturn;
     }
