@@ -17,7 +17,7 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeTaskStrategy {
 
     @Override
     public boolean timeIsNow(LocalDateTime localDateTime) {
-            return time.equals(localDateTime);
+            return time.equals(localDateTime) || time.isBefore(localDateTime);
     }
 
     @Override

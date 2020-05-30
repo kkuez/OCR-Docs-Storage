@@ -7,6 +7,7 @@ import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
 import org.apache.log4j.Logger;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,11 +35,12 @@ public class Task implements Comparable{
     }
 
     public boolean perform(){
+        Message message = null;
         for(User user : getUserList()){
             String userName = user.getName();
-            getBot().sendSimpleMsg("Hey " + userName + ",\n " + getName(), user.getId(), KeyboardFactory.KeyBoardType.NoButtons, true);
+            message = getBot().sendSimpleMsg("Hey " + userName + ",\n " + getName(), user.getId(), KeyboardFactory.KeyBoardType.NoButtons, true);
         }
-        return true;
+        return message != null;
     }
 
     public boolean timeIsNow(LocalDateTime localDateTime) {
