@@ -24,9 +24,8 @@ public class CheckConnectionTask extends Task {
         this.logger = Main.getLogger();
         if(!ObjectHub.getInstance().getProperties().getProperty("debug").equals("true")) {
             try {
-                if(checkWiringPiInstallation()) {
-                    logger.info("Wirpingpi found :)");
-                }
+                checkWiringPiInstallation();
+                logger.info("Wirpingpi found :)");
             } catch (IOException e) {
                 logger.info("WiringPi not installed :(");
                 logger.info("git clone https://github.com/WiringPi/WiringPi.git");
@@ -52,17 +51,13 @@ public class CheckConnectionTask extends Task {
         }
     }
 
-    private Boolean checkWiringPiInstallation() throws IOException {
+    private void checkWiringPiInstallation() throws IOException {
         ProcessBuilder pb = new ProcessBuilder();
         pb.command("gpio");
         pb.redirectErrorStream();
         pb.redirectOutput();
         pb.redirectInput();
         pb.start();
-
-        //TODO
-        //Return false so it will not be tried to be deleted x) Hack?
-        return false;
     }
 
     @Override
@@ -78,7 +73,9 @@ public class CheckConnectionTask extends Task {
                 setGPIO(0);
             }
         }
-        return googleUp;
+        //TODO
+        //Return false so it will not be tried to be deleted x) Hack?
+        return false;
     }
 
     private void setGPIO(int i) {
