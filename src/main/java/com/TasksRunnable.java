@@ -22,11 +22,14 @@ public class TasksRunnable implements Runnable {
 
     private Bot bot;
 
+    private CheckConnectionTask checkConnectionTask;
+
     private void loop() throws InterruptedException {
         loopActive = true;
 
         while (loopActive) {
             tasksToDo = DBUtil.getTasksFromDB(bot);
+            tasksToDo.add(checkConnectionTask);
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
                 localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
@@ -54,7 +57,7 @@ public class TasksRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            CheckConnectionTask checkConnectionTask = new CheckConnectionTask(bot);
+            checkConnectionTask = new CheckConnectionTask(bot);
             RegularMinutelyTaskStrategy checkConnectionTaskStrategy = new RegularMinutelyTaskStrategy(checkConnectionTask);
             checkConnectionTask.setTaskStrategy(checkConnectionTaskStrategy);
             loop();
