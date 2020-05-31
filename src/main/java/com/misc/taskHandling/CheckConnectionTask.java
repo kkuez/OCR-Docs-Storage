@@ -30,7 +30,8 @@ public class CheckConnectionTask extends Task {
             } catch (IOException e) {
                 logger.info("WiringPi not installed :(");
                 logger.info("git clone https://github.com/WiringPi/WiringPi.git");
-                logger.info("Exit.");
+                logger.info("cd WiringPi");
+                logger.info("./build");
                 System.exit(2);
             }
             setupRPIGPIO();
