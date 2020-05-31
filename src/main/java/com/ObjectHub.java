@@ -50,7 +50,6 @@ public class ObjectHub {
 
     public void initLater(){
         Thread thread = new Thread(() -> {
-
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {

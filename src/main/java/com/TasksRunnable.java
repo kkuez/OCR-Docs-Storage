@@ -1,5 +1,7 @@
 package com;
 
+import com.misc.taskHandling.CheckConnectionTask;
+import com.misc.taskHandling.strategies.RegularMinutelyTaskStrategy;
 import com.misc.taskHandling.strategies.RegularTaskStrategy;
 import com.misc.taskHandling.Task;
 import com.telegram.Bot;
@@ -22,6 +24,7 @@ public class TasksRunnable implements Runnable {
 
     private void loop() throws InterruptedException {
         loopActive = true;
+
         while (loopActive) {
             tasksToDo = DBUtil.getTasksFromDB(bot);
             LocalDateTime localDateTimeNow;
@@ -51,6 +54,9 @@ public class TasksRunnable implements Runnable {
     @Override
     public void run() {
         try {
+            CheckConnectionTask checkConnectionTask = new CheckConnectionTask(bot);
+            RegularMinutelyTaskStrategy checkConnectionTaskStrategy = new RegularMinutelyTaskStrategy(checkConnectionTask);
+            checkConnectionTask.setTaskStrategy(checkConnectionTaskStrategy);
             loop();
         } catch (InterruptedException e) {
             logger.error("Couldn't run CalendarTasks.", e);
