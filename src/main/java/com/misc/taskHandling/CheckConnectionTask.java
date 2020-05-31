@@ -60,30 +60,25 @@ public class CheckConnectionTask extends Task {
         pb.redirectInput();
         pb.start();
 
-        return true;
+        //TODO
+        //Return false so it will not be tried to be deleted x) Hack?
+        return false;
     }
 
     @Override
     public boolean perform(){
         boolean googleUp = false;
-        boolean telegramBotApiUp = false;
         try {
             googleUp = InetAddress.getByName(GOOGLE_DNS).isReachable(1000);
-            telegramBotApiUp = InetAddress.getByName(TELEGRAMM_BOTAPI).isReachable(1000);
         } catch (IOException e) {
-            logger.error("Looking up DNS failed.", e);
+            if(!googleUp)  {
+                logger.info("Connection problem. Google: " + googleUp);
+                setGPIO(1);;
+            } else {
+                setGPIO(0);
+            }
         }
-
-        boolean connectSuccess = googleUp && telegramBotApiUp;
-        if(!connectSuccess)  {
-            logger.info("Connection problem. Google: " + googleUp + "TelegramBotApi: " + telegramBotApiUp);
-            setGPIO(1);;
-        } else {
-            setGPIO(0);
-        }
-
-
-        return connectSuccess;
+        return googleUp;
     }
 
     private void setGPIO(int i) {
