@@ -1,0 +1,3 @@
+use the scripts in "Replace NussBot Jar Script Templates"-Folder.
+Set pw in killNussbot.sh and restarNussbot.sh.
+eventually pathes have to be fixed to new installation in copynewJar.sh

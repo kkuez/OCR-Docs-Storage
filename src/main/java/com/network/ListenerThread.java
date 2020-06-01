@@ -65,4 +65,9 @@ public class ListenerThread extends Thread {
             }
         }
     }
+
+    private void remoteShutdown() {
+        logger.info("Performing remote shutdown...");
+        System.exit(0);
+    }
 }
