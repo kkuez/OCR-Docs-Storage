@@ -1,8 +1,8 @@
 package com;
 
 import com.misc.taskHandling.CheckConnectionTask;
-import com.misc.taskHandling.strategies.RegularMinutelyTaskStrategy;
-import com.misc.taskHandling.strategies.RegularTaskStrategy;
+import com.misc.taskHandling.strategies.RegularMinutelyExecutionStrategy;
+import com.misc.taskHandling.strategies.RegularExecutionStrategy;
 import com.misc.taskHandling.Task;
 import com.telegram.Bot;
 import com.utils.DBUtil;
@@ -40,12 +40,9 @@ public class TasksRunnable implements Runnable {
                         StringBuilder usersString = new StringBuilder();
                         task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
                         logger.info("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
-                        if(!(task.getTaskStrategy() instanceof RegularTaskStrategy)) {
+                        if(!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
                             task.delete();
                             DBUtil.removeTask(task);
-                        } else {
-                            //TODO der user wird NICHT benachrichtigt, auch das Keyboard mit den Items verändert sich nicht!!
-                            logger.info("Deletion of regular tasks not supported yet :(");
                         }
                     }
                 }
@@ -58,8 +55,8 @@ public class TasksRunnable implements Runnable {
     public void run() {
         try {
             checkConnectionTask = new CheckConnectionTask(bot);
-            RegularMinutelyTaskStrategy checkConnectionTaskStrategy = new RegularMinutelyTaskStrategy(checkConnectionTask);
-            checkConnectionTask.setTaskStrategy(checkConnectionTaskStrategy);
+            RegularMinutelyExecutionStrategy checkConnectionTaskStrategy = new RegularMinutelyExecutionStrategy(checkConnectionTask);
+            checkConnectionTask.setExecutionStrategy(checkConnectionTaskStrategy);
             loop();
         } catch (InterruptedException e) {
             logger.error("Couldn't run CalendarTasks.", e);

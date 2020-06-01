@@ -1,8 +1,8 @@
 package com.misc.taskHandling;
 
 import com.Main;
-import com.misc.taskHandling.strategies.OneTimeTaskStrategy;
-import com.misc.taskHandling.strategies.TaskStrategy;
+import com.misc.taskHandling.strategies.OneTimeExecutionStrategy;
+import com.misc.taskHandling.strategies.ExecutionStrategy;
 import com.objectTemplates.User;
 import com.telegram.Bot;
 import com.telegram.KeyboardFactory;
@@ -17,7 +17,7 @@ public class Task implements Comparable{
 
     private static Logger logger = Main.getLogger();
 
-    private TaskStrategy taskStrategy;
+    private ExecutionStrategy executionStrategy;
 
     private String name;
 
@@ -44,21 +44,21 @@ public class Task implements Comparable{
     }
 
     public boolean timeIsNow(LocalDateTime localDateTime) {
-        return taskStrategy.timeIsNow(localDateTime);
+        return executionStrategy.timeIsNow(localDateTime);
     }
 
     public String getInsertDBString(){
-        return taskStrategy.getInsertDBString();
+        return executionStrategy.getInsertDBString();
    }
 
     //GETTER SETTER
 
-    public TaskStrategy getTaskStrategy() {
-        return taskStrategy;
+    public ExecutionStrategy getExecutionStrategy() {
+        return executionStrategy;
     }
 
-    public void setTaskStrategy(TaskStrategy taskStrategy) {
-        this.taskStrategy = taskStrategy;
+    public void setExecutionStrategy(ExecutionStrategy executionStrategy) {
+        this.executionStrategy = executionStrategy;
     }
 
     public String getName() {
@@ -92,15 +92,15 @@ public class Task implements Comparable{
         if(!o.getClass().equals(this.getClass())){
             throw  new RuntimeException("Classes dont match!");
         }
-        if(!(this.getTaskStrategy() instanceof OneTimeTaskStrategy) || !(((Task)o).getTaskStrategy() instanceof OneTimeTaskStrategy)){
+        if(!(this.getExecutionStrategy() instanceof OneTimeExecutionStrategy) || !(((Task)o).getExecutionStrategy() instanceof OneTimeExecutionStrategy)){
             return 1;
         }
 
         Task oTask = (Task) o;
-        return getTaskStrategy().getTime().compareTo(oTask.getTaskStrategy().getTime());
+        return getExecutionStrategy().getTime().compareTo(oTask.getExecutionStrategy().getTime());
     }
 
     public void delete() {
-        taskStrategy.delete(getName());
+        executionStrategy.delete(getName());
     }
 }

@@ -18,7 +18,7 @@ public class PhotoTask extends Task {
         super(bot);
         this.user = user;
         this.photoFuture = future;
-        setTaskStrategy(new SimpleCalendarOneTimeStrategy(this, LocalDateTime.now().plusMinutes(3).withSecond(0).withNano(0)));
+        setExecutionStrategy(new SimpleCalendarOneTimeStrategy(this, LocalDateTime.now().plusMinutes(3).withSecond(0).withNano(0)));
     }
 
     @Override

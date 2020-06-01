@@ -6,9 +6,9 @@ import org.apache.log4j.Logger;
 
 import java.util.concurrent.TimeUnit;
 
-public abstract class RegularTaskStrategy implements TaskStrategy {
+public abstract class RegularExecutionStrategy implements ExecutionStrategy {
 
-    Logger LOGGER = Logger.getLogger(RegularTaskStrategy.class);
+    Logger LOGGER = Logger.getLogger(RegularExecutionStrategy.class);
 
     int min = 0;
 
@@ -22,7 +22,7 @@ public abstract class RegularTaskStrategy implements TaskStrategy {
 
     public Logger logger = Main.getLogger();
 
-    public RegularTaskStrategy(){
+    public RegularExecutionStrategy(){
     }
 
     public abstract TimeUnit getExecutionTimeUnit();

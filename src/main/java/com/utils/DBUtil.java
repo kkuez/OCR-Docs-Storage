@@ -120,11 +120,11 @@ public class DBUtil {
     }
 
     public static void removeTask(Task task){
-        int year = task.getTaskStrategy().getTime().getYear();
-        int month = task.getTaskStrategy().getTime().getMonth().getValue();
-        int day = task.getTaskStrategy().getTime().getDayOfMonth();
-        int hour = task.getTaskStrategy().getTime().getHour();
-        int minute = task.getTaskStrategy().getTime().getMinute();
+        int year = task.getExecutionStrategy().getTime().getYear();
+        int month = task.getExecutionStrategy().getTime().getMonth().getValue();
+        int day = task.getExecutionStrategy().getTime().getDayOfMonth();
+        int hour = task.getExecutionStrategy().getTime().getHour();
+        int minute = task.getExecutionStrategy().getTime().getMinute();
 
         executeSQL("delete from CalendarTasks where name='" + task.getName() + "' AND year=" + year + " AND month=" + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
     }

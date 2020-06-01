@@ -20,8 +20,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -312,23 +310,23 @@ public class CalenderProcess extends Process {
                 continue;
             }
             messageOfTasks.append("\n-----------------\n");
-             if(task.getTaskStrategy() instanceof OneTimeTaskStrategy) {
-                 LocalDateTime time = task.getTaskStrategy().getTime();
+             if(task.getExecutionStrategy() instanceof OneTimeExecutionStrategy) {
+                 LocalDateTime time = task.getExecutionStrategy().getTime();
                  String min = time.getMinute() == 0 ? "" : "." + time.getMinute();
                  String date = time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, "));
                  int hour = time.getHour();
                  String germanDate = date + hour + min;
                  messageOfTasks.append("Am *").append(germanDate).append(" Uhr*:\n");
             }else{
-                switch (task.getTaskStrategy().getType()){
+                switch (task.getExecutionStrategy().getType()){
                     case DAILY:
                         messageOfTasks.append("*Täglich*:\n");
                         break;
                     case MONTHLY:
-                        messageOfTasks.append("*Monatlich, jeden ").append(((RegularMonthlyTaskStrategy) task.getTaskStrategy()).getDay()).append(".*:\n");
+                        messageOfTasks.append("*Monatlich, jeden ").append(((RegularMonthlyExecutionStrategy) task.getExecutionStrategy()).getDay()).append(".*:\n");
                         break;
                     case YEARLY:
-                        messageOfTasks.append("*Jährlich, jeden ").append(TimeUtil.getMonthMapIntKeys().get(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getMonth())).append(" am ").append(((RegularYearlyTaskStrategy) task.getTaskStrategy()).getDay()).append(".*:\n");
+                        messageOfTasks.append("*Jährlich, jeden ").append(TimeUtil.getMonthMapIntKeys().get(((RegularYearlyExecutionStrategy) task.getExecutionStrategy()).getMonth())).append(" am ").append(((RegularYearlyExecutionStrategy) task.getExecutionStrategy()).getDay()).append(".*:\n");
                         break;
                 }
             }
@@ -396,16 +394,16 @@ public class CalenderProcess extends Process {
             case "oneTime":
             case "oneTimeWithTime":
                 LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
-                task.setTaskStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime));
+                task.setExecutionStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime));
                 return getBot().simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
             case "regularDaily":
-                task.setTaskStrategy(new RegularDailyTaskStrategy(task));
+                task.setExecutionStrategy(new RegularDailyExecutionStrategy(task));
                 break;
             case "regularMonthly":
-                task.setTaskStrategy(new RegularMonthlyTaskStrategy(task, day));
+                task.setExecutionStrategy(new RegularMonthlyExecutionStrategy(task, day));
                 break;
             case "regularYearly":
-                task.setTaskStrategy(new RegularYearlyTaskStrategy(task, day, month));
+                task.setExecutionStrategy(new RegularYearlyExecutionStrategy(task, day, month));
                 break;
         }
         return getBot().sendMsg("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser", false, true);

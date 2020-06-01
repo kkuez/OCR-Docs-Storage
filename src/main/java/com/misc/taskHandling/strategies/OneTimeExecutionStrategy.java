@@ -5,14 +5,14 @@ import com.misc.taskHandling.Task;
 import com.utils.DBUtil;
 import org.apache.log4j.Logger;
 
-public abstract class OneTimeTaskStrategy implements TaskStrategy {
+public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
     private static Logger logger = Main.getLogger();
 
     private String name;
 
     Task task;
 
-    public OneTimeTaskStrategy(){}
+    public OneTimeExecutionStrategy(){}
 
     @Override
     public StrategyType getType() {

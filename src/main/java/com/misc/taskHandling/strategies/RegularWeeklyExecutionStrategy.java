@@ -3,7 +3,7 @@ package com.misc.taskHandling.strategies;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-public class RegularWeeklyTaskStrategy extends RegularTaskStrategy {
+public class RegularWeeklyExecutionStrategy extends RegularExecutionStrategy {
     @Override
     public StrategyType getType() {
         return StrategyType.WEEKLY;

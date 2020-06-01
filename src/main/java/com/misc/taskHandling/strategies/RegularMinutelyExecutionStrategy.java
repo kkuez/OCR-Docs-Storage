@@ -5,9 +5,9 @@ import com.misc.taskHandling.Task;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-public class RegularMinutelyTaskStrategy extends RegularTaskStrategy {
+public class RegularMinutelyExecutionStrategy extends RegularExecutionStrategy {
 
-    public RegularMinutelyTaskStrategy(Task task) {
+    public RegularMinutelyExecutionStrategy(Task task) {
         this.task = task;
     }
 

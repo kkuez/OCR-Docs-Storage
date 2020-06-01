@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
-public class RegularDailyTaskStrategy extends RegularTaskStrategy {
+public class RegularDailyExecutionStrategy extends RegularExecutionStrategy {
 
-    public RegularDailyTaskStrategy(Task task){
+    public RegularDailyExecutionStrategy(Task task){
         this.task = task;
         min = 0;
         hour = 4;

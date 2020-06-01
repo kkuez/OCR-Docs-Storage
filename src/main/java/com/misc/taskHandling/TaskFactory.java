@@ -37,7 +37,7 @@ public class TaskFactory {
             throw new IllegalStateException("Unexpected value: " + taskType);
         }
 
-        TaskStrategy taskStrategy = null;
+        ExecutionStrategy executionStrategy = null;
 
         String strategyTypeString = rs.getString("strategyType");
         StrategyType strategyType = getStrategyTypeOrNull(strategyTypeString);
@@ -48,25 +48,25 @@ public class TaskFactory {
         switch (strategyType){
             case SIMPLECALENDAR_ONETIME:
                 LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
-                taskStrategy = new SimpleCalendarOneTimeStrategy(task, time);
-                task.setTaskStrategy(taskStrategy);
+                executionStrategy = new SimpleCalendarOneTimeStrategy(task, time);
+                task.setExecutionStrategy(executionStrategy);
                 break;
             case MINUTELY:
-                taskStrategy = new RegularMinutelyTaskStrategy(task);
+                executionStrategy = new RegularMinutelyExecutionStrategy(task);
                 break;
             case DAILY:
-                taskStrategy = new RegularDailyTaskStrategy(task);
+                executionStrategy = new RegularDailyExecutionStrategy(task);
                 break;
             case MONTHLY:
-                taskStrategy = new RegularMonthlyTaskStrategy(task, rs.getInt("day"));
+                executionStrategy = new RegularMonthlyExecutionStrategy(task, rs.getInt("day"));
                 break;
             case YEARLY:
-                taskStrategy = new RegularYearlyTaskStrategy(task, rs.getInt("day"), rs.getInt("month"));
+                executionStrategy = new RegularYearlyExecutionStrategy(task, rs.getInt("day"), rs.getInt("month"));
                 break;
             default:
                 throw new RuntimeException("Couldnt parse StrategyType from DB: " + strategyTypeString);
         }
-        task.setTaskStrategy(taskStrategy);
+        task.setExecutionStrategy(executionStrategy);
         return task;
     }
 

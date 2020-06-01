@@ -4,7 +4,7 @@ import com.misc.taskHandling.Task;
 
 import java.time.LocalDateTime;
 
-public class SimpleCalendarOneTimeStrategy extends OneTimeTaskStrategy {
+public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
     private Task task;
 

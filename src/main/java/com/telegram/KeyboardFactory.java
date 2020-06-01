@@ -223,13 +223,13 @@ public class KeyboardFactory {
         return endKeyboard;
     }
 
-//TODO die Methode überall implementieren
+    //TODO die Methode überall implementieren
     private static List<String> makeValueList(List<String> keyList, String prefix){
-List<String> valueList = new ArrayList<>();
-for (String key: keyList){
-    valueList.add(key == "-" ? prefix + "-" : prefix + key);
-}
-return valueList;
+        List<String> valueList = new ArrayList<>();
+        for (String key: keyList){
+            valueList.add(key == "-" ? prefix + "-" : prefix + key);
+        }
+    return valueList;
 
     }
 
