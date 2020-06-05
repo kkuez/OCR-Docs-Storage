@@ -1,6 +1,7 @@
 package com;
 
 import com.controller.StartApplication;
+import com.misc.taskHandling.CheckConnectionTask;
 import com.network.ListenerThread;
 import com.telegram.Bot;
 import javafx.application.Application;
@@ -56,8 +57,18 @@ public class Main {
             try {
                 TelegramBotsApi telegramBotApi = new TelegramBotsApi();
                 botSession = telegramBotApi.registerBot(bot);
+                try {
+                    CheckConnectionTask.setGPIO(0);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             } catch (TelegramApiRequestException e) {
                 logger.error("Failed registering bot.\nTrying again in 30 seconds...", e);
+                try {
+                    CheckConnectionTask.setGPIO(1);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
                 pause(30);
             }
         }
@@ -101,6 +112,7 @@ public class Main {
                 }
                 System.out.println("Logfile: " + logFile.getAbsolutePath());
             } catch (IOException e) {
+                //No Logger since this is the algorythm to initilialize logger.
                 e.printStackTrace();
                 System.exit(2);
             }catch (RuntimeException ex) {

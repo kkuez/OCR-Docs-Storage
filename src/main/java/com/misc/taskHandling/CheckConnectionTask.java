@@ -15,14 +15,14 @@ public class CheckConnectionTask extends Task {
 
     private final String TELEGRAMM_BOTAPI = "https://api.telegram.org";
 
-    private final int PIN = 25;
+    private final static int PIN = 25;
 
     private final Logger logger;
 
     public CheckConnectionTask(Bot bot) {
         super(bot);
         this.logger = Main.getLogger();
-        if(!ObjectHub.getInstance().getProperties().getProperty("debug").equals("true")) {
+        if (!ObjectHub.getInstance().getProperties().getProperty("debug").equals("true")) {
             try {
                 checkWiringPiInstallation();
                 logger.info("Wirpingpi found :)");
@@ -61,34 +61,30 @@ public class CheckConnectionTask extends Task {
     }
 
     @Override
-    public boolean perform(){
+    public boolean perform() {
         boolean googleUp = false;
         try {
             googleUp = InetAddress.getByName(GOOGLE_DNS).isReachable(1000);
-        } catch (IOException e) {
-            if(!googleUp)  {
+            if (!googleUp) {
                 logger.info("Connection problem. Google: " + googleUp);
-                setGPIO(1);;
+                setGPIO(1);
             } else {
                 setGPIO(0);
             }
+        } catch (IOException e) {
+            logger.error("Could not set Pin.", e);
         }
         //TODO
         //Return false so it will not be tried to be deleted x) Hack?
         return false;
     }
 
-    private void setGPIO(int i) {
+    public static void setGPIO(int i) throws IOException {
         ProcessBuilder setpinOutPB = new ProcessBuilder();
         setpinOutPB.command("gpio", "write", PIN + "", i + "");
         setpinOutPB.redirectErrorStream();
         setpinOutPB.redirectOutput();
         setpinOutPB.redirectInput();
-        try {
-            setpinOutPB.start();
-        } catch (IOException e) {
-            logger.info("Couldnt set pin output");
-            System.exit(2);
-        }
+        setpinOutPB.start();
     }
 }
