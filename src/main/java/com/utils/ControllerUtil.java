@@ -1,7 +1,7 @@
 package com.utils;
 
 import com.Main;
-import com.controller.strategies.ControllerStrategy;
+import com.gui.controller.strategies.ControllerStrategy;
 import com.objectTemplates.Document;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controller.AddTags">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gui.controller.AddTags">
    <children>
       <Label fx:id="newTagLabel" alignment="TOP_LEFT" layoutX="116.0" layoutY="137.0" prefHeight="127.0" prefWidth="337.0" text="Noch keine Tags..." />
       <Button fx:id="addButton" layoutX="421.0" layoutY="59.0" mnemonicParsing="false" onAction="#addTag" text="Hinzufügen" />

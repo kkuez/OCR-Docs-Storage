@@ -1,9 +1,8 @@
 package com;
 
-import com.controller.StartApplication;
-import com.misc.taskHandling.CheckConnectionTask;
-import com.network.ListenerThread;
-import com.telegram.Bot;
+import com.gui.controller.StartApplication;
+import com.backend.network.ListenerThread;
+import com.bot.telegram.Bot;
 import javafx.application.Application;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;

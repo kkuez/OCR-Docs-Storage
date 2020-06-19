@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controller.SelectHTMLOrImageController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gui.controller.SelectHTMLOrImageController">
     <children>
         <Button fx:id="hTMLButton" layoutX="26.0" layoutY="31.0" mnemonicParsing="false" onAction="#showHTML"
                 text="HTML"/>

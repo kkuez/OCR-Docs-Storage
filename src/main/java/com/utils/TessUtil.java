@@ -1,11 +1,10 @@
 package com.utils;
 
 import com.Main;
-import com.controller.reporter.ProgressReporter;
+import com.gui.controller.reporter.ProgressReporter;
 import com.ObjectHub;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
-import com.telegram.Bot;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;

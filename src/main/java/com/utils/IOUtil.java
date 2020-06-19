@@ -1,8 +1,7 @@
 package com.utils;
 
 import com.Main;
-import com.misc.OperatingSys;
-import com.ObjectHub;
+import com.backend.OperatingSys;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 

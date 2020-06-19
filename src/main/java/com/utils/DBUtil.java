@@ -1,14 +1,14 @@
 package com.utils;
 
 import com.Main;
-import com.misc.taskHandling.TaskFactory;
-import com.misc.taskHandling.Task;
+import com.backend.taskHandling.TaskFactory;
+import com.backend.taskHandling.Task;
 import com.ObjectHub;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
 import com.objectTemplates.User;
-import com.telegram.Bot;
+import com.bot.telegram.Bot;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.Update;

@@ -1,10 +1,10 @@
 package com;
 
-import com.misc.taskHandling.CheckConnectionTask;
-import com.misc.taskHandling.strategies.RegularMinutelyExecutionStrategy;
-import com.misc.taskHandling.strategies.RegularExecutionStrategy;
-import com.misc.taskHandling.Task;
-import com.telegram.Bot;
+import com.backend.taskHandling.CheckConnectionTask;
+import com.backend.taskHandling.strategies.RegularMinutelyExecutionStrategy;
+import com.backend.taskHandling.strategies.RegularExecutionStrategy;
+import com.backend.taskHandling.Task;
+import com.bot.telegram.Bot;
 import com.utils.DBUtil;
 
 import org.apache.log4j.Logger;
