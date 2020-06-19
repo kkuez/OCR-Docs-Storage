@@ -9,16 +9,14 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.util.*;
 
+/**
+ * Util responsible for File IO
+ * */
+
 public class IOUtil {
     private static Logger logger = Main.getLogger();
 
-    public static final String LOCAL_OS = System.getProperty("os.name").startsWith("Linux") ? "Linux" : "Windows";
-
-    public static final String alternativePathToArchive = ObjectHub.getInstance().getProperties().getProperty("alternativePathToArchive");
-
-    public static final String projectFolderOnHost = ObjectHub.getInstance().getProperties().getProperty("projectFolderOnHost");
-
-    public static String convertFilePathOSDependent(String filePath, OperatingSys targetOS){
+   public static String convertFilePathOSDependent(String filePath, OperatingSys targetOS){
 
         if(targetOS == OperatingSys.Linux && !filePath.startsWith("/")){
             filePath = filePath.replace("\\", "/").replace("//", "/");
@@ -34,20 +32,13 @@ public class IOUtil {
         return filePath;
     }
 
-    public static String makePathHostRelative(String originFilePath){
-        if(!IOUtil.alternativePathToArchive.equals("")){
-            originFilePath = originFilePath.replace(IOUtil.alternativePathToArchive, IOUtil.projectFolderOnHost + "/Archiv");
-        }
-        return originFilePath;
-    }
-
-
     public static Collection<File> createFileSetBySize(Collection<File> inputFiles){
         //Method to make sure only absolute different files in size will be processed
         Map<Long, File> fileMap = new HashMap<>();
         inputFiles.forEach(file -> fileMap.putIfAbsent(FileUtils.sizeOf(file), file));
         return fileMap.values();
     }
+
 
 
 }

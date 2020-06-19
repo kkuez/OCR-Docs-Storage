@@ -17,7 +17,6 @@ tgBotToken=
 pwForNewUsers=Nuss
 //Path written by Host system in DB
 projectFolderOnHost=
-alternativePathToArchive=
 //Path to remote folder, seen from local system. Will be replaced with localpath when fetching docs in GUI.
 pathToProjectFolder=
 birdVidFolder=

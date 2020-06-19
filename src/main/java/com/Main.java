@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Properties;
 
+import static com.utils.PinUtil.setGPIO;
+
 
 public class Main {
 
@@ -58,16 +60,16 @@ public class Main {
                 TelegramBotsApi telegramBotApi = new TelegramBotsApi();
                 botSession = telegramBotApi.registerBot(bot);
                 try {
-                    CheckConnectionTask.setGPIO(0);
+                    setGPIO(0);
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    logger.error("Couldnt set GpioIO (" + 0 + ")");
                 }
             } catch (TelegramApiRequestException e) {
                 logger.error("Failed registering bot.\nTrying again in 30 seconds...", e);
                 try {
-                    CheckConnectionTask.setGPIO(1);
+                    setGPIO(1);
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    logger.error("Couldnt set GpioIO (" + 1 + ")");
                 }
                 pause(30);
             }
