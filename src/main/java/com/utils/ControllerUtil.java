@@ -1,6 +1,5 @@
 package com.utils;
 
-import com.Main;
 import com.gui.controller.strategies.ControllerStrategy;
 import com.objectTemplates.Document;
 import javafx.application.Platform;
@@ -10,12 +9,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import org.apache.log4j.Logger;
 
 import java.util.List;
 
 public class ControllerUtil {
-    private static Logger logger = Main.getLogger();
+
+    private ControllerUtil() {}
 
     public static ObservableList<Document> createObservableList(List<Document> documentList) {
         ObservableList<Document> observableList = FXCollections.observableArrayList();

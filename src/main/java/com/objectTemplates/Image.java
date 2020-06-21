@@ -1,13 +1,23 @@
 package com.objectTemplates;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 
 public class Image extends Document implements Comparable<Image>{
 
-    public Image(String content, File originalFile, int id) {
-        this.setId(id);
-        this.setContent(content);
-        this.setOriginFile(originalFile);
+    DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
+
+    public Image(String content, File originalFile, int id, int user) {
+        setId(id);
+        setContent(content);
+        setOriginFile(originalFile);
+        String date = LocalDate.now().format(germanFormatter);
+        setDate(date);
+        setUser(user);
+        setOriginalFileName(originalFile.getName());
     }
 
     @Override

@@ -34,6 +34,8 @@ public class TessUtil {
 
     private static Pattern numberPattern = Pattern.compile("((\\d\\d|\\d)(,|\\.)\\d\\d)");
 
+    private TessUtil() {}
+
     public static Set<Document> processFolder(TableView tableView, TableColumn[] tableColumns,
                                               PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter,
                                               BackendFacade facade) {
@@ -79,20 +81,12 @@ public class TessUtil {
         Document document = null;
         try {
             String result = tesseract.doOCR(inputfile);
-            document = new Image(result, inputfile, facade.getIdForNextDocument());
+            document = new Image(result, inputfile, facade.getIdForNextDocument(), userID);
 
-            DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
-            String date = LocalDate.now().format(germanFormatter);
-            document.setDate(date);
-            document.setUser(userID);
+
             File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(), document.getOriginalFileName());
             if(!newOriginalFilePath.exists()) {
-                try {
-                    File originFilePath = document.getOriginFile();
-                    FileUtils.copyFile(originFilePath, newOriginalFilePath);
-                } catch (IOException e) {
-                    logger.error("File couldnt be copied (" + newOriginalFilePath + " -> " + newOriginalFilePath + ")", e);
-                }
+                copyFile(document, newOriginalFilePath);
             }
             document.setOriginFile(newOriginalFilePath);
 
@@ -110,6 +104,15 @@ public class TessUtil {
             logger.error(null, e);
         }
         return document;
+    }
+
+    private static void copyFile(Document document, File newOriginalFilePath) {
+        try {
+            File originFilePath = document.getOriginFile();
+            FileUtils.copyFile(originFilePath, newOriginalFilePath);
+        } catch (IOException e) {
+            logger.error("File couldnt be copied (" + newOriginalFilePath + " -> " + newOriginalFilePath + ")", e);
+        }
     }
 
     public static boolean checkIfBon(String content){

@@ -1,16 +1,13 @@
 package com.utils;
 
-import com.Main;
-import org.apache.log4j.Logger;
-
 import java.time.YearMonth;
 import java.util.*;
 
 public class TimeUtil {
-    private static Logger logger = Main.getLogger();
-
     static Map<String, String> monthMap = new HashMap<>();
 
+    private TimeUtil()
+    {}
     public static void waitUntilObjectsEqual(Object o1, Object o2) throws InterruptedException {
         while(!o1.equals(o2)){
                 Thread.sleep(300);
@@ -37,7 +34,6 @@ public class TimeUtil {
         Map<Integer, String> returnMap = new HashMap<>();
         String[] monthArray = new String[]{"JAN", "FEB","MÄR","APR","MAI", "JUN","JUL","AUG","SEP", "OKT","NOV","DEZ"};
         for(int i =1; i<13;i++){
-            String addZeroOrNot = i< 10 ? "0" : "";
             returnMap.put(i, monthArray[i - 1]);
         }
         return returnMap;

@@ -1,18 +1,14 @@
 package com.objectTemplates;
 
-import com.Main;
 import com.utils.IOUtil;
 import com.backend.OperatingSys;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Set;
 
 public abstract class Document{
-
-    private static Logger logger = Main.getLogger();
 
     private String date;
 
@@ -48,7 +44,7 @@ public abstract class Document{
         originFilePath = IOUtil.convertFilePathOSDependent(originFilePath, OperatingSys.Linux);
 
         return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + docCount + ", '" +
-                content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', " + user + ", " + FileUtils.sizeOf(originFile) + ")";
+                content.replace("'", "''") + "', '" + originFilePath + "', '" + date + "', " + user + ", " + FileUtils.sizeOf(originFile) + ")";
     }
 
     // Getter Setter

@@ -66,8 +66,6 @@ public interface BackendFacade {
 
     void insertTag(int documentId, String tag);
 
-    void insertPicture(Image image);
-
     List<Document> getDocuments(String searchTerm);
 
     Map<Integer, User> getAllowedUsers();

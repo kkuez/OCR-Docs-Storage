@@ -1,9 +1,7 @@
 package com.utils;
 
-import com.Main;
 import com.backend.OperatingSys;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.*;
@@ -13,7 +11,7 @@ import java.util.*;
  * */
 
 public class IOUtil {
-    private static Logger logger = Main.getLogger();
+   private IOUtil() {}
 
    public static String convertFilePathOSDependent(String filePath, OperatingSys targetOS){
 
@@ -23,7 +21,7 @@ public class IOUtil {
             if(targetOS == OperatingSys.Windows && !filePath.startsWith("\\\\")){
                 filePath = filePath.replace("/", "\\");
                 while(!filePath.startsWith("\\\\")) {
-                    filePath = filePath = "\\" + filePath;
+                    filePath = "\\" + filePath;
                 }
             }
             

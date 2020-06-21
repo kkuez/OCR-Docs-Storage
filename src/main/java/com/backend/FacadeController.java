@@ -143,11 +143,6 @@ public class FacadeController implements BackendFacade {
     }
 
     @Override
-    public void insertPicture(Image image) {
-        //TODO
-    }
-
-    @Override
     public int getIdForNextDocument() {
         return dbdao.countDocuments("Documents", "");
     }

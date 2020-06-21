@@ -1,8 +1,6 @@
 package com.utils;
 
-import com.Main;
 import com.backend.ObjectHub;
-import org.apache.log4j.Logger;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -10,7 +8,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class ExecutorUtil {
 
-    private static Logger logger = Main.getLogger();
+    private ExecutorUtil() {}
 
     public static void blockUntilExecutorIsDone(Executor executor, int tasksToFinish) throws InterruptedException {
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;

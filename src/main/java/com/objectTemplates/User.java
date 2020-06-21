@@ -1,17 +1,11 @@
 package com.objectTemplates;
 
-import com.Main;
 import com.backend.BackendFacade;
-import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
 import com.bot.telegram.processes.Process;
-import org.apache.log4j.Logger;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 public class User {
-
-    private static Logger logger = Main.getLogger();
 
     private BackendFacade facade = null;
 
@@ -33,11 +27,11 @@ public class User {
         this.name = name;
     }
 
-    public void deleteProcessEventually(Bot bot, Update update){
+    public void deleteProcessEventually(){
         if(process != null && process.getDeleteLater()){
             process = null;
         }
-    };
+    }
 
     //GETTER SETTER
 

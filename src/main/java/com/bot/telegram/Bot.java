@@ -64,25 +64,26 @@ public class Bot extends TelegramLongPollingBot {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
                 progressManager.setTotalSteps(steps);
-                sendMsg("Start process " +allowedUsersMap.get(updateOrNull.getMessage().getFrom().getId()).getProcess().getProcessName(),  updateOrNull, null,false, false);
+                sendMsg("Start process " + allowedUsersMap.get(updateOrNull.getMessage().getFrom().getId()).getProcess().getProcessName(), updateOrNull, null, false, false);
             }
 
             @Override
             public void addStep(Update updateOrNull) {
                 progressManager.addStep();
-                sendMsg( progressManager.getCurrentProgress() + "%", updateOrNull, null,false, false);
+                sendMsg(progressManager.getCurrentProgress() + "%", updateOrNull, null, false, false);
             }
 
             @Override
             public void setStep(int step, Update updateOrNull) {
                 progressManager.setCurrentStep(step);
-                sendMsg(progressManager.getCurrentProgress() + "%", updateOrNull, null,false, false);
+                sendMsg(progressManager.getCurrentProgress() + "%", updateOrNull, null, false, false);
             }
         };
     }
 
     /**
      * Method for receiving messages.
+     *
      * @param update Contains a message from the user.
      */
     @Override
@@ -91,22 +92,22 @@ public class Bot extends TelegramLongPollingBot {
         int currentUserID;
         String userName;
         String textGivenByUser;
-        if(update.hasCallbackQuery()){
+        if (update.hasCallbackQuery()) {
             currentUserID = update.getCallbackQuery().getFrom().getId();
             userName = update.getCallbackQuery().getFrom().getFirstName();
             textGivenByUser = update.getCallbackQuery().getData();
-            if (textGivenByUser.equals("abort")){
+            if (textGivenByUser.equals("abort")) {
                 abortProcess(update);
-                allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
+                allowedUsersMap.get(currentUserID).deleteProcessEventually();
                 return;
             }
-        }else{
+        } else {
             currentUserID = update.getMessage().getFrom().getId();
             userName = update.getMessage().getFrom().getFirstName();
         }
 
         //Check if user is in System
-        if(allowedUsersMap.get(currentUserID) == null){
+        if (allowedUsersMap.get(currentUserID) == null) {
             allowedUsersMap.put(currentUserID, new User(currentUserID, userName, facade));
             sendMsg("Hallo " + userName + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", update, null, true, false);
             allowedUsersMap.get(currentUserID).setProcess(new NewUserRegProcess(this, (ProgressReporter) progressReporter, facade));
@@ -114,70 +115,84 @@ public class Bot extends TelegramLongPollingBot {
         }
         try {
             processUpdateReceveived(update);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Couldn't process update.", e);
         }
     }
 
-    public void processUpdateReceveived(Update update) throws Exception{
+    public void processUpdateReceveived(Update update) throws Exception {
         int currentUserID;
         String textGivenByUser;
         boolean isBusy = getNonBotUserFromUpdate(update).isBusy();
-        if(update.hasCallbackQuery()){
+        if (update.hasCallbackQuery()) {
             currentUserID = update.getCallbackQuery().getFrom().getId();
             textGivenByUser = update.getCallbackQuery().getData();
-        }else{
+        } else {
             textGivenByUser = update.getMessage().getText();
             currentUserID = update.getMessage().getFrom().getId();
         }
+
         Process process = allowedUsersMap.get(currentUserID).getProcess();
+        if (checkBusy(update, isBusy, process)) return;
 
         try {
-            if (isBusy) {
-                Message message = sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
-                process.getSentMessages().add(message);
+            if (process == null) {
+                setupProcess(update, currentUserID);
             } else {
-                if (process == null) {
-                    //Set process if null
-                    if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                        Message message = sendMsg("Verarbeite Bild...", update, null, true, false);
-                        processPhoto(update);
-                    }else{
-                        allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
-                        allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
-                    }
-                } else {
-                    if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                        Message message = sendMsg("Verarbeite Bild...", update, null, true, false);
-                        processPhoto(update);
-                    }else{
-                        process.performNextStep(textGivenByUser, update, allowedUsersMap);
-                        allowedUsersMap.get(currentUserID).deleteProcessEventually(this, update);
-                    }
-                }
+                performProcess(update, currentUserID, textGivenByUser, process);
             }
         } catch (Exception e) {
-            logger.error(null, e);
+            logger.error("Something went wrong :(", e);
             throw new RuntimeException();
         }
     }
 
-    private void printUpdateData(Update update){
+    private void performProcess(Update update, int currentUserID, String textGivenByUser, Process process) throws TelegramApiException {
+        if (update.hasMessage() && update.getMessage().hasPhoto()) {
+            sendMsg("Verarbeite Bild...", update, null, true, false);
+            processPhoto(update);
+        } else {
+            process.performNextStep(textGivenByUser, update, allowedUsersMap);
+            allowedUsersMap.get(currentUserID).deleteProcessEventually();
+        }
+    }
+
+    private void setupProcess(Update update, int currentUserID) {
+        //Set process if null
+        if (update.hasMessage() && update.getMessage().hasPhoto()) {
+            sendMsg("Verarbeite Bild...", update, null, true, false);
+            processPhoto(update);
+        } else {
+            allowedUsersMap.get(currentUserID).setProcess(fetchCommandOrNull(update));
+            allowedUsersMap.get(currentUserID).deleteProcessEventually();
+        }
+    }
+
+    private boolean checkBusy(Update update, boolean isBusy, Process process) {
+        if (isBusy) {
+            Message message = sendMsg("Bin am arbeiten...", update, KeyboardFactory.KeyBoardType.Abort, true, true);
+            process.getSentMessages().add(message);
+            return true;
+        }
+        return false;
+    }
+
+    private void printUpdateData(Update update) {
         StringBuilder printBuilder;
-        if(update.getMessage() == null){
+        if (update.getMessage() == null) {
             printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getCallbackQuery().getFrom().getFirstName() + " ");
             printBuilder.append(update.getCallbackQuery().getData());
-        }else{
+        } else {
             printBuilder = new StringBuilder(LocalDateTime.now().toString() + ":    Update from " + update.getMessage().getFrom().getFirstName() + " ");
             String append = update.getMessage().hasPhoto() ? ", new Picture" : "";
             printBuilder.append(append);
-            append = update.getMessage().hasText() ? ", cmd: " +update.getMessage().getText() : " ";
+            append = update.getMessage().hasText() ? ", cmd: " + update.getMessage().getText() : " ";
             printBuilder.append(append);
         }
         logger.info(printBuilder.toString());
     }
 
-    private void processPhoto(Update update){
+    private void processPhoto(Update update) {
         Future photoFuture = ObjectHub.getInstance().getExecutorService().submit(() -> {
             User user = getNonBotUserFromUpdate(update);
             Process process = user.getProcess();
@@ -190,7 +205,7 @@ public class Bot extends TelegramLongPollingBot {
             String filePath = getFilePath(photoList.get(0));
             largestPhoto = downloadPhotoByFilePath(filePath);
 
-            if(facade.isFilePresent(largestPhoto)){
+            if (facade.isFilePresent(largestPhoto)) {
                 //Is File already stored...?
                 logger.info("File already present: " + largestPhoto.getName());
                 sendMsg("Bild schon vorhanden.", update, null, true, false);
@@ -208,13 +223,13 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             Set<String> tags = null;
-            if(update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")){
+            if (update.getMessage().getCaption() != null && update.getMessage().getCaption().toLowerCase().startsWith("tag")) {
                 tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
-            };
+            }
 
             Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags, facade);
             try {
-                if((TessUtil.checkIfBon(document.getContent()) || process instanceof BonProcess)){
+                if ((TessUtil.checkIfBon(document.getContent()) || process instanceof BonProcess)) {
                     float sum = TessUtil.getLastNumber(document.getContent());
                     Bon bon = new Bon(document, sum);
                     BonProcess bonProcess = (BonProcess) process;
@@ -227,8 +242,8 @@ public class Bot extends TelegramLongPollingBot {
             if (process != null && process.getClass().equals(BonProcess.class)) {
                 Message message = sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true, "", facade));
                 user.getProcess().getSentMessages().add(message);
-            }else{
-                sendMsg("Fertig.", update,  null, true, false);
+            } else {
+                sendMsg("Fertig.", update, null, true, false);
             }
             logger.info("Processed " + document.getOriginalFileName());
             user.setBusy(false);
@@ -238,11 +253,11 @@ public class Bot extends TelegramLongPollingBot {
         ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(photoAbortTask);
     }
 
-    private Set<String> parseTags(String input){
+    private Set<String> parseTags(String input) {
         //Tags have to be input by Caption
         input = input.toLowerCase().replace("tag ", "");
         Set<String> tags = new HashSet<>();
-        while (input.contains(",")){
+        while (input.contains(",")) {
             String tag = input.substring(0, input.indexOf(','));
             tags.add(tag);
             input = input.replace(tag, "").replaceFirst(",", "");
@@ -252,16 +267,16 @@ public class Bot extends TelegramLongPollingBot {
         return tags;
     }
 
-    public Message sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull){
+    public Message sendPhotoFromURL(Update update, String imagePath, String caption, ReplyKeyboard possibleKeyBoardOrNull) {
         SendPhoto sendPhoto = null;
         User user = getNonBotUserFromUpdate(update);
         Message message = null;
         try {
             sendPhoto = new SendPhoto().setPhoto("SomeText", new FileInputStream(new File(imagePath)));
             sendPhoto.setCaption(caption);
-            if(possibleKeyBoardOrNull != null){
+            if (possibleKeyBoardOrNull != null) {
                 sendPhoto.setReplyMarkup(possibleKeyBoardOrNull);
-                if(!(possibleKeyBoardOrNull instanceof InlineKeyboardMarkup)){
+                if (!(possibleKeyBoardOrNull instanceof InlineKeyboardMarkup)) {
                     //In case of an Inlinekeyboard it will not be stored as keyboardcontext
                     user.setKeyboardContext(possibleKeyBoardOrNull);
                 }
@@ -270,19 +285,19 @@ public class Bot extends TelegramLongPollingBot {
             logger.error(imagePath, e);
             return message;
         }
-        long chatID = update.hasMessage() ? update.getMessage().getChatId() : (long)update.getCallbackQuery().getFrom().getId();
+        long chatID = update.hasMessage() ? update.getMessage().getChatId() : (long) update.getCallbackQuery().getFrom().getId();
         sendPhoto.setChatId(chatID);
         try {
             message = execute(sendPhoto);
         } catch (TelegramApiException e) {
             user.setBusy(false);
-            sendMsg("Fehler, Aktion abgebrochen.",update,  null, true, false);
+            sendMsg("Fehler, Aktion abgebrochen.", update, null, true, false);
             logger.error(null, e);
         }
         return message;
     }
 
-    public Message sendVideoFromURL(User user, String VideoPath, String caption){
+    public Message sendVideoFromURL(User user, String VideoPath, String caption) {
         SendVideo sendVideo = null;
         Message message = null;
         try {
@@ -333,14 +348,16 @@ public class Bot extends TelegramLongPollingBot {
         return null; // Just in case
     }
 
-    private Process fetchCommandOrNull(Update update){
+    private Process fetchCommandOrNull(Update update) {
         String textGivenByUser = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
 
         Process processToReturn = null;
-        if(textGivenByUser != null) {
-            switch (textGivenByUser){
+        if (textGivenByUser != null) {
+            Message message = null;
+            String WUTCHAWANNADO = "Was willst du tun?";
+            switch (textGivenByUser) {
                 case "Weitere Optionen":
-                    Message message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.FurtherOptions, true, false);
+                    sendMsg(WUTCHAWANNADO, update, KeyboardFactory.KeyBoardType.FurtherOptions, true, false);
                     break;
                 case "QR-Item mappen":
                     processToReturn = new MapQRItemProcess(this, (ProgressReporter) progressReporter, update, facade);
@@ -350,10 +367,10 @@ public class Bot extends TelegramLongPollingBot {
                     message = sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     processToReturn.getSentMessages().add(message);
                     break;
-                    //TODO Standartliste anzeigen :D
+                //TODO Standartliste anzeigen :D
                 case "Standardliste: Optionen":
                     processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
-                    message = sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, "", facade), false);
+                    sendKeyboard(WUTCHAWANNADO, update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, "", facade), false);
                     break;
                 case "start":
                 case "Start":
@@ -366,16 +383,16 @@ public class Bot extends TelegramLongPollingBot {
                     processToReturn = new SumProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap, facade);
                     break;
                 case "Hole Bons":
-                    processToReturn =  new GetBonsProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap, facade);
+                    processToReturn = new GetBonsProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap, facade);
                     break;
                 case "Letztes Bild Löschen":
                     processToReturn = new RemoveLastProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap, facade);
                     break;
                 case "Bon-Optionen":
-                    message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Bons, true, false);
+                    sendMsg(WUTCHAWANNADO, update, KeyboardFactory.KeyBoardType.Bons, true, false);
                     break;
                 case "Kalender":
-                    message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Calendar, true, false);
+                    sendMsg(WUTCHAWANNADO, update, KeyboardFactory.KeyBoardType.Calendar, true, false);
                     break;
                 case "Termine anzeige":
                 case "Termin hinzufügen":
@@ -383,7 +400,7 @@ public class Bot extends TelegramLongPollingBot {
                     processToReturn = new CalenderProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                     break;
                 case "Memo-Optionen":
-                    message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Memo, true, false);
+                    sendMsg(WUTCHAWANNADO, update, KeyboardFactory.KeyBoardType.Memo, true, false);
                     break;
                 case "Memos anzeigen":
                 case "Memo hinzufügen":
@@ -391,14 +408,14 @@ public class Bot extends TelegramLongPollingBot {
                     processToReturn = new MemoProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                     break;
                 case "Einkaufslisten-Optionen":
-                    message = sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
+                    sendMsg(WUTCHAWANNADO, update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
                     break;
                 case "Hinzufügen":
                 case "Zu Einkaufsliste hinzufügen":
                 case "Löschen":
                 case "Einkaufsliste anzeigen":
                 case "Liste Löschen":
-                    if(!update.hasCallbackQuery()) {
+                    if (!update.hasCallbackQuery()) {
                         boolean isStadardListConText = allowedUsersMap.get(update.getMessage().getFrom().getId()).getKeyboardContext().equals(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, "", facade));
                         if (isStadardListConText) {
                             processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
@@ -414,6 +431,7 @@ public class Bot extends TelegramLongPollingBot {
 
     /**
      * This method returns the bot's name, which was specified during registration.
+     *
      * @return bot name
      */
     @Override
@@ -423,42 +441,44 @@ public class Bot extends TelegramLongPollingBot {
 
     /**
      * This method returns the bot's token for communicating with the telegram server
+     *
      * @return the bot's token
      */
     @Override
     public String getBotToken() {
         return ObjectHub.getInstance().getProperties().getProperty("tgBotToken");
     }
-    public User getNonBotUserFromUpdate(Update update){
+
+    public User getNonBotUserFromUpdate(Update update) {
         int userId = update.hasCallbackQuery() ? update.getCallbackQuery().getFrom().getId() : update.getMessage().getFrom().getId();
         return allowedUsersMap.get(userId);
     }
 
-    public void abortProcess(Update update){
+    public void abortProcess(Update update) {
         User user = getNonBotUserFromUpdate(update);
-        if(user.getProcess() != null) {
+        if (user.getProcess() != null) {
             user.setBusy(false);
             String processName = user.getProcess().getProcessName();
             logger.info("User " + user.getName() + " aborts " + user.getProcess().getProcessName() + " Process.");
             user.getProcess().close();
             try {
                 sendMsg(processName + " abgebrochen.", update, null, false, false);
-                if(update.hasCallbackQuery()) {
+                if (update.hasCallbackQuery()) {
                     sendAnswerCallbackQuery(processName + " abgebrochen.", false, update.getCallbackQuery());
                 }
             } catch (TelegramApiException e) {
                 logger.error("Abort done, messaging about abort failed.", e);
             }
-        }else{
+        } else {
             try {
                 simpleEditMessage("Abgebrochen", update, KeyboardFactory.KeyBoardType.NoButtons);
-                if(update.hasCallbackQuery()){
-                    sendAnswerCallbackQuery("Abgebrochen",  false, update.getCallbackQuery());
+                if (update.hasCallbackQuery()) {
+                    sendAnswerCallbackQuery("Abgebrochen", false, update.getCallbackQuery());
                 }
             } catch (TelegramApiException e) {
-                if(e.getMessage().equals("Error editing message reply markup")){
+                if (e.getMessage().equals("Error editing message reply markup")) {
                     logger.info("Message not edited.");
-                }else{
+                } else {
                     logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
                 }
             }
@@ -466,47 +486,49 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-    public  Message sendKeyboard(String s, Update update, ReplyKeyboard replyKeyboard, boolean isReply){
+    public Message sendKeyboard(String s, Update update, ReplyKeyboard replyKeyboard, boolean isReply) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(getMassageFromUpdate(update).getChatId());
-        if(isReply){
+        if (isReply) {
             sendMessage.setReplyToMessageId(getMassageFromUpdate(update).getMessageId());
         }
         sendMessage.setReplyMarkup(replyKeyboard);
-        if(!(replyKeyboard instanceof InlineKeyboardMarkup)){
+        if (!(replyKeyboard instanceof InlineKeyboardMarkup)) {
             allowedUsersMap.get(getMassageFromUpdate(update).getFrom().getId()).setKeyboardContext(replyKeyboard);
         }
         sendMessage.setText(s);
 
         Message messageToReturn = null;
         try {
-            messageToReturn =  execute(sendMessage);
+            messageToReturn = execute(sendMessage);
         } catch (TelegramApiException e) {
             logger.error(null, e);
         }
         return messageToReturn;
     }
 
-    public  Message askBoolean(String question, Update update,boolean isReply) throws TelegramApiException{
+    public Message askBoolean(String question, Update update, boolean isReply) throws TelegramApiException {
         Message message = null;
-        if(update.hasCallbackQuery()){
+        if (update.hasCallbackQuery()) {
             message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Boolean);
-        }else{
+        } else {
             message = sendMsg(question, update, KeyboardFactory.KeyBoardType.Boolean, isReply, true);
         }
         return message;
     }
-    public  Message askMonth(String question, Update update,  boolean isReply, String callbackPrefix)  throws TelegramApiException{
+
+    public Message askMonth(String question, Update update, boolean isReply, String callbackPrefix) throws TelegramApiException {
         Message message = null;
         if (update.hasCallbackQuery()) {
-            message = simpleEditMessage(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month, callbackPrefix);
+            message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Month, callbackPrefix);
         } else {
-            message = sendMsg(question,  update, KeyboardFactory.KeyBoardType.Calendar_Month, callbackPrefix, isReply, true);
+            message = sendMsg(question, update, KeyboardFactory.KeyBoardType.Calendar_Month, callbackPrefix, isReply, true);
         }
         return message;
     }
-    public  void editCaption(String text,  Message message){
+
+    public void editCaption(String text, Message message) {
         EditMessageCaption editMessageCaption = new EditMessageCaption();
         editMessageCaption.setChatId(message.getChatId() + "");
         editMessageCaption.setMessageId(message.getMessageId());
@@ -519,48 +541,39 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     //Convenience method to have one edit method for everything
-    public  Message simpleEditMessage(String text,  Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callBackPrefix) throws TelegramApiException{
+    public Message simpleEditMessage(String text, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callBackPrefix) throws TelegramApiException {
         Message message = getMassageFromUpdate(update);
-        return simpleEditMessage(text,  message, keyBoardTypeOrNull, callBackPrefix);
+        return simpleEditMessage(text, message, keyBoardTypeOrNull, callBackPrefix);
     }
-    public  Message simpleEditMessage(String text,  Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull) throws TelegramApiException{
+
+    public Message simpleEditMessage(String text, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull) throws TelegramApiException {
         Message message = getMassageFromUpdate(update);
-        return simpleEditMessage(text,  message, keyBoardTypeOrNull, "");
+        return simpleEditMessage(text, message, keyBoardTypeOrNull, "");
     }
-    public  Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackPrefix) throws TelegramApiException{
+
+    public Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackPrefix) throws TelegramApiException {
         List<List<InlineKeyboardButton>> inputKeyboard = KeyboardFactory.createInlineKeyboard(keyBoardTypeOrNull, callbackPrefix, facade);
         return simpleEditMessage(text, message, inputKeyboard, callbackPrefix);
     }
-    public  Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard, String callbackPrefix) throws TelegramApiException{
+
+    public Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard, String callbackPrefix) throws TelegramApiException {
         String prefix = callbackPrefix != null ? callbackPrefix : "";
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(inputKeyboard);
-        return simpleEditMessage(text, message, inlineKeyboardMarkup, callbackPrefix);
+        return simpleEditMessage(text, message, inlineKeyboardMarkup, prefix);
     }
+
     public Message simpleEditMessage(String text, Message message, ReplyKeyboard inputKeyboard, String callbackPrefix) throws TelegramApiException {
 
-        if(!message.hasText()){
-            if(message.hasPhoto() && message.getCaption() != null){
-                editCaption(text,  message);
+        if (!message.hasText()) {
+            if (message.hasPhoto() && message.getCaption() != null) {
+                editCaption(text, message);
             }
-        }else{
-            EditMessageText editMessageText = new EditMessageText();
-            editMessageText.setChatId(message.getChatId());
-            editMessageText.setMessageId(message.getMessageId());
-            editMessageText.setText(text);
-
-            editMessageText.setReplyMarkup((InlineKeyboardMarkup) inputKeyboard);
-            try {
-               execute(editMessageText);
-            } catch (TelegramApiException e) {
-                if(e.getMessage().equals("Error editing message reply markup") || e.getMessage().contains("Error editing message text")){
-                    logger.info("Couldn't change ReplyMarkup for 1 message.");
-                    return message;
-                }
-                throw e;
-            }
+        } else {
+            if (tryEditText(text, message, (InlineKeyboardMarkup) inputKeyboard)) return message;
         }
-        if(inputKeyboard != null && message.hasReplyMarkup()) {
+
+        if (inputKeyboard != null && message.hasReplyMarkup()) {
             EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
             editMessageReplyMarkup.setChatId(message.getChatId());
             editMessageReplyMarkup.setMessageId(message.getMessageId());
@@ -568,7 +581,7 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 execute(editMessageReplyMarkup);
             } catch (TelegramApiException e) {
-                if(e.getMessage().equals("Error editing message reply markup")){
+                if (e.getMessage().equals("Error editing message reply markup")) {
                     logger.info("Couldn't change ReplyMarkup for 1 message.");
                     return message;
                 }
@@ -578,12 +591,31 @@ public class Bot extends TelegramLongPollingBot {
         return message;
     }
 
-    public Message askYear(String question, Update update, boolean isReply, String callbackPrefix) throws TelegramApiException{
+    private boolean tryEditText(String text, Message message, InlineKeyboardMarkup inputKeyboard) throws TelegramApiException {
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(message.getChatId());
+        editMessageText.setMessageId(message.getMessageId());
+        editMessageText.setText(text);
+
+        editMessageText.setReplyMarkup(inputKeyboard);
+        try {
+            execute(editMessageText);
+        } catch (TelegramApiException e) {
+            if (e.getMessage().equals("Error editing message reply markup") || e.getMessage().contains("Error editing message text")) {
+                logger.info("Couldn't change ReplyMarkup for 1 message.");
+                return true;
+            }
+            throw e;
+        }
+        return false;
+    }
+
+    public Message askYear(String question, Update update, boolean isReply, String callbackPrefix) throws TelegramApiException {
         Message message = null;
         if (update.hasCallbackQuery()) {
             message = simpleEditMessage(question, update, KeyboardFactory.KeyBoardType.Calendar_Year, callbackPrefix);
         } else {
-            message = sendMsg(question,  update, KeyboardFactory.KeyBoardType.Calendar_Year, callbackPrefix, isReply, true);
+            message = sendMsg(question, update, KeyboardFactory.KeyBoardType.Calendar_Year, callbackPrefix, isReply, true);
         }
         return message;
     }
@@ -596,16 +628,16 @@ public class Bot extends TelegramLongPollingBot {
      */
 
     /**
-     *Documents cannot be send in groups like pictures
+     * Documents cannot be send in groups like pictures
      */
-    public  Message sendDocument(Update update,  boolean isReply,  InputMediaDocument inputMediaDocument){
+    public Message sendDocument(Update update, boolean isReply, InputMediaDocument inputMediaDocument) {
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
         SendDocument sendDocument = new SendDocument();
         sendDocument.setDocument(inputMediaDocument.getMediaFile());
         sendDocument.setChatId(chatID);
         Message messageToReturn = null;
-        if(isReply){
+        if (isReply) {
             sendDocument.setReplyToMessageId(message.getMessageId());
         }
         try {
@@ -616,62 +648,65 @@ public class Bot extends TelegramLongPollingBot {
         return messageToReturn;
     }
 
-    public  synchronized List<Message> sendMediaMsg(Update update,  boolean isReply,  List<InputMedia> inputMediaList) {
+    public synchronized List<Message> sendMediaMsg(Update update, boolean isReply, List<InputMedia> inputMediaList) {
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
 
         SendMediaGroup sendMediaGroup = new SendMediaGroup();
         sendMediaGroup.setMedia(inputMediaList);
         sendMediaGroup.setChatId(chatID);
-        if(isReply){
+        if (isReply) {
             sendMediaGroup.setReplyToMessageId(message.getMessageId());
         }
         List<Message> messageToReturn = null;
         try {
-            if(inputMediaList.size() == 0){
+            if (inputMediaList.isEmpty()) {
                 throw new TelegramApiException("No media in List found.");
             }
             messageToReturn = execute(sendMediaGroup);
         } catch (TelegramApiException e) {
             logger.error(null, e);
-            sendMsg("Failed to send mediaGroup.",  update, null, false, false);
+            sendMsg("Failed to send mediaGroup.", update, null, false, false);
             abortProcess(update);
         }
         return messageToReturn;
     }
 
-    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
+    public synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard) {
         return sendMsg(s, update, keyBoardTypeOrNull, "", isReply, inlineKeyboard, ParseMode.None);
     }
-    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
+
+    public synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
         return sendMsg(s, update, keyBoardTypeOrNull, "", isReply, inlineKeyboard, parseModeOrNull);
     }
-    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard) {
+
+    public synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix, boolean isReply, boolean inlineKeyboard) {
         return sendMsg(s, update, keyBoardTypeOrNull, callbackValuePrefix, isReply, inlineKeyboard, ParseMode.None);
     }
-    public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
+
+    public synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix, boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
         ReplyKeyboard replyKeyboard = null;
-        if(keyBoardTypeOrNull != null){
-        replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, false, callbackValuePrefix, facade);
+        if (keyBoardTypeOrNull != null) {
+            replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, false, callbackValuePrefix, facade);
         }
         return sendMsg(s, update, replyKeyboard, callbackValuePrefix, isReply, inlineKeyboard, parseModeOrNull);
     }
-    public  synchronized Message sendMsg(String s, Update update, ReplyKeyboard replyKeyboard, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
-        boolean isOneTimeKeyboard = false;
+
+    public synchronized Message sendMsg(String s, Update update, ReplyKeyboard replyKeyboard, String callbackValuePrefix, boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatID);
-        if(isReply){
+        if (isReply) {
             sendMessage.setReplyToMessageId(message.getMessageId());
         }
-        if(parseModeOrNull != null && parseModeOrNull != ParseMode.None){
+        if (parseModeOrNull != null && parseModeOrNull != ParseMode.None) {
             sendMessage.setParseMode(parseModeOrNull.name());
         }
-        if(replyKeyboard != null){
+        if (replyKeyboard != null) {
             sendMessage.setReplyMarkup(replyKeyboard);
-            if(!inlineKeyboard){
+            if (!inlineKeyboard) {
                 //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.
                 allowedUsersMap.get(update.getMessage().getFrom().getId()).setKeyboardContext(replyKeyboard);
             }
@@ -685,17 +720,18 @@ public class Bot extends TelegramLongPollingBot {
         }
         return messageToReturn;
     }
-    public synchronized Message sendSimpleMsg(String s, long chatID, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean inlineKeyboard){
+
+    public synchronized Message sendSimpleMsg(String s, long chatID, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, boolean inlineKeyboard) {
         boolean isOneTimeKeyboard = false;
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatID);
-        if(keyBoardTypeOrNull != null){
+        if (keyBoardTypeOrNull != null) {
             ReplyKeyboard replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard, "", facade);
             sendMessage.setReplyMarkup(replyKeyboard);
-            if(!inlineKeyboard){
+            if (!inlineKeyboard) {
                 //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.
-                allowedUsersMap.get((int)chatID).setKeyboardContext(replyKeyboard);
+                allowedUsersMap.get((int) chatID).setKeyboardContext(replyKeyboard);
             }
         }
         sendMessage.setText(s);
@@ -708,11 +744,11 @@ public class Bot extends TelegramLongPollingBot {
         return messageToReturn;
     }
 
-    public  Message getMassageFromUpdate(Update update){
+    public Message getMassageFromUpdate(Update update) {
         return update.hasCallbackQuery() ? update.getCallbackQuery().getMessage() : update.getMessage();
     }
 
-    public   void sendAnswerCallbackQuery(String text, boolean alert, CallbackQuery callbackquery) throws TelegramApiException{
+    public void sendAnswerCallbackQuery(String text, boolean alert, CallbackQuery callbackquery) throws TelegramApiException {
         AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
         answerCallbackQuery.setCallbackQueryId(callbackquery.getId());
         answerCallbackQuery.setShowAlert(alert);
@@ -738,7 +774,7 @@ public class Bot extends TelegramLongPollingBot {
         this.shoppingList = shoppingList;
     }
 
-    public enum ParseMode{ //https://core.telegram.org/bots/api#formatting-options
+    public enum ParseMode { //https://core.telegram.org/bots/api#formatting-options
         None, Markdown, HTML
     }
 }

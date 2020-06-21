@@ -261,11 +261,13 @@ public class MainController extends SingleDocumentController {
 
     @Override
     public Document getDocument() {
+        //Fixme these methods are leftovers of the parent class -> remove somehow
         return null;
     }
 
     @Override
     public void setDocument(Document document) {
+
     }
 
     @Override

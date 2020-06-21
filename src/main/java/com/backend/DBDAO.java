@@ -144,8 +144,7 @@ class DBDAO {
     }
 
   void insertDocument(Document document){
-        if(document.getClass().equals(Image.class)){
-            //TODO auf neue BonStruktur angleichen
+        if(!(document instanceof Bon)){
             lastProcessedDoc = document;
         }
         executeSQL(document.getInsertDBString(document.getId()));
@@ -272,7 +271,7 @@ class DBDAO {
             documentList = new ArrayList<>();
             while (rs.next()) {
                 //TODO auch pdfs eigene klasse schreiben
-                Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
+                Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"), rs.getInt("user"));
                 image.setTagSet(getTagsForDocument(image));
                 documentList.add(image);
             }
@@ -323,8 +322,7 @@ class DBDAO {
                 float sum = rs.getFloat("sum");
                 int id = rs.getInt("id");
 
-                Document document = new Image(content, new File(originalFilePath), id);
-                document.setUser(userInt);
+                Document document = new Image(content, new File(originalFilePath), id, userInt);
                 Bon bon = new Bon(document, sum);
                 resultBons.add(bon);
             }

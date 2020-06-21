@@ -12,26 +12,32 @@ import java.io.IOException;
 
 public class PinUtil {
 
-    private final static int PIN = 25;
+    private static final int PIN = 25;
 
     private static boolean isSetup = false;
 
     private static Logger logger = Main.getLogger();
 
-    public static void setGPIO(int i) throws IOException {
+    private PinUtil() {}
+
+    public static void setGPIO(int i)  {
         if (isSetup) {
             ProcessBuilder setpinOutPB = new ProcessBuilder();
             setpinOutPB.command("gpio", "write", PIN + "", i + "");
             setpinOutPB.redirectErrorStream();
             setpinOutPB.redirectOutput();
             setpinOutPB.redirectInput();
-            setpinOutPB.start();
+            try {
+                setpinOutPB.start();
+            } catch (IOException e) {
+                logger.error("Couldnt start GPIO " + i, e);
+            }
         } else {
             setupRPIGPIO();
         }
     }
 
-    private static void setupRPIGPIO() throws IOException {
+    private static void setupRPIGPIO(){
         if (!ObjectHub.getInstance().getProperties().getProperty("debug").equals("true")) {
             try {
                 checkWiringPiInstallation();
@@ -48,7 +54,11 @@ public class PinUtil {
             setpinOutPB.redirectErrorStream();
             setpinOutPB.redirectOutput();
             setpinOutPB.redirectInput();
-            setpinOutPB.start();
+            try {
+                setpinOutPB.start();
+            } catch (IOException e) {
+                logger.error("Couldnt setup GPIO", e);
+            }
             isSetup = true;
         }
     }
