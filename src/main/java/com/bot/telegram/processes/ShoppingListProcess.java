@@ -1,10 +1,10 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.utils.DBUtil;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,8 +20,8 @@ public class ShoppingListProcess extends Process{
 
     User user;
 
-    public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
-        super(progressReporter);
+    public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+        super(progressReporter, facade);
         this.setBot(bot);
         user = getBot().getNonBotUserFromUpdate(update);
         user.setBusy(true);
@@ -44,7 +44,7 @@ public class ShoppingListProcess extends Process{
             case "add":
                 String item = commandValue[1];
                 getBot().getShoppingList().add(item);
-                DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
+                getFacade().insertShoppingItem(item);
                 if(update.hasCallbackQuery()){
                     try {
                         getBot().sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
@@ -59,7 +59,7 @@ public class ShoppingListProcess extends Process{
             case "remove":
                 try{
                     item = commandValue[1];
-                    DBUtil.executeSQL("delete from ShoppingList where item='" +  item + "'");
+                    getFacade().deleteFromShoppingList(item);
                     getBot().getShoppingList().remove(item);
                     getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
                     getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
@@ -76,13 +76,13 @@ public class ShoppingListProcess extends Process{
                 close();
                 break;
             case "Liste Löschen":
-                DBUtil.executeSQL("Drop Table ShoppingList; create Table ShoppingList(item TEXT);");
+                getBot().getShoppingList().forEach(shoppingItem -> getFacade().deleteFromShoppingList(shoppingItem));
                 getBot().setShoppingList(new ArrayList<>());
                 getBot().sendMsg("Einkaufsliste gelöscht :)", update, null, false, false);
                 close();
                 break;
             case "Löschen":
-                ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getShoppingListFromDB(), "remove");
+                ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getShoppingList(), "remove");
                 message = getBot().sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
                 break;
             case "Zu Einkaufsliste hinzufügen":

@@ -1,5 +1,6 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.ObjectHub;
 import com.objectTemplates.Bon;
@@ -7,7 +8,7 @@ import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -27,8 +28,8 @@ public class BonProcess extends Process {
 
     private Document document;
 
-    public BonProcess(Bot bot, ProgressReporter progressReporter){
-        super(progressReporter);
+    public BonProcess(Bot bot, ProgressReporter progressReporter, BackendFacade facade){
+        super(progressReporter, facade);
         setBot(bot);
         currentStep = Steps.enterBon;
     }
@@ -46,7 +47,7 @@ public class BonProcess extends Process {
                 case "Start":
                     if (commandValue[1].equals("confirm")) {
                         user.setBusy(true);
-                        //In Bonfolder kompieren nachdem der User bestätigt hat dass Dok ein Bon ist.
+                        //In Bonfolder kopieren nachdem der User bestätigt hat dass Dok ein Bon ist.
                         File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
                         try {
                             FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
@@ -54,7 +55,7 @@ public class BonProcess extends Process {
                             logger.error(document.getOriginFile().getAbsolutePath(), e);
                         }
                         FileUtils.deleteQuietly(document.getOriginFile());
-                        DBUtil.executeSQL("update Documents set originalFile = '" + newOriginalFilePath + "' where originalFile = '" + document.getOriginFile().getAbsolutePath() + "'");
+                        DBDAO.executeSQL("update Documents set originalFile = '" + newOriginalFilePath + "' where originalFile = '" + document.getOriginFile().getAbsolutePath() + "'");
                         document.setOriginFile(newOriginalFilePath);
                         message = getBot().askBoolean("Endsumme " + bon.getSum() + "?", update, true);
                         currentStep = Steps.isSum;
@@ -71,8 +72,8 @@ public class BonProcess extends Process {
                 case "isSum":
                     if (commandValue[1].equals("confirm")) {
                         getBot().sendMsg("Ok :)", update, null, true, false);
-                        DBUtil.insertDocumentToDB(bon);
-                        DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');");
+                        DBDAO.insertDocumentToDB(bon);
+                        DBDAO.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');");
                         setDeleteLater(true);
                         close();
                     } else {
@@ -89,8 +90,8 @@ public class BonProcess extends Process {
                     try {
                         sum = Float.parseFloat(commandValue[1].replace(',', '.'));
                         bon.setSum(sum);
-                        DBUtil.insertDocumentToDB(bon);
-                        DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');");
+                        DBDAO.insertDocumentToDB(bon);
+                        DBDAO.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');");
                         getBot().sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
                         close();
                     } catch (NumberFormatException e) {
@@ -100,7 +101,7 @@ public class BonProcess extends Process {
                 default:
                     if (currentStep == Steps.enterBon) {
                         currentStep = Steps.Start;
-                        this.document = DBUtil.getDocumentForID(bon.getBelongsToDocument());
+                        this.document = DBDAO.getDocumentForID(bon.getBelongsToDocument());
                         performNextStep("Start", update, allowedUsersMap);
                     }
                     break;

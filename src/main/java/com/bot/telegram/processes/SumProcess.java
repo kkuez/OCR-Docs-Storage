@@ -3,7 +3,7 @@ package com.bot.telegram.processes;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -55,9 +55,9 @@ public class SumProcess extends Process{
                     if (TimeUtil.getYearsSet().contains(year)) {
                         getBot().getNonBotUserFromUpdate(update).setBusy(true);
                         String parsedDate = month + "." + year;
-                        float sumOfMonthAll = DBUtil.getSumMonth(parsedDate, null);
+                        float sumOfMonthAll = DBDAO.getSumMonth(parsedDate, null);
                         User user = allowedUsersMap.get(update.getCallbackQuery().getFrom().getId());
-                        float sumOfMonthForCurrentUser = DBUtil.getSumMonth(parsedDate, user);
+                        float sumOfMonthForCurrentUser = DBDAO.getSumMonth(parsedDate, user);
                         String messageToSend = month + "/" + year + "\nSumme alle: " + sumOfMonthAll + "\nSumme " + user.getName() + ": " + sumOfMonthForCurrentUser;
                         try {
                             getBot().sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());

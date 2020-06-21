@@ -4,7 +4,7 @@ import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -60,14 +60,14 @@ public class GetBonsProcess extends Process{
                     year = commandValue[1];
                     user.setBusy(true);
                     String parsedDate = month + "." + year;
-                            List<Document> documentList = DBUtil.getDocumentsForMonthAndYear(parsedDate);
+                            List<Document> documentList = DBDAO.getDocumentsForMonthAndYear(parsedDate);
                             for(Document document : documentList){
-                                if(DBUtil.countDocuments("Bons", "where belongsToDocument =" + document.getId()) == 0){
+                                if(DBDAO.countDocuments("Bons", "where belongsToDocument =" + document.getId()) == 0){
                                     documentList.remove(document);
                                 }
                             }
                     Map<Integer, Float> bonIdMap = new HashMap<>();
-                    DBUtil.getAllBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
+                    DBDAO.getAllBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
                     documentList.forEach(document1 -> {
                         String possibleCaption = "Von " + allowedUsersMap.get(document1.getUser()).getName() + ": " + bonIdMap.get(document1.getId()) + "€";
                                 getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);

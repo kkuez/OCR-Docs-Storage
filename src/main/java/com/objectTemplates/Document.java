@@ -1,7 +1,7 @@
 package com.objectTemplates;
 
 import com.Main;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 import com.utils.IOUtil;
 import com.backend.OperatingSys;
 import org.apache.commons.io.FileUtils;
@@ -48,7 +48,7 @@ public abstract class Document{
         String originFilePath = originFile.getAbsolutePath();
         originFilePath = IOUtil.convertFilePathOSDependent(originFilePath, OperatingSys.Linux);
 
-        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBUtil.countDocuments("Documents", "") + ", '" +
+        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBDAO.countDocuments("Documents", "") + ", '" +
                 content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
     }
 
@@ -124,7 +124,7 @@ public abstract class Document{
 
     public void setOriginFile(File originFile) {
         if(this.originFile != null){
-            DBUtil.executeSQL("update Documents set originalFile='" + originFile.getAbsolutePath() + "' where originalFile='" + this.originFile.getAbsolutePath() + "'");
+            DBDAO.executeSQL("update Documents set originalFile='" + originFile.getAbsolutePath() + "' where originalFile='" + this.originFile.getAbsolutePath() + "'");
         }
         this.originFile = originFile;
     }

@@ -5,7 +5,7 @@ import com.backend.taskHandling.strategies.RegularMinutelyExecutionStrategy;
 import com.backend.taskHandling.strategies.RegularExecutionStrategy;
 import com.backend.taskHandling.Task;
 import com.bot.telegram.Bot;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import org.apache.log4j.Logger;
 
@@ -28,7 +28,7 @@ public class TasksRunnable implements Runnable {
         loopActive = true;
 
         while (loopActive) {
-            tasksToDo = DBUtil.getTasksFromDB(bot);
+            tasksToDo = DBDAO.getTasksFromDB();
             tasksToDo.add(checkConnectionTask);
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
@@ -42,7 +42,7 @@ public class TasksRunnable implements Runnable {
                         logger.info("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
                         if(!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
                             task.delete();
-                            DBUtil.removeTask(task);
+                            DBDAO.removeTask(task);
                         }
                     }
                 }

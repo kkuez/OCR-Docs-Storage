@@ -2,7 +2,7 @@ package com.backend.taskHandling.strategies;
 
 import com.Main;
 import com.backend.taskHandling.Task;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 import org.apache.log4j.Logger;
 
 public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
@@ -26,7 +26,7 @@ public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
         int hour = getTime().getHour();
         int minute = getTime().getMinute();
 
-        DBUtil.executeSQL("delete from CalendarTasks where name='" + taskName + "' AND year=" + year + " AND month=" + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
+        DBDAO.executeSQL("delete from CalendarTasks where name='" + taskName + "' AND year=" + year + " AND month=" + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
     }
 
     //GETTER SETTER

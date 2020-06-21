@@ -1,5 +1,6 @@
 package com.gui.controller;
 
+import com.backend.DBDAO;
 import com.gui.controller.reporter.*;
 import com.gui.controller.strategies.*;
 import com.ObjectHub;
@@ -143,7 +144,7 @@ public class MainController extends SingleDocumentController {
             if(tagSet != null){
                 for(String tag : tagSet){
                     for(Document document : documentSet){
-                        DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
+                        DBDAO.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
                     }
                 }
             }
@@ -152,7 +153,7 @@ public class MainController extends SingleDocumentController {
 
     public void search() {
         logger.info(GUI_INIT_STRING + "Performing search with Term '" + searchTermTextField.getText() + "'");
-        List<Document> documentList = DBUtil.getDocumentsForSearchTerm(searchTermTextField.getText());
+        List<Document> documentList = DBDAO.getDocumentsForSearchTerm(searchTermTextField.getText());
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(documentList);
         ControllerUtil.fillTable(mainTableView, documentObservableList,
@@ -204,7 +205,7 @@ public class MainController extends SingleDocumentController {
                 pdPageContentStream.setFont( PDType1Font.COURIER, 16 );
                 LocalDate nextLocalDate = beginDate.withDayOfMonth(1);
                 Map<User, Float> userSumMap = new HashMap<>();
-                DBUtil.getAllowedUsersMap().values().forEach(user -> userSumMap.put(user, 0f));
+                DBDAO.getAllowedUsersMap().values().forEach(user -> userSumMap.put(user, 0f));
                 pdPageContentStream.newLine();
                 float sumOfAll = 0f;
                 do{
@@ -219,7 +220,7 @@ public class MainController extends SingleDocumentController {
                     for(Map.Entry<User, Float> entry : userSumMap.entrySet()){
 
                         pdPageContentStream.newLine();
-                        float sumForUser = DBUtil.getSumMonth(nextLocalDate.getMonth().getValue() + "-" + nextLocalDate.getYear(), entry.getKey());
+                        float sumForUser = DBDAO.getSumMonth(nextLocalDate.getMonth().getValue() + "-" + nextLocalDate.getYear(), entry.getKey());
                         sumForMonth += sumForUser;
                         sumOfAll += sumForUser;
                         userSumMap.put(entry.getKey(), entry.getValue() + sumForUser);

@@ -11,7 +11,7 @@ import com.bot.telegram.processes.Process;
 import com.ObjectHub;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import com.utils.TessUtil;
 import org.apache.commons.io.FileUtils;
@@ -54,8 +54,8 @@ public class Bot extends TelegramLongPollingBot {
     private static Logger logger = Main.getLogger();
 
     public Bot() {
-        this.allowedUsersMap = DBUtil.getAllowedUsersMap();
-        shoppingList = DBUtil.getShoppingListFromDB();
+        this.allowedUsersMap = DBDAO.getAllowedUsersMap();
+        shoppingList = DBDAO.getShoppingListFromDB();
         progressReporter = new ProgressReporter() {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
@@ -186,7 +186,7 @@ public class Bot extends TelegramLongPollingBot {
             String filePath = getFilePath(photoList.get(0));
             largestPhoto = downloadPhotoByFilePath(filePath);
 
-            if(DBUtil.isFilePresent(largestPhoto)){
+            if(DBDAO.isFilePresent(largestPhoto)){
                 //Is File already stored...?
                 logger.info("File already present: " + largestPhoto.getName());
                 sendMsg("Bild schon vorhanden.", update, null, true, false);

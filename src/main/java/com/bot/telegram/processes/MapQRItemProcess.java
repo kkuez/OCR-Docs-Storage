@@ -4,7 +4,7 @@ import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -37,7 +37,7 @@ public class MapQRItemProcess extends Process {
                 currentStep = Step.nameItem;
                 break;
             case nameItem:
-                DBUtil.updateQRItem(itemNumberToMap, update.getMessage().getText());
+                DBDAO.updateQRItem(itemNumberToMap, update.getMessage().getText());
                 message = getBot().sendMsg("Ok :)", update, KeyboardFactory.KeyBoardType.NoButtons, false, false);
                 getSentMessages().add(message);
                 close();

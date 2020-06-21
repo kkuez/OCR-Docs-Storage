@@ -1,4 +1,4 @@
-package com.utils;
+package com.backend;
 
 import com.Main;
 import com.backend.taskHandling.TaskFactory;
@@ -17,19 +17,22 @@ import java.io.File;
 import java.sql.*;
 import java.util.*;
 
-public class DBUtil {
-    private static Logger logger = Main.getLogger();
+class DBDAO {
 
-    private static Connection connection = null;
+    DBDAO() {}
+    
+    private Logger logger = Main.getLogger();
 
-    static File dbFile = new File(ObjectHub.getInstance().getProperties().getProperty("dbPath"));
+    private Connection connection = null;
 
-    private static Document lastProcessedDoc = null;
+    File dbFile = new File(ObjectHub.getInstance().getProperties().getProperty("dbPath"));
 
-    public static List<Document> getDocumentsForSearchTerm(String searchTerm) {
+    private Document lastProcessedDoc = null;
+
+    List<Document> getDocumentsForSearchTerm(String searchTerm) {
         Map<File, Document> documentMap = new HashMap<>();
 
-        DBUtil.showDocumentsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'").forEach(document -> {
+        showDocumentsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'").forEach(document -> {
             document.setTagSet(getTagsForDocument(document));
             documentMap.put(document.getOriginFile(), document);
         });
@@ -42,18 +45,18 @@ public class DBUtil {
         return documentList;
     }
 
-    public static Document getDocumentForID(int id) {
-        return DBUtil.showDocumentsFromSQLExpression("select * from Documents where id =" + id + "").get(0);
+    Document getDocumentForID(int id) {
+        return showDocumentsFromSQLExpression("select * from Documents where id =" + id + "").get(0);
     }
 
-    public static Set<String> getFilePathOfDocsContainedInDB() {
+    Set<String> getFilePathOfDocsContainedInDB() {
         Set<String> filePathSet = new HashSet<>();
         List<Document> documentList = showDocumentsFromSQLExpression("select * from Documents");
         documentList.forEach(document -> filePathSet.add(document.getOriginFile().getAbsolutePath()));
         return filePathSet;
     }
 
-    public static Map<Integer, User> getAllowedUsersMap(){
+    Map<Integer, User> getAllowedUsersMap(){
         Map<Integer, User> userMap = new HashMap<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
@@ -68,7 +71,7 @@ public class DBUtil {
         return userMap;
     }
 
-    public static List<String> getShoppingListFromDB(){
+    List<String> getShoppingListFromDB(){
         List<String> shoppingList = new ArrayList<>();
         try(Statement  statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");) {
@@ -82,23 +85,24 @@ public class DBUtil {
         return shoppingList;
     }
 
-    public static List<String> getMemoListFromDB(Bot bot, Update update){
-        List<String> memoList = new ArrayList<>();
-        User user = bot.getNonBotUserFromUpdate(update);
-        try(Statement statement = getConnection().createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM Memos where user=" + user.getId())) {
+    void insertShoppingItem(String item) {
+        executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
+    }
 
+    List<String> getMemos(long userId){
+        List<String> memoList = new ArrayList<>();
+        try(Statement statement = getConnection().createStatement();
+        ResultSet rs = statement.executeQuery("SELECT * FROM Memos where user=" + userId)) {
             while (rs.next()) {
                 memoList.add(rs.getString("item"));
             }
-            statement.close();
         } catch (SQLException e) {
-            logger.error("SELECT * FROM Memos where user=" + user.getId() + ")", e);
+            logger.error("SELECT * FROM Memos where user=" + userId + ")", e);
         }
         return memoList;
     }
 
-    public static List<String> getStandardListFromDB(){
+    List<String> getStandardListFromDB(){
         List<String> standardList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");) {
@@ -112,14 +116,14 @@ public class DBUtil {
         return standardList;
     }
 
-  public static void insertDocumentToDB(Document document){
+  void insertDocumentToDB(Document document){
         if(document.getClass().equals(Image.class)){
             lastProcessedDoc = document;
         }
-        DBUtil.executeSQL(document.getInsertDBString());
+        executeSQL(document.getInsertDBString());
     }
 
-    public static void removeTask(Task task){
+    void removeTask(Task task){
         int year = task.getExecutionStrategy().getTime().getYear();
         int month = task.getExecutionStrategy().getTime().getMonth().getValue();
         int day = task.getExecutionStrategy().getTime().getDayOfMonth();
@@ -129,13 +133,13 @@ public class DBUtil {
         executeSQL("delete from CalendarTasks where name='" + task.getName() + "' AND year=" + year + " AND month=" + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
     }
 
-    public static void removeLastProcressedDocument(){
+    void removeLastProcressedDocument(){
         executeSQL("delete from Documents where id=" + lastProcessedDoc.getId() + "");
         executeSQL("delete from Bons where belongsToDocument=" + lastProcessedDoc.getId() + "");
         FileUtils.deleteQuietly(lastProcessedDoc.getOriginFile());
     }
 
-    public static Set<String> getTagsForDocument(Document document){
+    Set<String> getTagsForDocument(Document document){
         Set<String> tagSet = new HashSet<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());) {
@@ -149,7 +153,7 @@ public class DBUtil {
         return tagSet;
     }
 
-    public static void executeSQL(String sqlStatement) {
+    void executeSQL(String sqlStatement) {
         try(Statement statement = getConnection().createStatement();) {
             statement.executeUpdate(sqlStatement);
         } catch (SQLException e) {
@@ -157,7 +161,7 @@ public class DBUtil {
         }
     }
 
-    public static float getSumMonth(String monthAndYear, User userOrNull){
+    float getSumMonth(String monthAndYear, User userOrNull){
         float resultSum = 0f;
         String plusUserString = userOrNull == null ? "" :" AND USER=" + userOrNull.getId();
         try(Statement statement = getConnection().createStatement();
@@ -172,7 +176,7 @@ public class DBUtil {
         return resultSum;
     }
 
-    public static Map<Integer, String> getQRItemMap(){
+    Map<Integer, String> getQRItemMap(){
         Map<Integer, String> itemMap = new HashMap<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("select * from QRItems");) {
@@ -186,11 +190,11 @@ public class DBUtil {
         return itemMap;
     }
 
-    public static void updateQRItem(Integer itemNumer, String itemName){
-        executeSQL("UPDATE QRItems Set itemMapped=\"" + itemName +"\" where itemNumber=" + itemNumer);
+    void updateQRItem(Integer itemNumber, String itemName){
+        executeSQL("UPDATE QRItems Set itemMapped=\"" + itemName +"\" where itemNumber=" + itemNumber);
     }
 
-    public static List<Document> getDocumentsForMonthAndYear(String monthAndYear){
+    List<Document> getDocumentsForMonthAndYear(String monthAndYear){
         List<Document> documentList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear.replace('-', '.') + "%' AND originalFile like '%Bons%'");
@@ -207,13 +211,13 @@ public class DBUtil {
         return documentList;
     }
 
-    public static boolean isFilePresent(File newFile){
+    boolean isFilePresent(File newFile){
         int filesSizeOfNewFile = countDocuments("Documents" ,"where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
 
         return filesSizeOfNewFile > 0;
     }
 
-    public static List<Task> getTasksFromDB(Bot bot){
+    List<Task> getTasksFromDB(){
         List<Task> taskList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
@@ -227,11 +231,11 @@ public class DBUtil {
         return taskList;
     }
 
-    public static void insertTaskToDB(Task task){
-        DBUtil.executeSQL(task.getInsertDBString());
+    void insertTaskToDB(Task task){
+        executeSQL(task.getInsertDBString());
     }
 
-    public static List<Bon> getAllBonsfromDB(){
+    List<Bon> getAllBonsfromDB(){
         List<Bon> bonList = new ArrayList<>(50);
 
         try(Statement statement = getConnection().createStatement();
@@ -247,7 +251,7 @@ public class DBUtil {
     }
 
 
-    public static List<Document> getDocumentsByTag(String tag){
+    List<Document> getDocumentsByTag(String tag){
         List<Integer> documentIds = new ArrayList<>();
         List<Document> documentList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
@@ -260,13 +264,12 @@ public class DBUtil {
             logger.error("select belongsToDocument from Tags where Tag like '%" + tag + "%'", e);
         }
         for(Integer id : documentIds){
-            documentList.addAll(DBUtil
-                    .showDocumentsFromSQLExpression("select * from Documents where id=" + id + ""));
+            documentList.addAll(showDocumentsFromSQLExpression("select * from Documents where id=" + id + ""));
         }
         return documentList;
     }
 
-    public static List<Document> showDocumentsFromSQLExpression(String sqlExpression) {
+    List<Document> showDocumentsFromSQLExpression(String sqlExpression) {
         List<Document> documentList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
         ResultSet rs = statement.executeQuery(sqlExpression);) {
@@ -285,7 +288,7 @@ public class DBUtil {
         return documentList;
     }
 
-    public static int countDocuments(String tableName, String sqlAddition){
+    int countDocuments(String tableName, String sqlAddition){
         int count = 0;
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);) {
@@ -299,7 +302,7 @@ public class DBUtil {
         return count;
     }
 
-    private static Connection getConnection() {
+    private Connection getConnection() {
         try {
             if (connection == null || connection.isClosed() && dbFile.exists()) {
                 connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
@@ -310,5 +313,29 @@ public class DBUtil {
         }
 
         return connection;
+    }
+
+    public List<Bon> getBonsForMonth(int year, int monthValue) {
+        //TODO es gibt ein dateTime Format von SQLite
+    }
+
+    public void deleteFromShoppingList(String item) {
+        executeSQL("delete from ShoppingList where item='" +  item + "'");
+    }
+
+    public void insertToStandartList(String item) {
+        executeSQL("insert into StandardList(item) Values ('" + item + "')");
+    }
+
+    public void deleteFromStandartList(String itemName) {
+        executeSQL("delete from StandardList where item='" +  itemName + "'");
+    }
+
+    public void insertMemo(String itemName, long userId) {
+        executeSQL("insert into Memos(item, user) Values ('" + itemName + "', " + userId + ")");
+    }
+
+    public void deleteMemo(String memoName) {
+        executeSQL("delete from Memos where item='" +  memoName + "'");
     }
 }

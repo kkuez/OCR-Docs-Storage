@@ -1,10 +1,9 @@
 package com.backend;
 
-import com.objectTemplates.Appointment;
+import com.backend.taskHandling.Task;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
-import com.utils.TimeUtil;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -22,21 +21,22 @@ public interface BackendFacade {
 
     //No special getsum method since it has to be calculated from the Client
 
-    Map<Long, Bon> getBonsForMonth(LocalDate targetYearMonth);
+    List<Bon> getBonsForMonth(LocalDate targetYearMonth);
 
-    void deleteLastBon();
 
+    void insertBon(int document, int sum, Image image);
 
     File getPDF(LocalDate start, LocalDate end);
 
     File getLogs();
 
 
-    void insertAppointment(Appointment appointment);
 
-    List<Appointment> getAppointments();
+    void insertTask(Task task);
 
-    void deleteAppointment(Appointment appointment);
+    List<Task> getTasks();
+
+    void deleteTask(Task task);
 
 
     void insertShoppingItem(String item);
@@ -51,10 +51,9 @@ public interface BackendFacade {
 
     void deleteFromStandartList(String itemName);
 
+    void insertMemo(String itemName, long userId);
 
-    void insertMemo(String itemName);
-
-    List<String> getMemos();
+    List<String> getMemos(long userId);
 
     void deleteMemo(String memoName);
 
@@ -62,7 +61,7 @@ public interface BackendFacade {
 
     void insertPicture(Image image);
 
-    void deleteLastPicture();
+    void deleteLastDocument();
 
     List<Document> getDocuments(String searchTerm);
 

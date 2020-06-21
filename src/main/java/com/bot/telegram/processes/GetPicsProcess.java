@@ -1,11 +1,12 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
+import com.backend.DBDAO;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.utils.*;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
@@ -20,8 +21,8 @@ public class GetPicsProcess extends Process {
 
     Step currentStep = null;
 
-    public GetPicsProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
-        super(progressReporter);
+    public GetPicsProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+        super(progressReporter, facade);
         setBot(bot);
         performNextStep(searchTerm, update, allowedUsersMap);
     }
@@ -37,7 +38,7 @@ public class GetPicsProcess extends Process {
             case "getPics":
                 List<Document> listOfDocs;
                     searchTerm = commandValue[1];
-                    listOfDocs = DBUtil.getDocumentsForSearchTerm(searchTerm);
+                    listOfDocs = DBDAO.getDocumentsForSearchTerm(searchTerm);
 
                 if(listOfDocs.size() == 0){
                     getBot().sendMsg("Keine Dokumente gefunden für den Begriff.",  update, null, false, false);

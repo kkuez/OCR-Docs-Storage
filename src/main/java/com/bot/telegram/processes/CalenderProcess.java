@@ -7,7 +7,7 @@ import com.ObjectHub;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -282,7 +282,7 @@ public class CalenderProcess extends Process {
 
     private void processForMe(Update update, User user, Message message) throws TelegramApiException {
         task.getUserList().add(user);
-        DBUtil.executeSQL(task.getInsertDBString());
+        DBDAO.executeSQL(task.getInsertDBString());
         getSentMessages().add(message);
         ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
         close();
@@ -291,7 +291,7 @@ public class CalenderProcess extends Process {
 
     private void processForAll(Update update, Map<Integer, User> allowedUsersMap, Message message) throws TelegramApiException {
         allowedUsersMap.values().forEach(user1 -> task.getUserList().add(user1));
-        DBUtil.executeSQL(task.getInsertDBString());
+        DBDAO.executeSQL(task.getInsertDBString());
         getSentMessages().add(message);
         ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
         close();
@@ -301,7 +301,7 @@ public class CalenderProcess extends Process {
     private void processShowAppointments(Update update, User user){
         int currentUserId = user.getId();
         StringBuilder messageOfTasks = new StringBuilder();
-        List<Task> taskList = DBUtil.getTasksFromDB(getBot());
+        List<Task> taskList = DBDAO.getTasksFromDB();
         Collections.sort(taskList);
         Collections.reverse(taskList);
         for (Task task : taskList) {
@@ -345,7 +345,7 @@ public class CalenderProcess extends Process {
 
     private Message processDeleteAppointment(Update update){
         List<String> taskNames = new ArrayList<>();
-        DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames.add(task1.getName()));
+        DBDAO.getTasksFromDB().forEach(task1 -> taskNames.add(task1.getName()));
         ReplyKeyboard listKeyboard = KeyboardFactory.getInlineKeyboardForList(taskNames, "deleteTask");
         return getBot().sendKeyboard("Welchen Termin willst du löschen?", update, listKeyboard, false);
     }
@@ -353,21 +353,21 @@ public class CalenderProcess extends Process {
     private Message processDeleteTask(Update update, String[] commandValue) throws TelegramApiException {
         Message message = null;
         Task taskToRemove = null;
-        for (Task task : DBUtil.getTasksFromDB(getBot())) {
+        for (Task task : DBDAO.getTasksFromDB()) {
             if (task.getName().equals(commandValue[1])) {
                 taskToRemove = task;
                 break;
             }
         }
         if (taskToRemove != null) {
-            DBUtil.removeTask(taskToRemove);
+            DBDAO.removeTask(taskToRemove);
             try {
                 getBot().sendAnswerCallbackQuery(taskToRemove.getName() + " gelöscht :)", false, update.getCallbackQuery());
             } catch (TelegramApiException e) {
                 logger.error("Failed activating bot", e);
             }
             List<String> taskNames1 = new ArrayList<>();
-            DBUtil.getTasksFromDB(getBot()).forEach(task1 -> taskNames1.add(task1.getName()));
+            DBDAO.getTasksFromDB().forEach(task1 -> taskNames1.add(task1.getName()));
             ReplyKeyboard listKeyboard1 = KeyboardFactory.getInlineKeyboardForList(taskNames1, "deleteTask");
             message = getBot().simpleEditMessage("Welchen Termin willst du löschen?", getBot().getMassageFromUpdate(update), listKeyboard1, "deleteTask");
         }

@@ -1,6 +1,7 @@
 package com.bot.telegram.processes;
 
 import com.Main;
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
@@ -19,10 +20,6 @@ public abstract class Process {
 
     public static final Logger logger = Main.getLogger();
 
-    public Process(ProgressReporter reporter){
-        progressReporter = reporter;
-    }
-
     private ProgressReporter progressReporter;
 
     private Bot bot;
@@ -38,6 +35,14 @@ public abstract class Process {
     public abstract String getProcessName();
 
     private List<Message> sentMessages = new ArrayList<>();
+
+    private BackendFacade facade;
+
+    public Process(ProgressReporter reporter, BackendFacade facade)
+    {
+        progressReporter = reporter;
+        this.facade = facade;
+    }
 
     private void clearButtons(){
         int caughtMessages = 0;
@@ -141,6 +146,9 @@ public abstract class Process {
         this.bot = bot;
     }
 
+    public BackendFacade getFacade() {
+        return facade;
+    }
 
     public Boolean getHasStarted() {
         return hasStarted;

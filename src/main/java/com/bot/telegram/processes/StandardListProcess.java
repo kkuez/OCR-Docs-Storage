@@ -1,10 +1,10 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.utils.DBUtil;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -18,8 +18,8 @@ public class StandardListProcess extends Process {
 
     AWAITING_INPUT status = null;
 
-    public StandardListProcess(ProgressReporter progressReporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap){
-        super(progressReporter);
+    public StandardListProcess(ProgressReporter progressReporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+        super(progressReporter, facade);
         this.setBot(bot);
         getBot().getNonBotUserFromUpdate(update).setBusy(true);
         performNextStep("-", update,  allowedUsersMap);
@@ -32,14 +32,14 @@ public class StandardListProcess extends Process {
         switch (commandValue[0]){
             case "add":
                 String item = commandValue[1];
-                DBUtil.executeSQL("insert into StandardList(item) Values ('" + item + "')");
+                getFacade().insertToStandartList(item);
                     message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
                 getSentMessages().add(message);
                 break;
             case "remove":
                 try{
                     item = commandValue[1];
-                    DBUtil.executeSQL("delete from StandardList where item='" +  item + "'");
+                    getFacade().deleteFromStandartList(item);
                     getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
                     getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.StandardList_Current, "remove");
                 }catch (Exception e){
@@ -55,13 +55,14 @@ public class StandardListProcess extends Process {
                 close();
                 break;
             case "Liste Löschen":
-                DBUtil.executeSQL("Drop Table StandardList; create Table StandardList(item TEXT);");
+                List<String> standartList = getFacade().getStandartList();
+                standartList.forEach(standartListItem -> getFacade().deleteFromStandartList(standartListItem));
                 getBot().setShoppingList(new ArrayList<String>());
                 getBot().sendMsg("Standardliste gelöscht :)", update, null, false, false);
                 close();
                 break;
             case "Löschen":
-                ReplyKeyboard standardListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getStandardListFromDB(), "remove");
+                ReplyKeyboard standardListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getStandartList(), "remove");
                 message = getBot().sendKeyboard("Was soll gelöscht werden?", update, standardListKeyboard, false);
                 break;
             case "Hinzufügen":
@@ -77,7 +78,7 @@ public class StandardListProcess extends Process {
 
     private void sendStandardList(Update update) {
         StringBuilder listeBuilder = new StringBuilder("Aktuelle Standardliste:\n");
-        List<String> standardList = DBUtil.getStandardListFromDB();
+        List<String> standardList = getFacade().getStandartList();
         for(int i = 0;i<standardList.size();i++){
             listeBuilder.append( i + ": " + standardList.get(i) + "\n");
         }

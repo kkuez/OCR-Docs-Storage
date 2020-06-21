@@ -3,7 +3,7 @@ package com.bot.telegram.processes;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Map;
@@ -17,7 +17,7 @@ public class RemoveLastProcess extends Process {
     }
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
-        DBUtil.removeLastProcressedDocument();
+        DBDAO.removeLastProcressedDocument();
         getBot().sendMsg( "Letztes Bild gelöscht :)", update, null, true, false);
         close();
     }

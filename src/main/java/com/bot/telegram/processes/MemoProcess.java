@@ -1,10 +1,10 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.utils.DBUtil;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -23,8 +23,8 @@ public class MemoProcess extends Process {
     InputType inputType = null;
 
 
-    public MemoProcess(ProgressReporter reporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap) {
-        super(reporter);
+    public MemoProcess(ProgressReporter reporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade) {
+        super(reporter, facade);
         this.setBot(bot);
         this.allowedUsersMap = allowedUsersMap;
         user = getBot().getNonBotUserFromUpdate(update);
@@ -46,7 +46,7 @@ public class MemoProcess extends Process {
                 break;
             case "Memos löschen":
                 inputType = InputType.remove;
-                ReplyKeyboard memoListKeyboard = KeyboardFactory.getInlineKeyboardForList(DBUtil.getMemoListFromDB(getBot(), update), "remove");
+                ReplyKeyboard memoListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getMemos(user.getId()), "remove");
                 message = getBot().sendKeyboard("Was soll gelöscht werden?", update, memoListKeyboard, false);
                 break;
             case "Memo hinzufügen":
@@ -55,16 +55,16 @@ public class MemoProcess extends Process {
                 break;
             case "add":
                 String item = commandValue[1];
-                DBUtil.executeSQL("insert into Memos(item, user) Values ('" + item + "', " + user.getId() + ")");
+                getFacade().insertMemo(item, user.getId());
                 message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
                 getSentMessages().add(message);
                 break;
             case "remove":
                 try{
                     item = commandValue[1];
-                    DBUtil.executeSQL("delete from Memos where item='" +  item + "'");
+                    getFacade().deleteMemo(item);
                     getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
-                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.getInlineKeyboardForList(DBUtil.getMemoListFromDB(getBot(), update), "remove"), "remove");
+                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.getInlineKeyboardForList(getFacade().getMemos(user.getId()), "remove"), "remove");
                 }catch (Exception e){
                     logger.error(null, e);
                 }
@@ -105,7 +105,7 @@ public class MemoProcess extends Process {
     }
 
     private void sendMemoList(Update update){
-        List<String> memoList = DBUtil.getMemoListFromDB(getBot(), update);
+        List<String> memoList = getFacade().getMemos(user.getId());
         StringBuilder listeBuilder = new StringBuilder("*Aktuelle Memos:*\n");
         for(int i = 0;i<memoList.size();i++){
             listeBuilder.append( i + ": " + memoList.get(i) + "\n");

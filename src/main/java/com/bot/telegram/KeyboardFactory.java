@@ -1,7 +1,7 @@
 package com.bot.telegram;
 
 import com.Main;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import com.utils.TimeUtil;
 import org.apache.log4j.Logger;
@@ -67,7 +67,7 @@ public class KeyboardFactory {
                 endKeyboard.add(ABORT_ROW);
                 break;
             case ShoppingList_Current:
-                List<String> shoppingList = DBUtil.getShoppingListFromDB();
+                List<String> shoppingList = DBDAO.getShoppingListFromDB();
                 shoppingList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
                 endKeyboard.add(DONE_ROW);
                 break;
@@ -76,7 +76,7 @@ public class KeyboardFactory {
                 endKeyboard.add(DONE_ROW);
                 break;
             case StandardList_Current:
-                List<String> standardList = DBUtil.getStandardListFromDB();
+                List<String> standardList = DBDAO.getStandardListFromDB();
                 standardList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
                 endKeyboard.add(DONE_ROW);
                 break;
@@ -98,7 +98,7 @@ public class KeyboardFactory {
                 endKeyboard.add(ABORT_ROW);
                 break;
             case QRItems:
-                Map<Integer, String> itemsMap = DBUtil.getQRItemMap();
+                Map<Integer, String> itemsMap = DBDAO.getQRItemMap();
                 int itemCount = itemsMap.size();
                 for(int i = 1;i<itemCount + 1;i++){
                     endKeyboard.add(createInlineKeyboardRow(List.of("Item" + i + ": " + itemsMap.get(i)), List.of("" + i)));

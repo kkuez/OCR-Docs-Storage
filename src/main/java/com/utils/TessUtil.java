@@ -1,6 +1,7 @@
 package com.utils;
 
 import com.Main;
+import com.backend.DBDAO;
 import com.gui.controller.reporter.ProgressReporter;
 import com.ObjectHub;
 import com.objectTemplates.Document;
@@ -38,7 +39,7 @@ public class TessUtil {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
                 new String[] { "pdf", "PDF", "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
         Collection<File> absoluteDifferentFilesSet = IOUtil.createFileSetBySize(filesInFolder);
-        Set<String> filePathSet = DBUtil.getFilePathOfDocsContainedInDB();
+        Set<String> filePathSet = DBDAO.getFilePathOfDocsContainedInDB();
         AtomicInteger counterProcessedFiles = new AtomicInteger();
 
         progressReporter.setTotalSteps(absoluteDifferentFilesSet.size(), null);
@@ -47,7 +48,7 @@ public class TessUtil {
         absoluteDifferentFilesSet.forEach(file -> {
             if (!filePathSet.contains(file.getAbsolutePath())) {
                 ObjectHub.getInstance().getExecutorService().submit(() -> {
-                    if(!DBUtil.isFilePresent(file)) {
+                    if(!DBDAO.isFilePresent(file)) {
                         Document document = processFile(file, 0, null);
                         documentSet.add(document);
                     }
@@ -77,7 +78,7 @@ public class TessUtil {
         Document document = null;
         try {
             String result = tesseract.doOCR(inputfile);
-            document = new Image(result, inputfile, DBUtil.countDocuments("Documents", "") );
+            document = new Image(result, inputfile, DBDAO.countDocuments("Documents", "") );
 
             DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
             String date = LocalDate.now().format(germanFormatter);
@@ -94,11 +95,11 @@ public class TessUtil {
             }
             document.setOriginFile(newOriginalFilePath);
 
-            DBUtil.insertDocumentToDB(document);
+            DBDAO.insertDocumentToDB(document);
 
             if(tagSet != null){
                 for(String tag : tagSet){
-                        DBUtil.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
+                        DBDAO.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
                 }
                 document.setTagSet(tagSet);
             }

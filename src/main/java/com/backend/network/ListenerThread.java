@@ -2,7 +2,7 @@ package com.backend.network;
 
 import com.Main;
 import com.bot.telegram.Bot;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import org.apache.log4j.Logger;
 
@@ -49,19 +49,19 @@ public class ListenerThread extends Thread {
     private void processIncomingStream(String incomingString){
         logger.info("Processing incoming Stream: " + incomingString);
         if(incomingString.startsWith(addListCMDItemNr)){
-            Map<Integer, String> itemMap = DBUtil.getQRItemMap();
+            Map<Integer, String> itemMap = DBDAO.getQRItemMap();
             int itemNumber = Integer.parseInt(incomingString.replace(addListCMDItemNr, ""));
             String item = itemMap.get(itemNumber);
             if(item.equals("-")){
                 return;
             }
             bot.getShoppingList().add(item);
-            DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
+            DBDAO.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
         }else {
             if (incomingString.startsWith(addListCMD)) {
                 String item = incomingString.replace(addListCMD, "").replace('_', ' ');
                 bot.getShoppingList().add(item);
-                DBUtil.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
+                DBDAO.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
             }
         }
     }

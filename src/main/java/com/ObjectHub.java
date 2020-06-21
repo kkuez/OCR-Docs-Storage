@@ -5,7 +5,7 @@ import com.gui.controller.MainController;
 import com.backend.CustomProperties;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
-import com.utils.DBUtil;
+import com.backend.DBDAO;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +57,7 @@ public class ObjectHub {
                 Thread.currentThread().interrupt();
                 System.exit(2);
             }
-            allowedUsersMap = DBUtil.getAllowedUsersMap();
+            allowedUsersMap = DBDAO.getAllowedUsersMap();
             tasksRunnable = new TasksRunnable();
             tasksRunnable.setBot(getBot());
             tasksRunnable.run();
