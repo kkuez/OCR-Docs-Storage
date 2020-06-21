@@ -40,7 +40,7 @@ public abstract class Document{
         this.user = user;
     }
 
-    public String getInsertDBString(){
+    public String getInsertDBString(int docCount){
         if(date == null){
             date = LocalDate.now().toString();
         }
@@ -48,7 +48,7 @@ public abstract class Document{
         String originFilePath = originFile.getAbsolutePath();
         originFilePath = IOUtil.convertFilePathOSDependent(originFilePath, OperatingSys.Linux);
 
-        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + DBDAO.countDocuments("Documents", "") + ", '" +
+        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + docCount + ", '" +
                 content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
     }
 

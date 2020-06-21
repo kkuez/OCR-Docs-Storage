@@ -8,7 +8,6 @@ import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.backend.DBDAO;
 
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -48,15 +47,15 @@ public class BonProcess extends Process {
                     if (commandValue[1].equals("confirm")) {
                         user.setBusy(true);
                         //In Bonfolder kopieren nachdem der User bestätigt hat dass Dok ein Bon ist.
-                        File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
+                        File newOriginalFile = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
                         try {
-                            FileUtils.copyFile(document.getOriginFile(), newOriginalFilePath);
+                            FileUtils.copyFile(document.getOriginFile(), newOriginalFile);
                         } catch (IOException e) {
                             logger.error(document.getOriginFile().getAbsolutePath(), e);
                         }
                         FileUtils.deleteQuietly(document.getOriginFile());
-                        DBDAO.executeSQL("update Documents set originalFile = '" + newOriginalFilePath + "' where originalFile = '" + document.getOriginFile().getAbsolutePath() + "'");
-                        document.setOriginFile(newOriginalFilePath);
+                        document.setOriginFile(newOriginalFile);
+                        getFacade().updateDocument(document);
                         message = getBot().askBoolean("Endsumme " + bon.getSum() + "?", update, true);
                         currentStep = Steps.isSum;
                         user.setBusy(false);
@@ -72,8 +71,8 @@ public class BonProcess extends Process {
                 case "isSum":
                     if (commandValue[1].equals("confirm")) {
                         getBot().sendMsg("Ok :)", update, null, true, false);
-                        DBDAO.insertDocumentToDB(bon);
-                        DBDAO.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');");
+                        getFacade().insertDocument(bon);
+                        getFacade().insertTag(document.getId(), "Bon");
                         setDeleteLater(true);
                         close();
                     } else {
@@ -90,8 +89,9 @@ public class BonProcess extends Process {
                     try {
                         sum = Float.parseFloat(commandValue[1].replace(',', '.'));
                         bon.setSum(sum);
-                        DBDAO.insertDocumentToDB(bon);
-                        DBDAO.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", 'Bon');");
+                        getFacade().insertDocument(bon);
+                        getFacade().insertTag(document.getId(), "B");
+                        getFacade().insertTag(document.getId(), "Bon");
                         getBot().sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
                         close();
                     } catch (NumberFormatException e) {
@@ -101,7 +101,7 @@ public class BonProcess extends Process {
                 default:
                     if (currentStep == Steps.enterBon) {
                         currentStep = Steps.Start;
-                        this.document = DBDAO.getDocumentForID(bon.getBelongsToDocument());
+                        this.document = getFacade().getDocument(bon.getId());
                         performNextStep("Start", update, allowedUsersMap);
                     }
                     break;

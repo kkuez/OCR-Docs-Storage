@@ -45,7 +45,7 @@ class DBDAO {
         return documentList;
     }
 
-    Document getDocumentForID(int id) {
+    Document getDocument(int id) {
         return showDocumentsFromSQLExpression("select * from Documents where id =" + id + "").get(0);
     }
 
@@ -54,6 +54,42 @@ class DBDAO {
         List<Document> documentList = showDocumentsFromSQLExpression("select * from Documents");
         documentList.forEach(document -> filePathSet.add(document.getOriginFile().getAbsolutePath()));
         return filePathSet;
+    }
+
+    void updateDocument(Document document) {
+        String divider = ", ";
+        StringBuilder updateStatement = new StringBuilder("update Documents set ");
+        updateStatement.append("content = '");
+        updateStatement.append(document.getContent());
+        updateStatement.append("'");
+        updateStatement.append(divider);
+        updateStatement.append("originalFile = '");
+        updateStatement.append(document.getOriginFile().getAbsolutePath());
+        updateStatement.append("'");
+        updateStatement.append(divider);
+        updateStatement.append("date = '");
+        updateStatement.append(document.getDate());
+        updateStatement.append("'");
+        updateStatement.append(divider);
+        updateStatement.append("inZipFile = '");
+        updateStatement.append(document.getInZipFile());
+        updateStatement.append("'");
+        updateStatement.append(divider);
+        updateStatement.append("sizeOfOriginalFile = ");
+        updateStatement.append(document.getOriginFile().length());
+        updateStatement.append(" where id = ");
+        updateStatement.append(document.getId());
+        updateStatement.append(";");
+
+        if(document instanceof Bon) {
+            Bon bon = (Bon) document;
+            updateStatement.append("update Bons set sum = ");
+            updateStatement.append(bon.getSum());
+            updateStatement.append(" where belongsToDocument = ");
+            updateStatement.append(bon.getId());
+        }
+
+        executeSQL(updateStatement.toString());
     }
 
     Map<Integer, User> getAllowedUsersMap(){
@@ -116,11 +152,11 @@ class DBDAO {
         return standardList;
     }
 
-  void insertDocumentToDB(Document document){
+  void insertDocument(Document document){
         if(document.getClass().equals(Image.class)){
             lastProcessedDoc = document;
         }
-        executeSQL(document.getInsertDBString());
+        executeSQL(document.getInsertDBString(countDocuments("Documents", "")));
     }
 
     void removeTask(Task task){
@@ -235,22 +271,6 @@ class DBDAO {
         executeSQL(task.getInsertDBString());
     }
 
-    List<Bon> getAllBonsfromDB(){
-        List<Bon> bonList = new ArrayList<>(50);
-
-        try(Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument")){
-            while (rs.next()) {
-                File originalFile = new File(rs.getString("originalFile"));
-                bonList.add(new Bon(rs.getString("content"), originalFile, rs.getFloat("sum"), rs.getInt("belongsToDocument")));
-            }
-        } catch (SQLException e) {
-            logger.error("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument", e);
-        }
-        return bonList;
-    }
-
-
     List<Document> getDocumentsByTag(String tag){
         List<Integer> documentIds = new ArrayList<>();
         List<Document> documentList = new ArrayList<>();
@@ -315,8 +335,26 @@ class DBDAO {
         return connection;
     }
 
-    public List<Bon> getBonsForMonth(int year, int monthValue) {
+    public List<Bon> getBonsForMonth(int year, int month) {
         //TODO es gibt ein dateTime Format von SQLite
+        String monthAndYear = month + "-" + year;
+        List<Bon> resultBons = new ArrayList<>();
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + monthAndYear.replace("-", ".") + "%'")){
+            while (rs.next()) {
+                String content = rs.getString("content");
+                String originalFilePath = rs.getString("originalFile");
+                int userInt = rs.getInt("user");
+                float sum = rs.getFloat("sum");
+                int id = rs.getInt("id");
+
+                Bon bon = new Bon(content, new File(originalFilePath), sum, id, userInt);
+                resultBons.add(bon);
+            }
+        } catch (SQLException e) {
+            logger.error("Couldnt sql to get Bons for time " + month + "-" + year, e);
+        }
+        return resultBons;
     }
 
     public void deleteFromShoppingList(String item) {
@@ -337,5 +375,9 @@ class DBDAO {
 
     public void deleteMemo(String memoName) {
         executeSQL("delete from Memos where item='" +  memoName + "'");
+    }
+
+    public void insertTag(int documentId, String tag) {
+        executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + documentId + ", '" + tag + "');" );
     }
 }

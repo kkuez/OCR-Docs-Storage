@@ -4,11 +4,13 @@ import com.backend.taskHandling.Task;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
+import com.objectTemplates.User;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface BackendFacade {
 
@@ -17,14 +19,16 @@ public interface BackendFacade {
     Map<Integer, String> getQRItems();
 
 
-    void insertBon(Bon bon);
+    void insertDocument(Document document);
+
+    void deleteLastDocument();
+
+    int getIdForNextDocument();
 
     //No special getsum method since it has to be calculated from the Client
 
     List<Bon> getBonsForMonth(LocalDate targetYearMonth);
 
-
-    void insertBon(int document, int sum, Image image);
 
     File getPDF(LocalDate start, LocalDate end);
 
@@ -37,7 +41,6 @@ public interface BackendFacade {
     List<Task> getTasks();
 
     void deleteTask(Task task);
-
 
     void insertShoppingItem(String item);
 
@@ -57,12 +60,19 @@ public interface BackendFacade {
 
     void deleteMemo(String memoName);
 
+    Set<String> getFilePathOfDocsContainedInDB();
 
+    boolean isFilePresent(File file);
+
+    void insertTag(int documentId, String tag);
 
     void insertPicture(Image image);
 
-    void deleteLastDocument();
-
     List<Document> getDocuments(String searchTerm);
 
+    Map<Integer, User> getAllowedUsers();
+
+    Document getDocument(int id);
+
+    void updateDocument(Document document);
 }

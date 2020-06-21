@@ -1,7 +1,7 @@
 package com.utils;
 
 import com.Main;
-import com.backend.DBDAO;
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.ObjectHub;
 import com.objectTemplates.Document;
@@ -35,11 +35,12 @@ public class TessUtil {
     private static Pattern numberPattern = Pattern.compile("((\\d\\d|\\d)(,|\\.)\\d\\d)");
 
     public static Set<Document> processFolder(TableView tableView, TableColumn[] tableColumns,
-                                              PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter) {
+                                              PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter,
+                                              BackendFacade facade) {
         Collection<File> filesInFolder = FileUtils.listFiles(new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
                 new String[] { "pdf", "PDF", "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
         Collection<File> absoluteDifferentFilesSet = IOUtil.createFileSetBySize(filesInFolder);
-        Set<String> filePathSet = DBDAO.getFilePathOfDocsContainedInDB();
+        Set<String> filePathSet = facade.getFilePathOfDocsContainedInDB();
         AtomicInteger counterProcessedFiles = new AtomicInteger();
 
         progressReporter.setTotalSteps(absoluteDifferentFilesSet.size(), null);
@@ -48,8 +49,8 @@ public class TessUtil {
         absoluteDifferentFilesSet.forEach(file -> {
             if (!filePathSet.contains(file.getAbsolutePath())) {
                 ObjectHub.getInstance().getExecutorService().submit(() -> {
-                    if(!DBDAO.isFilePresent(file)) {
-                        Document document = processFile(file, 0, null);
+                    if(!facade.isFilePresent(file)) {
+                        Document document = processFile(file, 0, null, facade);
                         documentSet.add(document);
                     }
                     progressReporter.addStep(null);
@@ -72,13 +73,13 @@ public class TessUtil {
         return documentSet;
     }
 
-    public static Document processFile(File inputfile, int userID, Set<String> tagSet) {
+    public static Document processFile(File inputfile, int userID, Set<String> tagSet, BackendFacade facade) {
         logger.info("Processing " + inputfile.getAbsolutePath());
         Tesseract tesseract = getTesseract();
         Document document = null;
         try {
             String result = tesseract.doOCR(inputfile);
-            document = new Image(result, inputfile, DBDAO.countDocuments("Documents", "") );
+            document = new Image(result, inputfile, facade.getIdForNextDocument());
 
             DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
             String date = LocalDate.now().format(germanFormatter);
@@ -95,11 +96,11 @@ public class TessUtil {
             }
             document.setOriginFile(newOriginalFilePath);
 
-            DBDAO.insertDocumentToDB(document);
+            facade.insertDocument(document);
 
             if(tagSet != null){
                 for(String tag : tagSet){
-                        DBDAO.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
+                        facade.insertTag(document.getId(), tag);
                 }
                 document.setTagSet(tagSet);
             }

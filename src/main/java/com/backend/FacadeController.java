@@ -4,11 +4,13 @@ import com.backend.taskHandling.Task;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
+import com.objectTemplates.User;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class FacadeController implements BackendFacade {
 
@@ -29,20 +31,23 @@ public class FacadeController implements BackendFacade {
     }
 
     @Override
-    public void insertBon(Bon bon) {
+    public void insertDocument(Document document) {
+        dbdao.insertDocument(document);
+    }
 
+    @Override
+    public void updateDocument(Document document) {
+        dbdao.updateDocument(document);
+    }
+
+    @Override
+    public Document getDocument(int id) {
+        return dbdao.getDocument(id);
     }
 
     @Override
     public List<Bon> getBonsForMonth(LocalDate targetYearMonth) {
-        //TODO
-        dbdao.getBonsForMonth(targetYearMonth.getYear(), targetYearMonth.getMonthValue());
-        return null;
-    }
-
-    @Override
-    public void insertBon(int document, int sum, Image image) {
-        //TODO
+        return dbdao.getBonsForMonth(targetYearMonth.getYear(), targetYearMonth.getMonthValue());
     }
 
     @Override
@@ -118,8 +123,28 @@ public class FacadeController implements BackendFacade {
     }
 
     @Override
-    public void insertPicture(Image image) {
+    public Set<String> getFilePathOfDocsContainedInDB() {
+        return dbdao.getFilePathOfDocsContainedInDB();
+    }
 
+    @Override
+    public boolean isFilePresent(File file) {
+        return dbdao.isFilePresent(file);
+    }
+
+    @Override
+    public void insertTag(int documentId, String tag) {
+        dbdao.insertTag(documentId, tag);
+    }
+
+    @Override
+    public void insertPicture(Image image) {
+        //TODO
+    }
+
+    @Override
+    public int getIdForNextDocument() {
+        return dbdao.countDocuments("Documents", "");
     }
 
     @Override
@@ -130,5 +155,10 @@ public class FacadeController implements BackendFacade {
     @Override
     public List<Document> getDocuments(String searchTerm) {
         return null;
+    }
+
+    @Override
+    public Map<Integer, User> getAllowedUsers() {
+        return dbdao.getAllowedUsersMap();
     }
 }

@@ -1,6 +1,7 @@
 package com.bot.telegram;
 
 import com.Main;
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.gui.controller.reporter.Reporter;
 import com.backend.taskHandling.PhotoTask;
@@ -11,7 +12,6 @@ import com.bot.telegram.processes.Process;
 import com.ObjectHub;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
-import com.backend.DBDAO;
 
 import com.utils.TessUtil;
 import org.apache.commons.io.FileUtils;
@@ -45,6 +45,8 @@ import java.util.concurrent.Future;
 
 public class Bot extends TelegramLongPollingBot {
 
+    private final BackendFacade facade;
+
     private List<String> shoppingList;
 
     private Reporter progressReporter;
@@ -53,9 +55,11 @@ public class Bot extends TelegramLongPollingBot {
 
     private static Logger logger = Main.getLogger();
 
-    public Bot() {
-        this.allowedUsersMap = DBDAO.getAllowedUsersMap();
-        shoppingList = DBDAO.getShoppingListFromDB();
+    public Bot(BackendFacade backendFacade) {
+        this.facade = backendFacade;
+        this.allowedUsersMap = facade.getAllowedUsers();
+        shoppingList = facade.getShoppingList();
+
         progressReporter = new ProgressReporter() {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
@@ -186,7 +190,7 @@ public class Bot extends TelegramLongPollingBot {
             String filePath = getFilePath(photoList.get(0));
             largestPhoto = downloadPhotoByFilePath(filePath);
 
-            if(DBDAO.isFilePresent(largestPhoto)){
+            if(facade.isFilePresent(largestPhoto)){
                 //Is File already stored...?
                 logger.info("File already present: " + largestPhoto.getName());
                 sendMsg("Bild schon vorhanden.", update, null, true, false);
@@ -208,11 +212,11 @@ public class Bot extends TelegramLongPollingBot {
                 tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
             };
 
-            Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags);
+            Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags, facade);
             try {
                 if((TessUtil.checkIfBon(document.getContent()) || process instanceof BonProcess)){
                     float sum = TessUtil.getLastNumber(document.getContent());
-                    Bon bon = new Bon(document.getContent(), targetFile, sum, document.getId());
+                    Bon bon = new Bon(document, sum);
                     BonProcess bonProcess = (BonProcess) process;
                     bonProcess.setBon(bon);
                 }
@@ -342,12 +346,12 @@ public class Bot extends TelegramLongPollingBot {
                     processToReturn = new MapQRItemProcess(this, (ProgressReporter) progressReporter, update);
                     break;
                 case "Bon eingeben":
-                    processToReturn = new BonProcess(this, (ProgressReporter) progressReporter);
+                    processToReturn = new BonProcess(this, (ProgressReporter) progressReporter, facade);
                     message = sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     processToReturn.getSentMessages().add(message);
                     break;
                 case "Standardliste: Optionen":
-                    processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                    processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                     message = sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""), false);
                     break;
                 case "start":
@@ -355,7 +359,7 @@ public class Bot extends TelegramLongPollingBot {
                     processToReturn = new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
                     break;
                 case "Dokumente suchen":
-                    processToReturn = new GetPicsProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                    processToReturn = new GetPicsProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap, facade);
                     break;
                 case "Summe von Bons":
                     processToReturn = new SumProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
@@ -383,7 +387,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "Memos anzeigen":
                 case "Memo hinzufügen":
                 case "Memos löschen":
-                    processToReturn = new MemoProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                    processToReturn = new MemoProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                     break;
                 case "Einkaufslisten-Optionen":
                     message = sendMsg("Was willst du tun?", update, KeyboardFactory.KeyBoardType.ShoppingList, true, false);
@@ -396,9 +400,9 @@ public class Bot extends TelegramLongPollingBot {
                     if(!update.hasCallbackQuery()) {
                         boolean isStadardListConText = allowedUsersMap.get(update.getMessage().getFrom().getId()).getKeyboardContext().equals(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""));
                         if (isStadardListConText) {
-                            processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                            processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                         } else {
-                            processToReturn = new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                            processToReturn = new ShoppingListProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap, facade);
                         }
                     }
                     break;
