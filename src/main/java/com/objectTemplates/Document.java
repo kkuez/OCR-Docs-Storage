@@ -48,7 +48,7 @@ public abstract class Document{
         originFilePath = IOUtil.convertFilePathOSDependent(originFilePath, OperatingSys.Linux);
 
         return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + docCount + ", '" +
-                content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', '" + user + "', " + FileUtils.sizeOf(originFile) + ")";
+                content.replaceAll("'", "''") + "', '" + originFilePath + "', '" + date + "', " + user + ", " + FileUtils.sizeOf(originFile) + ")";
     }
 
     // Getter Setter

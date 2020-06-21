@@ -148,8 +148,7 @@ class DBDAO {
             //TODO auf neue BonStruktur angleichen
             lastProcessedDoc = document;
         }
-        int id = document instanceof Document ? countDocuments("Documents", "") : document.getId();
-        executeSQL(document.getInsertDBString(id));
+        executeSQL(document.getInsertDBString(document.getId()));
     }
 
     void removeTask(Task task){
@@ -193,7 +192,7 @@ class DBDAO {
     float getSumMonth(LocalDate monthAndYear, User userOrNull){
         float resultSum = 0f;
         String plusUserString = userOrNull == null ? "" :" AND USER=" + userOrNull.getId();
-        String statementString = "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + (monthAndYear.getYear() + "-" + monthAndYear.getMonthValue()).replace("-", ".") + "%'" + plusUserString;
+        String statementString = "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + (monthAndYear.getMonthValue() + "-" + monthAndYear.getYear()).replace("-", ".") + "%'" + plusUserString;
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery(statementString)){
             while (rs.next()) {

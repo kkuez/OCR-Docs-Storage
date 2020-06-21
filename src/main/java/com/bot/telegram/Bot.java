@@ -350,6 +350,7 @@ public class Bot extends TelegramLongPollingBot {
                     message = sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     processToReturn.getSentMessages().add(message);
                     break;
+                    //TODO Standartliste anzeigen :D
                 case "Standardliste: Optionen":
                     processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                     message = sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, "", facade), false);

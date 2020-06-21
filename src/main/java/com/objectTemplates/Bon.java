@@ -4,6 +4,8 @@ import org.apache.commons.io.FileUtils;
 
 public class Bon extends Document {
 
+    float sum;
+
     public Bon(Document document, float sum) {
         this.setContent(document.getContent());
         this.setOriginFile(document.getOriginFile());
@@ -42,8 +44,8 @@ public class Bon extends Document {
         return /*docStatement.toString() + ";" +*/ bonStatement.toString();
     }
 
-
     //GETTER SETTER
+
     public float getSum() {
         return sum;
     }
@@ -51,7 +53,5 @@ public class Bon extends Document {
     public void setSum(float sum) {
         this.sum = sum;
     }
-
-    float sum;
 
 }

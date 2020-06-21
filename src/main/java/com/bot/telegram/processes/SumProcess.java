@@ -56,7 +56,6 @@ public class SumProcess extends Process{
                     if (TimeUtil.getYearsSet().contains(year)) {
                         User user = allowedUsersMap.get(update.getCallbackQuery().getFrom().getId());
                         getBot().getNonBotUserFromUpdate(update).setBusy(true);
-                        String parsedDate = month + "." + year;
                         float sumOfMonthAll = getFacade().getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1), null);
                         float sumOfMonthForCurrentUser = getFacade().getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1), user);
                         String messageToSend = month + "/" + year + "\nSumme alle: " + sumOfMonthAll + "\nSumme " + user.getName() + ": " + sumOfMonthForCurrentUser;
