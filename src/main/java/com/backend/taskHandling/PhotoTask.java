@@ -1,6 +1,6 @@
 package com.backend.taskHandling;
 
-import com.backend.DBDAO;
+import com.backend.BackendFacade;
 import com.backend.taskHandling.strategies.SimpleCalendarOneTimeStrategy;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
@@ -15,11 +15,11 @@ public class PhotoTask extends Task {
 
     User user;
 
-    public PhotoTask(User user, Bot bot, Future future) {
+    public PhotoTask(User user, Bot bot, Future future, BackendFacade facade) {
         super(bot);
         this.user = user;
         this.photoFuture = future;
-        setExecutionStrategy(new SimpleCalendarOneTimeStrategy(this, LocalDateTime.now().plusMinutes(3).withSecond(0).withNano(0)));
+        setExecutionStrategy(new SimpleCalendarOneTimeStrategy(this, LocalDateTime.now().plusMinutes(3).withSecond(0).withNano(0), facade));
     }
 
     @Override

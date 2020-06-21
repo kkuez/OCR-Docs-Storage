@@ -1,11 +1,10 @@
-package com;
+package com.backend;
 
-import com.backend.Archiver;
+import com.Main;
+import com.TasksRunnable;
 import com.gui.controller.MainController;
-import com.backend.CustomProperties;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
-import com.backend.DBDAO;
 
 import org.apache.log4j.Logger;
 
@@ -35,9 +34,13 @@ public class ObjectHub {
 
     private TasksRunnable tasksRunnable;
 
+    private BackendFacade facade;
+
     private ObjectHub() {
         properties = new CustomProperties();
         String root = "";
+        facade = new FacadeController();
+
         try {
             properties.load(new FileInputStream(root + "setup.properties"));
         } catch (IOException e) {
@@ -57,9 +60,10 @@ public class ObjectHub {
                 Thread.currentThread().interrupt();
                 System.exit(2);
             }
-            allowedUsersMap = DBDAO.getAllowedUsersMap();
+            allowedUsersMap = facade.getAllowedUsers();
             tasksRunnable = new TasksRunnable();
             tasksRunnable.setBot(getBot());
+            tasksRunnable.setFacade(facade);
             tasksRunnable.run();
         });
         thread.setName("TasksToDoThread");
@@ -140,5 +144,9 @@ public class ObjectHub {
         }
 
         this.inputArgs = argsMap;
+    }
+
+    public BackendFacade getFacade() {
+        return facade;
     }
 }

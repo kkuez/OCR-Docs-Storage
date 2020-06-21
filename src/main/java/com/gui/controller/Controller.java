@@ -7,4 +7,5 @@ public abstract class Controller {
      public static final Logger logger = Main.getLogger();
 
      abstract void closeWindow();
+
 }

@@ -1,16 +1,18 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
-import com.backend.DBDAO;
 
 import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +26,8 @@ public class GetBonsProcess extends Process{
 
     Map<Integer, User> allowedUsersMap;
 
-    public GetBonsProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
-        super(progressReporter);
+    public GetBonsProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+        super(progressReporter, facade);
         this.allowedUsersMap = allowedUsersMap;
         setBot(bot);
         currentStep = Steps.Start;
@@ -59,25 +61,17 @@ public class GetBonsProcess extends Process{
                 if(TimeUtil.getYearsSet().contains(commandValue[1])){
                     year = commandValue[1];
                     user.setBusy(true);
-                    String parsedDate = month + "." + year;
-                            List<Document> documentList = DBDAO.getDocumentsForMonthAndYear(parsedDate);
-                            for(Document document : documentList){
-                                if(DBDAO.countDocuments("Bons", "where belongsToDocument =" + document.getId()) == 0){
-                                    documentList.remove(document);
-                                }
-                            }
-                    Map<Integer, Float> bonIdMap = new HashMap<>();
-                    DBDAO.getAllBonsfromDB().forEach(bon -> bonIdMap.put(bon.getBelongsToDocument(), bon.getSum()));
-                    documentList.forEach(document1 -> {
-                        String possibleCaption = "Von " + allowedUsersMap.get(document1.getUser()).getName() + ": " + bonIdMap.get(document1.getId()) + "€";
-                                getBot().sendPhotoFromURL(update, document1.getOriginFile().getAbsolutePath(), possibleCaption, null);
+                    List<Bon> bonsForMonth = getFacade().getBonsForMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1));
+                    bonsForMonth.forEach(bon -> {
+                        String possibleCaption = "Von " + allowedUsersMap.get(bon.getUser()).getName() + ": " + bon.getSum() + "€";
+                                getBot().sendPhotoFromURL(update, bon.getOriginFile().getAbsolutePath(), possibleCaption, null);
                             });
                             try {
                                 getBot().sendAnswerCallbackQuery("Fertig", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
                                 logger.error("Failed activating bot", e);
                             }
-                            getBot().sendMsg("Fertig: " + documentList.size() + " Bilder geholt.", update, null, false, false);
+                            getBot().sendMsg("Fertig: " + bonsForMonth.size() + " Bilder geholt.", update, null, false, false);
                     close();
                     user.setBusy(false);
                 }else{

@@ -1,10 +1,10 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.backend.DBDAO;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -16,8 +16,8 @@ public class MapQRItemProcess extends Process {
 
     Step currentStep = null;
 
-    public MapQRItemProcess(Bot bot, ProgressReporter reporter, Update update) {
-        super(reporter);
+    public MapQRItemProcess(Bot bot, ProgressReporter reporter, Update update, BackendFacade facade) {
+        super(reporter, facade);
         setBot(bot);
 
         Message message = bot.sendMsg("Welches Item willst du mappen?", update, KeyboardFactory.KeyBoardType.QRItems, true, true);
@@ -37,7 +37,7 @@ public class MapQRItemProcess extends Process {
                 currentStep = Step.nameItem;
                 break;
             case nameItem:
-                DBDAO.updateQRItem(itemNumberToMap, update.getMessage().getText());
+                getFacade().updateQRItem(itemNumberToMap, update.getMessage().getText());
                 message = getBot().sendMsg("Ok :)", update, KeyboardFactory.KeyBoardType.NoButtons, false, false);
                 getSentMessages().add(message);
                 close();

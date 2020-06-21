@@ -1,7 +1,7 @@
 package com.bot.telegram;
 
 import com.Main;
-import com.backend.DBDAO;
+import com.backend.BackendFacade;
 
 import com.utils.TimeUtil;
 import org.apache.log4j.Logger;
@@ -22,10 +22,10 @@ public class KeyboardFactory {
 
     private static List<InlineKeyboardButton> ABORT_ROW = createInlineKeyboardRow(Map.of("Abbrechen", "abort"));
 
-    public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard, boolean oneTimeKeyboard, String callbackValuePrefix) {
+    public static ReplyKeyboard getKeyBoard(KeyBoardType keyBoardType, boolean inlineKeyboard, boolean oneTimeKeyboard, String callbackValuePrefix, BackendFacade facade) {
         if(inlineKeyboard){
             InlineKeyboardMarkup replyKeyboardInline = new InlineKeyboardMarkup();
-            replyKeyboardInline.setKeyboard(createInlineKeyboard(keyBoardType, callbackValuePrefix));
+            replyKeyboardInline.setKeyboard(createInlineKeyboard(keyBoardType, callbackValuePrefix, facade));
             if(oneTimeKeyboard){
                 logger.info("No oneTimeKeyboard possible for InlineKeyboard.");
             }
@@ -42,7 +42,7 @@ public class KeyboardFactory {
         }
     }
 
-    public static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType, String valuePrefixOrNull){
+    public static List<List<InlineKeyboardButton>> createInlineKeyboard(KeyBoardType keyBoardType, String valuePrefixOrNull, BackendFacade facade){
         List<List<InlineKeyboardButton>> endKeyboard = new ArrayList<>();
         switch (keyBoardType){
             case Done:
@@ -67,7 +67,7 @@ public class KeyboardFactory {
                 endKeyboard.add(ABORT_ROW);
                 break;
             case ShoppingList_Current:
-                List<String> shoppingList = DBDAO.getShoppingListFromDB();
+                List<String> shoppingList = facade.getShoppingList();
                 shoppingList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
                 endKeyboard.add(DONE_ROW);
                 break;
@@ -76,7 +76,7 @@ public class KeyboardFactory {
                 endKeyboard.add(DONE_ROW);
                 break;
             case StandardList_Current:
-                List<String> standardList = DBDAO.getStandardListFromDB();
+                List<String> standardList = facade.getStandartList();
                 standardList.forEach(item -> endKeyboard.add(createInlineKeyboardRow(Map.of(item, valuePrefixOrNull + item))));
                 endKeyboard.add(DONE_ROW);
                 break;
@@ -98,7 +98,7 @@ public class KeyboardFactory {
                 endKeyboard.add(ABORT_ROW);
                 break;
             case QRItems:
-                Map<Integer, String> itemsMap = DBDAO.getQRItemMap();
+                Map<Integer, String> itemsMap = facade.getQRItems();
                 int itemCount = itemsMap.size();
                 for(int i = 1;i<itemCount + 1;i++){
                     endKeyboard.add(createInlineKeyboardRow(List.of("Item" + i + ": " + itemsMap.get(i)), List.of("" + i)));

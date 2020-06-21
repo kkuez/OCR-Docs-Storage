@@ -1,5 +1,6 @@
 package com;
 
+import com.backend.ObjectHub;
 import com.gui.controller.StartApplication;
 import com.backend.network.ListenerThread;
 import com.bot.telegram.Bot;
@@ -38,21 +39,22 @@ public class Main {
             if(s.equals("-bot")){
                 Bot bot = null;
                 while(bot == null){
-                    bot = activateTGBot(null);
-                    ListenerThread listenerThread = new ListenerThread(bot);
+                    ObjectHub objectHub = ObjectHub.getInstance();
+                    bot = activateTGBot(null, objectHub);
+                    ListenerThread listenerThread = new ListenerThread(bot, objectHub.getFacade());
                     listenerThread.start();
                 }
             }
         }
     }
 
-    private static Bot activateTGBot(Bot inputBotOrNull) {
+    private static Bot activateTGBot(Bot inputBotOrNull, ObjectHub objectHub) {
         System.out.println("Trying to initialize Telegram-Bot...");
         ApiContextInitializer.init();
         Bot bot = null;
-        bot = inputBotOrNull == null ? new Bot() : inputBotOrNull;
-        ObjectHub.getInstance().setBot(bot);
-        ObjectHub.getInstance().initLater();
+        bot = inputBotOrNull == null ? new Bot(objectHub.getFacade()) : inputBotOrNull;
+        objectHub.setBot(bot);
+        objectHub.initLater();
         BotSession botSession = null;
         while(botSession == null) {
             try {

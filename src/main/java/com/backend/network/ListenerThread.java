@@ -1,8 +1,8 @@
 package com.backend.network;
 
 import com.Main;
+import com.backend.BackendFacade;
 import com.bot.telegram.Bot;
-import com.backend.DBDAO;
 
 import org.apache.log4j.Logger;
 
@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 public class ListenerThread extends Thread {
 
+    private final BackendFacade facade;
     private boolean networkRun;
     private static String addListCMD = "<addList>";
     private static String addListCMDItemNr = "<addList>Item#";
@@ -22,7 +23,8 @@ public class ListenerThread extends Thread {
     private static int socketPort = 55555;
     private static Logger logger = Main.getLogger();
 
-    public ListenerThread(Bot bot){
+    public ListenerThread(Bot bot, BackendFacade facade){
+        this.facade = facade;
      this.bot = bot;
      this.setName("networkListener");
      this.networkRun = true;
@@ -49,19 +51,19 @@ public class ListenerThread extends Thread {
     private void processIncomingStream(String incomingString){
         logger.info("Processing incoming Stream: " + incomingString);
         if(incomingString.startsWith(addListCMDItemNr)){
-            Map<Integer, String> itemMap = DBDAO.getQRItemMap();
+            Map<Integer, String> itemMap = facade.getQRItems();
             int itemNumber = Integer.parseInt(incomingString.replace(addListCMDItemNr, ""));
             String item = itemMap.get(itemNumber);
             if(item.equals("-")){
                 return;
             }
             bot.getShoppingList().add(item);
-            DBDAO.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
+            facade.insertShoppingItem(item);
         }else {
             if (incomingString.startsWith(addListCMD)) {
                 String item = incomingString.replace(addListCMD, "").replace('_', ' ');
                 bot.getShoppingList().add(item);
-                DBDAO.executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
+                facade.insertShoppingItem(item);
             }
         }
     }

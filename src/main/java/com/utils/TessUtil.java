@@ -3,7 +3,7 @@ package com.utils;
 import com.Main;
 import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
-import com.ObjectHub;
+import com.backend.ObjectHub;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
 import javafx.collections.ObservableList;

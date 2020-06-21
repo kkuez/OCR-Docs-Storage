@@ -75,4 +75,10 @@ public interface BackendFacade {
     Document getDocument(int id);
 
     void updateDocument(Document document);
+
+    void updateQRItem(Integer itemNumber, String itemName);
+
+    void insertUserToAllowedUsers(Integer id, String firstName, Long chatId);
+
+    float getSumMonth(LocalDate yearMonth, User userOrNull);
 }

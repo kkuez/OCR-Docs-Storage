@@ -1,7 +1,6 @@
 package com.bot.telegram.processes;
 
 import com.backend.BackendFacade;
-import com.backend.DBDAO;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
@@ -38,7 +37,7 @@ public class GetPicsProcess extends Process {
             case "getPics":
                 List<Document> listOfDocs;
                     searchTerm = commandValue[1];
-                    listOfDocs = DBDAO.getDocumentsForSearchTerm(searchTerm);
+                    listOfDocs = getFacade().getDocuments(searchTerm);
 
                 if(listOfDocs.size() == 0){
                     getBot().sendMsg("Keine Dokumente gefunden für den Begriff.",  update, null, false, false);

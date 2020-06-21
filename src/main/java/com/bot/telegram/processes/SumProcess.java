@@ -1,9 +1,9 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
-import com.backend.DBDAO;
 
 import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public class SumProcess extends Process{
@@ -19,8 +20,8 @@ public class SumProcess extends Process{
 
     private String year;
 
-    public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
-        super(progressReporter);
+    public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+        super(progressReporter, facade);
         setBot(bot);
         Message message = null;
         try {
@@ -53,11 +54,11 @@ public class SumProcess extends Process{
                 case "selectYear":
                     year = commandValue[1];
                     if (TimeUtil.getYearsSet().contains(year)) {
+                        User user = allowedUsersMap.get(update.getCallbackQuery().getFrom().getId());
                         getBot().getNonBotUserFromUpdate(update).setBusy(true);
                         String parsedDate = month + "." + year;
-                        float sumOfMonthAll = DBDAO.getSumMonth(parsedDate, null);
-                        User user = allowedUsersMap.get(update.getCallbackQuery().getFrom().getId());
-                        float sumOfMonthForCurrentUser = DBDAO.getSumMonth(parsedDate, user);
+                        float sumOfMonthAll = getFacade().getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 0), null);
+                        float sumOfMonthForCurrentUser = getFacade().getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 0), user);
                         String messageToSend = month + "/" + year + "\nSumme alle: " + sumOfMonthAll + "\nSumme " + user.getName() + ": " + sumOfMonthForCurrentUser;
                         try {
                             getBot().sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());

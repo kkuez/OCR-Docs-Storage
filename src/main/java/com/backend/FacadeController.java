@@ -26,6 +26,11 @@ public class FacadeController implements BackendFacade {
     }
 
     @Override
+    public void updateQRItem(Integer itemNumber, String itemName) {
+        dbdao.updateQRItem(itemNumber, itemName);
+    }
+
+    @Override
     public Map<Integer, String> getQRItems() {
         return dbdao.getQRItemMap();
     }
@@ -69,7 +74,7 @@ public class FacadeController implements BackendFacade {
 
     @Override
     public List<Task> getTasks() {
-        return dbdao.getTasksFromDB();
+        return dbdao.getTasksFromDB(this);
     }
 
     @Override
@@ -154,11 +159,21 @@ public class FacadeController implements BackendFacade {
 
     @Override
     public List<Document> getDocuments(String searchTerm) {
-        return null;
+        return dbdao.getDocumentsForSearchTerm(searchTerm);
     }
 
     @Override
     public Map<Integer, User> getAllowedUsers() {
-        return dbdao.getAllowedUsersMap();
+        return dbdao.getAllowedUsersMap(this);
+    }
+
+    @Override
+    public void insertUserToAllowedUsers(Integer id, String firstName, Long chatId) {
+        dbdao.insertUserToAllowedUsers(id, firstName, chatId);
+    }
+
+    @Override
+    public float getSumMonth(LocalDate yearMonth, User userOrNull) {
+        return dbdao.getSumMonth(yearMonth, userOrNull);
     }
 }

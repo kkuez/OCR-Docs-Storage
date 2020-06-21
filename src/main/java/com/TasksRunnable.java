@@ -1,11 +1,11 @@
 package com;
 
+import com.backend.BackendFacade;
 import com.backend.taskHandling.CheckConnectionTask;
 import com.backend.taskHandling.strategies.RegularMinutelyExecutionStrategy;
 import com.backend.taskHandling.strategies.RegularExecutionStrategy;
 import com.backend.taskHandling.Task;
 import com.bot.telegram.Bot;
-import com.backend.DBDAO;
 
 import org.apache.log4j.Logger;
 
@@ -24,11 +24,13 @@ public class TasksRunnable implements Runnable {
 
     private CheckConnectionTask checkConnectionTask;
 
+    private BackendFacade facade;
+
     private void loop() throws InterruptedException {
         loopActive = true;
 
         while (loopActive) {
-            tasksToDo = DBDAO.getTasksFromDB();
+            tasksToDo = facade.getTasks();
             tasksToDo.add(checkConnectionTask);
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
@@ -42,7 +44,7 @@ public class TasksRunnable implements Runnable {
                         logger.info("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
                         if(!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
                             task.delete();
-                            DBDAO.removeTask(task);
+                            facade.deleteTask(task);
                         }
                     }
                 }
@@ -86,5 +88,9 @@ public class TasksRunnable implements Runnable {
 
     public void setTasksToDo(List<Task> tasksToDo) {
         this.tasksToDo = tasksToDo;
+    }
+
+    public void setFacade(BackendFacade facade) {
+        this.facade = facade;
     }
 }

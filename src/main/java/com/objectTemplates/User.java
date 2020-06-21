@@ -1,6 +1,7 @@
 package com.objectTemplates;
 
 import com.Main;
+import com.backend.BackendFacade;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
 import com.bot.telegram.processes.Process;
@@ -12,6 +13,8 @@ public class User {
 
     private static Logger logger = Main.getLogger();
 
+    private BackendFacade facade = null;
+
     private int id;
 
     private String name;
@@ -22,7 +25,13 @@ public class User {
 
     private boolean isBusy = false;
     //NO InlineKeyboards! important to seperat input of the to List processes.
-    private ReplyKeyboard keyboardContext = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Start, false, false, "");
+    private ReplyKeyboard keyboardContext = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Start, false, false, "", facade);
+
+    public User(int id, String name, BackendFacade facade){
+        this.facade = facade;
+        this.id = id;
+        this.name = name;
+    }
 
     public void deleteProcessEventually(Bot bot, Update update){
         if(process != null && process.getDeleteLater()){
@@ -77,11 +86,6 @@ public class User {
     }
 
     public void setName(String name) {
-        this.name = name;
-    }
-
-    public User(int id, String name){
-        this.id = id;
         this.name = name;
     }
 

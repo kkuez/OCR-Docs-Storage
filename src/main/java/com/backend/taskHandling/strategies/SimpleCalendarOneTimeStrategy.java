@@ -1,5 +1,6 @@
 package com.backend.taskHandling.strategies;
 
+import com.backend.BackendFacade;
 import com.backend.taskHandling.Task;
 
 import java.time.LocalDateTime;
@@ -10,8 +11,10 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
     private LocalDateTime time;
 
-    public SimpleCalendarOneTimeStrategy(Task task, LocalDateTime time)
-    {   this.time = time;
+    public SimpleCalendarOneTimeStrategy(Task task, LocalDateTime time, BackendFacade facade)
+    {
+        super(facade);
+        this.time = time;
         this.task = task;
     }
 

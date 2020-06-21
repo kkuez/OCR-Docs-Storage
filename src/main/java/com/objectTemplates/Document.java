@@ -1,7 +1,6 @@
 package com.objectTemplates;
 
 import com.Main;
-import com.backend.DBDAO;
 import com.utils.IOUtil;
 import com.backend.OperatingSys;
 import org.apache.commons.io.FileUtils;
@@ -123,9 +122,6 @@ public abstract class Document{
     }
 
     public void setOriginFile(File originFile) {
-        if(this.originFile != null){
-            DBDAO.executeSQL("update Documents set originalFile='" + originFile.getAbsolutePath() + "' where originalFile='" + this.originFile.getAbsolutePath() + "'");
-        }
         this.originFile = originFile;
     }
 

@@ -1,18 +1,22 @@
 package com.backend.taskHandling.strategies;
 
 import com.Main;
+import com.backend.BackendFacade;
 import com.backend.taskHandling.Task;
-import com.backend.DBDAO;
 import org.apache.log4j.Logger;
 
 public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
     private static Logger logger = Main.getLogger();
 
+    private final BackendFacade facade;
+
     private String name;
 
     Task task;
 
-    public OneTimeExecutionStrategy(){}
+    public OneTimeExecutionStrategy(BackendFacade facade){
+        this.facade = facade;
+    }
 
     @Override
     public StrategyType getType() {
@@ -20,13 +24,7 @@ public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
     }
 
     public void delete(String taskName){
-        int year = getTime().getYear();
-        int month = getTime().getMonth().getValue();
-        int day = getTime().getDayOfMonth();
-        int hour = getTime().getHour();
-        int minute = getTime().getMinute();
-
-        DBDAO.executeSQL("delete from CalendarTasks where name='" + taskName + "' AND year=" + year + " AND month=" + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
+        facade.deleteTask(task);
     }
 
     //GETTER SETTER

@@ -2,7 +2,7 @@ package com.bot.telegram.processes;
 
 import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
-import com.ObjectHub;
+import com.backend.ObjectHub;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;

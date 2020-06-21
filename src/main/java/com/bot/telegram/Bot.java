@@ -9,7 +9,7 @@ import com.backend.taskHandling.Task;
 import com.objectTemplates.User;
 import com.bot.telegram.processes.*;
 import com.bot.telegram.processes.Process;
-import com.ObjectHub;
+import com.backend.ObjectHub;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 
@@ -107,9 +107,9 @@ public class Bot extends TelegramLongPollingBot {
 
         //Check if user is in System
         if(allowedUsersMap.get(currentUserID) == null){
-            allowedUsersMap.put(currentUserID, new User(currentUserID, userName));
+            allowedUsersMap.put(currentUserID, new User(currentUserID, userName, facade));
             sendMsg("Hallo " + userName + ", ich hab dich noch nicht im System gefunden, bitte gib das PW für NussBot ein:", update, null, true, false);
-            allowedUsersMap.get(currentUserID).setProcess(new NewUserRegProcess(this, (ProgressReporter) progressReporter));
+            allowedUsersMap.get(currentUserID).setProcess(new NewUserRegProcess(this, (ProgressReporter) progressReporter, facade));
             return;
         }
         try {
@@ -225,7 +225,7 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             if (process != null && process.getClass().equals(BonProcess.class)) {
-                Message message = sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true, ""));
+                Message message = sendPhotoFromURL(update, document.getOriginFile().getAbsolutePath(), "Das ist ein Bon oder?", KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Boolean, true, true, "", facade));
                 user.getProcess().getSentMessages().add(message);
             }else{
                 sendMsg("Fertig.", update,  null, true, false);
@@ -234,7 +234,7 @@ public class Bot extends TelegramLongPollingBot {
             user.setBusy(false);
         });
 
-        Task photoAbortTask = new PhotoTask(allowedUsersMap.get(update.getMessage().getFrom().getId()), this, photoFuture);
+        Task photoAbortTask = new PhotoTask(allowedUsersMap.get(update.getMessage().getFrom().getId()), this, photoFuture, facade);
         ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(photoAbortTask);
     }
 
@@ -343,7 +343,7 @@ public class Bot extends TelegramLongPollingBot {
                     Message message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.FurtherOptions, true, false);
                     break;
                 case "QR-Item mappen":
-                    processToReturn = new MapQRItemProcess(this, (ProgressReporter) progressReporter, update);
+                    processToReturn = new MapQRItemProcess(this, (ProgressReporter) progressReporter, update, facade);
                     break;
                 case "Bon eingeben":
                     processToReturn = new BonProcess(this, (ProgressReporter) progressReporter, facade);
@@ -352,23 +352,23 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case "Standardliste: Optionen":
                     processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
-                    message = sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""), false);
+                    message = sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, "", facade), false);
                     break;
                 case "start":
                 case "Start":
-                    processToReturn = new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap);
+                    processToReturn = new StartProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap, facade);
                     break;
                 case "Dokumente suchen":
                     processToReturn = new GetPicsProcess(this, update, (ProgressReporter) progressReporter, allowedUsersMap, facade);
                     break;
                 case "Summe von Bons":
-                    processToReturn = new SumProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
+                    processToReturn = new SumProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap, facade);
                     break;
                 case "Hole Bons":
-                    processToReturn =  new GetBonsProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
+                    processToReturn =  new GetBonsProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap, facade);
                     break;
                 case "Letztes Bild Löschen":
-                    processToReturn = new RemoveLastProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap);
+                    processToReturn = new RemoveLastProcess(this, (ProgressReporter) progressReporter, update, allowedUsersMap, facade);
                     break;
                 case "Bon-Optionen":
                     message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Bons, true, false);
@@ -379,7 +379,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "Termine anzeige":
                 case "Termin hinzufügen":
                 case "Termin löschen":
-                    processToReturn = new CalenderProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap);
+                    processToReturn = new CalenderProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                     break;
                 case "Memo-Optionen":
                     message = sendMsg("Was willst du tun?",update,  KeyboardFactory.KeyBoardType.Memo, true, false);
@@ -398,7 +398,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "Einkaufsliste anzeigen":
                 case "Liste Löschen":
                     if(!update.hasCallbackQuery()) {
-                        boolean isStadardListConText = allowedUsersMap.get(update.getMessage().getFrom().getId()).getKeyboardContext().equals(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, ""));
+                        boolean isStadardListConText = allowedUsersMap.get(update.getMessage().getFrom().getId()).getKeyboardContext().equals(KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, "", facade));
                         if (isStadardListConText) {
                             processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                         } else {
@@ -527,7 +527,7 @@ public class Bot extends TelegramLongPollingBot {
         return simpleEditMessage(text,  message, keyBoardTypeOrNull, "");
     }
     public  Message simpleEditMessage(String text, Message message, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackPrefix) throws TelegramApiException{
-        List<List<InlineKeyboardButton>> inputKeyboard = KeyboardFactory.createInlineKeyboard(keyBoardTypeOrNull, callbackPrefix);
+        List<List<InlineKeyboardButton>> inputKeyboard = KeyboardFactory.createInlineKeyboard(keyBoardTypeOrNull, callbackPrefix, facade);
         return simpleEditMessage(text, message, inputKeyboard, callbackPrefix);
     }
     public  Message simpleEditMessage(String text, Message message, List<List<InlineKeyboardButton>> inputKeyboard, String callbackPrefix) throws TelegramApiException{
@@ -651,7 +651,7 @@ public class Bot extends TelegramLongPollingBot {
     public  synchronized Message sendMsg(String s, Update update, KeyboardFactory.KeyBoardType keyBoardTypeOrNull, String callbackValuePrefix,  boolean isReply, boolean inlineKeyboard, ParseMode parseModeOrNull) {
         ReplyKeyboard replyKeyboard = null;
         if(keyBoardTypeOrNull != null){
-        replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, false, callbackValuePrefix);
+        replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, false, callbackValuePrefix, facade);
         }
         return sendMsg(s, update, replyKeyboard, callbackValuePrefix, isReply, inlineKeyboard, parseModeOrNull);
     }
@@ -690,7 +690,7 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatID);
         if(keyBoardTypeOrNull != null){
-            ReplyKeyboard replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard, "");
+            ReplyKeyboard replyKeyboard = KeyboardFactory.getKeyBoard(keyBoardTypeOrNull, inlineKeyboard, isOneTimeKeyboard, "", facade);
             sendMessage.setReplyMarkup(replyKeyboard);
             if(!inlineKeyboard){
                 //If no InlineKeyboard set the keyboardcontext to the incoming keyboard. Therefore making sure the list processes get the certain keyboards as context.

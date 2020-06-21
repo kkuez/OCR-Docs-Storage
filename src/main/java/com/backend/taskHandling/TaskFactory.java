@@ -1,6 +1,7 @@
 package com.backend.taskHandling;
 
-import com.ObjectHub;
+import com.backend.BackendFacade;
+import com.backend.ObjectHub;
 import com.backend.taskHandling.strategies.*;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
@@ -21,7 +22,7 @@ public class TaskFactory {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Task getTask(ResultSet rs) throws SQLException {
+    public static Task getTask(ResultSet rs, BackendFacade facade) throws SQLException {
         List<User> userList = new ArrayList<>();
         if(rs.getString("user").equals("ALL")){
             userList.addAll(allowedUsersMap.values());
@@ -48,7 +49,7 @@ public class TaskFactory {
         switch (strategyType){
             case SIMPLECALENDAR_ONETIME:
                 LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
-                executionStrategy = new SimpleCalendarOneTimeStrategy(task, time);
+                executionStrategy = new SimpleCalendarOneTimeStrategy(task, time, facade);
                 task.setExecutionStrategy(executionStrategy);
                 break;
             case MINUTELY:

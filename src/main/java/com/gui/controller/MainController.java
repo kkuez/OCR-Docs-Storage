@@ -1,9 +1,9 @@
 package com.gui.controller;
 
-import com.backend.DBDAO;
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.*;
 import com.gui.controller.strategies.*;
-import com.ObjectHub;
+import com.backend.ObjectHub;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.utils.*;
@@ -78,6 +78,7 @@ public class MainController extends SingleDocumentController {
 
     private static String GUI_INIT_STRING = "Gui: ";
 
+    private BackendFacade facade;
 
     @FXML
     private void initialize() {
@@ -100,6 +101,7 @@ public class MainController extends SingleDocumentController {
             }
         };
 
+        facade = ObjectHub.getInstance().getFacade();
         logger.info(GUI_INIT_STRING + "Init Gui.");
         archivePathLabel.setText(ObjectHub.getInstance().getArchiver().getArchiveFolder().getAbsolutePath());
         inputPathLabel.setText(ObjectHub.getInstance().getProperties().getProperty("lastInputPath"));
@@ -139,12 +141,12 @@ public class MainController extends SingleDocumentController {
                     new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                     new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
                             new PropertyValueFactory<Document, String>("date"),
-                            new PropertyValueFactory<Document, String>("tags") }, (ProgressReporter) progressReporter);
+                            new PropertyValueFactory<Document, String>("tags") }, (ProgressReporter) progressReporter, facade);
 
             if(tagSet != null){
                 for(String tag : tagSet){
                     for(Document document : documentSet){
-                        DBDAO.executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + document.getId() + ", '" + tag + "');" );
+                        facade.insertTag(document.getId(), tag);
                     }
                 }
             }
@@ -153,7 +155,7 @@ public class MainController extends SingleDocumentController {
 
     public void search() {
         logger.info(GUI_INIT_STRING + "Performing search with Term '" + searchTermTextField.getText() + "'");
-        List<Document> documentList = DBDAO.getDocumentsForSearchTerm(searchTermTextField.getText());
+        List<Document> documentList = facade.getDocuments(searchTermTextField.getText());
         ObservableList<Document> documentObservableList = ControllerUtil
                 .createObservableList(documentList);
         ControllerUtil.fillTable(mainTableView, documentObservableList,
@@ -205,7 +207,7 @@ public class MainController extends SingleDocumentController {
                 pdPageContentStream.setFont( PDType1Font.COURIER, 16 );
                 LocalDate nextLocalDate = beginDate.withDayOfMonth(1);
                 Map<User, Float> userSumMap = new HashMap<>();
-                DBDAO.getAllowedUsersMap().values().forEach(user -> userSumMap.put(user, 0f));
+                facade.getAllowedUsers().values().forEach(user -> userSumMap.put(user, 0f));
                 pdPageContentStream.newLine();
                 float sumOfAll = 0f;
                 do{
@@ -220,7 +222,7 @@ public class MainController extends SingleDocumentController {
                     for(Map.Entry<User, Float> entry : userSumMap.entrySet()){
 
                         pdPageContentStream.newLine();
-                        float sumForUser = DBDAO.getSumMonth(nextLocalDate.getMonth().getValue() + "-" + nextLocalDate.getYear(), entry.getKey());
+                        float sumForUser = facade.getSumMonth(nextLocalDate, entry.getKey());
                         sumForMonth += sumForUser;
                         sumOfAll += sumForUser;
                         userSumMap.put(entry.getKey(), entry.getValue() + sumForUser);

@@ -1,23 +1,23 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
-import com.backend.DBDAO;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Map;
 
 public class RemoveLastProcess extends Process {
 
-    public RemoveLastProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap){
-        super(progressReporter);
+    public RemoveLastProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+        super(progressReporter, facade);
     setBot(bot);
     performNextStep("asd", update, allowedUsersMap);
     }
     @Override
     public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
-        DBDAO.removeLastProcressedDocument();
+        getFacade().deleteLastDocument();
         getBot().sendMsg( "Letztes Bild gelöscht :)", update, null, true, false);
         close();
     }

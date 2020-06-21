@@ -1,5 +1,6 @@
 package com.gui.controller;
 
+import com.backend.BackendFacade;
 import com.objectTemplates.Document;
 
 public abstract class SingleDocumentController extends Controller {

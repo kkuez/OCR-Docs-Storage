@@ -1,10 +1,6 @@
 package com.objectTemplates;
 
-import com.backend.DBDAO;
 import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.util.Collections;
 
 public class Bon extends Document {
 

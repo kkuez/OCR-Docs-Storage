@@ -1,5 +1,6 @@
 package com.bot.telegram.processes;
 
+import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.bot.telegram.Bot;
@@ -10,8 +11,8 @@ import java.util.Map;
 
 public class StartProcess extends Process {
 
-    public StartProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap){
-        super(progressReporter);
+    public StartProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+        super(progressReporter, facade);
         setBot(bot);
         getBot().sendMsg("Wähle eine Aktion:", update, KeyboardFactory.KeyBoardType.Start, true, false);
         close();

@@ -3,24 +3,20 @@ package com.backend;
 import com.Main;
 import com.backend.taskHandling.TaskFactory;
 import com.backend.taskHandling.Task;
-import com.ObjectHub;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
 import com.objectTemplates.User;
-import com.bot.telegram.Bot;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 
 class DBDAO {
 
-    DBDAO() {}
-    
     private Logger logger = Main.getLogger();
 
     private Connection connection = null;
@@ -28,6 +24,8 @@ class DBDAO {
     File dbFile = new File(ObjectHub.getInstance().getProperties().getProperty("dbPath"));
 
     private Document lastProcessedDoc = null;
+
+    DBDAO() {}
 
     List<Document> getDocumentsForSearchTerm(String searchTerm) {
         Map<File, Document> documentMap = new HashMap<>();
@@ -92,13 +90,13 @@ class DBDAO {
         executeSQL(updateStatement.toString());
     }
 
-    Map<Integer, User> getAllowedUsersMap(){
+    Map<Integer, User> getAllowedUsersMap(BackendFacade facade){
         Map<Integer, User> userMap = new HashMap<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
 
             while (rs.next()) {
-                User user = new User(rs.getInt("id"), rs.getString("name"));
+                User user = new User(rs.getInt("id"), rs.getString("name"), facade);
                 userMap.put(rs.getInt("id"), user);
             }
         } catch (SQLException e) {
@@ -197,17 +195,17 @@ class DBDAO {
         }
     }
 
-    float getSumMonth(String monthAndYear, User userOrNull){
+    float getSumMonth(LocalDate monthAndYear, User userOrNull){
         float resultSum = 0f;
         String plusUserString = userOrNull == null ? "" :" AND USER=" + userOrNull.getId();
+        String statementString = "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + (monthAndYear.getYear() + "-" + monthAndYear.getMonthValue()).replace("-", ".") + "%'" + plusUserString;
         try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + monthAndYear.replace("-", ".") + "%'" + plusUserString)){
-
+            ResultSet rs = statement.executeQuery(statementString)){
             while (rs.next()) {
                 resultSum += Float.parseFloat(rs.getString("sum"));
             }
         } catch (SQLException e) {
-            logger.error("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + monthAndYear.replace("-", ".") + "%'", e);
+            logger.error("Couldnt execute\n" + statementString, e);
         }
         return resultSum;
     }
@@ -230,35 +228,18 @@ class DBDAO {
         executeSQL("UPDATE QRItems Set itemMapped=\"" + itemName +"\" where itemNumber=" + itemNumber);
     }
 
-    List<Document> getDocumentsForMonthAndYear(String monthAndYear){
-        List<Document> documentList = new ArrayList<>();
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Documents WHERE date like '%" + monthAndYear.replace('-', '.') + "%' AND originalFile like '%Bons%'");
-        ) {
-           documentList = new ArrayList<>();
-            while (rs.next()) {
-                Document document = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"));
-                document.setUser(rs.getInt("user"));
-                documentList.add(document);
-            }
-        } catch (SQLException e) {
-            logger.error("SELECT * FROM Documents WHERE date like '%" + monthAndYear + "%' AND originalFile like '%Bons%'", e);
-        }
-        return documentList;
-    }
-
     boolean isFilePresent(File newFile){
         int filesSizeOfNewFile = countDocuments("Documents" ,"where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
 
         return filesSizeOfNewFile > 0;
     }
 
-    List<Task> getTasksFromDB(){
+    List<Task> getTasksFromDB(BackendFacade facade){
         List<Task> taskList = new ArrayList<>();
         try(Statement statement = getConnection().createStatement();
             ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
             while (rs.next()) {
-                Task task = TaskFactory.getTask(rs);
+                Task task = TaskFactory.getTask(rs, facade);
                 taskList.add(task);
             }
         } catch (SQLException e) {
@@ -348,7 +329,9 @@ class DBDAO {
                 float sum = rs.getFloat("sum");
                 int id = rs.getInt("id");
 
-                Bon bon = new Bon(content, new File(originalFilePath), sum, id, userInt);
+                Document document = new Image(content, new File(originalFilePath), id);
+                document.setUser(userInt);
+                Bon bon = new Bon(document, sum);
                 resultBons.add(bon);
             }
         } catch (SQLException e) {
@@ -379,5 +362,10 @@ class DBDAO {
 
     public void insertTag(int documentId, String tag) {
         executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + documentId + ", '" + tag + "');" );
+    }
+
+    public void insertUserToAllowedUsers(Integer id, String firstName, Long chatId) {
+        executeSQL("insert into AllowedUsers(id, name, chatId) Values (" + id + ", '" +
+                firstName + "', " + chatId + ")");
     }
 }
