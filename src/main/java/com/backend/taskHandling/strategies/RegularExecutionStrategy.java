@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class RegularExecutionStrategy implements ExecutionStrategy {
 
-    Logger LOGGER = Logger.getLogger(RegularExecutionStrategy.class);
+    Logger LOGGER = Main.getLogger();
 
     int min = 0;
 

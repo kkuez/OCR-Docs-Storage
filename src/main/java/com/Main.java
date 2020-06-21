@@ -5,10 +5,7 @@ import com.gui.controller.StartApplication;
 import com.backend.network.ListenerThread;
 import com.bot.telegram.Bot;
 import javafx.application.Application;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.log4j.*;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
@@ -28,7 +25,6 @@ public class Main {
     private static Logger logger;
 
     public static void main(String[] args) {
-        // write your code here
         logger = createLogger();
 
         logger.info("\n\nStarting.");

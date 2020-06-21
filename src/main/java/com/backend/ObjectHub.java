@@ -8,6 +8,7 @@ import com.bot.telegram.Bot;
 
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
@@ -39,13 +40,15 @@ public class ObjectHub {
     private ObjectHub() {
         properties = new CustomProperties();
         String root = "";
-        facade = new FacadeController();
 
         try {
             properties.load(new FileInputStream(root + "setup.properties"));
         } catch (IOException e) {
             logger.error("Failed activating bot", e);
         }
+
+        File dbFile = new File(getProperties().getProperty("dbPath"));
+        facade = new FacadeController(dbFile);
         archiver = new Archiver(properties);
 
         executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));

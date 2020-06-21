@@ -47,15 +47,15 @@ public class BonProcess extends Process {
                     if (commandValue[1].equals("confirm")) {
                         user.setBusy(true);
                         //In Bonfolder kopieren nachdem der User bestätigt hat dass Dok ein Bon ist.
-                        File newOriginalFile = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), document.getOriginalFileName());
+                        File newOriginalFile = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), bon.getOriginalFileName());
                         try {
-                            FileUtils.copyFile(document.getOriginFile(), newOriginalFile);
+                            FileUtils.copyFile(bon.getOriginFile(), newOriginalFile);
                         } catch (IOException e) {
-                            logger.error(document.getOriginFile().getAbsolutePath(), e);
+                            logger.error(bon.getOriginFile().getAbsolutePath(), e);
                         }
-                        FileUtils.deleteQuietly(document.getOriginFile());
-                        document.setOriginFile(newOriginalFile);
-                        getFacade().updateDocument(document);
+                        FileUtils.deleteQuietly(bon.getOriginFile());
+                        bon.setOriginFile(newOriginalFile);
+                        getFacade().updateDocument(bon);
                         message = getBot().askBoolean("Endsumme " + bon.getSum() + "?", update, true);
                         currentStep = Steps.isSum;
                         user.setBusy(false);
@@ -72,7 +72,7 @@ public class BonProcess extends Process {
                     if (commandValue[1].equals("confirm")) {
                         getBot().sendMsg("Ok :)", update, null, true, false);
                         getFacade().insertDocument(bon);
-                        getFacade().insertTag(document.getId(), "Bon");
+                        getFacade().insertTag(bon.getId(), "Bon");
                         setDeleteLater(true);
                         close();
                     } else {
@@ -90,8 +90,8 @@ public class BonProcess extends Process {
                         sum = Float.parseFloat(commandValue[1].replace(',', '.'));
                         bon.setSum(sum);
                         getFacade().insertDocument(bon);
-                        getFacade().insertTag(document.getId(), "B");
-                        getFacade().insertTag(document.getId(), "Bon");
+                        getFacade().insertTag(bon.getId(), "B");
+                        getFacade().insertTag(bon.getId(), "Bon");
                         getBot().sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
                         close();
                     } catch (NumberFormatException e) {
@@ -101,7 +101,6 @@ public class BonProcess extends Process {
                 default:
                     if (currentStep == Steps.enterBon) {
                         currentStep = Steps.Start;
-                        this.document = getFacade().getDocument(bon.getId());
                         performNextStep("Start", update, allowedUsersMap);
                     }
                     break;

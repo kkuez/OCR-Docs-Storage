@@ -7,6 +7,7 @@ public class Bon extends Document {
     public Bon(Document document, float sum) {
         this.setContent(document.getContent());
         this.setOriginFile(document.getOriginFile());
+        this.setOriginalFileName(document.getOriginalFileName());
         this.setTagSet(document.getTagSet());
         this.setId(document.getId());
         this.setUser(document.getUser());
@@ -18,6 +19,7 @@ public class Bon extends Document {
     @Override
     public String getInsertDBString(int docCount){
         String divider = ", '";
+        /*
         StringBuilder docStatement = new StringBuilder("insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (");
         docStatement.append(docCount);
         docStatement.append(divider);
@@ -30,14 +32,14 @@ public class Bon extends Document {
         docStatement.append(getUser());
         docStatement.append(", ");
         docStatement.append(FileUtils.sizeOf(getOriginFile()));
-        docStatement.append(");");
+        docStatement.append(");");*/
 
         StringBuilder bonStatement = new StringBuilder("insert into Bons (belongsToDocument, sum) Values (");
         bonStatement.append(docCount);
         bonStatement.append(", ");
         bonStatement.append(sum);
         bonStatement.append(")");
-        return docStatement.toString() + ";" + bonStatement.toString();
+        return /*docStatement.toString() + ";" +*/ bonStatement.toString();
     }
 
 

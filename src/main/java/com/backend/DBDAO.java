@@ -21,11 +21,13 @@ class DBDAO {
 
     private Connection connection = null;
 
-    File dbFile = new File(ObjectHub.getInstance().getProperties().getProperty("dbPath"));
+    File dbFile = null;
 
     private Document lastProcessedDoc = null;
 
-    DBDAO() {}
+    DBDAO(File dbFile) {
+        this.dbFile = dbFile;
+    }
 
     List<Document> getDocumentsForSearchTerm(String searchTerm) {
         Map<File, Document> documentMap = new HashMap<>();
@@ -78,15 +80,6 @@ class DBDAO {
         updateStatement.append(" where id = ");
         updateStatement.append(document.getId());
         updateStatement.append(";");
-
-        if(document instanceof Bon) {
-            Bon bon = (Bon) document;
-            updateStatement.append("update Bons set sum = ");
-            updateStatement.append(bon.getSum());
-            updateStatement.append(" where belongsToDocument = ");
-            updateStatement.append(bon.getId());
-        }
-
         executeSQL(updateStatement.toString());
     }
 
@@ -152,9 +145,11 @@ class DBDAO {
 
   void insertDocument(Document document){
         if(document.getClass().equals(Image.class)){
+            //TODO auf neue BonStruktur angleichen
             lastProcessedDoc = document;
         }
-        executeSQL(document.getInsertDBString(countDocuments("Documents", "")));
+        int id = document instanceof Document ? countDocuments("Documents", "") : document.getId();
+        executeSQL(document.getInsertDBString(id));
     }
 
     void removeTask(Task task){

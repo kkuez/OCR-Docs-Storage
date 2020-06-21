@@ -16,8 +16,8 @@ public class FacadeController implements BackendFacade {
 
     DBDAO dbdao;
 
-    FacadeController() {
-        dbdao = new DBDAO();
+    FacadeController(File dbFile) {
+        dbdao = new DBDAO(dbFile);
     }
 
     @Override
