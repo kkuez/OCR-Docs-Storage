@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 public class BonProcess extends Process {
 
@@ -27,21 +28,24 @@ public class BonProcess extends Process {
 
     private Document document;
 
-    public BonProcess(Bot bot, ProgressReporter progressReporter, BackendFacade facade){
+    private static Set<String> commands = Set.of(
+            "Start",
+            "isSum",
+            "EnterRightSum");
+    public BonProcess(ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-        setBot(bot);
         currentStep = Steps.enterBon;
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap){
-        String[] commandValue = deserializeInput(update);
+    public void performNextStep(String arg, Update update, Bot bot){
+        String[] commandValue = deserializeInput(update, bot);
         Message message = null;
-        User user = getBot().getNonBotUserFromUpdate(update);
+        User user = bot.getNonBotUserFromUpdate(update);
         try {
             switch (commandValue[0]) {
                 case "abort":
-                    getBot().abortProcess(update);
+                    bot.abortProcess(update);
                     break;
                 case "Start":
                     if (commandValue[1].equals("confirm")) {
@@ -56,31 +60,31 @@ public class BonProcess extends Process {
                         FileUtils.deleteQuietly(bon.getOriginFile());
                         bon.setOriginFile(newOriginalFile);
                         getFacade().updateDocument(bon);
-                        message = getBot().askBoolean("Endsumme " + bon.getSum() + "?", update, true);
+                        message = bot.askBoolean("Endsumme " + bon.getSum() + "?", update, true);
                         currentStep = Steps.isSum;
                         user.setBusy(false);
                     } else {
                         if (commandValue[1].equals("deny")) {
-                            message = getBot().simpleEditMessage("Ok :)", update, KeyboardFactory.KeyBoardType.NoButtons);
-                            close();
+                            message = bot.simpleEditMessage("Ok :)", update, KeyboardFactory.KeyBoardType.NoButtons);
+                            close(bot);
                         } else {
-                            message = getBot().simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
+                            message = bot.simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
                         }
                     }
                     break;
                 case "isSum":
                     if (commandValue[1].equals("confirm")) {
-                        getBot().sendMsg("Ok :)", update, null, true, false);
+                        bot.sendMsg("Ok :)", update, null, true, false);
                         getFacade().insertDocument(bon);
                         getFacade().insertTag(bon.getId(), "Bon");
                         setDeleteLater(true);
-                        close();
+                        close(bot);
                     } else {
                         if (commandValue[1].equals("deny")) {
-                            message = getBot().sendMsg("Bitte richtige Summe eingeben:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                            message = bot.sendMsg("Bitte richtige Summe eingeben:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                             currentStep = Steps.EnterRightSum;
                         } else {
-                            message = getBot().simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
+                            message = bot.simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
                         }
                     }
                     break;
@@ -92,16 +96,16 @@ public class BonProcess extends Process {
                         getFacade().insertDocument(bon);
                         getFacade().insertTag(bon.getId(), "B");
                         getFacade().insertTag(bon.getId(), "Bon");
-                        getBot().sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
-                        close();
+                        bot.sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
+                        close(bot);
                     } catch (NumberFormatException e) {
-                        message = getBot().sendMsg("Die Zahl verstehe ich nicht :(", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                        message = bot.sendMsg("Die Zahl verstehe ich nicht :(", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     }
                     break;
                 default:
                     if (currentStep == Steps.enterBon) {
                         currentStep = Steps.Start;
-                        performNextStep("Start", update, allowedUsersMap);
+                        performNextStep("Start", update, bot);
                     }
                     break;
             }
@@ -118,8 +122,13 @@ public class BonProcess extends Process {
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
+    public String getCommandIfPossible(Update update, Bot bot) {
         return currentStep.toString();
+    }
+
+    @Override
+    public boolean hasCommand(String cmd) {
+        return false;
     }
 
     @Override

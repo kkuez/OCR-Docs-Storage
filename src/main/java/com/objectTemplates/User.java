@@ -15,8 +15,6 @@ public class User {
 
     private Process process = null;
 
-    boolean aboutToUploadFile = false;
-
     private boolean isBusy = false;
     //NO InlineKeyboards! important to seperat input of the to List processes.
     private ReplyKeyboard keyboardContext = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Start, false, false, "", facade);
@@ -49,14 +47,6 @@ public class User {
 
     public void setKeyboardContext(ReplyKeyboard keyboardContext) {
         this.keyboardContext = keyboardContext;
-    }
-
-    public boolean isAboutToUploadFile() {
-        return aboutToUploadFile;
-    }
-
-    public void setAboutToUploadFile(boolean aboutToUploadFile) {
-        this.aboutToUploadFile = aboutToUploadFile;
     }
 
     public Process getProcess() {

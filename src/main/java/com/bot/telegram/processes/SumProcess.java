@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
 
 public class SumProcess extends Process{
 
@@ -20,14 +21,17 @@ public class SumProcess extends Process{
 
     private String year;
 
-    public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+    private static Set<String> commands = Set.of(
+            "selectMonth",
+            "selectYear");
+
+    public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, BackendFacade facade){
         super(progressReporter, facade);
-        setBot(bot);
         Message message = null;
         try {
-            message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
+            message = bot.askMonth("Für welchem Monat...?", update, false, "selectMonth");
             getSentMessages().add(message);
-            performNextStep("", update, allowedUsersMap);
+            performNextStep("", update, bot);
         } catch (TelegramApiException e) {
             if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
                 logger.info("Message not edited, no need.");
@@ -38,37 +42,37 @@ public class SumProcess extends Process{
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap){
+    public void performNextStep(String arg, Update update, Bot bot){
         Message message = null;
-        String[] commandValue = deserializeInput(update);
+        String[] commandValue = deserializeInput(update, bot);
         try {
             switch (commandValue[0]) {
                 case "selectMonth":
                     if (TimeUtil.getMonthMapStringKeys().containsKey(commandValue[1])) {
                         month = TimeUtil.getMonthMapStringKeys().get(commandValue[1]);
-                        message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
+                        message = bot.askYear("Für welches Jahr...?", update, false, "selectYear");
                     } else {
-                        message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
+                        message = bot.askMonth("Für welchem Monat...?", update, false, "selectMonth");
                     }
                     break;
                 case "selectYear":
                     year = commandValue[1];
                     if (TimeUtil.getYearsSet().contains(year)) {
-                        User user = allowedUsersMap.get(update.getCallbackQuery().getFrom().getId());
-                        getBot().getNonBotUserFromUpdate(update).setBusy(true);
+                        User user = bot.getAllowedUsersMap().get(update.getCallbackQuery().getFrom().getId());
+                        bot.getNonBotUserFromUpdate(update).setBusy(true);
                         float sumOfMonthAll = getFacade().getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1), null);
                         float sumOfMonthForCurrentUser = getFacade().getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1), user);
                         String messageToSend = month + "/" + year + "\nSumme alle: " + sumOfMonthAll + "\nSumme " + user.getName() + ": " + sumOfMonthForCurrentUser;
                         try {
-                            getBot().sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());
+                            bot.sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());
                         } catch (TelegramApiException e) {
                             logger.error("Failed activating bot", e);
                         }
-                        getBot().sendMsg(messageToSend, update, null, false, false);
-                        getBot().getNonBotUserFromUpdate(update).setBusy(false);
-                        close();
+                        bot.sendMsg(messageToSend, update, null, false, false);
+                        bot.getNonBotUserFromUpdate(update).setBusy(false);
+                        close(bot);
                     } else {
-                        message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
+                        message = bot.askYear("Für welches Jahr...?", update, false, "selectYear");
                     }
                     break;
             }
@@ -90,8 +94,8 @@ public class SumProcess extends Process{
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
-        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  getBot().getMassageFromUpdate(update).getText();
+    public String getCommandIfPossible(Update update, Bot bot) {
+        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  bot.getMassageFromUpdate(update).getText();
         if(update.hasCallbackQuery()){
             if(updateText.startsWith("selectMonth")){
                 return "selectMonth";
@@ -102,5 +106,10 @@ public class SumProcess extends Process{
             }
         }
         return "";
+    }
+
+    @Override
+    public boolean hasCommand(String cmd) {
+        return commands.contains(cmd);
     }
 }

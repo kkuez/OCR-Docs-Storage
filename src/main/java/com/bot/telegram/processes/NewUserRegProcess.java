@@ -11,20 +11,19 @@ import java.util.Map;
 
 public class NewUserRegProcess extends Process {
 
-    public NewUserRegProcess(Bot bot, ProgressReporter progressReporter, BackendFacade facade){
+    public NewUserRegProcess(ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-        setBot(bot);
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+    public void performNextStep(String arg, Update update, Bot bot) {
         if(arg.equals(ObjectHub.getInstance().getProperties().getProperty("pwForNewUsers"))){
-            getBot().sendMsg("Willkommen :)", update, null, true, false);
+            bot.sendMsg("Willkommen :)", update, null, true, false);
             getFacade().insertUserToAllowedUsers(update.getMessage().getFrom().getId(), update.getMessage().getFrom().getFirstName(), update.getMessage().getChatId());
             ObjectHub.getInstance().setAllowedUsersMap(getFacade().getAllowedUsers());
             setDeleteLater(true);
         }else{
-            allowedUsersMap.remove(update.getMessage().getFrom().getId());
+            bot.getAllowedUsersMap().remove(update.getMessage().getFrom().getId());
         }
     }
 
@@ -34,7 +33,13 @@ public class NewUserRegProcess extends Process {
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
+    public String getCommandIfPossible(Update update, Bot bot) {
         return null;
+    }
+
+    @Override
+    public boolean hasCommand(String cmd) {
+        //TODO
+        return false;
     }
 }

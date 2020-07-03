@@ -35,6 +35,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -54,6 +56,8 @@ public class Bot extends TelegramLongPollingBot {
     Map<Integer, User> allowedUsersMap;
 
     private static Logger logger = Main.getLogger();
+
+    Map<Class, Process> processCache = new HashMap<>(10);
 
     public Bot(BackendFacade backendFacade) {
         this.facade = backendFacade;
@@ -79,6 +83,23 @@ public class Bot extends TelegramLongPollingBot {
                 sendMsg(progressManager.getCurrentProgress() + "%", updateOrNull, null, false, false);
             }
         };
+        setupProcessCache(facade, progressReporter);
+    }
+
+    private void setupProcessCache(BackendFacade facade, Reporter reporter) {
+        ProgressReporter progressReporter = (ProgressReporter) reporter;
+        processCache.put(BonProcess.class, new BonProcess(progressReporter, facade));
+        processCache.put(CalenderProcess.class, new CalenderProcess(progressReporter, facade));
+        processCache.put(GetBonsProcess.class, new GetBonsProcess(progressReporter, facade));
+        processCache.put(GetPicsProcess.class, new GetPicsProcess(progressReporter, facade));
+        processCache.put(MapQRItemProcess.class, new MapQRItemProcess(progressReporter, facade));
+        processCache.put(MemoProcess.class, new MemoProcess(progressReporter, facade));
+        processCache.put(NewUserRegProcess.class, new NewUserRegProcess(progressReporter, facade));
+        processCache.put(RemoveLastProcess.class, new RemoveLastProcess(progressReporter, facade));
+        processCache.put(ShoppingListProcess.class, new ShoppingListProcess(progressReporter, facade));
+        processCache.put(StandardListProcess.class, new StandardListProcess(progressReporter, facade));
+        processCache.put(StartProcess.class, new StartProcess(progressReporter, facade));
+        processCache.put(SumProcess.class, new SumProcess(progressReporter, facade));
     }
 
     /**
@@ -355,7 +376,16 @@ public class Bot extends TelegramLongPollingBot {
         if (textGivenByUser != null) {
             Message message = null;
             String WUTCHAWANNADO = "Was willst du tun?";
+            //TODO Function Factory is aber Prio2
+            Optional<Process> process = fetchProcess(textGivenByUser);
+            if(process.isEmpty()) {
+                logger.warn("No process found for " + textGivenByUser);
+            }
+
+            process.get().performNextStep(textGivenByUser, update, allowedUsersMap, this);
+            Process asd = (Process) test.apply(update);
             switch (textGivenByUser) {
+
                 case "Weitere Optionen":
                     sendMsg(WUTCHAWANNADO, update, KeyboardFactory.KeyBoardType.FurtherOptions, true, false);
                     break;
@@ -367,7 +397,6 @@ public class Bot extends TelegramLongPollingBot {
                     message = sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                     processToReturn.getSentMessages().add(message);
                     break;
-                //TODO Standartliste anzeigen :D
                 case "Standardliste: Optionen":
                     processToReturn = new StandardListProcess((ProgressReporter) progressReporter, this, update, allowedUsersMap, facade);
                     sendKeyboard(WUTCHAWANNADO, update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.StandardList, false, false, "", facade), false);
@@ -755,6 +784,16 @@ public class Bot extends TelegramLongPollingBot {
         answerCallbackQuery.setText(text);
         execute(answerCallbackQuery);
     }
+
+    private Optional<Process> fetchProcess(String cmd) {
+        for(Map.Entry<Class, Process> entry: processCache.entrySet()){
+            if(entry.getValue().hasCommand(cmd)) {
+                return Optional.of(entry.getValue());
+            }
+        }
+        return Optional.empty();
+    }
+
     //GETTER SETTER
 
 
@@ -777,4 +816,5 @@ public class Bot extends TelegramLongPollingBot {
     public enum ParseMode { //https://core.telegram.org/bots/api#formatting-options
         None, Markdown, HTML
     }
+
 }

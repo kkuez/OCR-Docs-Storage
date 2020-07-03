@@ -10,16 +10,15 @@ import java.util.Map;
 
 public class RemoveLastProcess extends Process {
 
-    public RemoveLastProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+    public RemoveLastProcess(Bot bot, ProgressReporter progressReporter, Update update, BackendFacade facade){
         super(progressReporter, facade);
-    setBot(bot);
-    performNextStep("asd", update, allowedUsersMap);
+    performNextStep("asd", update, bot);
     }
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+    public void performNextStep(String arg, Update update, Bot bot) {
         getFacade().deleteLastDocument();
-        getBot().sendMsg( "Letztes Bild gelöscht :)", update, null, true, false);
-        close();
+        bot.sendMsg( "Letztes Bild gelöscht :)", update, null, true, false);
+        close(bot);
     }
 
     @Override
@@ -28,7 +27,13 @@ public class RemoveLastProcess extends Process {
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
+    public String getCommandIfPossible(Update update, Bot bot) {
         return null;
+    }
+
+    @Override
+    public boolean hasCommand(String cmd) {
+        //TODO
+        return false;
     }
 }

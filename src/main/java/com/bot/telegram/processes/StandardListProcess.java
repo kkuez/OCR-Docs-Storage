@@ -13,76 +13,83 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class StandardListProcess extends Process {
 
     AWAITING_INPUT status = null;
 
-    public StandardListProcess(ProgressReporter progressReporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+    private final static Set<String> commands = Set.of(
+            "Standardliste anzeigen",
+            "Liste Löschen",
+            "Löschen",
+            "Hinzufügen");
+
+    public StandardListProcess(ProgressReporter progressReporter, Bot bot, Update update, BackendFacade facade){
         super(progressReporter, facade);
-        this.setBot(bot);
-        getBot().getNonBotUserFromUpdate(update).setBusy(true);
-        performNextStep("-", update,  allowedUsersMap);
+        bot.getNonBotUserFromUpdate(update).setBusy(true);
+        performNextStep("-", update,  bot);
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
-        String[] commandValue = deserializeInput(update);
+    public void performNextStep(String arg, Update update, Bot bot) {
+        String[] commandValue = deserializeInput(update, bot);
         Message message = null;
         switch (commandValue[0]){
             case "add":
                 String item = commandValue[1];
                 getFacade().insertToStandartList(item);
-                    message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                    message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
                 getSentMessages().add(message);
                 break;
             case "remove":
                 try{
                     item = commandValue[1];
                     getFacade().deleteFromStandartList(item);
-                    getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
-                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.StandardList_Current, "remove");
+                    bot.sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
+                    bot.simpleEditMessage(item + " gelöscht. Nochwas?", bot.getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.StandardList_Current, "remove");
                 }catch (Exception e){
                     logger.error(null, e);
                 }
                 break;
             case "done":
-                getBot().sendMsg("Ok :)", update, null, false, false);
-                close();
+                bot.sendMsg("Ok :)", update, null, false, false);
+                close(bot);
                 break;
             case "Standardliste anzeigen":
-                sendStandardList(update);
-                close();
+                //TODO Man kann nicht zweimal hintereinander Standartliste anzeigen ZB denn der Process wird geschlossen. Wenn der Prozess null ist dann wird gewartet bis gültige eingabe kommt
+                sendStandardList(update, bot);
+                close(bot);
                 break;
             case "Liste Löschen":
                 List<String> standartList = getFacade().getStandartList();
                 standartList.forEach(standartListItem -> getFacade().deleteFromStandartList(standartListItem));
-                getBot().setShoppingList(new ArrayList<String>());
-                getBot().sendMsg("Standardliste gelöscht :)", update, null, false, false);
-                close();
+                bot.setShoppingList(new ArrayList<String>());
+                bot.sendMsg("Standardliste gelöscht :)", update, null, false, false);
+                close(bot);
                 break;
             case "Löschen":
                 ReplyKeyboard standardListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getStandartList(), "remove");
-                message = getBot().sendKeyboard("Was soll gelöscht werden?", update, standardListKeyboard, false);
+                message = bot.sendKeyboard("Was soll gelöscht werden?", update, standardListKeyboard, false);
                 break;
             case "Hinzufügen":
-                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                message = bot.sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 status = AWAITING_INPUT.add;
                 break;
         }
-        getBot().getNonBotUserFromUpdate(update).setBusy(false);
+        bot.getNonBotUserFromUpdate(update).setBusy(false);
         if(message != null){
             getSentMessages().add(message);
         }
     }
 
-    private void sendStandardList(Update update) {
+    private void sendStandardList(Update update, Bot bot) {
         StringBuilder listeBuilder = new StringBuilder("Aktuelle Standardliste:\n");
         List<String> standardList = getFacade().getStandartList();
         for(int i = 0;i<standardList.size();i++){
             listeBuilder.append( i + ": " + standardList.get(i) + "\n");
         }
-        getBot().sendMsg(listeBuilder.toString(), update, null, false, false);
+        bot.sendMsg(listeBuilder.toString(), update, null, false, false);
     }
 
     @Override
@@ -91,10 +98,15 @@ public class StandardListProcess extends Process {
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
+    public String getCommandIfPossible(Update update, Bot bot) {
         String prefix = !update.hasCallbackQuery() ? update.getMessage().getText() : "";
         prefix = status == AWAITING_INPUT.add ? "add" : prefix;
         return prefix;
+    }
+
+    @Override
+    public boolean hasCommand(String cmd) {
+        return commands.contains(cmd);
     }
 
     enum AWAITING_INPUT{

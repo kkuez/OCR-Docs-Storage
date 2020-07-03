@@ -20,39 +20,46 @@ public class ShoppingListProcess extends Process{
 
     User user;
 
-    public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+    private final static Set<String> commands = Set.of(
+            "Einkaufsliste anzeigen",
+            "Liste Löschen",
+            "Löschen",
+            "Zu Einkaufsliste hinzufügen",
+            "Hinzufügen",
+            "Standardliste anzeigen");
+
+    public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-        this.setBot(bot);
-        user = getBot().getNonBotUserFromUpdate(update);
+        user = bot.getNonBotUserFromUpdate(update);
         user.setBusy(true);
-        performNextStep("-", update,  allowedUsersMap);
+        performNextStep("-", update, bot);
     }
 
-    private void sendShoppingList(Update update){
+    private void sendShoppingList(Update update, Bot bot){
         StringBuilder listeBuilder = new StringBuilder("*Aktuelle Einkaufsliste:*\n");
-        for(int i = 0;i<getBot().getShoppingList().size();i++){
-            listeBuilder.append( i + ": " + getBot().getShoppingList().get(i) + "\n");
+        for(int i = 0;i<bot.getShoppingList().size();i++){
+            listeBuilder.append( i + ": " + bot.getShoppingList().get(i) + "\n");
         }
-        getBot().sendMsg(listeBuilder.toString(), update, null, false, false, Bot.ParseMode.Markdown);
+        bot.sendMsg(listeBuilder.toString(), update, null, false, false, Bot.ParseMode.Markdown);
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
-        String[] commandValue = deserializeInput(update);
+    public void performNextStep(String arg, Update update, Bot bot) {
+        String[] commandValue = deserializeInput(update, bot);
         Message message = null;
         switch (commandValue[0]){
             case "add":
                 String item = commandValue[1];
-                getBot().getShoppingList().add(item);
+                bot.getShoppingList().add(item);
                 getFacade().insertShoppingItem(item);
                 if(update.hasCallbackQuery()){
                     try {
-                        getBot().sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
+                        bot.sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         logger.error("Failed activating bot", e);
                     }
                 }else{
-                    message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                    message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
                 }
                 getSentMessages().add(message);
                 break;
@@ -60,39 +67,39 @@ public class ShoppingListProcess extends Process{
                 try{
                     item = commandValue[1];
                     getFacade().deleteFromShoppingList(item);
-                    getBot().getShoppingList().remove(item);
-                    getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
-                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
+                    bot.getShoppingList().remove(item);
+                    bot.sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
+                    bot.simpleEditMessage(item + " gelöscht. Nochwas?", bot.getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
                 }catch (Exception e){
                     logger.error(null, e);
                 }
                 break;
             case "done":
-                getBot().sendMsg("Ok :)", update, null, false, false);
-                close();
+                bot.sendMsg("Ok :)", update, null, false, false);
+                close(bot);
                 break;
             case "Einkaufsliste anzeigen":
-                sendShoppingList(update);
-                close();
+                sendShoppingList(update, bot);
+                close(bot);
                 break;
             case "Liste Löschen":
-                getBot().getShoppingList().forEach(shoppingItem -> getFacade().deleteFromShoppingList(shoppingItem));
-                getBot().setShoppingList(new ArrayList<>());
-                getBot().sendMsg("Einkaufsliste gelöscht :)", update, null, false, false);
-                close();
+                bot.getShoppingList().forEach(shoppingItem -> getFacade().deleteFromShoppingList(shoppingItem));
+                bot.setShoppingList(new ArrayList<>());
+                bot.sendMsg("Einkaufsliste gelöscht :)", update, null, false, false);
+                close(bot);
                 break;
             case "Löschen":
                 ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getShoppingList(), "remove");
-                message = getBot().sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
+                message = bot.sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
                 break;
             case "Zu Einkaufsliste hinzufügen":
             case "Hinzufügen":
-                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.ShoppingList_Add, false, true);
+                message = bot.sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.ShoppingList_Add, false, true);
                 status = AWAITING_INPUT.add;
                 break;
-            case"Standardliste anzeigen":
+            case "Standardliste anzeigen":
                 try {
-                    message = getBot().simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
+                    message = bot.simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
                 } catch (TelegramApiException e) {
                     if(((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
                         logger.info("Message not edited, no need.");
@@ -114,7 +121,7 @@ public class ShoppingListProcess extends Process{
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
+    public String getCommandIfPossible(Update update, Bot bot) {
         if(update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("Standardliste anzeigen")){
             return "Standardliste anzeigen";
         }else{
@@ -128,6 +135,11 @@ public class ShoppingListProcess extends Process{
         }
 
         return !update.hasCallbackQuery() ? update.getMessage().getText() : "";
+    }
+
+    @Override
+    public boolean hasCommand(String cmd) {
+        return commands.contains(cmd);
     }
 
     enum AWAITING_INPUT{

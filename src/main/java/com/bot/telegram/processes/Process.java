@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class Process {
 
@@ -22,15 +23,13 @@ public abstract class Process {
 
     private ProgressReporter progressReporter;
 
-    private Bot bot;
-
     private Boolean hasStarted = false;
 
     private boolean deleteLater = false;
 
     private boolean awaitsInput = false;
 
-    public abstract void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) throws TelegramApiException;
+    public abstract void performNextStep(String arg, Update update, Bot bot) throws TelegramApiException;
 
     public abstract String getProcessName();
 
@@ -44,12 +43,12 @@ public abstract class Process {
         this.facade = facade;
     }
 
-    private void clearButtons(){
+    private void clearButtons(Bot bot){
         int caughtMessages = 0;
         for(Message message : getSentMessages()){
             if(message != null){
                 try {
-                    getBot().simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons, "");
+                    bot.simpleEditMessage(message.getText(), message, KeyboardFactory.KeyBoardType.NoButtons, "");
                 } catch (TelegramApiException e) {
                     if(e.getMessage().equals("Error editing message reply markup") || e.getMessage().equals("Error editing message text")){
                         caughtMessages++;
@@ -64,14 +63,14 @@ public abstract class Process {
         }
     }
 
-    public void close(){
-        clearButtons();
+    public void close(Bot bot){
+        clearButtons(bot);
         setDeleteLater(true);
     }
 
-    String[] deserializeInput(Update update){
-        String command = getCommandIfPossible(update);
-        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  getBot().getMassageFromUpdate(update).getText();
+    String[] deserializeInput(Update update, Bot bot){
+        String command = getCommandIfPossible(update, bot);
+        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  bot.getMassageFromUpdate(update).getText();
         String value = updateText.replace(command, "");
 
 
@@ -100,11 +99,16 @@ public abstract class Process {
         return new String[]{command, value};
     }
 
-    public abstract String getCommandIfPossible(Update update);
+    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap, Bot bot) {
+        //Method only to setup stuff, like Bot in this case
+        try {
+            performNextStep(arg, update, bot);
+        } catch (TelegramApiException e) {
+            logger.error("Couldnt execute update.", e);
+        }
+    };
 
     //GETTER SETTER
-
-
     public boolean isAwaitsInput() {
         return awaitsInput;
     }
@@ -137,15 +141,6 @@ public abstract class Process {
         this.progressReporter = progressReporter;
     }
 
-
-    public Bot getBot() {
-        return bot;
-    }
-
-    public void setBot(Bot bot) {
-        this.bot = bot;
-    }
-
     public BackendFacade getFacade() {
         return facade;
     }
@@ -157,5 +152,9 @@ public abstract class Process {
     public void setHasStarted(Boolean hasStarted) {
         this.hasStarted = hasStarted;
     }
+
+    public abstract String getCommandIfPossible(Update update, Bot bot);
+
+    public abstract boolean hasCommand(String cmd);
 
 }

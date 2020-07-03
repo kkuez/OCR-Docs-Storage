@@ -13,65 +13,69 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MemoProcess extends Process {
 
-    Map<Integer, User> allowedUsersMap;
-
-    User user;
-
     InputType inputType = null;
+    private User user = null;
 
+    private final static Set<String> commands = Set.of(
+            "Memos anzeigen",
+            "Memos löschen",
+            "Memo hinzufügen",
+            "add",
+            "remove");
 
-    public MemoProcess(ProgressReporter reporter, Bot bot, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade) {
+    public MemoProcess(ProgressReporter reporter, BackendFacade facade, Update update, Bot bot) {
         super(reporter, facade);
-        this.setBot(bot);
-        this.allowedUsersMap = allowedUsersMap;
-        user = getBot().getNonBotUserFromUpdate(update);
         try {
-            performNextStep("", update, allowedUsersMap);
+            performNextStep("", update, bot);
         } catch (TelegramApiException e) {
             logger.error("Failed activating bot", e);
         }
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) throws TelegramApiException {
+    public void performNextStep(String arg, Update update, Bot bot) throws TelegramApiException {
+        if(user == null) {
+            user = bot.getNonBotUserFromUpdate(update);
+        }
         Message message = null;
-        String[] commandValue = deserializeInput(update);
+        String[] commandValue = deserializeInput(update, bot);
         switch (commandValue[0]){
             case "Memos anzeigen":
-                sendMemoList(update);
-                close();
+                sendMemoList(update, bot);
+                close(bot);
                 break;
             case "Memos löschen":
                 inputType = InputType.remove;
                 ReplyKeyboard memoListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getMemos(user.getId()), "remove");
-                message = getBot().sendKeyboard("Was soll gelöscht werden?", update, memoListKeyboard, false);
+                message = bot.sendKeyboard("Was soll gelöscht werden?", update, memoListKeyboard, false);
                 break;
             case "Memo hinzufügen":
                 inputType = InputType.add;
-                message = getBot().sendMsg("Was soll hinzugefügt werden?", update, null, true, false);
+                message = bot.sendMsg("Was soll hinzugefügt werden?", update, null, true, false);
                 break;
             case "add":
                 String item = commandValue[1];
                 getFacade().insertMemo(item, user.getId());
-                message = getBot().sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
                 getSentMessages().add(message);
                 break;
             case "remove":
                 try{
                     item = commandValue[1];
                     getFacade().deleteMemo(item);
-                    getBot().sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
-                    getBot().simpleEditMessage(item + " gelöscht. Nochwas?", getBot().getMassageFromUpdate(update), KeyboardFactory.getInlineKeyboardForList(getFacade().getMemos(user.getId()), "remove"), "remove");
+                    bot.sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
+                    bot.simpleEditMessage(item + " gelöscht. Nochwas?", bot.getMassageFromUpdate(update), KeyboardFactory.getInlineKeyboardForList(getFacade().getMemos(user.getId()), "remove"), "remove");
                 }catch (Exception e){
                     logger.error(null, e);
                 }
                 break;
             case "done":
-                getBot().sendMsg("Ok :)", update, null, false, false);
-                close();
+                bot.sendMsg("Ok :)", update, null, false, false);
+                close(bot);
                 break;
         }
 
@@ -88,7 +92,7 @@ public class MemoProcess extends Process {
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
+    public String getCommandIfPossible(Update update, Bot bot) {
         String inputString = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
         if (inputString.startsWith("Memo")) {
             return inputString;
@@ -104,13 +108,18 @@ public class MemoProcess extends Process {
         return null;
     }
 
-    private void sendMemoList(Update update){
+    @Override
+    public boolean hasCommand(String cmd) {
+        return commands.contains(cmd);
+    }
+
+    private void sendMemoList(Update update, Bot bot){
         List<String> memoList = getFacade().getMemos(user.getId());
         StringBuilder listeBuilder = new StringBuilder("*Aktuelle Memos:*\n");
         for(int i = 0;i<memoList.size();i++){
             listeBuilder.append( i + ": " + memoList.get(i) + "\n");
         }
-        getBot().sendMsg(listeBuilder.toString(), update, null, false, false, Bot.ParseMode.Markdown);
+        bot.sendMsg(listeBuilder.toString(), update, null, false, false, Bot.ParseMode.Markdown);
     }
 
     enum InputType{

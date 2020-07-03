@@ -8,18 +8,20 @@ import com.bot.telegram.KeyboardFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Map;
+import java.util.Set;
 
 public class StartProcess extends Process {
+    private static Set<String> commands = Set.of(
+            "start");
 
-    public StartProcess(Bot bot, Update update, ProgressReporter progressReporter, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+    public StartProcess(Bot bot, Update update, ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-        setBot(bot);
-        getBot().sendMsg("Wähle eine Aktion:", update, KeyboardFactory.KeyBoardType.Start, true, false);
-        close();
+        bot.sendMsg("Wähle eine Aktion:", update, KeyboardFactory.KeyBoardType.Start, true, false);
+        close(bot);
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) {
+    public void performNextStep(String arg, Update update, Bot bot) {
 
     }
 
@@ -29,7 +31,12 @@ public class StartProcess extends Process {
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
+    public String getCommandIfPossible(Update update, Bot bot) {
         return null;
+    }
+
+    @Override
+    public boolean hasCommand(String cmd) {
+        return commands.contains(cmd);
     }
 }

@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class GetBonsProcess extends Process{
     private Steps currentStep;
@@ -24,15 +25,15 @@ public class GetBonsProcess extends Process{
 
     private String year;
 
-    Map<Integer, User> allowedUsersMap;
+    private static Set<String> commands = Set.of(
+            "selectMonth",
+            "selectYear");
 
-    public GetBonsProcess(Bot bot, ProgressReporter progressReporter, Update update, Map<Integer, User> allowedUsersMap, BackendFacade facade){
+    public GetBonsProcess(ProgressReporter progressReporter, BackendFacade facade, Update update, Bot bot){
         super(progressReporter, facade);
-        this.allowedUsersMap = allowedUsersMap;
-        setBot(bot);
         currentStep = Steps.Start;
         try {
-            performNextStep("" , update, allowedUsersMap);
+            performNextStep("" , update, bot);
         } catch (TelegramApiException e) {
             if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
                 logger.info("Message not edited, no need.");
@@ -43,18 +44,18 @@ public class GetBonsProcess extends Process{
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap) throws TelegramApiException{
-        String[] commandValue = deserializeInput(update);
+    public void performNextStep(String arg, Update update, Bot bot) throws TelegramApiException{
+        String[] commandValue = deserializeInput(update, bot);
         Message message = null;
-        User user = getBot().getNonBotUserFromUpdate(update);
+        User user = bot.getNonBotUserFromUpdate(update);
         switch (commandValue[0]){
             case "selectMonth":
                 if(TimeUtil.getMonthMapStringKeys().keySet().contains(commandValue[1])) {
                     month = TimeUtil.getMonthMapStringKeys().get(commandValue[1]);
-                message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
+                message = bot.askYear("Für welches Jahr...?", update, false, "selectYear");
                 currentStep = Steps.selectYear;
             }else{
-                message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
+                message = bot.askMonth("Für welchem Monat...?", update, false, "selectMonth");
             }
             break;
             case "selectYear":
@@ -63,23 +64,23 @@ public class GetBonsProcess extends Process{
                     user.setBusy(true);
                     List<Bon> bonsForMonth = getFacade().getBonsForMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1));
                     bonsForMonth.forEach(bon -> {
-                        String possibleCaption = "Von " + allowedUsersMap.get(bon.getUser()).getName() + ": " + bon.getSum() + "€";
-                                getBot().sendPhotoFromURL(update, bon.getOriginFile().getAbsolutePath(), possibleCaption, null);
+                        String possibleCaption = "Von " + bot.getAllowedUsersMap().get(bon.getUser()).getName() + ": " + bon.getSum() + "€";
+                                bot.sendPhotoFromURL(update, bon.getOriginFile().getAbsolutePath(), possibleCaption, null);
                             });
                             try {
-                                getBot().sendAnswerCallbackQuery("Fertig", false, update.getCallbackQuery());
+                                bot.sendAnswerCallbackQuery("Fertig", false, update.getCallbackQuery());
                             } catch (TelegramApiException e) {
                                 logger.error("Failed activating bot", e);
                             }
-                            getBot().sendMsg("Fertig: " + bonsForMonth.size() + " Bilder geholt.", update, null, false, false);
-                    close();
+                            bot.sendMsg("Fertig: " + bonsForMonth.size() + " Bilder geholt.", update, null, false, false);
+                    close(bot);
                     user.setBusy(false);
                 }else{
-                    message = getBot().askYear("Für welches Jahr...?", update, false, "selectYear");
+                    message = bot.askYear("Für welches Jahr...?", update, false, "selectYear");
                 }
             break;
             default:
-                message = getBot().askMonth("Für welchem Monat...?", update, false, "selectMonth");
+                message = bot.askMonth("Für welchem Monat...?", update, false, "selectMonth");
                 currentStep = Steps.selectMonth;
                 break;
         }
@@ -94,8 +95,8 @@ public class GetBonsProcess extends Process{
     }
 
     @Override
-    public String getCommandIfPossible(Update update) {
-        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  getBot().getMassageFromUpdate(update).getText();
+    public String getCommandIfPossible(Update update, Bot bot) {
+        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  bot.getMassageFromUpdate(update).getText();
         if(update.hasCallbackQuery()){
             if (updateText.startsWith("selectMonth")){
                 return "selectMonth";
@@ -106,6 +107,11 @@ public class GetBonsProcess extends Process{
             }
         }
         return "";
+    }
+
+    @Override
+    public boolean hasCommand(String cmd) {
+        return commands.contains(cmd);
     }
 
     private enum Steps{
