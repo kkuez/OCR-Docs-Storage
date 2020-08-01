@@ -12,7 +12,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class MemoProcess extends Process {
@@ -27,17 +26,13 @@ public class MemoProcess extends Process {
             "add",
             "remove");
 
-    public MemoProcess(ProgressReporter reporter, BackendFacade facade, Update update, Bot bot) {
+    public MemoProcess(ProgressReporter reporter, BackendFacade facade) {
         super(reporter, facade);
-        try {
-            performNextStep("", update, bot);
-        } catch (TelegramApiException e) {
-            logger.error("Failed activating bot", e);
-        }
     }
 
     @Override
     public void performNextStep(String arg, Update update, Bot bot) throws TelegramApiException {
+        User user = bot.getNonBotUserFromUpdate(update);
         if(user == null) {
             user = bot.getNonBotUserFromUpdate(update);
         }
@@ -46,7 +41,7 @@ public class MemoProcess extends Process {
         switch (commandValue[0]){
             case "Memos anzeigen":
                 sendMemoList(update, bot);
-                close(bot);
+                reset(bot, user);
                 break;
             case "Memos löschen":
                 inputType = InputType.remove;
@@ -75,7 +70,7 @@ public class MemoProcess extends Process {
                 break;
             case "done":
                 bot.sendMsg("Ok :)", update, null, false, false);
-                close(bot);
+                reset(bot, user);
                 break;
         }
 

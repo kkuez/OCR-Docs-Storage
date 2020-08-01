@@ -1,17 +1,14 @@
 package com.bot.telegram.processes;
 
 import com.backend.BackendFacade;
-import com.google.common.annotations.VisibleForTesting;
 import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
+import com.objectTemplates.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.lang.model.util.Types;
-import java.util.Map;
 import java.util.Set;
 
 public class MapQRItemProcess extends Process {
@@ -21,17 +18,21 @@ public class MapQRItemProcess extends Process {
     private final static Set<String> commands = Set.of(
             "QR-Item mappen");
 
-    public MapQRItemProcess(ProgressReporter reporter, BackendFacade facade, Update update, Bot bot) {
+    public MapQRItemProcess(ProgressReporter reporter, BackendFacade facade) {
         super(reporter, facade);
-        Message message = bot.sendMsg("Welches Item willst du mappen?", update, KeyboardFactory.KeyBoardType.QRItems, true, true);
-        getSentMessages().add(message);
-        currentStep = Step.chooseNumber;
+        currentStep = Step.mapNewItem;
     }
 
     @Override
     public void performNextStep(String arg, Update update, Bot bot) throws TelegramApiException {
+        User user = bot.getNonBotUserFromUpdate(update);
         Message message = null;
         switch (currentStep) {
+            case mapNewItem:
+                message = bot.sendMsg("Welches Item willst du mappen?", update, KeyboardFactory.KeyBoardType.QRItems, true, true);
+                getSentMessages().add(message);
+                currentStep = Step.chooseNumber;
+                break;
             case chooseNumber:
                 itemNumberToMap = Integer.parseInt(update.getCallbackQuery().getData());
                 message = bot.simpleEditMessage("Und was..?", update, KeyboardFactory.KeyBoardType.Abort);
@@ -43,9 +44,15 @@ public class MapQRItemProcess extends Process {
                 getFacade().updateQRItem(itemNumberToMap, update.getMessage().getText());
                 message = bot.sendMsg("Ok :)", update, KeyboardFactory.KeyBoardType.NoButtons, false, false);
                 getSentMessages().add(message);
-                close(bot);
+                this.reset(bot, user);
                 break;
         }
+    }
+
+    @Override
+    public void reset(Bot bot, User user) {
+        currentStep = Step.mapNewItem;
+        super.reset(bot, user);
     }
 
     @Override
@@ -64,6 +71,6 @@ public class MapQRItemProcess extends Process {
     }
 
     private enum Step {
-        chooseNumber, nameItem
+        chooseNumber, nameItem, mapNewItem
     }
 }

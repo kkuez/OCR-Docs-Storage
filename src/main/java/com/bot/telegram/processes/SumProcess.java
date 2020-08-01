@@ -12,7 +12,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.Set;
 
 public class SumProcess extends Process{
@@ -25,20 +24,8 @@ public class SumProcess extends Process{
             "selectMonth",
             "selectYear");
 
-    public SumProcess(Bot bot, ProgressReporter progressReporter, Update update, BackendFacade facade){
+    public SumProcess(ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-        Message message = null;
-        try {
-            message = bot.askMonth("Für welchem Monat...?", update, false, "selectMonth");
-            getSentMessages().add(message);
-            performNextStep("", update, bot);
-        } catch (TelegramApiException e) {
-            if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
-                logger.info("Message not edited, no need.");
-            }else{
-                logger.error(((TelegramApiException) e).getLocalizedMessage(), e);
-            }
-        }
     }
 
     @Override
@@ -70,11 +57,22 @@ public class SumProcess extends Process{
                         }
                         bot.sendMsg(messageToSend, update, null, false, false);
                         bot.getNonBotUserFromUpdate(update).setBusy(false);
-                        close(bot);
+                        reset(bot, user);
                     } else {
                         message = bot.askYear("Für welches Jahr...?", update, false, "selectYear");
                     }
                     break;
+                default:
+                    try {
+                        message = bot.askMonth("Für welchem Monat...?", update, false, "selectMonth");
+                        getSentMessages().add(message);
+                    } catch (TelegramApiException e) {
+                        if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                            logger.info("Message not edited, no need.");
+                        }else{
+                            logger.error(((TelegramApiException) e).getLocalizedMessage(), e);
+                        }
+                    }
             }
         } catch (TelegramApiException e) {
             if(e.getMessage().equals("Error editing message reply markup")){

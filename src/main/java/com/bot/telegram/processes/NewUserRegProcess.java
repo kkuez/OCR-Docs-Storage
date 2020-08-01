@@ -21,7 +21,6 @@ public class NewUserRegProcess extends Process {
             bot.sendMsg("Willkommen :)", update, null, true, false);
             getFacade().insertUserToAllowedUsers(update.getMessage().getFrom().getId(), update.getMessage().getFrom().getFirstName(), update.getMessage().getChatId());
             ObjectHub.getInstance().setAllowedUsersMap(getFacade().getAllowedUsers());
-            setDeleteLater(true);
         }else{
             bot.getAllowedUsersMap().remove(update.getMessage().getFrom().getId());
         }

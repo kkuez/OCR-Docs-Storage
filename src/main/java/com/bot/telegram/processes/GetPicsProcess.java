@@ -23,15 +23,14 @@ public class GetPicsProcess extends Process {
     private static Set<String> commands = Set.of(
             "getPics");
 
-    public GetPicsProcess(ProgressReporter progressReporter, Update update, Bot bot, BackendFacade facade){
+    public GetPicsProcess(ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-        performNextStep("", update, bot);
     }
 
     @Override
     public void performNextStep(String arg, Update update, Bot bot) {
-        String[] commandValue = deserializeInput(update, bot);
         User user = bot.getNonBotUserFromUpdate(update);
+        String[] commandValue = deserializeInput(update, bot);
         switch (commandValue[0]){
             case "abort":
                 bot.abortProcess(update);
@@ -43,7 +42,7 @@ public class GetPicsProcess extends Process {
 
                 if(listOfDocs.size() == 0){
                     bot.sendMsg("Keine Dokumente gefunden für den Begriff.",  update, null, false, false);
-                    close(bot);
+                    reset(bot, user);
                     break;
                 }
                 List<InputMedia> inputMediaList = new ArrayList<>();
@@ -67,7 +66,7 @@ public class GetPicsProcess extends Process {
                 if(messages.size() > 0){
                     bot.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", update, null, true, false);
                 }
-                close(bot);
+                reset(bot, user);
                 break;
                 default:
                     Message message = bot.sendMsg("Dein Suchbegriff:", update, KeyboardFactory.KeyBoardType.Abort, false, true);

@@ -25,12 +25,6 @@ public class User {
         this.name = name;
     }
 
-    public void deleteProcessEventually(){
-        if(process != null && process.getDeleteLater()){
-            process = null;
-        }
-    }
-
     //GETTER SETTER
 
     public boolean isBusy() {

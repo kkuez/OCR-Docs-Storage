@@ -18,8 +18,6 @@ public class ShoppingListProcess extends Process{
 
     private AWAITING_INPUT status = null;
 
-    User user;
-
     private final static Set<String> commands = Set.of(
             "Einkaufsliste anzeigen",
             "Liste Löschen",
@@ -28,11 +26,8 @@ public class ShoppingListProcess extends Process{
             "Hinzufügen",
             "Standardliste anzeigen");
 
-    public ShoppingListProcess(Bot bot, Update update, ProgressReporter progressReporter, BackendFacade facade){
+    public ShoppingListProcess(ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-        user = bot.getNonBotUserFromUpdate(update);
-        user.setBusy(true);
-        performNextStep("-", update, bot);
     }
 
     private void sendShoppingList(Update update, Bot bot){
@@ -45,6 +40,7 @@ public class ShoppingListProcess extends Process{
 
     @Override
     public void performNextStep(String arg, Update update, Bot bot) {
+        User user = bot.getNonBotUserFromUpdate(update);
         String[] commandValue = deserializeInput(update, bot);
         Message message = null;
         switch (commandValue[0]){
@@ -76,17 +72,17 @@ public class ShoppingListProcess extends Process{
                 break;
             case "done":
                 bot.sendMsg("Ok :)", update, null, false, false);
-                close(bot);
+                reset(bot, user);
                 break;
             case "Einkaufsliste anzeigen":
                 sendShoppingList(update, bot);
-                close(bot);
+                reset(bot, user);
                 break;
             case "Liste Löschen":
                 bot.getShoppingList().forEach(shoppingItem -> getFacade().deleteFromShoppingList(shoppingItem));
                 bot.setShoppingList(new ArrayList<>());
                 bot.sendMsg("Einkaufsliste gelöscht :)", update, null, false, false);
-                close(bot);
+                reset(bot, user);
                 break;
             case "Löschen":
                 ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getShoppingList(), "remove");
@@ -108,6 +104,8 @@ public class ShoppingListProcess extends Process{
                     }
                 }
                 break;
+            default:
+                user = bot.getAllowedUsersMap().get(update.getMessage().getChatId());
         }
         user.setBusy(false);
         if(message != null){

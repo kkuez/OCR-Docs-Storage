@@ -26,7 +26,7 @@ public class PhotoTask extends Task {
     public boolean perform(){
         boolean successCanceling = photoFuture.cancel(true);
         if(successCanceling){
-            getBot().sendSimpleMsg("Abgebrochen, 3 Minuten vorbei :( Versuchs nochmal!", user.getId(), KeyboardFactory.KeyBoardType.NoButtons, false);
+            getBot().sendSimpleMsg("Abgebrochen, 3 Minuten vorbei :( Versuchs nochmal!", user.getId(), KeyboardFactory.KeyBoardType.NoButtons, false, null);
             user.setBusy(false);
             user.setProcess(null);
         }

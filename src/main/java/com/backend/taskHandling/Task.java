@@ -38,7 +38,7 @@ public class Task implements Comparable{
         Message message = null;
         for(User user : getUserList()){
             String userName = user.getName();
-            message = getBot().sendSimpleMsg("Hey " + userName + ",\n " + getName(), user.getId(), KeyboardFactory.KeyBoardType.NoButtons, true);
+            message = getBot().sendSimpleMsg("Hey " + userName + ",\n " + getName(), user.getId(), KeyboardFactory.KeyBoardType.NoButtons, true, null);
         }
         return message != null;
     }

@@ -52,7 +52,9 @@ public class KeyboardFactory {
                 endKeyboard.add(ABORT_ROW);
                 break;
             case Boolean:
-                endKeyboard.add(createInlineKeyboardRow(Map.of("Japp", "confirm", "Nee", "deny")));
+                String confirm = valuePrefixOrNull == null ? "confirm" : "confirm" + ';' + valuePrefixOrNull;
+                String deny = valuePrefixOrNull == null ? "deny" : "deny" + ';' + valuePrefixOrNull;
+                endKeyboard.add(createInlineKeyboardRow(Map.of("Japp", confirm, "Nee", deny)));
                 endKeyboard.add(ABORT_ROW);
                 break;
             case Calendar_Month:

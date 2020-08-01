@@ -2,17 +2,16 @@ package com.bot.telegram.processes;
 
 import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.User;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
 
+import com.objectTemplates.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class StandardListProcess extends Process {
@@ -25,14 +24,13 @@ public class StandardListProcess extends Process {
             "Löschen",
             "Hinzufügen");
 
-    public StandardListProcess(ProgressReporter progressReporter, Bot bot, Update update, BackendFacade facade){
+    public StandardListProcess(ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-        bot.getNonBotUserFromUpdate(update).setBusy(true);
-        performNextStep("-", update,  bot);
     }
 
     @Override
     public void performNextStep(String arg, Update update, Bot bot) {
+        User user = bot.getNonBotUserFromUpdate(update);
         String[] commandValue = deserializeInput(update, bot);
         Message message = null;
         switch (commandValue[0]){
@@ -54,19 +52,19 @@ public class StandardListProcess extends Process {
                 break;
             case "done":
                 bot.sendMsg("Ok :)", update, null, false, false);
-                close(bot);
+                reset(bot, user);
                 break;
             case "Standardliste anzeigen":
                 //TODO Man kann nicht zweimal hintereinander Standartliste anzeigen ZB denn der Process wird geschlossen. Wenn der Prozess null ist dann wird gewartet bis gültige eingabe kommt
                 sendStandardList(update, bot);
-                close(bot);
+                reset(bot, user);
                 break;
             case "Liste Löschen":
                 List<String> standartList = getFacade().getStandartList();
                 standartList.forEach(standartListItem -> getFacade().deleteFromStandartList(standartListItem));
                 bot.setShoppingList(new ArrayList<String>());
                 bot.sendMsg("Standardliste gelöscht :)", update, null, false, false);
-                close(bot);
+                reset(bot, user);
                 break;
             case "Löschen":
                 ReplyKeyboard standardListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getStandartList(), "remove");
@@ -76,6 +74,8 @@ public class StandardListProcess extends Process {
                 message = bot.sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.Abort, false, true);
                 status = AWAITING_INPUT.add;
                 break;
+            default:
+                bot.getAllowedUsersMap().get(update.getMessage().getChatId()).setBusy(true);
         }
         bot.getNonBotUserFromUpdate(update).setBusy(false);
         if(message != null){

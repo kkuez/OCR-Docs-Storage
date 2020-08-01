@@ -2,23 +2,26 @@ package com.bot.telegram.processes;
 
 import com.backend.BackendFacade;
 import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.User;
 import com.bot.telegram.Bot;
+import com.objectTemplates.User;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Map;
+import java.util.Set;
 
 public class RemoveLastProcess extends Process {
 
-    public RemoveLastProcess(Bot bot, ProgressReporter progressReporter, Update update, BackendFacade facade){
+    private Set<String> commands = Set.of("Letztes Bild Löschen");
+
+    public RemoveLastProcess(ProgressReporter progressReporter, BackendFacade facade){
         super(progressReporter, facade);
-    performNextStep("asd", update, bot);
     }
+
     @Override
     public void performNextStep(String arg, Update update, Bot bot) {
+        User user = bot.getNonBotUserFromUpdate(update);
         getFacade().deleteLastDocument();
         bot.sendMsg( "Letztes Bild gelöscht :)", update, null, true, false);
-        close(bot);
+        reset(bot, user);
     }
 
     @Override
@@ -33,7 +36,6 @@ public class RemoveLastProcess extends Process {
 
     @Override
     public boolean hasCommand(String cmd) {
-        //TODO
-        return false;
+        return commands.contains(cmd);
     }
 }

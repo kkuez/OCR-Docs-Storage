@@ -21,11 +21,11 @@ public abstract class Process {
 
     public static final Logger logger = Main.getLogger();
 
+    private static final String DIVIDER = ";";
+
     private ProgressReporter progressReporter;
 
     private Boolean hasStarted = false;
-
-    private boolean deleteLater = false;
 
     private boolean awaitsInput = false;
 
@@ -63,43 +63,56 @@ public abstract class Process {
         }
     }
 
-    public void close(Bot bot){
+    public void reset(Bot bot, User user){
         clearButtons(bot);
-        setDeleteLater(true);
+        user.setProcess(null);
     }
 
     String[] deserializeInput(Update update, Bot bot){
         String command = getCommandIfPossible(update, bot);
-        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  bot.getMassageFromUpdate(update).getText();
-        String value = updateText.replace(command, "");
-
+        String updateText;
+        String value;
 
         //Normaly its command => Processstep, value => value. Sometimes there are "stepindependet" values to perform, these are set here.
         if(update.hasCallbackQuery()){
-             updateText = update.getCallbackQuery().getData();
+            updateText = update.getCallbackQuery().getData();
+            value = parseValue(updateText);
             if(updateText.startsWith("abort")){
                 command = "abort";
-                value = updateText.replace(command, "");
-            }else{
-            if(updateText.startsWith("remove")){
-                command = "remove";
-                value = updateText.replace(command, "");
             }else {
-                if (updateText.startsWith("add")) {
-                    command = "add";
-                    value = updateText.replace(command, "");
+                if (updateText.startsWith("remove")) {
+                    command = "remove";
                 } else {
-                    if (updateText.startsWith("done")) {
-                        command = "done";
+                    if (updateText.startsWith("add")) {
+                        command = "add";
+                    } else {
+                        if (updateText.startsWith("done")) {
+                            command = "done";
+                        } else {
+                            if (updateText.startsWith("confirm")) {
+                                command = "confirm";
+                            } else {
+                                if (updateText.startsWith("deny")) {
+                                    command = "deny";
+                                }
+                            }
+                        }
                     }
                 }
             }
-            }
+        } else {
+            updateText = bot.getMassageFromUpdate(update).getText();
+            value = parseValue(updateText);
         }
+
         return new String[]{command, value};
     }
 
-    public void performNextStep(String arg, Update update, Map<Integer, User> allowedUsersMap, Bot bot) {
+    protected String parseValue(String updateText) {
+        return updateText.contains(DIVIDER) ? updateText.split(DIVIDER)[1] : updateText;
+    }
+
+    public void performNextStep(String arg, Update update, User user, Bot bot) {
         //Method only to setup stuff, like Bot in this case
         try {
             performNextStep(arg, update, bot);
@@ -119,18 +132,6 @@ public abstract class Process {
 
     public synchronized List<Message> getSentMessages() {
         return sentMessages;
-    }
-
-    public boolean isDeleteLater() {
-        return deleteLater;
-    }
-
-    public boolean getDeleteLater() {
-        return deleteLater;
-    }
-
-    public void setDeleteLater(boolean deleteLater) {
-        this.deleteLater = deleteLater;
     }
 
     public ProgressReporter getProgressReporter() {

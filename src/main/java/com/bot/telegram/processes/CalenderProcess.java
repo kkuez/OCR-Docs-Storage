@@ -40,30 +40,20 @@ public class CalenderProcess extends Process {
 
     private static Set<String> commands = Set.of(
             "Termin hinzufügen",
-            "chooseStrategy",
-            "daily",
-            "monthly",
-            "yearly",
-            "chooseMonth",
-            "chooseYear",
-            "chooseDay",
-            "chooseMinute",
-            "chooseYear",
-            "forMe",
-            "chooseYear",
-            "chooseMonth");
+            "chooseStrategy;calendar",
+            "daily;calendar",
+            "monthly;calendar",
+            "yearly;calendar",
+            "chooseUser;calendar",
+            "chooseMonth;calendar",
+            "chooseDay;calendar",
+            "chooseMinute;calendar",
+            "forMe;calendar",
+            "chooseYear;calendar"
+    );
 
-    public CalenderProcess(ProgressReporter reporter, BackendFacade facade, Update update, Bot bot) {
+    public CalenderProcess(ProgressReporter reporter, BackendFacade facade) {
         super(reporter, facade);
-        try {
-            performNextStep("Termin hinzufügen", update, bot);
-        } catch (TelegramApiException e) {
-            if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
-                logger.info("Message not edited, no need.");
-            }else{
-                logger.error(((TelegramApiException) e).getLocalizedMessage(), e);
-            }
-        }
     }
 
     @Override
@@ -76,38 +66,38 @@ public class CalenderProcess extends Process {
                 case "done":
                     processDone(update, bot);
                     break;
-                case "chooseStrategy":
+                case "chooseStrategy;calendar":
                     message = processChooseStrategy(update, commandValue, bot);
                     break;
-                case "daily":
+                case "daily;calendar":
                     message = processDayly(update, bot);
                     break;
-                case "monthly":
+                case "monthly;calendar":
                     message = processMonthly(update, bot);
                     break;
-                case "yearly":
+                case "yearly;calendar":
                     message = processYearly(update, bot);
                     break;
-                case "chooseYear":
+                case "chooseYear;calendar":
                     message = processChooseYear(update, commandValue, bot);
                     break;
-                case "chooseMonth":
+                case "chooseMonth;calendar":
                     message = processChooseMonth(update, commandValue, bot);
                     break;
-                case "chooseDay":
+                case "chooseDay;calendar":
                     message = processChooseDay(update, commandValue, bot);
                     break;
-                case "chooseHour":
+                case "chooseHour;calendar":
                     message = processChooseHour(update, commandValue, bot);
                     break;
-                 case "chooseMinute":
+                 case "chooseMinute;calendar":
                      message = processChooseMinute(update, commandValue, bot);
                     break;
-                case "forMe":
+                case "forMe;calendar":
                     processForMe(update, user, message, bot);
                     break;
-                case "forAll":
-                    processForAll(update, bot, message);
+                case "forAll;calendar":
+                    processForAll(update, bot, message, user);
                     break;
                 case "Termine anzeige":
                     processShowAppointments(update, user, bot);
@@ -158,7 +148,7 @@ public class CalenderProcess extends Process {
 
     private void processDone(Update update, Bot bot) {
         bot.sendMsg("Ok :)", update, null, false, false);
-        close(bot);
+        reset(bot, bot.getNonBotUserFromUpdate(update));
     }
 
     private Message processChooseStrategy(Update update, String[] commandValue, Bot bot) throws TelegramApiException {
@@ -296,16 +286,16 @@ public class CalenderProcess extends Process {
         getFacade().insertTask(task);
         getSentMessages().add(message);
         ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
-        close(bot);
+        reset(bot, user);
         bot.simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
     }
 
-    private void processForAll(Update update, Bot bot, Message message) throws TelegramApiException {
+    private void processForAll(Update update, Bot bot, Message message, User user) throws TelegramApiException {
         bot.getAllowedUsersMap().values().forEach(user1 -> task.getUserList().add(user1));
         getFacade().insertTask(task);
         getSentMessages().add(message);
         ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
-        close(bot);
+        reset(bot, user);
         bot.simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
     }
 
@@ -348,7 +338,7 @@ public class CalenderProcess extends Process {
         }
         String messageString = messageOfTasks.toString().replaceFirst("\n-----------------\n", "");
         bot.sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false, Bot.ParseMode.Markdown);
-        close(bot);
+        reset(bot, user);
     }
     private Message processAddAppointment(Update update, Bot bot){
         return bot.sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy, "chooseStrategy", true, true);
@@ -386,7 +376,7 @@ public class CalenderProcess extends Process {
     }
 
     private Message processOneTime(Update update, Bot bot){
-        return bot.sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
+        return bot.sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear;calendar", false, true);
     }
 
     private Message processRegularMonthly(Update update, Bot bot){
@@ -394,7 +384,7 @@ public class CalenderProcess extends Process {
     }
 
     private Message processRegularYearly(Update update, Bot bot){
-        return bot.sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth", false, true);
+        return bot.sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth;calendar", false, true);
     }
 
     private Message askForWhom(Update update, Bot bot) throws TelegramApiException {
@@ -406,7 +396,7 @@ public class CalenderProcess extends Process {
             case "oneTimeWithTime":
                 LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
                 task.setExecutionStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime, getFacade()));
-                return bot.simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
+                return bot.simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser;calendar");
             case "regularDaily":
                 task.setExecutionStrategy(new RegularDailyExecutionStrategy(task));
                 break;
@@ -417,7 +407,7 @@ public class CalenderProcess extends Process {
                 task.setExecutionStrategy(new RegularYearlyExecutionStrategy(task, day, month));
                 break;
         }
-        return bot.sendMsg("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser", false, true);
+        return bot.sendMsg("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser;calendar", false, true);
     }
 
     @Override
@@ -434,42 +424,42 @@ public class CalenderProcess extends Process {
             if (inputString.startsWith("deleteTask")) {
                 return "deleteTask";
             } else {
-                if (inputString.startsWith("chooseName")) {
-                    return "chooseName";
+                if (inputString.startsWith("chooseName;calendar")) {
+                    return "chooseName;calendar";
                 } else {
-                    if (inputString.startsWith("chooseStrategy")) {
-                        return "chooseStrategy";
+                    if (inputString.startsWith("chooseStrategy;calendar")) {
+                        return "chooseStrategy;calendar";
                     } else {
-                        if (inputString.startsWith("chooseYear")) {
-                            return "chooseYear";
+                        if (inputString.startsWith("chooseYear;calendar")) {
+                            return "chooseYear;calendar";
                         } else {
-                            if (inputString.startsWith("chooseMonth")) {
-                                return "chooseMonth";
+                            if (inputString.startsWith("chooseMonth;calendar")) {
+                                return "chooseMonth;calendar";
                             } else {
-                                if (inputString.startsWith("chooseDay")) {
-                                    return "chooseDay";
+                                if (inputString.startsWith("chooseDay;calendar")) {
+                                    return "chooseDay;calendar";
                                 } else {
-                                if (inputString.startsWith("chooseHour")) {
-                                    return "chooseHour";
+                                if (inputString.startsWith("chooseHour;calendar")) {
+                                    return "chooseHour;calendar";
                                 } else {
-                                if (inputString.startsWith("chooseMinute")) {
-                                    return "chooseMinute";
+                                if (inputString.startsWith("chooseMinute;calendar")) {
+                                    return "chooseMinute;calendar";
                                 } else {
-                                    if (inputString.startsWith("forMe")) {
-                                        return "forMe";
+                                    if (inputString.startsWith("forMe;calendar")) {
+                                        return "forMe;calendar";
                                     } else {
-                                        if (inputString.startsWith("forAll")) {
-
+                                        if (inputString.startsWith("forAll;calendar")) {
+                                            return "forAll;calendar";
                                         } else {
-                                            if (inputString.startsWith("daily")) {
-                                                return "daily";
+                                            if (inputString.startsWith("daily;calendar")) {
+                                                return "daily;calendar";
                                             } else {
-                                                if (inputString.startsWith("monthly")) {
-                                                    return "monthly";
+                                                if (inputString.startsWith("monthly;calendar")) {
+                                                    return "monthly;calendar";
                                                 } else {
-                                                    if (inputString.startsWith("yearly")) {
+                                                    if (inputString.startsWith("yearly;calendar")) {
                                                         {
-                                                            return "yearly";
+                                                            return "yearly;calendar";
                                                         }
                                                     }
                                                 }
