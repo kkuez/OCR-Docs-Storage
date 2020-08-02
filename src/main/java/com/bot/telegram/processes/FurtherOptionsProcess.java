@@ -26,7 +26,7 @@ public class FurtherOptionsProcess extends Process {
 
     @Override
     public String getProcessName() {
-        return null;
+        return "";
     }
 
     @Override

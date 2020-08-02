@@ -2,26 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/FurtherOptionsProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/PhotoTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/PhotoTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/Task.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/Bot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/KeyboardFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/KeyboardFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetBonsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetBonsProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetPicsProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MapQRItemProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MapQRItemProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MemoProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MemoProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/NewUserRegProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/NewUserRegProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/FurtherOptionsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/FurtherOptionsProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/Process.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/RemoveLastProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/RemoveLastProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StandardListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StandardListProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StartProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StartProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/SumProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/SumProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/objectTemplates/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -277,13 +265,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Refactor. New .jar.">
-      <created>1569160194601</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1569160194601</updated>
     </task>
     <task id="LOCAL-00016" summary="Fix Camelcase in cmd.">
       <created>1569168393610</created>
@@ -621,7 +602,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593789962813</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="WIP.">
+      <created>1596303385033</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1596303385034</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -715,16 +703,16 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="690" y="327" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1592636455589" />
-    <state x="682" y="561" width="1067" height="582" key="#xdebugger.evaluate" timestamp="1596301710216">
+    <state x="682" y="561" width="1067" height="582" key="#xdebugger.evaluate" timestamp="1596315404820">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="715" y="283" width="1067" height="582" key="#xdebugger.evaluate/0.0.1920.1160@0.0.1920.1160" timestamp="1595267359622" />
-    <state x="682" y="561" width="875" height="594" key="#xdebugger.evaluate/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596301710216" />
-    <state x="607" y="156" key="CommitChangelistDialog2" timestamp="1593789961887">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="682" y="561" width="875" height="594" key="#xdebugger.evaluate/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315404820" />
+    <state x="553" y="174" key="CommitChangelistDialog2" timestamp="1596303384450">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="607" y="156" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1593789961887" />
-    <state x="553" y="174" key="CommitChangelistDialog2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1592603348730" />
+    <state x="553" y="174" key="CommitChangelistDialog2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303384450" />
     <state x="648" y="304" key="DBNavigator.ConnectionInfoDialog" timestamp="1592598817911">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
@@ -742,54 +730,54 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="739" y="321" key="FileChooserDialogImpl/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1595142365593" />
-    <state width="1877" height="338" key="GridCell.Tab.0.bottom" timestamp="1596303300105">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state width="1877" height="296" key="GridCell.Tab.0.bottom" timestamp="1596358767997">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="916" height="333" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1589137638846" />
+    <state width="1877" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596358767997" />
     <state width="1877" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
-    <state width="1877" height="338" key="GridCell.Tab.0.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303300105" />
-    <state width="1877" height="338" key="GridCell.Tab.0.center" timestamp="1596303300105">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state width="1877" height="338" key="GridCell.Tab.0.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
+    <state width="1877" height="296" key="GridCell.Tab.0.center" timestamp="1596358767997">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="916" height="333" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1589137638846" />
+    <state width="1877" height="296" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596358767997" />
     <state width="1877" height="338" key="GridCell.Tab.0.center/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
-    <state width="1877" height="338" key="GridCell.Tab.0.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303300105" />
-    <state width="1877" height="338" key="GridCell.Tab.0.left" timestamp="1596303300105">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state width="1877" height="338" key="GridCell.Tab.0.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
+    <state width="1877" height="296" key="GridCell.Tab.0.left" timestamp="1596358767997">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="916" height="333" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1589137638846" />
+    <state width="1877" height="296" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596358767997" />
     <state width="1877" height="338" key="GridCell.Tab.0.left/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
-    <state width="1877" height="338" key="GridCell.Tab.0.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303300105" />
-    <state width="1877" height="338" key="GridCell.Tab.0.right" timestamp="1596303300105">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state width="1877" height="338" key="GridCell.Tab.0.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
+    <state width="1877" height="296" key="GridCell.Tab.0.right" timestamp="1596358767997">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="916" height="333" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1589137638846" />
+    <state width="1877" height="296" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596358767997" />
     <state width="1877" height="338" key="GridCell.Tab.0.right/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
-    <state width="1877" height="338" key="GridCell.Tab.0.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303300105" />
-    <state width="1877" height="338" key="GridCell.Tab.1.bottom" timestamp="1596303171120">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state width="1877" height="338" key="GridCell.Tab.0.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
+    <state width="1877" height="296" key="GridCell.Tab.1.bottom" timestamp="1596358769982">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="916" height="333" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1589137638846" />
+    <state width="1877" height="296" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596358769982" />
     <state width="1877" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
-    <state width="1877" height="338" key="GridCell.Tab.1.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303171120" />
-    <state width="1877" height="338" key="GridCell.Tab.1.center" timestamp="1596303171120">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state width="1877" height="338" key="GridCell.Tab.1.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
+    <state width="1877" height="296" key="GridCell.Tab.1.center" timestamp="1596358769982">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="916" height="333" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1589137638846" />
+    <state width="1877" height="296" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596358769982" />
     <state width="1877" height="338" key="GridCell.Tab.1.center/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
-    <state width="1877" height="338" key="GridCell.Tab.1.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303171120" />
-    <state width="1877" height="338" key="GridCell.Tab.1.left" timestamp="1596303171120">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state width="1877" height="338" key="GridCell.Tab.1.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
+    <state width="1877" height="296" key="GridCell.Tab.1.left" timestamp="1596358769982">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="916" height="333" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1589137638846" />
+    <state width="1877" height="296" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596358769982" />
     <state width="1877" height="338" key="GridCell.Tab.1.left/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
-    <state width="1877" height="338" key="GridCell.Tab.1.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303171120" />
-    <state width="1877" height="338" key="GridCell.Tab.1.right" timestamp="1596303171120">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state width="1877" height="338" key="GridCell.Tab.1.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
+    <state width="1877" height="296" key="GridCell.Tab.1.right" timestamp="1596358769982">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="916" height="333" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1589137638846" />
+    <state width="1877" height="296" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596358769982" />
     <state width="1877" height="338" key="GridCell.Tab.1.right/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
-    <state width="1877" height="338" key="GridCell.Tab.1.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303171120" />
+    <state width="1877" height="338" key="GridCell.Tab.1.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
     <state x="715" y="231" key="RollbackChangesDialog" timestamp="1589134650162">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -799,17 +787,17 @@
     </state>
     <state x="461" y="199" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1593159478135" />
     <state x="461" y="222" key="SettingsEditor/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1593020364096" />
-    <state x="857" y="273" width="579" height="524" key="StructurePopup" timestamp="1596302338944">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state x="857" y="245" width="579" height="470" key="StructurePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1593626853408" />
-    <state x="857" y="273" width="540" height="524" key="StructurePopup/0.0.1920.1160@0.0.1920.1160" timestamp="1589307989879" />
-    <state x="857" y="273" width="579" height="524" key="StructurePopup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596302338944" />
-    <state x="552" y="281" key="Vcs.Push.Dialog.v2" timestamp="1593789964750">
+    <state x="857" y="245" width="579" height="470" key="StructurePopup" timestamp="1596357137388">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="857" y="245" width="579" height="470" key="StructurePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1596357137388" />
+    <state x="857" y="273" width="540" height="524" key="StructurePopup/0.0.1920.1160@0.0.1920.1160" timestamp="1589307989879" />
+    <state x="857" y="273" width="579" height="524" key="StructurePopup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596309693541" />
+    <state x="552" y="313" key="Vcs.Push.Dialog.v2" timestamp="1596303386924">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
     <state x="552" y="281" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1593789964750" />
-    <state x="552" y="313" key="Vcs.Push.Dialog.v2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1592603351569" />
+    <state x="552" y="313" key="Vcs.Push.Dialog.v2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303386924" />
     <state width="968" height="588" key="XDebugger.FullValuePopup" timestamp="1595266662220">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
@@ -835,12 +823,12 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="690" y="335" key="extract.method.dialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1590924471018" />
-    <state x="656" y="312" width="926" height="729" key="find.popup" timestamp="1596303119063">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state x="427" y="96" width="926" height="654" key="find.popup" timestamp="1596357284076">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="656" y="280" width="926" height="654" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1593161795028" />
+    <state x="427" y="96" width="926" height="654" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596357284076" />
     <state x="656" y="312" width="607" height="536" key="find.popup/0.0.1920.1160@0.0.1920.1160" timestamp="1589307983531" />
-    <state x="656" y="312" width="926" height="729" key="find.popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303119063" />
+    <state x="483" y="431" width="1213" height="729" key="find.popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596311402783" />
     <state x="342" y="200" key="new project wizard" timestamp="1595002305479">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
@@ -853,12 +841,12 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="616" y="270" width="672" height="677" key="run.anything.popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303049659" />
-    <state x="623" y="255" width="672" height="678" key="search.everywhere.popup" timestamp="1596298629754">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state x="623" y="229" width="672" height="608" key="search.everywhere.popup" timestamp="1596357531373">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="229" width="672" height="608" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1593160916981" />
+    <state x="623" y="229" width="672" height="608" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596357531373" />
     <state x="623" y="255" width="672" height="678" key="search.everywhere.popup/0.0.1920.1160@0.0.1920.1160" timestamp="1595266582316" />
-    <state x="623" y="255" width="672" height="678" key="search.everywhere.popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596298629754" />
+    <state x="623" y="255" width="672" height="678" key="search.everywhere.popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596312461863" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -867,11 +855,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/Processes/ShoppingListProcess.java</url>
           <line>61</line>
           <option name="timeStamp" value="63" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/Processes/ShoppingListProcess.java</url>
-          <line>104</line>
-          <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/Processes/ShoppingListProcess.java</url>
@@ -889,24 +872,49 @@
           <option name="timeStamp" value="128" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java</url>
-          <line>62</line>
-          <option name="timeStamp" value="130" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java</url>
-          <line>44</line>
-          <option name="timeStamp" value="161" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/Process.java</url>
-          <line>66</line>
+          <line>68</line>
           <option name="timeStamp" value="167" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java</url>
+          <line>54</line>
+          <option name="timeStamp" value="175" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="176" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java</url>
+          <line>127</line>
+          <option name="timeStamp" value="177" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StartProcess.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="183" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/Bot.java</url>
-          <line>259</line>
-          <option name="timeStamp" value="173" />
+          <line>160</line>
+          <option name="timeStamp" value="185" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java</url>
+          <line>98</line>
+          <option name="timeStamp" value="186" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="187" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/SumProcess.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="188" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

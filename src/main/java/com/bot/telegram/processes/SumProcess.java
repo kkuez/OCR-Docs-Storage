@@ -22,6 +22,7 @@ public class SumProcess extends Process{
 
     private static Set<String> commands = Set.of(
             "selectMonth",
+            "Summe von Bons",
             "selectYear");
 
     public SumProcess(ProgressReporter progressReporter, BackendFacade facade){

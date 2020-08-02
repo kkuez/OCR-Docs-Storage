@@ -30,6 +30,7 @@ public class BonProcess extends Process {
     private static Set<String> commands = Set.of(
             "Start",
             "isSum",
+            "Bon-Optionen",
             "Bon eingeben",
             "EnterRightSum");
 
@@ -45,8 +46,8 @@ public class BonProcess extends Process {
         Message message = null;
         try {
             switch (commandValue[0]) {
-                case "confirm":
-                    if (commandValue[1].equals("isBon")) {
+                case "isBon":
+                    if(commandValue[1].equals("confirm")) {
                         user.setBusy(true);
                         //In Bonfolder kopieren nachdem der User bestätigt hat dass Dok ein Bon ist.
                         File newOriginalFile = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), bon.getOriginalFileName());
@@ -61,28 +62,24 @@ public class BonProcess extends Process {
                         message = bot.askBoolean("Endsumme " + bon.getSum() + "?", update, true, "isSum");
                         currentStep = Steps.isSum;
                         user.setBusy(false);
-                    } else {
-                        if (commandValue[1].equals("isSum")) {
-                            bot.sendMsg("Ok :)", update, null, true, false);
-                            getFacade().insertDocument(bon);
-                            getFacade().insertTag(bon.getId(), "Bon");
-                            reset(bot, user);
-                        }
                     }
-                    break;
-                case "deny":
-                    if (commandValue[1].equals("isBon")) {
+                    if(commandValue[1].equals("deny")) {
                         message = bot.simpleEditMessage("Ok :)", update, KeyboardFactory.KeyBoardType.NoButtons, null);
                         reset(bot, user);
+                    }
+                break;
+                case "isSum":
+                    if(commandValue[1].equals("confirm")) {
+                        bot.sendMsg("Ok :)", update, null, true, false);
+                        getFacade().insertDocument(bon);
+                        getFacade().insertTag(bon.getId(), "Bon");
+                        reset(bot, user);
+                    }
+                    if(commandValue[1].equals("deny")) {
+                        message = bot.sendMsg("Bitte richtige Summe eingeben:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                        currentStep = Steps.EnterRightSum;
                     } else {
-                        if (commandValue[1].equals("isSum")) {
-                            bot.sendMsg("Ok :)", update, null, true, false);
-                            getFacade().insertDocument(bon);
-                            getFacade().insertTag(bon.getId(), "Bon");
-                            reset(bot, user);
-                        } else {
-                            message = bot.simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
-                        }
+                        message = bot.simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
                     }
                     break;
                 case "Bon eingeben":
@@ -91,39 +88,32 @@ public class BonProcess extends Process {
                 case "abort":
                     bot.abortProcess(update);
                     break;
-                case "isSum":
-                    if (commandValue[1].equals("confirm")) {
-                        bot.sendMsg("Ok :)", update, null, true, false);
-                        getFacade().insertDocument(bon);
-                        getFacade().insertTag(bon.getId(), "Bon");
-                        reset(bot, user);
-                    } else {
-                        if (commandValue[1].equals("deny")) {
-                            message = bot.sendMsg("Bitte richtige Summe eingeben:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
-                            currentStep = Steps.EnterRightSum;
-                        } else {
-                            message = bot.simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
-                        }
-                    }
-                    break;
                 case "EnterRightSum":
-                    float sum = 0f;
-                    try {
-                        sum = Float.parseFloat(commandValue[1].replace(',', '.'));
-                        bon.setSum(sum);
-                        getFacade().insertDocument(bon);
-                        getFacade().insertTag(bon.getId(), "B");
-                        getFacade().insertTag(bon.getId(), "Bon");
-                        bot.sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
-                        reset(bot, user);
-                    } catch (NumberFormatException e) {
-                        message = bot.sendMsg("Die Zahl verstehe ich nicht :(", update, KeyboardFactory.KeyBoardType.Abort, false, true);
-                    }
+
+                    break;
+                case "Bon-Optionen":
+                    bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Bons,
+                            false, false, null, getFacade()), false);
                     break;
                 default:
                     if (currentStep == Steps.enterBon) {
                         currentStep = Steps.Start;
-                        performNextStep("Start", update, user, bot);
+                        performNextStep("Start", update, bot);
+                    } else {
+                        if (currentStep == Steps.EnterRightSum) {
+                            float sum;
+                            try {
+                                sum = Float.parseFloat(commandValue[1].replace(',', '.'));
+                                bon.setSum(sum);
+                                getFacade().insertDocument(bon);
+                                getFacade().insertTag(bon.getId(), "B");
+                                getFacade().insertTag(bon.getId(), "Bon");
+                                bot.sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
+                                reset(bot, user);
+                            } catch (NumberFormatException e) {
+                                message = bot.sendMsg("Die Zahl verstehe ich nicht :(", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                            }
+                        }
                     }
                     break;
             }
@@ -156,7 +146,7 @@ public class BonProcess extends Process {
             case "Bon eingeben":
                 return text;
             default:
-                return currentStep.toString();
+                return text;
         }
     }
 

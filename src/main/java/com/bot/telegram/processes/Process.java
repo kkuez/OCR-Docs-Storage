@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
+import java.security.KeyFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,6 @@ import java.util.Set;
 public abstract class Process {
 
     public static final Logger logger = Main.getLogger();
-
-    private static final String DIVIDER = ";";
 
     private ProgressReporter progressReporter;
 
@@ -36,6 +35,9 @@ public abstract class Process {
     private List<Message> sentMessages = new ArrayList<>();
 
     private BackendFacade facade;
+
+    private final static Set<String> generalCommands = Set.of(
+        "abort", "remove", "add", "done", "confirm", "deny");
 
     public Process(ProgressReporter reporter, BackendFacade facade)
     {
@@ -69,57 +71,29 @@ public abstract class Process {
     }
 
     String[] deserializeInput(Update update, Bot bot){
-        String command = getCommandIfPossible(update, bot);
+        String command;
         String updateText;
         String value;
 
-        //Normaly its command => Processstep, value => value. Sometimes there are "stepindependet" values to perform, these are set here.
+        //Normally its command => Processstep, value => value. Sometimes there are "stepindependet" values to perform, these are set here.
         if(update.hasCallbackQuery()){
             updateText = update.getCallbackQuery().getData();
-            value = parseValue(updateText);
-            if(updateText.startsWith("abort")){
-                command = "abort";
-            }else {
-                if (updateText.startsWith("remove")) {
-                    command = "remove";
-                } else {
-                    if (updateText.startsWith("add")) {
-                        command = "add";
-                    } else {
-                        if (updateText.startsWith("done")) {
-                            command = "done";
-                        } else {
-                            if (updateText.startsWith("confirm")) {
-                                command = "confirm";
-                            } else {
-                                if (updateText.startsWith("deny")) {
-                                    command = "deny";
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         } else {
             updateText = bot.getMassageFromUpdate(update).getText();
-            value = parseValue(updateText);
+        }
+        if(updateText.contains(KeyboardFactory.DIVIDER)) {
+            command = updateText.split(";")[0];
+            value = updateText.split(";")[1];
+        } else {
+            command = value = updateText;
         }
 
         return new String[]{command, value};
     }
 
     protected String parseValue(String updateText) {
-        return updateText.contains(DIVIDER) ? updateText.split(DIVIDER)[1] : updateText;
+        return updateText.contains(KeyboardFactory.DIVIDER) ? updateText.split(KeyboardFactory.DIVIDER)[1] : updateText;
     }
-
-    public void performNextStep(String arg, Update update, User user, Bot bot) {
-        //Method only to setup stuff, like Bot in this case
-        try {
-            performNextStep(arg, update, bot);
-        } catch (TelegramApiException e) {
-            logger.error("Couldnt execute update.", e);
-        }
-    };
 
     //GETTER SETTER
     public boolean isAwaitsInput() {

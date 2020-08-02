@@ -39,17 +39,10 @@ public class CalenderProcess extends Process {
     private String type;
 
     private static Set<String> commands = Set.of(
+            "Kalender",
             "Termin hinzufügen",
-            "chooseStrategy;calendar",
-            "daily;calendar",
-            "monthly;calendar",
-            "yearly;calendar",
-            "chooseUser;calendar",
-            "chooseMonth;calendar",
-            "chooseDay;calendar",
-            "chooseMinute;calendar",
-            "forMe;calendar",
-            "chooseYear;calendar"
+            "Termin löschen",
+            "Termine anzeige"
     );
 
     public CalenderProcess(ProgressReporter reporter, BackendFacade facade) {
@@ -66,37 +59,37 @@ public class CalenderProcess extends Process {
                 case "done":
                     processDone(update, bot);
                     break;
-                case "chooseStrategy;calendar":
+                case "chooseStrategy":
                     message = processChooseStrategy(update, commandValue, bot);
                     break;
-                case "daily;calendar":
+                case "daily":
                     message = processDayly(update, bot);
                     break;
-                case "monthly;calendar":
+                case "monthly":
                     message = processMonthly(update, bot);
                     break;
-                case "yearly;calendar":
+                case "yearly":
                     message = processYearly(update, bot);
                     break;
-                case "chooseYear;calendar":
+                case "chooseYear":
                     message = processChooseYear(update, commandValue, bot);
                     break;
-                case "chooseMonth;calendar":
+                case "chooseMonth":
                     message = processChooseMonth(update, commandValue, bot);
                     break;
-                case "chooseDay;calendar":
+                case "chooseDay":
                     message = processChooseDay(update, commandValue, bot);
                     break;
-                case "chooseHour;calendar":
+                case "chooseHour":
                     message = processChooseHour(update, commandValue, bot);
                     break;
-                 case "chooseMinute;calendar":
+                 case "chooseMinute":
                      message = processChooseMinute(update, commandValue, bot);
                     break;
-                case "forMe;calendar":
+                case "forMe":
                     processForMe(update, user, message, bot);
                     break;
-                case "forAll;calendar":
+                case "forAll":
                     processForAll(update, bot, message, user);
                     break;
                 case "Termine anzeige":
@@ -113,6 +106,9 @@ public class CalenderProcess extends Process {
                     break;
                 case "-": //In case a faulty day was chosen by user
                     bot.sendAnswerCallbackQuery("Ungültiger Tag", false, update.getCallbackQuery());
+                    break;
+                case "Kalender":
+                    bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar, false, false, null, getFacade()), false);
                     break;
                 default:
                     task.setName(commandValue[0]);
@@ -376,7 +372,7 @@ public class CalenderProcess extends Process {
     }
 
     private Message processOneTime(Update update, Bot bot){
-        return bot.sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear;calendar", false, true);
+        return bot.sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
     }
 
     private Message processRegularMonthly(Update update, Bot bot){
@@ -384,7 +380,7 @@ public class CalenderProcess extends Process {
     }
 
     private Message processRegularYearly(Update update, Bot bot){
-        return bot.sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth;calendar", false, true);
+        return bot.sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth", false, true);
     }
 
     private Message askForWhom(Update update, Bot bot) throws TelegramApiException {
@@ -396,7 +392,7 @@ public class CalenderProcess extends Process {
             case "oneTimeWithTime":
                 LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
                 task.setExecutionStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime, getFacade()));
-                return bot.simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser;calendar");
+                return bot.simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
             case "regularDaily":
                 task.setExecutionStrategy(new RegularDailyExecutionStrategy(task));
                 break;
@@ -407,7 +403,7 @@ public class CalenderProcess extends Process {
                 task.setExecutionStrategy(new RegularYearlyExecutionStrategy(task, day, month));
                 break;
         }
-        return bot.sendMsg("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser;calendar", false, true);
+        return bot.sendMsg("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser", false, true);
     }
 
     @Override

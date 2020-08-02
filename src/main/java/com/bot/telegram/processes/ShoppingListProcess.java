@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.*;
 
-public class ShoppingListProcess extends Process{
+public class ShoppingListProcess extends Process {
 
     private AWAITING_INPUT status = null;
 
@@ -24,16 +24,17 @@ public class ShoppingListProcess extends Process{
             "Löschen",
             "Zu Einkaufsliste hinzufügen",
             "Hinzufügen",
+            "Einkaufslisten-Optionen",
             "Standardliste anzeigen");
 
-    public ShoppingListProcess(ProgressReporter progressReporter, BackendFacade facade){
+    public ShoppingListProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
     }
 
-    private void sendShoppingList(Update update, Bot bot){
+    private void sendShoppingList(Update update, Bot bot) {
         StringBuilder listeBuilder = new StringBuilder("*Aktuelle Einkaufsliste:*\n");
-        for(int i = 0;i<bot.getShoppingList().size();i++){
-            listeBuilder.append( i + ": " + bot.getShoppingList().get(i) + "\n");
+        for (int i = 0; i < bot.getShoppingList().size(); i++) {
+            listeBuilder.append(i + ": " + bot.getShoppingList().get(i) + "\n");
         }
         bot.sendMsg(listeBuilder.toString(), update, null, false, false, Bot.ParseMode.Markdown);
     }
@@ -43,30 +44,30 @@ public class ShoppingListProcess extends Process{
         User user = bot.getNonBotUserFromUpdate(update);
         String[] commandValue = deserializeInput(update, bot);
         Message message = null;
-        switch (commandValue[0]){
+        switch (commandValue[0]) {
             case "add":
                 String item = commandValue[1];
                 bot.getShoppingList().add(item);
                 getFacade().insertShoppingItem(item);
-                if(update.hasCallbackQuery()){
+                if (update.hasCallbackQuery()) {
                     try {
                         bot.sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         logger.error("Failed activating bot", e);
                     }
-                }else{
+                } else {
                     message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
                 }
                 getSentMessages().add(message);
                 break;
             case "remove":
-                try{
+                try {
                     item = commandValue[1];
                     getFacade().deleteFromShoppingList(item);
                     bot.getShoppingList().remove(item);
                     bot.sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
                     bot.simpleEditMessage(item + " gelöscht. Nochwas?", bot.getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
-                }catch (Exception e){
+                } catch (Exception e) {
                     logger.error(null, e);
                 }
                 break;
@@ -93,22 +94,26 @@ public class ShoppingListProcess extends Process{
                 message = bot.sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.ShoppingList_Add, false, true);
                 status = AWAITING_INPUT.add;
                 break;
+            case "Einkaufslisten-Optionen":
+                bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.ShoppingList, false, false, null, getFacade()), false);
+                break;
             case "Standardliste anzeigen":
                 try {
                     message = bot.simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
                 } catch (TelegramApiException e) {
-                    if(((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                    if (((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")) {
                         logger.info("Message not edited, no need.");
-                    }else{
+                    } else {
                         logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
                     }
                 }
                 break;
             default:
+                reset(bot, user);
                 user = bot.getAllowedUsersMap().get(update.getMessage().getChatId());
         }
         user.setBusy(false);
-        if(message != null){
+        if (message != null) {
             getSentMessages().add(message);
         }
     }
@@ -120,16 +125,16 @@ public class ShoppingListProcess extends Process{
 
     @Override
     public String getCommandIfPossible(Update update, Bot bot) {
-        if(update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("Standardliste anzeigen")){
+        if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("Standardliste anzeigen")) {
             return "Standardliste anzeigen";
-        }else{
-        if(status == AWAITING_INPUT.add){
-            return "add";
-        }else{
-            if(update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("remove")){
-                return "remove";
+        } else {
+            if (status == AWAITING_INPUT.add) {
+                return "add";
+            } else {
+                if (update.hasCallbackQuery() && update.getCallbackQuery().getData().startsWith("remove")) {
+                    return "remove";
+                }
             }
-        }
         }
 
         return !update.hasCallbackQuery() ? update.getMessage().getText() : "";
@@ -140,7 +145,7 @@ public class ShoppingListProcess extends Process{
         return commands.contains(cmd);
     }
 
-    enum AWAITING_INPUT{
+    enum AWAITING_INPUT {
         add
     }
 
