@@ -28,7 +28,6 @@ public class BonProcess extends Process {
     private Document document;
 
     private static Set<String> commands = Set.of(
-            "Start",
             "isSum",
             "Bon-Optionen",
             "Bon eingeben",
@@ -94,6 +93,7 @@ public class BonProcess extends Process {
                 case "Bon-Optionen":
                     bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Bons,
                             false, false, null, getFacade()), false);
+                    reset(bot, user);
                     break;
                 default:
                     if (currentStep == Steps.enterBon) {

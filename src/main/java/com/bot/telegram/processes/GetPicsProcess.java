@@ -18,12 +18,12 @@ public class GetPicsProcess extends Process {
 
     String searchTerm;
 
-    Step currentStep = null;
+    InputType type = null;
 
     private static Set<String> commands = Set.of(
-            "getPics");
+            "Dokumente suchen");
 
-    public GetPicsProcess(ProgressReporter progressReporter, BackendFacade facade){
+    public GetPicsProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
     }
 
@@ -31,49 +31,53 @@ public class GetPicsProcess extends Process {
     public void performNextStep(String arg, Update update, Bot bot) {
         User user = bot.getNonBotUserFromUpdate(update);
         String[] commandValue = deserializeInput(update, bot);
-        switch (commandValue[0]){
+        switch (commandValue[0]) {
+            case "Dokumente suchen":
+                Message message = bot.sendMsg("Dein Suchbegriff:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                type = InputType.getPics;
+                user.setBusy(false);
+                getSentMessages().add(message);
+                break;
             case "abort":
                 bot.abortProcess(update);
                 break;
-            case "getPics":
-                List<Document> listOfDocs;
-                    searchTerm = commandValue[1];
-                    listOfDocs = getFacade().getDocuments(searchTerm);
+            default:
+                switch (type) {
+                    case getPics:
+                        List<Document> listOfDocs;
+                        searchTerm = commandValue[1];
+                        listOfDocs = getFacade().getDocuments(searchTerm);
 
-                if(listOfDocs.size() == 0){
-                    bot.sendMsg("Keine Dokumente gefunden für den Begriff.",  update, null, false, false);
-                    reset(bot, user);
-                    break;
-                }
-                List<InputMedia> inputMediaList = new ArrayList<>();
-                for(Document document1 : listOfDocs){
-                    Set<String> photoEndings = Set.of("png", "PNG", "jpg", "JPG", "jpeg", "JPEG");
-                    String fileExtension = document1.getOriginalFileName().substring(document1.getOriginalFileName().indexOf(".")).replace(".", "");
-                    InputMedia media = photoEndings.contains(fileExtension) ? new InputMediaPhoto() : new InputMediaDocument();
-                    media.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
-                    //Filter for Documents in mediaList.
-                    if(media instanceof InputMediaDocument){
-                        //If inputmedia is a document instead of a picture, send it and remove it from the inputmedialist.
-                        bot.sendDocument(update, true, (InputMediaDocument) media);
-                    }else{
-                        inputMediaList.add(media);
-                    }
+                        if (listOfDocs.size() == 0) {
+                            bot.sendMsg("Keine Dokumente gefunden für den Begriff.", update, null, false, false);
+                            reset(bot, user);
+                            break;
+                        }
+                        List<InputMedia> inputMediaList = new ArrayList<>();
+                        for (Document document1 : listOfDocs) {
+                            Set<String> photoEndings = Set.of("png", "PNG", "jpg", "JPG", "jpeg", "JPEG");
+                            String fileExtension = document1.getOriginalFileName().substring(document1.getOriginalFileName().indexOf(".")).replace(".", "");
+                            InputMedia media = photoEndings.contains(fileExtension) ? new InputMediaPhoto() : new InputMediaDocument();
+                            media.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
+                            //Filter for Documents in mediaList.
+                            if (media instanceof InputMediaDocument) {
+                                //If inputmedia is a document instead of a picture, send it and remove it from the inputmedialist.
+                                bot.sendDocument(update, true, (InputMediaDocument) media);
+                            } else {
+                                inputMediaList.add(media);
+                            }
+                        }
+
+                        List<Message> messages = bot.sendMediaMsg(update, true, inputMediaList);
+                        user.setBusy(false);
+
+                        if (messages.size() > 0) {
+                            bot.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", update, null, true, false);
+                        }
+                        reset(bot, user);
+                        break;
                 }
 
-                List<Message> messages = bot.sendMediaMsg(update, true, inputMediaList);
-                user.setBusy(false);
-
-                if(messages.size() > 0){
-                    bot.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", update, null, true, false);
-                }
-                reset(bot, user);
-                break;
-                default:
-                    Message message = bot.sendMsg("Dein Suchbegriff:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
-                    currentStep = Step.getPics;
-                    user.setBusy(false);
-                    getSentMessages().add(message);
-                    break;
         }
     }
 
@@ -84,7 +88,7 @@ public class GetPicsProcess extends Process {
 
     @Override
     public String getCommandIfPossible(Update update, Bot bot) {
-        if(currentStep ==  Step.getPics){
+        if (type == InputType.getPics) {
             return "getPics";
         }
         return "";
@@ -95,7 +99,7 @@ public class GetPicsProcess extends Process {
         return commands.contains(cmd);
     }
 
-    enum Step{
+    enum InputType {
         getPics
     }
 }

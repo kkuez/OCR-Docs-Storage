@@ -3,13 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/KeyboardFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/KeyboardFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/FurtherOptionsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/FurtherOptionsProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/Process.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/SumProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/SumProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetPicsProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MemoProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MemoProcess.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -265,13 +262,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Fix Camelcase in cmd.">
-      <created>1569168393610</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1569168393610</updated>
     </task>
     <task id="LOCAL-00017" summary="Bot default not busy.">
       <created>1569169425150</created>
@@ -609,7 +599,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596303385034</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="WIP.">
+      <created>1596358848841</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1596358848841</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -695,9 +692,10 @@
     </state>
     <state x="765" y="229" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1593626014024" />
     <state x="765" y="255" width="729" height="581" key="#com.intellij.ide.util.MemberChooser/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596299018696" />
-    <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1596219553781">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1596360192135">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596360192135" />
     <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596219553781" />
     <state x="690" y="327" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1592636455589">
       <screen x="0" y="0" width="1920" height="1160" />
@@ -708,10 +706,10 @@
     </state>
     <state x="715" y="283" width="1067" height="582" key="#xdebugger.evaluate/0.0.1920.1160@0.0.1920.1160" timestamp="1595267359622" />
     <state x="682" y="561" width="875" height="594" key="#xdebugger.evaluate/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315404820" />
-    <state x="553" y="174" key="CommitChangelistDialog2" timestamp="1596303384450">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state x="607" y="156" key="CommitChangelistDialog2" timestamp="1596358848154">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="607" y="156" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1593789961887" />
+    <state x="607" y="156" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1596358848154" />
     <state x="553" y="174" key="CommitChangelistDialog2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303384450" />
     <state x="648" y="304" key="DBNavigator.ConnectionInfoDialog" timestamp="1592598817911">
       <screen x="0" y="0" width="1920" height="1160" />
@@ -730,52 +728,52 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="739" y="321" key="FileChooserDialogImpl/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1595142365593" />
-    <state width="1877" height="296" key="GridCell.Tab.0.bottom" timestamp="1596358767997">
+    <state width="1877" height="296" key="GridCell.Tab.0.bottom" timestamp="1596360365813">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596358767997" />
+    <state width="1877" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596360365813" />
     <state width="1877" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
     <state width="1877" height="338" key="GridCell.Tab.0.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
-    <state width="1877" height="296" key="GridCell.Tab.0.center" timestamp="1596358767997">
+    <state width="1877" height="296" key="GridCell.Tab.0.center" timestamp="1596360365813">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="296" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596358767997" />
+    <state width="1877" height="296" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596360365813" />
     <state width="1877" height="338" key="GridCell.Tab.0.center/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
     <state width="1877" height="338" key="GridCell.Tab.0.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
-    <state width="1877" height="296" key="GridCell.Tab.0.left" timestamp="1596358767997">
+    <state width="1877" height="296" key="GridCell.Tab.0.left" timestamp="1596360365813">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="296" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596358767997" />
+    <state width="1877" height="296" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596360365813" />
     <state width="1877" height="338" key="GridCell.Tab.0.left/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
     <state width="1877" height="338" key="GridCell.Tab.0.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
-    <state width="1877" height="296" key="GridCell.Tab.0.right" timestamp="1596358767997">
+    <state width="1877" height="296" key="GridCell.Tab.0.right" timestamp="1596360365813">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="296" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596358767997" />
+    <state width="1877" height="296" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596360365813" />
     <state width="1877" height="338" key="GridCell.Tab.0.right/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
     <state width="1877" height="338" key="GridCell.Tab.0.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
-    <state width="1877" height="296" key="GridCell.Tab.1.bottom" timestamp="1596358769982">
+    <state width="1877" height="296" key="GridCell.Tab.1.bottom" timestamp="1596360372612">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="296" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596358769982" />
+    <state width="1877" height="296" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596360372612" />
     <state width="1877" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
     <state width="1877" height="338" key="GridCell.Tab.1.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
-    <state width="1877" height="296" key="GridCell.Tab.1.center" timestamp="1596358769982">
+    <state width="1877" height="296" key="GridCell.Tab.1.center" timestamp="1596360372612">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="296" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596358769982" />
+    <state width="1877" height="296" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596360372612" />
     <state width="1877" height="338" key="GridCell.Tab.1.center/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
     <state width="1877" height="338" key="GridCell.Tab.1.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
-    <state width="1877" height="296" key="GridCell.Tab.1.left" timestamp="1596358769982">
+    <state width="1877" height="296" key="GridCell.Tab.1.left" timestamp="1596360372612">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="296" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596358769982" />
+    <state width="1877" height="296" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596360372612" />
     <state width="1877" height="338" key="GridCell.Tab.1.left/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
     <state width="1877" height="338" key="GridCell.Tab.1.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
-    <state width="1877" height="296" key="GridCell.Tab.1.right" timestamp="1596358769982">
+    <state width="1877" height="296" key="GridCell.Tab.1.right" timestamp="1596360372612">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="296" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596358769982" />
+    <state width="1877" height="296" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596360372612" />
     <state width="1877" height="338" key="GridCell.Tab.1.right/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
     <state width="1877" height="338" key="GridCell.Tab.1.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596315766063" />
     <state x="715" y="231" key="RollbackChangesDialog" timestamp="1589134650162">
@@ -793,10 +791,10 @@
     <state x="857" y="245" width="579" height="470" key="StructurePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1596357137388" />
     <state x="857" y="273" width="540" height="524" key="StructurePopup/0.0.1920.1160@0.0.1920.1160" timestamp="1589307989879" />
     <state x="857" y="273" width="579" height="524" key="StructurePopup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596309693541" />
-    <state x="552" y="313" key="Vcs.Push.Dialog.v2" timestamp="1596303386924">
-      <screen x="0" y="0" width="1920" height="1160" />
+    <state x="552" y="281" key="Vcs.Push.Dialog.v2" timestamp="1596358852154">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="281" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1593789964750" />
+    <state x="552" y="281" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1596358852154" />
     <state x="552" y="313" key="Vcs.Push.Dialog.v2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303386924" />
     <state width="968" height="588" key="XDebugger.FullValuePopup" timestamp="1595266662220">
       <screen x="0" y="0" width="1920" height="1160" />
@@ -872,11 +870,6 @@
           <option name="timeStamp" value="128" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/Process.java</url>
-          <line>68</line>
-          <option name="timeStamp" value="167" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java</url>
           <line>54</line>
           <option name="timeStamp" value="175" />
@@ -892,29 +885,44 @@
           <option name="timeStamp" value="177" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StartProcess.java</url>
-          <line>21</line>
-          <option name="timeStamp" value="183" />
-        </line-breakpoint>
-        <line-breakpoint type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/Bot.java</url>
-          <line>160</line>
-          <option name="timeStamp" value="185" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java</url>
           <line>98</line>
           <option name="timeStamp" value="186" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java</url>
-          <line>43</line>
+          <line>42</line>
           <option name="timeStamp" value="187" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/SumProcess.java</url>
           <line>34</line>
           <option name="timeStamp" value="188" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MemoProcess.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="192" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/Bot.java</url>
+          <line>173</line>
+          <option name="timeStamp" value="193" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetPicsProcess.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="194" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetPicsProcess.java</url>
+          <line>70</line>
+          <option name="timeStamp" value="195" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/Bot.java</url>
+          <line>602</line>
+          <option name="timeStamp" value="196" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

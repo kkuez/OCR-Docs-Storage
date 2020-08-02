@@ -16,13 +16,14 @@ import java.util.Set;
 
 public class MemoProcess extends Process {
 
-    InputType inputType = null;
+    InputType type = null;
     private User user = null;
 
     private final static Set<String> commands = Set.of(
             "Memos anzeigen",
             "Memos löschen",
             "Memo hinzufügen",
+            "Memo-Optionen",
             "add",
             "remove");
 
@@ -39,38 +40,46 @@ public class MemoProcess extends Process {
         Message message = null;
         String[] commandValue = deserializeInput(update, bot);
         switch (commandValue[0]){
+            case "Memo-Optionen":
+                bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Memo, false, false, null, getFacade()), false);
+                reset(bot, user);
+                break;
             case "Memos anzeigen":
                 sendMemoList(update, bot);
                 reset(bot, user);
                 break;
             case "Memos löschen":
-                inputType = InputType.remove;
+                type = InputType.remove;
                 ReplyKeyboard memoListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getMemos(user.getId()), "remove");
                 message = bot.sendKeyboard("Was soll gelöscht werden?", update, memoListKeyboard, false);
                 break;
             case "Memo hinzufügen":
-                inputType = InputType.add;
+                type = InputType.add;
                 message = bot.sendMsg("Was soll hinzugefügt werden?", update, null, true, false);
-                break;
-            case "add":
-                String item = commandValue[1];
-                getFacade().insertMemo(item, user.getId());
-                message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
-                getSentMessages().add(message);
-                break;
-            case "remove":
-                try{
-                    item = commandValue[1];
-                    getFacade().deleteMemo(item);
-                    bot.sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
-                    bot.simpleEditMessage(item + " gelöscht. Nochwas?", bot.getMassageFromUpdate(update), KeyboardFactory.getInlineKeyboardForList(getFacade().getMemos(user.getId()), "remove"), "remove");
-                }catch (Exception e){
-                    logger.error(null, e);
-                }
                 break;
             case "done":
                 bot.sendMsg("Ok :)", update, null, false, false);
                 reset(bot, user);
+                break;
+            default:
+                switch (type) {
+                    case add:
+                        String item = commandValue[1];
+                        getFacade().insertMemo(item, user.getId());
+                        message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                        getSentMessages().add(message);
+                        break;
+                    case remove:
+                        try{
+                            item = commandValue[1];
+                            getFacade().deleteMemo(item);
+                            bot.sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
+                            bot.simpleEditMessage(item + " gelöscht. Nochwas?", bot.getMassageFromUpdate(update), KeyboardFactory.getInlineKeyboardForList(getFacade().getMemos(user.getId()), "remove"), "remove");
+                        }catch (Exception e){
+                            logger.error(null, e);
+                        }
+                        break;
+                }
                 break;
         }
 
@@ -92,10 +101,10 @@ public class MemoProcess extends Process {
         if (inputString.startsWith("Memo")) {
             return inputString;
         } else {
-            if(inputType == InputType.add){
+            if(type == InputType.add){
                 return "add";
             }else{
-                if(inputType == InputType.remove){
+                if(type == InputType.remove){
                     return "remove";
                 }
             }
@@ -109,6 +118,7 @@ public class MemoProcess extends Process {
     }
 
     private void sendMemoList(Update update, Bot bot){
+        User user = bot.getNonBotUserFromUpdate(update);
         List<String> memoList = getFacade().getMemos(user.getId());
         StringBuilder listeBuilder = new StringBuilder("*Aktuelle Memos:*\n");
         for(int i = 0;i<memoList.size();i++){

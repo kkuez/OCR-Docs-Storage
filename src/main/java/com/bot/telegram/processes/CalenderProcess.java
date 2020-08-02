@@ -109,6 +109,7 @@ public class CalenderProcess extends Process {
                     break;
                 case "Kalender":
                     bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar, false, false, null, getFacade()), false);
+                    reset(bot, user);
                     break;
                 default:
                     task.setName(commandValue[0]);
