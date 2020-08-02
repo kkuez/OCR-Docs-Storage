@@ -599,7 +599,7 @@ public class Bot extends TelegramLongPollingBot {
         return messageToReturn;
     }
 
-    public synchronized List<Message> sendMediaMsg(Update update, boolean isReply, List<InputMedia> inputMediaList) {
+    public synchronized List<Message> sendMediaMsg(Update update, boolean isReply, List<InputMedia> inputMediaList) throws TelegramApiException {
         Message message = getMassageFromUpdate(update);
         long chatID = message.getChatId();
 
@@ -610,16 +610,10 @@ public class Bot extends TelegramLongPollingBot {
             sendMediaGroup.setReplyToMessageId(message.getMessageId());
         }
         List<Message> messageToReturn = null;
-        try {
             if (inputMediaList.isEmpty()) {
                 throw new TelegramApiException("No media in List found.");
             }
             messageToReturn = execute(sendMediaGroup);
-        } catch (TelegramApiException e) {
-            logger.error(null, e);
-            sendMsg("Failed to send mediaGroup.", update, null, false, false);
-            abortProcess(update);
-        }
         return messageToReturn;
     }
 

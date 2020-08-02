@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.*;
 
@@ -68,18 +69,25 @@ public class GetPicsProcess extends Process {
                             }
                         }
 
-                        List<Message> messages = bot.sendMediaMsg(update, true, inputMediaList);
+                        try {
+                            bot.sendMediaMsg(update, true, inputMediaList);
+                        } catch (TelegramApiException e) {
+                            logger.error(null, e);
+                            bot.sendMsg(e.getMessage(), update, null, false, false);
+                            reset(bot, user);
+                            return;
+                        }
                         user.setBusy(false);
 
-                        if (messages.size() > 0) {
-                            bot.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", update, null, true, false);
-                        }
+                        bot.sendMsg("Fertig: " + listOfDocs.size() + " Bilder geholt.", update, null, true, false);
                         reset(bot, user);
                         break;
                 }
 
         }
     }
+
+
 
     @Override
     public String getProcessName() {
