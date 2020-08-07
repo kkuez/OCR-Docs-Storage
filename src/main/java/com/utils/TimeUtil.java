@@ -6,13 +6,7 @@ import java.util.*;
 public class TimeUtil {
     static Map<String, String> monthMap = new HashMap<>();
 
-    private TimeUtil()
-    {}
-    public static void waitUntilObjectsEqual(Object o1, Object o2) throws InterruptedException {
-        while(!o1.equals(o2)){
-                Thread.sleep(300);
-        }
-    }
+    private TimeUtil() {}
 
     public static Map<Integer, List<Integer>> getDaysInMonthOfYear(int year){
         Map<Integer, List<Integer>> monthMap = new HashMap<>();

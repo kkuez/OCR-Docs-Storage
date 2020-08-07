@@ -49,8 +49,6 @@ public class Bot extends TelegramLongPollingBot {
 
     private List<String> shoppingList;
 
-    private Reporter progressReporter;
-
     Map<Integer, User> allowedUsersMap;
 
     private static Logger logger = Main.getLogger();
@@ -62,7 +60,7 @@ public class Bot extends TelegramLongPollingBot {
         this.allowedUsersMap = facade.getAllowedUsers();
         shoppingList = facade.getShoppingList();
 
-        progressReporter = new ProgressReporter() {
+        Reporter progressReporter = new ProgressReporter() {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
                 progressManager.setTotalSteps(steps);
@@ -132,6 +130,7 @@ public class Bot extends TelegramLongPollingBot {
             allowedUsersMap.get(currentUserID).setProcess(processCache.get(NewUserRegProcess.class));
             return;
         }
+
         try {
             processUpdateReceveived(update);
         } catch (Exception e) {
@@ -139,7 +138,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void processUpdateReceveived(Update update) throws Exception {
+    public void processUpdateReceveived(Update update) {
         int currentUserID;
         String textGivenByUser;
         boolean isBusy = getNonBotUserFromUpdate(update).isBusy();
@@ -309,26 +308,6 @@ public class Bot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             user.setBusy(false);
             sendMsg("Fehler, Aktion abgebrochen.", update, null, true, false);
-            logger.error(null, e);
-        }
-        return message;
-    }
-
-    public Message sendVideoFromURL(User user, String VideoPath, String caption) {
-        SendVideo sendVideo = null;
-        Message message = null;
-        try {
-            sendVideo = new SendVideo().setVideo("SomeText", new FileInputStream(new File(VideoPath)));
-            sendVideo.setCaption(caption);
-        } catch (FileNotFoundException e) {
-            logger.error(VideoPath, e);
-            return message;
-        }
-        long chatID = user.getId();
-        sendVideo.setChatId(chatID);
-        try {
-            message = execute(sendVideo);
-        } catch (TelegramApiException e) {
             logger.error(null, e);
         }
         return message;
@@ -712,8 +691,6 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     //GETTER SETTER
-
-
     public Map<Integer, User> getAllowedUsersMap() {
         return allowedUsersMap;
     }

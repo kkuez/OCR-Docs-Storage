@@ -1,0 +1,4 @@
+Drop table Documents;
+create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT, user INTEGER, inZipFile TEXT, sizeOfOriginalFile INTEGER);
+Drop Table Bons;
+create table Bons (belongsToDocument INTEGER, sum REAL);

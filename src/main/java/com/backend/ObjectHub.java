@@ -29,8 +29,6 @@ public class ObjectHub {
 
     private Map<Integer, User> allowedUsersMap;
 
-    private Map<String, String> inputArgs;
-
     private Bot bot;
 
     private TasksRunnable tasksRunnable;
@@ -82,9 +80,6 @@ public class ObjectHub {
     }
 
     // GETTER SETTER
-
-
-
     public TasksRunnable getTasksRunnable() {
         return tasksRunnable;
     }
@@ -129,24 +124,6 @@ public class ObjectHub {
 
     public void setExecutorService(ExecutorService executorService) {
         this.executorService = executorService;
-    }
-
-    public Map<String, String> getInputArgs() {
-        return inputArgs;
-    }
-
-    public void setInputArgs(String[] inputArgs) {
-        Map<String, String> argsMap = new HashMap<>();
-
-        for(String s : inputArgs){
-            if(s.contains("=")){
-                String key = s.substring(0, s.indexOf('='));
-                String value = s.substring(s.indexOf('=') + 1, s.length());
-                argsMap.put(key.toLowerCase(), value);
-            }
-        }
-
-        this.inputArgs = argsMap;
     }
 
     public BackendFacade getFacade() {
