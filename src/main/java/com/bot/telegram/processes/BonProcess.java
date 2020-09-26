@@ -1,13 +1,8 @@
 package com.bot.telegram.processes;
 
-import com.backend.BackendFacade;
-import com.gui.controller.reporter.ProgressReporter;
-import com.backend.ObjectHub;
-import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
-import com.objectTemplates.User;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
+import java.io.File;
+import java.io.IOException;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -15,9 +10,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Set;
+import com.backend.BackendFacade;
+import com.backend.ObjectHub;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.Bon;
+import com.objectTemplates.Document;
+import com.objectTemplates.User;
 
 public class BonProcess extends Process {
 
@@ -27,11 +27,7 @@ public class BonProcess extends Process {
 
     private Document document;
 
-    private static Set<String> commands = Set.of(
-            "isSum",
-            "Bon-Optionen",
-            "Bon eingeben",
-            "EnterRightSum");
+    private static Set<String> commands = Set.of("isSum", "Bon-Optionen", "Bon eingeben", "EnterRightSum");
 
     public BonProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
@@ -46,10 +42,11 @@ public class BonProcess extends Process {
         try {
             switch (commandValue[0]) {
                 case "isBon":
-                    if(commandValue[1].equals("confirm")) {
+                    if (commandValue[1].equals("confirm")) {
                         user.setBusy(true);
-                        //In Bonfolder kopieren nachdem der User bestätigt hat dass Dok ein Bon ist.
-                        File newOriginalFile = new File(ObjectHub.getInstance().getArchiver().getBonFolder(), bon.getOriginalFileName());
+                        // In Bonfolder kopieren nachdem der User bestätigt hat dass Dok ein Bon ist.
+                        File newOriginalFile = new File(ObjectHub.getInstance().getArchiver().getBonFolder(),
+                                bon.getOriginalFileName());
                         try {
                             FileUtils.copyFile(bon.getOriginFile(), newOriginalFile);
                         } catch (IOException e) {
@@ -62,27 +59,30 @@ public class BonProcess extends Process {
                         currentStep = Steps.isSum;
                         user.setBusy(false);
                     }
-                    if(commandValue[1].equals("deny")) {
+                    if (commandValue[1].equals("deny")) {
                         message = bot.simpleEditMessage("Ok :)", update, KeyboardFactory.KeyBoardType.NoButtons, null);
                         reset(bot, user);
                     }
-                break;
+                    break;
                 case "isSum":
-                    if(commandValue[1].equals("confirm")) {
+                    if (commandValue[1].equals("confirm")) {
                         bot.sendMsg("Ok :)", update, null, true, false);
                         getFacade().insertDocument(bon);
                         getFacade().insertTag(bon.getId(), "Bon");
                         reset(bot, user);
                     }
-                    if(commandValue[1].equals("deny")) {
-                        message = bot.sendMsg("Bitte richtige Summe eingeben:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                    if (commandValue[1].equals("deny")) {
+                        message = bot.sendMsg("Bitte richtige Summe eingeben:", update,
+                                KeyboardFactory.KeyBoardType.Abort, false, true);
                         currentStep = Steps.EnterRightSum;
                     } else {
-                        message = bot.simpleEditMessage("Falsche eingabe...", update, KeyboardFactory.KeyBoardType.Boolean);
+                        message = bot.simpleEditMessage("Falsche eingabe...", update,
+                                KeyboardFactory.KeyBoardType.Boolean);
                     }
                     break;
                 case "Bon eingeben":
-                    bot.sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.NoButtons, true, false);
+                    bot.sendMsg("Bitte lad jetzt den Bon hoch.", update, KeyboardFactory.KeyBoardType.NoButtons, true,
+                            false);
                     break;
                 case "abort":
                     bot.abortProcess(update);
@@ -91,8 +91,8 @@ public class BonProcess extends Process {
 
                     break;
                 case "Bon-Optionen":
-                    bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Bons,
-                            false, false, null, getFacade()), false);
+                    bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory
+                            .getKeyBoard(KeyboardFactory.KeyBoardType.Bons, false, false, null, getFacade()), false);
                     reset(bot, user);
                     break;
                 default:
@@ -111,7 +111,8 @@ public class BonProcess extends Process {
                                 bot.sendMsg("Ok, richtige Summe korrigiert :)", update, null, false, false);
                                 reset(bot, user);
                             } catch (NumberFormatException e) {
-                                message = bot.sendMsg("Die Zahl verstehe ich nicht :(", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                                message = bot.sendMsg("Die Zahl verstehe ich nicht :(", update,
+                                        KeyboardFactory.KeyBoardType.Abort, false, true);
                             }
                         }
                     }
@@ -164,7 +165,7 @@ public class BonProcess extends Process {
         Start, enterBon, isSum, EnterRightSum
     }
 
-    //GETTER SETTER
+    // GETTER SETTER
     public Steps getCurrentStep() {
         return currentStep;
     }
@@ -180,7 +181,6 @@ public class BonProcess extends Process {
     public void setBon(Bon bon) {
         this.bon = bon;
     }
-
 
     public Document getDocument() {
         return document;

@@ -1,11 +1,9 @@
 package com.bot.telegram.processes;
 
-import com.backend.BackendFacade;
-import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.Document;
-import com.objectTemplates.User;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
@@ -13,7 +11,12 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.Document;
+import com.objectTemplates.User;
 
 public class GetPicsProcess extends Process {
 
@@ -21,8 +24,7 @@ public class GetPicsProcess extends Process {
 
     InputType type = null;
 
-    private static Set<String> commands = Set.of(
-            "Dokumente suchen");
+    private static Set<String> commands = Set.of("Dokumente suchen");
 
     public GetPicsProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
@@ -34,7 +36,8 @@ public class GetPicsProcess extends Process {
         String[] commandValue = deserializeInput(update, bot);
         switch (commandValue[0]) {
             case "Dokumente suchen":
-                Message message = bot.sendMsg("Dein Suchbegriff:", update, KeyboardFactory.KeyBoardType.Abort, false, true);
+                Message message = bot.sendMsg("Dein Suchbegriff:", update, KeyboardFactory.KeyBoardType.Abort, false,
+                        true);
                 type = InputType.getPics;
                 user.setBusy(false);
                 getSentMessages().add(message);
@@ -57,12 +60,15 @@ public class GetPicsProcess extends Process {
                         List<InputMedia> inputMediaList = new ArrayList<>();
                         for (Document document1 : listOfDocs) {
                             Set<String> photoEndings = Set.of("png", "PNG", "jpg", "JPG", "jpeg", "JPEG");
-                            String fileExtension = document1.getOriginalFileName().substring(document1.getOriginalFileName().indexOf(".")).replace(".", "");
-                            InputMedia media = photoEndings.contains(fileExtension) ? new InputMediaPhoto() : new InputMediaDocument();
+                            String fileExtension = document1.getOriginalFileName()
+                                    .substring(document1.getOriginalFileName().indexOf(".")).replace(".", "");
+                            InputMedia media = photoEndings.contains(fileExtension) ? new InputMediaPhoto()
+                                    : new InputMediaDocument();
                             media.setMedia(document1.getOriginFile(), document1.getOriginalFileName());
-                            //Filter for Documents in mediaList.
+                            // Filter for Documents in mediaList.
                             if (media instanceof InputMediaDocument) {
-                                //If inputmedia is a document instead of a picture, send it and remove it from the inputmedialist.
+                                // If inputmedia is a document instead of a picture, send it and remove it from the
+                                // inputmedialist.
                                 bot.sendDocument(update, true, (InputMediaDocument) media);
                             } else {
                                 inputMediaList.add(media);
@@ -86,8 +92,6 @@ public class GetPicsProcess extends Process {
 
         }
     }
-
-
 
     @Override
     public String getProcessName() {

@@ -1,9 +1,9 @@
-package com.backend.taskHandling.strategies;
-
-import com.backend.taskHandling.Task;
+package com.backend.taskhandling.strategies;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+
+import com.backend.taskhandling.Task;
 
 public class RegularMinutelyExecutionStrategy extends RegularExecutionStrategy {
 
@@ -31,7 +31,9 @@ public class RegularMinutelyExecutionStrategy extends RegularExecutionStrategy {
 
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "')";
+        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values ("
+                + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user
+                + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "')";
     }
 
     @Override

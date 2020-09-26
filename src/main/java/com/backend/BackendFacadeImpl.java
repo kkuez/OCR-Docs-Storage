@@ -1,22 +1,21 @@
 package com.backend;
 
-import com.backend.taskHandling.Task;
-import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
-import com.objectTemplates.Image;
-import com.objectTemplates.User;
-
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class FacadeController implements BackendFacade {
+import com.backend.taskhandling.Task;
+import com.objectTemplates.Bon;
+import com.objectTemplates.Document;
+import com.objectTemplates.User;
+
+public class BackendFacadeImpl implements BackendFacade {
 
     DBDAO dbdao;
 
-    FacadeController(File dbFile) {
+    BackendFacadeImpl(File dbFile) {
         dbdao = new DBDAO(dbFile);
     }
 
@@ -57,13 +56,13 @@ public class FacadeController implements BackendFacade {
 
     @Override
     public File getPDF(LocalDate start, LocalDate end) {
-        //TODO
+        // TODO
         return null;
     }
 
     @Override
     public File getLogs() {
-        //TODO whole new feature, first do the other stuff plox
+        // TODO whole new feature, first do the other stuff plox
         return null;
     }
 

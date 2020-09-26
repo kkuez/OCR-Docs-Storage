@@ -1,16 +1,15 @@
 package com.backend;
 
-import com.backend.taskHandling.Task;
-import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
-import com.objectTemplates.Image;
-import com.objectTemplates.User;
-
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.backend.taskhandling.Task;
+import com.objectTemplates.Bon;
+import com.objectTemplates.Document;
+import com.objectTemplates.User;
 
 public interface BackendFacade {
 
@@ -18,23 +17,19 @@ public interface BackendFacade {
 
     Map<Integer, String> getQRItems();
 
-
     void insertDocument(Document document);
 
     void deleteLastDocument();
 
     int getIdForNextDocument();
 
-    //No special getsum method since it has to be calculated from the Client
+    // No special getsum method since it has to be calculated from the Client
 
     List<Bon> getBonsForMonth(LocalDate targetYearMonth);
-
 
     File getPDF(LocalDate start, LocalDate end);
 
     File getLogs();
-
-
 
     void insertTask(Task task);
 

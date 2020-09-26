@@ -1,13 +1,14 @@
-package com.backend.taskHandling.strategies;
+package com.backend.taskhandling.strategies;
 
 import java.time.LocalDateTime;
 
 public interface ExecutionStrategy {
-     StrategyType getType();
 
-     boolean timeIsNow(LocalDateTime localDateTime);
+    StrategyType getType();
 
-     String getInsertDBString();
+    boolean timeIsNow(LocalDateTime localDateTime);
+
+    String getInsertDBString();
 
     void delete(String taskName);
 

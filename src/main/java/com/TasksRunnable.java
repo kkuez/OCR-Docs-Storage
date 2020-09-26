@@ -1,16 +1,17 @@
 package com;
 
-import com.backend.BackendFacade;
-import com.backend.taskHandling.CheckConnectionTask;
-import com.backend.taskHandling.strategies.RegularMinutelyExecutionStrategy;
-import com.backend.taskHandling.strategies.RegularExecutionStrategy;
-import com.backend.taskHandling.Task;
-import com.bot.telegram.Bot;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import com.backend.BackendFacade;
+import com.backend.taskhandling.CheckConnectionTask;
+import com.backend.taskhandling.Task;
+import com.backend.taskhandling.strategies.RegularExecutionStrategy;
+import com.backend.taskhandling.strategies.RegularMinutelyExecutionStrategy;
+import com.bot.telegram.Bot;
 
 public class TasksRunnable implements Runnable {
 
@@ -35,21 +36,22 @@ public class TasksRunnable implements Runnable {
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
                 localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
-                if(task.timeIsNow(localDateTimeNow)){
+                if (task.timeIsNow(localDateTimeNow)) {
                     boolean success = task.perform();
-                    //if successfully performed and is NOT a regular task, remove from list
-                    if(success){
+                    // if successfully performed and is NOT a regular task, remove from list
+                    if (success) {
                         StringBuilder usersString = new StringBuilder();
                         task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
-                        logger.info("Task " + task.getName() + " for user " + usersString.toString().replaceFirst(", ", ""));
-                        if(!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
+                        logger.info("Task " + task.getName() + " for user "
+                                + usersString.toString().replaceFirst(", ", ""));
+                        if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
                             task.delete();
                             facade.deleteTask(task);
                         }
                     }
                 }
             }
-                Thread.sleep(60000);
+            Thread.sleep(60000);
         }
     }
 
@@ -57,7 +59,8 @@ public class TasksRunnable implements Runnable {
     public void run() {
         try {
             checkConnectionTask = new CheckConnectionTask(bot);
-            RegularMinutelyExecutionStrategy checkConnectionTaskStrategy = new RegularMinutelyExecutionStrategy(checkConnectionTask);
+            RegularMinutelyExecutionStrategy checkConnectionTaskStrategy = new RegularMinutelyExecutionStrategy(
+                    checkConnectionTask);
             checkConnectionTask.setExecutionStrategy(checkConnectionTaskStrategy);
             loop();
         } catch (InterruptedException e) {
@@ -67,8 +70,7 @@ public class TasksRunnable implements Runnable {
         }
     }
 
-    //GETTER SETTER
-
+    // GETTER SETTER
 
     public void setBot(Bot bot) {
         this.bot = bot;

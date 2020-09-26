@@ -1,20 +1,21 @@
-package com.backend.taskHandling.strategies;
-
-import com.backend.taskHandling.Task;
+package com.backend.taskhandling.strategies;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
+import com.backend.taskhandling.Task;
+
 public class RegularMonthlyExecutionStrategy extends RegularExecutionStrategy {
 
-    public RegularMonthlyExecutionStrategy(Task task, int day){
+    public RegularMonthlyExecutionStrategy(Task task, int day) {
         this.task = task;
         min = 0;
         hour = 4;
         this.day = day;
     }
+
     @Override
     public StrategyType getType() {
         return StrategyType.MONTHLY;
@@ -34,12 +35,15 @@ public class RegularMonthlyExecutionStrategy extends RegularExecutionStrategy {
 
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() +"')";
+        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values ("
+                + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user
+                + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "')";
     }
 
     @Override
     public LocalDateTime getTime() {
-        return LocalDateTime.of(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), day), LocalTime.of(hour, min));
+        return LocalDateTime.of(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), day),
+                LocalTime.of(hour, min));
     }
 
     @Override

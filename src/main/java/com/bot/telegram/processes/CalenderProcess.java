@@ -1,15 +1,13 @@
 package com.bot.telegram.processes;
 
-import com.backend.BackendFacade;
-import com.gui.controller.reporter.ProgressReporter;
-import com.backend.taskHandling.strategies.*;
-import com.backend.taskHandling.Task;
-import com.backend.ObjectHub;
-import com.objectTemplates.User;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
-import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -17,10 +15,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import com.backend.BackendFacade;
+import com.backend.ObjectHub;
+import com.backend.taskhandling.Task;
+import com.backend.taskhandling.strategies.*;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.User;
+import com.utils.TimeUtil;
 
 public class CalenderProcess extends Process {
 
@@ -38,19 +41,14 @@ public class CalenderProcess extends Process {
 
     private String type;
 
-    private static Set<String> commands = Set.of(
-            "Kalender",
-            "Termin hinzufügen",
-            "Termin löschen",
-            "Termine anzeige"
-    );
+    private static Set<String> commands = Set.of("Kalender", "Termin hinzufügen", "Termin löschen", "Termine anzeige");
 
     public CalenderProcess(ProgressReporter reporter, BackendFacade facade) {
         super(reporter, facade);
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Bot bot) throws TelegramApiException{
+    public void performNextStep(String arg, Update update, Bot bot) throws TelegramApiException {
         User user = bot.getNonBotUserFromUpdate(update);
         String[] commandValue = deserializeInput(update, bot);
         Message message = null;
@@ -83,8 +81,8 @@ public class CalenderProcess extends Process {
                 case "chooseHour":
                     message = processChooseHour(update, commandValue, bot);
                     break;
-                 case "chooseMinute":
-                     message = processChooseMinute(update, commandValue, bot);
+                case "chooseMinute":
+                    message = processChooseMinute(update, commandValue, bot);
                     break;
                 case "forMe":
                     processForMe(update, user, message, bot);
@@ -102,18 +100,19 @@ public class CalenderProcess extends Process {
                     message = processDeleteAppointment(update, bot);
                     break;
                 case "deleteTask":
-                   message = processDeleteTask(update, commandValue, bot);
+                    message = processDeleteTask(update, commandValue, bot);
                     break;
-                case "-": //In case a faulty day was chosen by user
+                case "-": // In case a faulty day was chosen by user
                     bot.sendAnswerCallbackQuery("Ungültiger Tag", false, update.getCallbackQuery());
                     break;
                 case "Kalender":
-                    bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Calendar, false, false, null, getFacade()), false);
+                    bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(
+                            KeyboardFactory.KeyBoardType.Calendar, false, false, null, getFacade()), false);
                     reset(bot, user);
                     break;
                 default:
                     task.setName(commandValue[0]);
-                    switch (type){
+                    switch (type) {
                         case "oneTime":
                         case "oneTimeWithTime":
                             message = processOneTime(update, bot);
@@ -130,15 +129,15 @@ public class CalenderProcess extends Process {
                     }
                     break;
             }
-        }catch (TelegramApiException e) {
-            if(e.getMessage().equals("Error editing message reply markup")){
+        } catch (TelegramApiException e) {
+            if (e.getMessage().equals("Error editing message reply markup")) {
                 logger.info("1 message not changed.");
-            }else{
+            } else {
                 logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
             }
         }
         bot.getNonBotUserFromUpdate(update).setBusy(false);
-        if(message != null){
+        if (message != null) {
             getSentMessages().add(message);
         }
     }
@@ -177,7 +176,8 @@ public class CalenderProcess extends Process {
                 } catch (TelegramApiException e) {
                     logger.error("Failed activating bot", e);
                 }
-                message = bot.simpleEditMessage("Wann?", update, KeyboardFactory.KeyBoardType.Calendar_Regular_Choose_Unit);
+                message = bot.simpleEditMessage("Wann?", update,
+                        KeyboardFactory.KeyBoardType.Calendar_Regular_Choose_Unit);
                 break;
         }
         return message;
@@ -232,29 +232,31 @@ public class CalenderProcess extends Process {
         } catch (TelegramApiException e) {
             logger.error("Failed activating bot", e);
         }
-        return bot.simpleEditMessage(question, bot.getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
+        return bot.simpleEditMessage(question, bot.getMassageFromUpdate(update),
+                KeyboardFactory.createInlineKeyboardForYearMonth(year, month), "chooseDay");
     }
 
     private Message processChooseDay(Update update, String[] commandValue, Bot bot) throws TelegramApiException {
         Message message = null;
         String question = "Zu welcher Stunde?";
-        if(commandValue[1].equals("-")) {
+        if (commandValue[1].equals("-")) {
             bot.sendAnswerCallbackQuery("Ungültiger Tag", false, update.getCallbackQuery());
             return null;
         }
         day = Integer.parseInt(commandValue[1]);
-        if(type.equals("oneTimeWithTime")){
+        if (type.equals("oneTimeWithTime")) {
             try {
                 bot.sendAnswerCallbackQuery(day + " gewählt. " + question, false, update.getCallbackQuery());
             } catch (TelegramApiException e) {
                 logger.error("Failed activating bot", e);
             }
-            message = bot.simpleEditMessage(question, bot.getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForHour(), "chooseHour");
-        }else{
-            if(type.equals("oneTime")){
+            message = bot.simpleEditMessage(question, bot.getMassageFromUpdate(update),
+                    KeyboardFactory.createInlineKeyboardForHour(), "chooseHour");
+        } else {
+            if (type.equals("oneTime")) {
                 message = askForWhom(update, bot);
-            }else{
-                if(type.equals("regularMonthly") || type.equals("regularYearly")){
+            } else {
+                if (type.equals("regularMonthly") || type.equals("regularYearly")) {
                     message = askForWhom(update, bot);
                 }
             }
@@ -270,7 +272,8 @@ public class CalenderProcess extends Process {
         } catch (TelegramApiException e) {
             logger.error("Failed activating bot", e);
         }
-        return bot.simpleEditMessage(question, bot.getMassageFromUpdate(update), KeyboardFactory.createInlineKeyboardForMinute(), "chooseMinute");
+        return bot.simpleEditMessage(question, bot.getMassageFromUpdate(update),
+                KeyboardFactory.createInlineKeyboardForMinute(), "chooseMinute");
     }
 
     private Message processChooseMinute(Update update, String[] commandValue, Bot bot) throws TelegramApiException {
@@ -296,7 +299,7 @@ public class CalenderProcess extends Process {
         bot.simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
     }
 
-    private void processShowAppointments(Update update, User user, Bot bot){
+    private void processShowAppointments(Update update, User user, Bot bot) {
         int currentUserId = user.getId();
         StringBuilder messageOfTasks = new StringBuilder();
         List<Task> taskList = getFacade().getTasks();
@@ -304,27 +307,34 @@ public class CalenderProcess extends Process {
         Collections.reverse(taskList);
         for (Task task : taskList) {
             boolean taskForCurrentUser = task.getUserList().stream().anyMatch(user1 -> user1.getId() == currentUserId);
-            if(!taskForCurrentUser){
+            if (!taskForCurrentUser) {
                 continue;
             }
             messageOfTasks.append("\n-----------------\n");
-             if(task.getExecutionStrategy() instanceof OneTimeExecutionStrategy) {
-                 LocalDateTime time = task.getExecutionStrategy().getTime();
-                 String min = time.getMinute() == 0 ? "" : "." + time.getMinute();
-                 String date = time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, "));
-                 int hour = time.getHour();
-                 String germanDate = date + hour + min;
-                 messageOfTasks.append("Am *").append(germanDate).append(" Uhr*:\n");
-            }else{
-                switch (task.getExecutionStrategy().getType()){
+            if (task.getExecutionStrategy() instanceof OneTimeExecutionStrategy) {
+                LocalDateTime time = task.getExecutionStrategy().getTime();
+                String min = time.getMinute() == 0 ? "" : "." + time.getMinute();
+                String date = time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, "));
+                int hour = time.getHour();
+                String germanDate = date + hour + min;
+                messageOfTasks.append("Am *").append(germanDate).append(" Uhr*:\n");
+            } else {
+                switch (task.getExecutionStrategy().getType()) {
                     case DAILY:
                         messageOfTasks.append("*Täglich*:\n");
                         break;
                     case MONTHLY:
-                        messageOfTasks.append("*Monatlich, jeden ").append(((RegularMonthlyExecutionStrategy) task.getExecutionStrategy()).getDay()).append(".*:\n");
+                        messageOfTasks.append("*Monatlich, jeden ")
+                                .append(((RegularMonthlyExecutionStrategy) task.getExecutionStrategy()).getDay())
+                                .append(".*:\n");
                         break;
                     case YEARLY:
-                        messageOfTasks.append("*Jährlich, jeden ").append(TimeUtil.getMonthMapIntKeys().get(((RegularYearlyExecutionStrategy) task.getExecutionStrategy()).getMonth())).append(" am ").append(((RegularYearlyExecutionStrategy) task.getExecutionStrategy()).getDay()).append(".*:\n");
+                        messageOfTasks.append("*Jährlich, jeden ")
+                                .append(TimeUtil.getMonthMapIntKeys()
+                                        .get(((RegularYearlyExecutionStrategy) task.getExecutionStrategy()).getMonth()))
+                                .append(" am ")
+                                .append(((RegularYearlyExecutionStrategy) task.getExecutionStrategy()).getDay())
+                                .append(".*:\n");
                         break;
                 }
             }
@@ -337,11 +347,13 @@ public class CalenderProcess extends Process {
         bot.sendMsg(messageString, update, KeyboardFactory.KeyBoardType.NoButtons, true, false, Bot.ParseMode.Markdown);
         reset(bot, user);
     }
-    private Message processAddAppointment(Update update, Bot bot){
-        return bot.sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy, "chooseStrategy", true, true);
+
+    private Message processAddAppointment(Update update, Bot bot) {
+        return bot.sendMsg("Art des Termins wählen:", update, KeyboardFactory.KeyBoardType.Calendar_Choose_Strategy,
+                "chooseStrategy", true, true);
     }
 
-    private Message processDeleteAppointment(Update update, Bot bot){
+    private Message processDeleteAppointment(Update update, Bot bot) {
         List<String> taskNames = new ArrayList<>();
         getFacade().getTasks().forEach(task1 -> taskNames.add(task1.getName()));
         ReplyKeyboard listKeyboard = KeyboardFactory.getInlineKeyboardForList(taskNames, "deleteTask");
@@ -367,33 +379,40 @@ public class CalenderProcess extends Process {
             List<String> taskNames1 = new ArrayList<>();
             getFacade().getTasks().forEach(task1 -> taskNames1.add(task1.getName()));
             ReplyKeyboard listKeyboard1 = KeyboardFactory.getInlineKeyboardForList(taskNames1, "deleteTask");
-            message = bot.simpleEditMessage("Welchen Termin willst du löschen?", bot.getMassageFromUpdate(update), listKeyboard1, "deleteTask");
+            message = bot.simpleEditMessage("Welchen Termin willst du löschen?", bot.getMassageFromUpdate(update),
+                    listKeyboard1, "deleteTask");
         }
         return message;
     }
 
-    private Message processOneTime(Update update, Bot bot){
-        return bot.sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false, true);
+    private Message processOneTime(Update update, Bot bot) {
+        return bot.sendMsg("Welches Jahr?", update, KeyboardFactory.KeyBoardType.Calendar_Year, "chooseYear", false,
+                true);
     }
 
-    private Message processRegularMonthly(Update update, Bot bot){
-        return bot.sendMsg("Welcher Tag?", update, new InlineKeyboardMarkup().setKeyboard(KeyboardFactory.createInlineKeyboardForYearMonth(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue())), "day", false, true, Bot.ParseMode.None);
+    private Message processRegularMonthly(Update update, Bot bot) {
+        return bot.sendMsg("Welcher Tag?", update,
+                new InlineKeyboardMarkup().setKeyboard(KeyboardFactory.createInlineKeyboardForYearMonth(
+                        LocalDate.now().getYear(), LocalDate.now().getMonth().getValue())),
+                "day", false, true, Bot.ParseMode.None);
     }
 
-    private Message processRegularYearly(Update update, Bot bot){
-        return bot.sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth", false, true);
+    private Message processRegularYearly(Update update, Bot bot) {
+        return bot.sendMsg("Welcher Monat?", update, KeyboardFactory.KeyBoardType.Calendar_Month, "chooseMonth", false,
+                true);
     }
 
     private Message askForWhom(Update update, Bot bot) throws TelegramApiException {
-            if(update.hasCallbackQuery()){
+        if (update.hasCallbackQuery()) {
             bot.sendAnswerCallbackQuery(day + " gewählt.", false, update.getCallbackQuery());
-            }
-        switch (type){
+        }
+        switch (type) {
             case "oneTime":
             case "oneTimeWithTime":
                 LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute);
                 task.setExecutionStrategy(new SimpleCalendarOneTimeStrategy(task, localDateTime, getFacade()));
-                return bot.simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose, "chooseUser");
+                return bot.simpleEditMessage("Für wen?", update, KeyboardFactory.KeyBoardType.User_Choose,
+                        "chooseUser");
             case "regularDaily":
                 task.setExecutionStrategy(new RegularDailyExecutionStrategy(task));
                 break;
@@ -414,7 +433,8 @@ public class CalenderProcess extends Process {
 
     @Override
     public String getCommandIfPossible(Update update, Bot bot) {
-        String inputString = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : update.getMessage().getText();
+        String inputString = update.hasCallbackQuery() ? update.getCallbackQuery().getData()
+                : update.getMessage().getText();
         if (inputString.startsWith("Termin")) {
             return inputString;
         } else {
@@ -436,31 +456,31 @@ public class CalenderProcess extends Process {
                                 if (inputString.startsWith("chooseDay;calendar")) {
                                     return "chooseDay;calendar";
                                 } else {
-                                if (inputString.startsWith("chooseHour;calendar")) {
-                                    return "chooseHour;calendar";
-                                } else {
-                                if (inputString.startsWith("chooseMinute;calendar")) {
-                                    return "chooseMinute;calendar";
-                                } else {
-                                    if (inputString.startsWith("forMe;calendar")) {
-                                        return "forMe;calendar";
+                                    if (inputString.startsWith("chooseHour;calendar")) {
+                                        return "chooseHour;calendar";
                                     } else {
-                                        if (inputString.startsWith("forAll;calendar")) {
-                                            return "forAll;calendar";
+                                        if (inputString.startsWith("chooseMinute;calendar")) {
+                                            return "chooseMinute;calendar";
                                         } else {
-                                            if (inputString.startsWith("daily;calendar")) {
-                                                return "daily;calendar";
+                                            if (inputString.startsWith("forMe;calendar")) {
+                                                return "forMe;calendar";
                                             } else {
-                                                if (inputString.startsWith("monthly;calendar")) {
-                                                    return "monthly;calendar";
+                                                if (inputString.startsWith("forAll;calendar")) {
+                                                    return "forAll;calendar";
                                                 } else {
-                                                    if (inputString.startsWith("yearly;calendar")) {
-                                                        {
-                                                            return "yearly;calendar";
+                                                    if (inputString.startsWith("daily;calendar")) {
+                                                        return "daily;calendar";
+                                                    } else {
+                                                        if (inputString.startsWith("monthly;calendar")) {
+                                                            return "monthly;calendar";
+                                                        } else {
+                                                            if (inputString.startsWith("yearly;calendar")) {
+                                                                {
+                                                                    return "yearly;calendar";
+                                                                }
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            }
                                                 }
                                             }
                                         }

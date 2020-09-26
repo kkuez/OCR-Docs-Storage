@@ -1,9 +1,10 @@
-package com.backend.taskHandling.strategies;
+package com.backend.taskhandling.strategies;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 public class RegularWeeklyExecutionStrategy extends RegularExecutionStrategy {
+
     @Override
     public StrategyType getType() {
         return StrategyType.WEEKLY;
@@ -17,12 +18,12 @@ public class RegularWeeklyExecutionStrategy extends RegularExecutionStrategy {
     @Override
     public String getInsertDBString() {
         return null;
-        //TODO implementieren die ganze Klasse ffs
+        // TODO implementieren die ganze Klasse ffs
     }
 
     @Override
     public LocalDateTime getTime() {
-        //TODO
+        // TODO
         logger.info("Get time of weekly not supported yet :(");
         return LocalDateTime.now();
     }

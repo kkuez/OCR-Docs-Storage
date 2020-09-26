@@ -1,22 +1,24 @@
 package com.bot.telegram.processes;
 
-import com.backend.BackendFacade;
-import com.gui.controller.reporter.ProgressReporter;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
-import com.objectTemplates.User;
+import java.util.Set;
+
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Set;
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.User;
 
 public class MapQRItemProcess extends Process {
+
     int itemNumberToMap = 0;
 
     Step currentStep = null;
-    private final static Set<String> commands = Set.of(
-            "QR-Item mappen");
+
+    private final static Set<String> commands = Set.of("QR-Item mappen");
 
     public MapQRItemProcess(ProgressReporter reporter, BackendFacade facade) {
         super(reporter, facade);
@@ -29,7 +31,8 @@ public class MapQRItemProcess extends Process {
         Message message = null;
         switch (currentStep) {
             case mapNewItem:
-                message = bot.sendMsg("Welches Item willst du mappen?", update, KeyboardFactory.KeyBoardType.QRItems, true, true);
+                message = bot.sendMsg("Welches Item willst du mappen?", update, KeyboardFactory.KeyBoardType.QRItems,
+                        true, true);
                 getSentMessages().add(message);
                 currentStep = Step.chooseNumber;
                 break;

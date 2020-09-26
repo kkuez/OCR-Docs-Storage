@@ -1,36 +1,33 @@
 package com.bot.telegram.processes;
 
-import com.backend.BackendFacade;
-import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.User;
-import com.bot.telegram.Bot;
+import java.time.LocalDate;
+import java.util.Set;
 
-import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import java.time.LocalDate;
-import java.util.Set;
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.User;
+import com.utils.TimeUtil;
 
-public class SumProcess extends Process{
+public class SumProcess extends Process {
 
     private String month;
 
     private String year;
 
-    private static Set<String> commands = Set.of(
-            "selectMonth",
-            "Summe von Bons",
-            "selectYear");
+    private static Set<String> commands = Set.of("selectMonth", "Summe von Bons", "selectYear");
 
-    public SumProcess(ProgressReporter progressReporter, BackendFacade facade){
+    public SumProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
     }
 
     @Override
-    public void performNextStep(String arg, Update update, Bot bot){
+    public void performNextStep(String arg, Update update, Bot bot) {
         Message message = null;
         String[] commandValue = deserializeInput(update, bot);
         try {
@@ -48,9 +45,12 @@ public class SumProcess extends Process{
                     if (TimeUtil.getYearsSet().contains(year)) {
                         User user = bot.getAllowedUsersMap().get(update.getCallbackQuery().getFrom().getId());
                         bot.getNonBotUserFromUpdate(update).setBusy(true);
-                        float sumOfMonthAll = getFacade().getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1), null);
-                        float sumOfMonthForCurrentUser = getFacade().getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1), user);
-                        String messageToSend = month + "/" + year + "\nSumme alle: " + sumOfMonthAll + "\nSumme " + user.getName() + ": " + sumOfMonthForCurrentUser;
+                        float sumOfMonthAll = getFacade()
+                                .getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1), null);
+                        float sumOfMonthForCurrentUser = getFacade()
+                                .getSumMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1), user);
+                        String messageToSend = month + "/" + year + "\nSumme alle: " + sumOfMonthAll + "\nSumme "
+                                + user.getName() + ": " + sumOfMonthForCurrentUser;
                         try {
                             bot.sendAnswerCallbackQuery(messageToSend, false, update.getCallbackQuery());
                         } catch (TelegramApiException e) {
@@ -68,21 +68,22 @@ public class SumProcess extends Process{
                         message = bot.askMonth("Für welchem Monat...?", update, false, "selectMonth");
                         getSentMessages().add(message);
                     } catch (TelegramApiException e) {
-                        if(((TelegramApiException) e).getCause().getLocalizedMessage().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")){
+                        if (((TelegramApiException) e).getCause().getLocalizedMessage().contains(
+                                "message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")) {
                             logger.info("Message not edited, no need.");
-                        }else{
+                        } else {
                             logger.error(((TelegramApiException) e).getLocalizedMessage(), e);
                         }
                     }
             }
         } catch (TelegramApiException e) {
-            if(e.getMessage().equals("Error editing message reply markup")){
+            if (e.getMessage().equals("Error editing message reply markup")) {
                 logger.info("1 message not changed.");
-            }else{
+            } else {
                 logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
             }
         }
-        if(message != null){
+        if (message != null) {
             getSentMessages().add(message);
         }
     }
@@ -94,12 +95,13 @@ public class SumProcess extends Process{
 
     @Override
     public String getCommandIfPossible(Update update, Bot bot) {
-        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() :  bot.getMassageFromUpdate(update).getText();
-        if(update.hasCallbackQuery()){
-            if(updateText.startsWith("selectMonth")){
+        String updateText = update.hasCallbackQuery() ? update.getCallbackQuery().getData()
+                : bot.getMassageFromUpdate(update).getText();
+        if (update.hasCallbackQuery()) {
+            if (updateText.startsWith("selectMonth")) {
                 return "selectMonth";
-            }else{
-                if(updateText.startsWith("selectYear")){
+            } else {
+                if (updateText.startsWith("selectYear")) {
                     return "selectYear";
                 }
             }

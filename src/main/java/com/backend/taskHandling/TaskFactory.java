@@ -1,10 +1,4 @@
-package com.backend.taskHandling;
-
-import com.backend.BackendFacade;
-import com.backend.ObjectHub;
-import com.backend.taskHandling.strategies.*;
-import com.objectTemplates.User;
-import com.bot.telegram.Bot;
+package com.backend.taskhandling;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,9 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.backend.BackendFacade;
+import com.backend.ObjectHub;
+import com.backend.taskhandling.strategies.*;
+import com.bot.telegram.Bot;
+import com.objectTemplates.User;
+
 public class TaskFactory {
 
     private static Map<Integer, User> allowedUsersMap = ObjectHub.getInstance().getAllowedUsersMap();
+
     private static Bot bot = ObjectHub.getInstance().getBot();
 
     private TaskFactory() {
@@ -24,9 +25,9 @@ public class TaskFactory {
 
     public static Task getTask(ResultSet rs, BackendFacade facade) throws SQLException {
         List<User> userList = new ArrayList<>();
-        if(rs.getString("user").equals("ALL")){
+        if (rs.getString("user").equals("ALL")) {
             userList.addAll(allowedUsersMap.values());
-        }else{
+        } else {
             userList.add(allowedUsersMap.get(Integer.parseInt(rs.getString("user"))));
         }
 
@@ -42,13 +43,14 @@ public class TaskFactory {
 
         String strategyTypeString = rs.getString("strategyType");
         StrategyType strategyType = getStrategyTypeOrNull(strategyTypeString);
-        if(strategyType == null) {
+        if (strategyType == null) {
             throw new RuntimeException("Couldnt parse StrategyType from DB: " + strategyTypeString);
         }
 
-        switch (strategyType){
+        switch (strategyType) {
             case SIMPLECALENDAR_ONETIME:
-                LocalDateTime time = LocalDateTime.of(rs.getInt("year"),rs.getInt("month"),rs.getInt("day"),rs.getInt("hour"),rs.getInt("minute"));
+                LocalDateTime time = LocalDateTime.of(rs.getInt("year"), rs.getInt("month"), rs.getInt("day"),
+                        rs.getInt("hour"), rs.getInt("minute"));
                 executionStrategy = new SimpleCalendarOneTimeStrategy(task, time, facade);
                 task.setExecutionStrategy(executionStrategy);
                 break;
@@ -72,7 +74,7 @@ public class TaskFactory {
     }
 
     public static StrategyType getStrategyTypeOrNull(String taskType) {
-        switch (taskType){
+        switch (taskType) {
             case "SIMPLECALENDAR_ONETIME":
                 return StrategyType.SIMPLECALENDAR_ONETIME;
             case "MINUTELY":

@@ -1,19 +1,20 @@
 package com.bot.telegram.processes;
 
-import com.backend.BackendFacade;
-import com.gui.controller.reporter.ProgressReporter;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
-import com.objectTemplates.User;
-import org.telegram.telegrambots.meta.api.objects.Update;
-
 import java.util.Set;
 
-public class StartProcess extends Process {
-    private static Set<String> commands = Set.of(
-            "Start");
+import org.telegram.telegrambots.meta.api.objects.Update;
 
-    public StartProcess(ProgressReporter progressReporter, BackendFacade facade){
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.User;
+
+public class StartProcess extends Process {
+
+    private static Set<String> commands = Set.of("Start");
+
+    public StartProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
     }
 

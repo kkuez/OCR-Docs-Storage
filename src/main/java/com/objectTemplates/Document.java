@@ -1,14 +1,15 @@
 package com.objectTemplates;
 
-import com.utils.IOUtil;
-import com.backend.OperatingSys;
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Set;
 
-public abstract class Document{
+import org.apache.commons.io.FileUtils;
+
+import com.backend.OperatingSys;
+import com.utils.IOUtil;
+
+public abstract class Document {
 
     private String date;
 
@@ -35,20 +36,20 @@ public abstract class Document{
         this.user = user;
     }
 
-    public String getInsertDBString(int docCount){
-        if(date == null){
+    public String getInsertDBString(int docCount) {
+        if (date == null) {
             date = LocalDate.now().toString();
         }
 
         String originFilePath = originFile.getAbsolutePath();
         originFilePath = IOUtil.convertFilePathOSDependent(originFilePath, OperatingSys.Linux);
 
-        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + docCount + ", '" +
-                content.replace("'", "''") + "', '" + originFilePath + "', '" + date + "', " + user + ", " + FileUtils.sizeOf(originFile) + ")";
+        return "insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (" + docCount
+                + ", '" + content.replace("'", "''") + "', '" + originFilePath + "', '" + date + "', " + user + ", "
+                + FileUtils.sizeOf(originFile) + ")";
     }
 
     // Getter Setter
-
 
     public String getInZipFile() {
         return inZipFile;
@@ -58,7 +59,6 @@ public abstract class Document{
         this.inZipFile = inZipFile;
     }
 
-
     public int getUser() {
         return user;
     }
@@ -66,7 +66,6 @@ public abstract class Document{
     public void setUser(int user) {
         this.user = user;
     }
-
 
     public void setOriginalFileName(String originalFileName) {
         this.originalFileName = originalFileName;
@@ -87,11 +86,11 @@ public abstract class Document{
         return originalFileName;
     }
 
-    public String getTags(){
+    public String getTags() {
         StringBuilder stringBuilder = new StringBuilder();
-        if(tags != null) {
+        if (tags != null) {
             tags.forEach(tag -> stringBuilder.append(tag + ", "));
-        }else {
+        } else {
             return "";
         }
         return stringBuilder.toString();

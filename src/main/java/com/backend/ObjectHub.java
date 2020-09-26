@@ -1,19 +1,20 @@
 package com.backend;
 
-import com.Main;
-import com.TasksRunnable;
-import com.gui.controller.MainController;
-import com.objectTemplates.User;
-import com.bot.telegram.Bot;
-
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.apache.log4j.Logger;
+
+import com.Main;
+import com.TasksRunnable;
+import com.bot.telegram.Bot;
+import com.gui.controller.MainController;
+import com.objectTemplates.User;
 
 public class ObjectHub {
 
@@ -46,13 +47,13 @@ public class ObjectHub {
         }
 
         File dbFile = new File(getProperties().getProperty("dbPath"));
-        facade = new FacadeController(dbFile);
+        facade = new BackendFacadeImpl(dbFile);
         archiver = new Archiver(properties);
 
         executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));
     }
 
-    public void initLater(){
+    public void initLater() {
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(200);
@@ -70,6 +71,7 @@ public class ObjectHub {
         thread.setName("TasksToDoThread");
         thread.start();
     }
+
     private Archiver archiver;
 
     public static ObjectHub getInstance() {
@@ -91,6 +93,7 @@ public class ObjectHub {
     public void setBot(Bot bot) {
         this.bot = bot;
     }
+
     public Map<Integer, User> getAllowedUsersMap() {
         return allowedUsersMap;
     }
@@ -98,6 +101,7 @@ public class ObjectHub {
     public void setAllowedUsersMap(Map<Integer, User> allowedUsersMap) {
         this.allowedUsersMap = allowedUsersMap;
     }
+
     public Properties getProperties() {
         return properties;
     }

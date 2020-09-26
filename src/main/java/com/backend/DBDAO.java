@@ -1,19 +1,20 @@
 package com.backend;
 
-import com.Main;
-import com.backend.taskHandling.TaskFactory;
-import com.backend.taskHandling.Task;
-import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
-import com.objectTemplates.Image;
-import com.objectTemplates.User;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
+import com.Main;
+import com.backend.taskhandling.Task;
+import com.backend.taskhandling.TaskFactory;
+import com.objectTemplates.Bon;
+import com.objectTemplates.Document;
+import com.objectTemplates.Image;
+import com.objectTemplates.User;
 
 class DBDAO {
 
@@ -32,10 +33,11 @@ class DBDAO {
     List<Document> getDocumentsForSearchTerm(String searchTerm) {
         Map<File, Document> documentMap = new HashMap<>();
 
-        showDocumentsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'").forEach(document -> {
-            document.setTagSet(getTagsForDocument(document));
-            documentMap.put(document.getOriginFile(), document);
-        });
+        showDocumentsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'")
+                .forEach(document -> {
+                    document.setTagSet(getTagsForDocument(document));
+                    documentMap.put(document.getOriginFile(), document);
+                });
 
         List<Document> taggedDocuments = getDocumentsByTag(searchTerm);
         taggedDocuments.forEach(document -> documentMap.putIfAbsent(document.getOriginFile(), document));
@@ -83,10 +85,10 @@ class DBDAO {
         executeSQL(updateStatement.toString());
     }
 
-    Map<Integer, User> getAllowedUsersMap(BackendFacade facade){
+    Map<Integer, User> getAllowedUsersMap(BackendFacade facade) {
         Map<Integer, User> userMap = new HashMap<>();
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
 
             while (rs.next()) {
                 User user = new User(rs.getInt("id"), rs.getString("name"), facade);
@@ -98,10 +100,10 @@ class DBDAO {
         return userMap;
     }
 
-    List<String> getShoppingListFromDB(){
+    List<String> getShoppingListFromDB() {
         List<String> shoppingList = new ArrayList<>();
-        try(Statement  statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");) {
 
             while (rs.next()) {
                 shoppingList.add(rs.getString("item"));
@@ -116,10 +118,10 @@ class DBDAO {
         executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
     }
 
-    List<String> getMemos(long userId){
+    List<String> getMemos(long userId) {
         List<String> memoList = new ArrayList<>();
-        try(Statement statement = getConnection().createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM Memos where user=" + userId)) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery("SELECT * FROM Memos where user=" + userId)) {
             while (rs.next()) {
                 memoList.add(rs.getString("item"));
             }
@@ -129,10 +131,10 @@ class DBDAO {
         return memoList;
     }
 
-    List<String> getStandardListFromDB(){
+    List<String> getStandardListFromDB() {
         List<String> standardList = new ArrayList<>();
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");) {
 
             while (rs.next()) {
                 standardList.add(rs.getString("item"));
@@ -143,33 +145,35 @@ class DBDAO {
         return standardList;
     }
 
-  void insertDocument(Document document){
-        if(!(document instanceof Bon)){
+    void insertDocument(Document document) {
+        if (!(document instanceof Bon)) {
             lastProcessedDoc = document;
         }
         executeSQL(document.getInsertDBString(document.getId()));
     }
 
-    void removeTask(Task task){
+    void removeTask(Task task) {
         int year = task.getExecutionStrategy().getTime().getYear();
         int month = task.getExecutionStrategy().getTime().getMonth().getValue();
         int day = task.getExecutionStrategy().getTime().getDayOfMonth();
         int hour = task.getExecutionStrategy().getTime().getHour();
         int minute = task.getExecutionStrategy().getTime().getMinute();
 
-        executeSQL("delete from CalendarTasks where name='" + task.getName() + "' AND year=" + year + " AND month=" + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
+        executeSQL("delete from CalendarTasks where name='" + task.getName() + "' AND year=" + year + " AND month="
+                + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
     }
 
-    void removeLastProcressedDocument(){
+    void removeLastProcressedDocument() {
         executeSQL("delete from Documents where id=" + lastProcessedDoc.getId() + "");
         executeSQL("delete from Bons where belongsToDocument=" + lastProcessedDoc.getId() + "");
         FileUtils.deleteQuietly(lastProcessedDoc.getOriginFile());
     }
 
-    Set<String> getTagsForDocument(Document document){
+    Set<String> getTagsForDocument(Document document) {
         Set<String> tagSet = new HashSet<>();
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement
+                        .executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());) {
 
             while (rs.next()) {
                 tagSet.add(rs.getString("Tag"));
@@ -181,19 +185,21 @@ class DBDAO {
     }
 
     void executeSQL(String sqlStatement) {
-        try(Statement statement = getConnection().createStatement();) {
+        try (Statement statement = getConnection().createStatement();) {
             statement.executeUpdate(sqlStatement);
         } catch (SQLException e) {
             logger.error(sqlStatement, e);
         }
     }
 
-    float getSumMonth(LocalDate monthAndYear, User userOrNull){
+    float getSumMonth(LocalDate monthAndYear, User userOrNull) {
         float resultSum = 0f;
-        String plusUserString = userOrNull == null ? "" :" AND USER=" + userOrNull.getId();
-        String statementString = "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + (monthAndYear.getMonthValue() + "-" + monthAndYear.getYear()).replace("-", ".") + "%'" + plusUserString;
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery(statementString)){
+        String plusUserString = userOrNull == null ? "" : " AND USER=" + userOrNull.getId();
+        String statementString = "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%"
+                + (monthAndYear.getMonthValue() + "-" + monthAndYear.getYear()).replace("-", ".") + "%'"
+                + plusUserString;
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery(statementString)) {
             while (rs.next()) {
                 resultSum += Float.parseFloat(rs.getString("sum"));
             }
@@ -203,10 +209,10 @@ class DBDAO {
         return resultSum;
     }
 
-    Map<Integer, String> getQRItemMap(){
+    Map<Integer, String> getQRItemMap() {
         Map<Integer, String> itemMap = new HashMap<>();
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from QRItems");) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery("select * from QRItems");) {
 
             while (rs.next()) {
                 itemMap.put(rs.getInt("itemNumber"), rs.getString("itemMapped"));
@@ -217,20 +223,20 @@ class DBDAO {
         return itemMap;
     }
 
-    void updateQRItem(Integer itemNumber, String itemName){
-        executeSQL("UPDATE QRItems Set itemMapped=\"" + itemName +"\" where itemNumber=" + itemNumber);
+    void updateQRItem(Integer itemNumber, String itemName) {
+        executeSQL("UPDATE QRItems Set itemMapped=\"" + itemName + "\" where itemNumber=" + itemNumber);
     }
 
-    boolean isFilePresent(File newFile){
-        int filesSizeOfNewFile = countDocuments("Documents" ,"where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
+    boolean isFilePresent(File newFile) {
+        int filesSizeOfNewFile = countDocuments("Documents", "where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
 
         return filesSizeOfNewFile > 0;
     }
 
-    List<Task> getTasksFromDB(BackendFacade facade){
+    List<Task> getTasksFromDB(BackendFacade facade) {
         List<Task> taskList = new ArrayList<>();
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
             while (rs.next()) {
                 Task task = TaskFactory.getTask(rs, facade);
                 taskList.add(task);
@@ -241,15 +247,16 @@ class DBDAO {
         return taskList;
     }
 
-    void insertTaskToDB(Task task){
+    void insertTaskToDB(Task task) {
         executeSQL(task.getInsertDBString());
     }
 
-    List<Document> getDocumentsByTag(String tag){
+    List<Document> getDocumentsByTag(String tag) {
         List<Integer> documentIds = new ArrayList<>();
         List<Document> documentList = new ArrayList<>();
-        try(Statement statement = getConnection().createStatement();
-        ResultSet rs = statement.executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement
+                        .executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");) {
 
             while (rs.next()) {
                 documentIds.add(rs.getInt("belongsToDocument"));
@@ -257,7 +264,7 @@ class DBDAO {
         } catch (SQLException e) {
             logger.error("select belongsToDocument from Tags where Tag like '%" + tag + "%'", e);
         }
-        for(Integer id : documentIds){
+        for (Integer id : documentIds) {
             documentList.addAll(showDocumentsFromSQLExpression("select * from Documents where id=" + id + ""));
         }
         return documentList;
@@ -265,13 +272,14 @@ class DBDAO {
 
     List<Document> showDocumentsFromSQLExpression(String sqlExpression) {
         List<Document> documentList = new ArrayList<>();
-        try(Statement statement = getConnection().createStatement();
-        ResultSet rs = statement.executeQuery(sqlExpression);) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery(sqlExpression);) {
 
             documentList = new ArrayList<>();
             while (rs.next()) {
-                //TODO auch pdfs eigene klasse schreiben
-                Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")), rs.getInt("id"), rs.getInt("user"));
+                // TODO auch pdfs eigene klasse schreiben
+                Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")),
+                        rs.getInt("id"), rs.getInt("user"));
                 image.setTagSet(getTagsForDocument(image));
                 documentList.add(image);
             }
@@ -282,10 +290,10 @@ class DBDAO {
         return documentList;
     }
 
-    int countDocuments(String tableName, String sqlAddition){
+    int countDocuments(String tableName, String sqlAddition) {
         int count = 0;
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);) {
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);) {
 
             while (rs.next()) {
                 count = rs.getInt("Count(*)");
@@ -310,11 +318,13 @@ class DBDAO {
     }
 
     public List<Bon> getBonsForMonth(int year, int month) {
-        //TODO es gibt ein dateTime Format von SQLite
+        // TODO es gibt ein dateTime Format von SQLite
         String monthAndYear = month + "-" + year;
         List<Bon> resultBons = new ArrayList<>();
-        try(Statement statement = getConnection().createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%" + monthAndYear.replace("-", ".") + "%'")){
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery(
+                        "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%"
+                                + monthAndYear.replace("-", ".") + "%'")) {
             while (rs.next()) {
                 String content = rs.getString("content");
                 String originalFilePath = rs.getString("originalFile");
@@ -333,7 +343,7 @@ class DBDAO {
     }
 
     public void deleteFromShoppingList(String item) {
-        executeSQL("delete from ShoppingList where item='" +  item + "'");
+        executeSQL("delete from ShoppingList where item='" + item + "'");
     }
 
     public void insertToStandartList(String item) {
@@ -341,7 +351,7 @@ class DBDAO {
     }
 
     public void deleteFromStandartList(String itemName) {
-        executeSQL("delete from StandardList where item='" +  itemName + "'");
+        executeSQL("delete from StandardList where item='" + itemName + "'");
     }
 
     public void insertMemo(String itemName, long userId) {
@@ -349,15 +359,15 @@ class DBDAO {
     }
 
     public void deleteMemo(String memoName) {
-        executeSQL("delete from Memos where item='" +  memoName + "'");
+        executeSQL("delete from Memos where item='" + memoName + "'");
     }
 
     public void insertTag(int documentId, String tag) {
-        executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + documentId + ", '" + tag + "');" );
+        executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + documentId + ", '" + tag + "');");
     }
 
     public void insertUserToAllowedUsers(Integer id, String firstName, Long chatId) {
-        executeSQL("insert into AllowedUsers(id, name, chatId) Values (" + id + ", '" +
-                firstName + "', " + chatId + ")");
+        executeSQL(
+                "insert into AllowedUsers(id, name, chatId) Values (" + id + ", '" + firstName + "', " + chatId + ")");
     }
 }

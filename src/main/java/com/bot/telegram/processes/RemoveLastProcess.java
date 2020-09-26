@@ -1,18 +1,19 @@
 package com.bot.telegram.processes;
 
-import com.backend.BackendFacade;
-import com.gui.controller.reporter.ProgressReporter;
-import com.bot.telegram.Bot;
-import com.objectTemplates.User;
+import java.util.Set;
+
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Set;
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.User;
 
 public class RemoveLastProcess extends Process {
 
     private Set<String> commands = Set.of("Letztes Bild Löschen");
 
-    public RemoveLastProcess(ProgressReporter progressReporter, BackendFacade facade){
+    public RemoveLastProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
     }
 
@@ -20,7 +21,7 @@ public class RemoveLastProcess extends Process {
     public void performNextStep(String arg, Update update, Bot bot) {
         User user = bot.getNonBotUserFromUpdate(update);
         getFacade().deleteLastDocument();
-        bot.sendMsg( "Letztes Bild gelöscht :)", update, null, true, false);
+        bot.sendMsg("Letztes Bild gelöscht :)", update, null, true, false);
         reset(bot, user);
     }
 

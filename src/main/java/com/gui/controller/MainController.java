@@ -1,12 +1,28 @@
 package com.gui.controller;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.List;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
 import com.backend.BackendFacade;
+import com.backend.ObjectHub;
 import com.gui.controller.reporter.*;
 import com.gui.controller.strategies.*;
-import com.backend.ObjectHub;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
-import com.utils.*;
+import com.utils.ControllerUtil;
+import com.utils.TessUtil;
+import com.utils.TimeUtil;
+
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,18 +33,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.List;
 
 public class MainController extends SingleDocumentController {
 
@@ -83,13 +87,14 @@ public class MainController extends SingleDocumentController {
     @FXML
     private void initialize() {
         progressReporter = new ProgressReporter() {
+
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
                 progressManager.setTotalSteps(steps);
             }
 
             @Override
-            public void addStep( Update updateOrNull) {
+            public void addStep(Update updateOrNull) {
                 progressManager.addStep();
                 Platform.runLater(() -> progressIndicator.setProgress(progressManager.getCurrentProgress()));
             }
@@ -114,12 +119,12 @@ public class MainController extends SingleDocumentController {
         });
     }
 
-    public void prepareTagsBeforeProcessing(){
+    public void prepareTagsBeforeProcessing() {
         logger.info(GUI_INIT_STRING + "Process new Files from Folder: " + inputPathLabel);
         Reporter booleanReporter = (SubmitBooleanReporter) value -> {
-            if(!value){
+            if (!value) {
                 process(null);
-            }else{
+            } else {
                 getTagsForProcessing();
             }
         };
@@ -127,13 +132,11 @@ public class MainController extends SingleDocumentController {
         ControllerUtil.createNewWindow(new BooleanWIndowStrategy(booleanReporter));
     }
 
-
-    void getTagsForProcessing(){
+    void getTagsForProcessing() {
         Reporter reporter = (SubmitTagsReporter) tagSet -> process(tagSet);
 
         ControllerUtil.createNewWindow(new SubmitTagsStrategy(reporter));
     }
-
 
     void process(Set<String> tagSet) {
         ObjectHub.getInstance().getExecutorService().submit(() -> {
@@ -141,23 +144,23 @@ public class MainController extends SingleDocumentController {
                     new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                     new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
                             new PropertyValueFactory<Document, String>("date"),
-                            new PropertyValueFactory<Document, String>("tags") }, (ProgressReporter) progressReporter, facade);
+                            new PropertyValueFactory<Document, String>("tags") },
+                    (ProgressReporter) progressReporter, facade);
 
-            if(tagSet != null){
-                for(String tag : tagSet){
-                    for(Document document : documentSet){
+            if (tagSet != null) {
+                for (String tag : tagSet) {
+                    for (Document document : documentSet) {
                         facade.insertTag(document.getId(), tag);
                     }
                 }
             }
         });
-        }
+    }
 
     public void search() {
         logger.info(GUI_INIT_STRING + "Performing search with Term '" + searchTermTextField.getText() + "'");
         List<Document> documentList = facade.getDocuments(searchTermTextField.getText());
-        ObservableList<Document> documentObservableList = ControllerUtil
-                .createObservableList(documentList);
+        ObservableList<Document> documentObservableList = ControllerUtil.createObservableList(documentList);
         ControllerUtil.fillTable(mainTableView, documentObservableList,
                 new TableColumn[] { fileNameTableColumn, dateTableColumn, tagsTableColumn },
                 new PropertyValueFactory[] { new PropertyValueFactory<Document, String>("originalFileName"),
@@ -172,7 +175,7 @@ public class MainController extends SingleDocumentController {
 
     private String choosePath(Label label) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        if(!label.getText().equals("")){
+        if (!label.getText().equals("")) {
             directoryChooser.setInitialDirectory(new File(label.getText()));
         }
 
@@ -185,41 +188,42 @@ public class MainController extends SingleDocumentController {
     }
 
     public void archive() {
-        logger.info(GUI_INIT_STRING + "Archive "  + nameOfProjectTextField.getText());
+        logger.info(GUI_INIT_STRING + "Archive " + nameOfProjectTextField.getText());
         ObjectHub.getInstance().getArchiver().archive(nameOfProjectTextField.getText());
     }
 
-    public void createPDF(){
+    public void createPDF() {
         ChooseTimeReporter chooseTimeReporter = (beginDate, endDate) -> {
 
-            try(PDDocument document = new PDDocument()) {
+            try (PDDocument document = new PDDocument()) {
                 PDPage firstPage = new PDPage();
                 document.addPage(firstPage);
                 PDPageContentStream pdPageContentStream = new PDPageContentStream(document, firstPage);
                 pdPageContentStream.beginText();
-                pdPageContentStream.setFont( PDType1Font.COURIER_BOLD, 24 );
+                pdPageContentStream.setFont(PDType1Font.COURIER_BOLD, 24);
                 pdPageContentStream.setLeading(14.5f);
                 pdPageContentStream.newLineAtOffset(25, 725);
                 pdPageContentStream.showText("Zusammenfassung " + beginDate.toString() + " - " + endDate.toString());
                 List<LocalDate> relatedMonth = new LinkedList<>();
                 relatedMonth.add(beginDate);
                 int index = -1;
-                pdPageContentStream.setFont( PDType1Font.COURIER, 16 );
+                pdPageContentStream.setFont(PDType1Font.COURIER, 16);
                 LocalDate nextLocalDate = beginDate.withDayOfMonth(1);
                 Map<User, Float> userSumMap = new HashMap<>();
                 facade.getAllowedUsers().values().forEach(user -> userSumMap.put(user, 0f));
                 pdPageContentStream.newLine();
                 float sumOfAll = 0f;
-                do{
+                do {
                     index++;
-                    nextLocalDate = beginDate.plusMonths(index).withDayOfMonth(TimeUtil.getdaysOfMonthCount(beginDate.plusMonths(index).getYear(), beginDate.plusMonths(index).getMonth().getValue()));
+                    nextLocalDate = beginDate.plusMonths(index).withDayOfMonth(TimeUtil.getdaysOfMonthCount(
+                            beginDate.plusMonths(index).getYear(), beginDate.plusMonths(index).getMonth().getValue()));
                     pdPageContentStream.newLine();
                     pdPageContentStream.newLine();
-                    pdPageContentStream.setFont( PDType1Font.COURIER_BOLD, 16 );
+                    pdPageContentStream.setFont(PDType1Font.COURIER_BOLD, 16);
                     pdPageContentStream.showText(nextLocalDate.toString());
-                    pdPageContentStream.setFont( PDType1Font.COURIER, 16 );
+                    pdPageContentStream.setFont(PDType1Font.COURIER, 16);
                     float sumForMonth = 0f;
-                    for(Map.Entry<User, Float> entry : userSumMap.entrySet()){
+                    for (Map.Entry<User, Float> entry : userSumMap.entrySet()) {
 
                         pdPageContentStream.newLine();
                         float sumForUser = facade.getSumMonth(nextLocalDate, entry.getKey());
@@ -231,7 +235,7 @@ public class MainController extends SingleDocumentController {
 
                     pdPageContentStream.newLine();
                     pdPageContentStream.showText("Gesamt: " + sumForMonth);
-                }while(!nextLocalDate.withDayOfMonth(1).toString().equals(endDate.withDayOfMonth(1).toString()));
+                } while (!nextLocalDate.withDayOfMonth(1).toString().equals(endDate.withDayOfMonth(1).toString()));
 
                 pdPageContentStream.newLine();
                 pdPageContentStream.newLine();
@@ -247,7 +251,8 @@ public class MainController extends SingleDocumentController {
                 });
                 pdPageContentStream.endText();
                 pdPageContentStream.close();
-                File fileToSave = new File(beginDate.toString().replace('\'', '_') + " - " + endDate.toString().replace('\'', '_') + ".pdf");
+                File fileToSave = new File(beginDate.toString().replace('\'', '_') + " - "
+                        + endDate.toString().replace('\'', '_') + ".pdf");
                 document.save(fileToSave);
                 Desktop.getDesktop().open(fileToSave);
             } catch (IOException e) {
@@ -261,7 +266,7 @@ public class MainController extends SingleDocumentController {
 
     @Override
     public Document getDocument() {
-        //Fixme these methods are leftovers of the parent class -> remove somehow
+        // Fixme these methods are leftovers of the parent class -> remove somehow
         return null;
     }
 

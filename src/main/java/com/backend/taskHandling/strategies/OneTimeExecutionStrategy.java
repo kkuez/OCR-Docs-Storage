@@ -1,20 +1,22 @@
-package com.backend.taskHandling.strategies;
+package com.backend.taskhandling.strategies;
+
+import org.apache.log4j.Logger;
 
 import com.Main;
 import com.backend.BackendFacade;
-import com.backend.taskHandling.Task;
-import org.apache.log4j.Logger;
+import com.backend.taskhandling.Task;
 
 public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
+
     private static Logger logger = Main.getLogger();
 
     private final BackendFacade facade;
 
     private String name;
 
-    Task task;
+    private Task task;
 
-    public OneTimeExecutionStrategy(BackendFacade facade){
+    public OneTimeExecutionStrategy(BackendFacade facade) {
         this.facade = facade;
     }
 
@@ -23,11 +25,12 @@ public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
         return StrategyType.ONETIME;
     }
 
-    public void delete(String taskName){
+    public void delete(String taskName) {
+        // TODO input parameter wird nicht genutzt
         facade.deleteTask(task);
     }
 
-    //GETTER SETTER
+    // GETTER SETTER
 
     public String getName() {
         return name;

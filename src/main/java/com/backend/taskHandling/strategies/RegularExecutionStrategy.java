@@ -1,10 +1,11 @@
-package com.backend.taskHandling.strategies;
-
-import com.Main;
-import com.backend.taskHandling.Task;
-import org.apache.log4j.Logger;
+package com.backend.taskhandling.strategies;
 
 import java.util.concurrent.TimeUnit;
+
+import org.apache.log4j.Logger;
+
+import com.Main;
+import com.backend.taskhandling.Task;
 
 public abstract class RegularExecutionStrategy implements ExecutionStrategy {
 
@@ -22,17 +23,17 @@ public abstract class RegularExecutionStrategy implements ExecutionStrategy {
 
     public Logger logger = Main.getLogger();
 
-    public RegularExecutionStrategy(){
+    public RegularExecutionStrategy() {
     }
 
     public abstract TimeUnit getExecutionTimeUnit();
 
     public void delete(String taskName) {
-        //TODO
+        // TODO
         Logger.getLogger("Deletion of regular tasks not supported... yet :)");
     };
 
-    //GETTER SETTER
+    // GETTER SETTER
 
     public int getMin() {
         return min;

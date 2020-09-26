@@ -1,13 +1,14 @@
-package com.backend.taskHandling;
+package com.backend.taskhandling;
+
+import static com.utils.PinUtil.setGPIO;
+
+import java.io.IOException;
+import java.net.InetAddress;
+
+import org.apache.log4j.Logger;
 
 import com.Main;
 import com.bot.telegram.Bot;
-import org.apache.log4j.Logger;
-
-import java.io.*;
-import java.net.InetAddress;
-
-import static com.utils.PinUtil.setGPIO;
 
 public class CheckConnectionTask extends Task {
 
@@ -36,10 +37,9 @@ public class CheckConnectionTask extends Task {
         } catch (IOException e) {
             logger.error("Could not set Pin.", e);
         }
-        //TODO
-        //Return false so it will not be tried to be deleted x) Hack?
+        // TODO
+        // Return false so it will not be tried to be deleted x) Hack?
         return false;
     }
-
 
 }

@@ -1,10 +1,7 @@
 package com.bot.telegram.processes;
 
-import com.backend.BackendFacade;
-import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.User;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
+import java.util.ArrayList;
+import java.util.Set;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -12,20 +9,18 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import java.util.*;
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.gui.controller.reporter.ProgressReporter;
+import com.objectTemplates.User;
 
 public class ShoppingListProcess extends Process {
 
     private AWAITING_INPUT status = null;
 
-    private final static Set<String> commands = Set.of(
-            "Einkaufsliste anzeigen",
-            "Liste Löschen",
-            "Löschen",
-            "Zu Einkaufsliste hinzufügen",
-            "Hinzufügen",
-            "Einkaufslisten-Optionen",
-            "Standardliste anzeigen");
+    private final static Set<String> commands = Set.of("Einkaufsliste anzeigen", "Liste Löschen", "Löschen",
+            "Zu Einkaufsliste hinzufügen", "Hinzufügen", "Einkaufslisten-Optionen", "Standardliste anzeigen");
 
     public ShoppingListProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
@@ -51,12 +46,14 @@ public class ShoppingListProcess extends Process {
                 getFacade().insertShoppingItem(item);
                 if (update.hasCallbackQuery()) {
                     try {
-                        bot.sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
+                        bot.sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false,
+                                update.getCallbackQuery());
                     } catch (TelegramApiException e) {
                         logger.error("Failed activating bot", e);
                     }
                 } else {
-                    message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false, true);
+                    message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update,
+                            KeyboardFactory.KeyBoardType.Done, false, true);
                 }
                 getSentMessages().add(message);
                 break;
@@ -66,7 +63,8 @@ public class ShoppingListProcess extends Process {
                     getFacade().deleteFromShoppingList(item);
                     bot.getShoppingList().remove(item);
                     bot.sendAnswerCallbackQuery(item + " gelöscht. Nochwas?", false, update.getCallbackQuery());
-                    bot.simpleEditMessage(item + " gelöscht. Nochwas?", bot.getMassageFromUpdate(update), KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
+                    bot.simpleEditMessage(item + " gelöscht. Nochwas?", bot.getMassageFromUpdate(update),
+                            KeyboardFactory.KeyBoardType.ShoppingList_Current, "remove");
                 } catch (Exception e) {
                     logger.error(null, e);
                 }
@@ -86,22 +84,27 @@ public class ShoppingListProcess extends Process {
                 reset(bot, user);
                 break;
             case "Löschen":
-                ReplyKeyboard shoppingListKeyboard = KeyboardFactory.getInlineKeyboardForList(getFacade().getShoppingList(), "remove");
+                ReplyKeyboard shoppingListKeyboard = KeyboardFactory
+                        .getInlineKeyboardForList(getFacade().getShoppingList(), "remove");
                 message = bot.sendKeyboard("Was soll gelöscht werden?", update, shoppingListKeyboard, false);
                 break;
             case "Zu Einkaufsliste hinzufügen":
             case "Hinzufügen":
-                message = bot.sendMsg("Was soll hinzugefügt werden?", update, KeyboardFactory.KeyBoardType.ShoppingList_Add, false, true);
+                message = bot.sendMsg("Was soll hinzugefügt werden?", update,
+                        KeyboardFactory.KeyBoardType.ShoppingList_Add, false, true);
                 status = AWAITING_INPUT.add;
                 break;
             case "Einkaufslisten-Optionen":
-                bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.ShoppingList, false, false, null, getFacade()), false);
+                bot.sendKeyboard("Was willst du tun?", update, KeyboardFactory.getKeyBoard(
+                        KeyboardFactory.KeyBoardType.ShoppingList, false, false, null, getFacade()), false);
                 break;
             case "Standardliste anzeigen":
                 try {
-                    message = bot.simpleEditMessage("Standardliste:", update, KeyboardFactory.KeyBoardType.StandardList_Current, "add");
+                    message = bot.simpleEditMessage("Standardliste:", update,
+                            KeyboardFactory.KeyBoardType.StandardList_Current, "add");
                 } catch (TelegramApiException e) {
-                    if (((TelegramApiRequestException) e).getApiResponse().contains("message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")) {
+                    if (((TelegramApiRequestException) e).getApiResponse().contains(
+                            "message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message")) {
                         logger.info("Message not edited, no need.");
                     } else {
                         logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
@@ -149,6 +152,6 @@ public class ShoppingListProcess extends Process {
         add
     }
 
-    //GETTER SETTER
+    // GETTER SETTER
 
 }
