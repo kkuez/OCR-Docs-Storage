@@ -2,14 +2,17 @@ package com.backend;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.backend.taskhandling.Task;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
+import com.utils.PDFUtil;
 
 public class BackendFacadeImpl implements BackendFacade {
 
@@ -56,8 +59,16 @@ public class BackendFacadeImpl implements BackendFacade {
 
     @Override
     public File getPDF(LocalDate start, LocalDate end) {
-        // TODO
-        return null;
+        if (start == null || end == null) {
+            final List<Bon> allBons = dbdao.getAllBons();
+            final List<LocalDate> dates = allBons.stream()
+                    .map(bon -> LocalDate.parse(bon.getDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+                    .collect(Collectors.toList());
+            dates.sort(LocalDate::compareTo);
+            return PDFUtil.createPDF(this, dates.get(0), LocalDate.now());
+        } else {
+            return PDFUtil.createPDF(this, start, end);
+        }
     }
 
     @Override

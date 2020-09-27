@@ -317,6 +317,31 @@ class DBDAO {
         return connection;
     }
 
+    List<Bon> getAllBons() {
+        // TODO es gibt ein dateTime Format von SQLite
+        List<Bon> resultBons = new ArrayList<>();
+        try (Statement statement = getConnection().createStatement();
+                ResultSet rs = statement.executeQuery(
+                        "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument")) {
+            while (rs.next()) {
+                String content = rs.getString("content");
+                String originalFilePath = rs.getString("originalFile");
+                int userInt = rs.getInt("user");
+                float sum = rs.getFloat("sum");
+                int id = rs.getInt("id");
+                String date = rs.getString("date");
+
+                Document document = new Image(content, new File(originalFilePath), id, userInt);
+                document.setDate(date);
+                Bon bon = new Bon(document, sum);
+                resultBons.add(bon);
+            }
+        } catch (SQLException e) {
+            logger.error("Couldnt sql to get Bons", e);
+        }
+        return resultBons;
+    }
+
     public List<Bon> getBonsForMonth(int year, int month) {
         // TODO es gibt ein dateTime Format von SQLite
         String monthAndYear = month + "-" + year;

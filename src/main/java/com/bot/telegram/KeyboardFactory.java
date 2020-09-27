@@ -314,10 +314,12 @@ public class KeyboardFactory {
                 keyboard.add(keyboardBonsFirstRow);
                 KeyboardRow keyboardBonsSecondRow = createKeyBoardRow(new String[] { "Summe von Bons" });
                 keyboard.add(keyboardBonsSecondRow);
-                KeyboardRow keyboardBonsThirdRow = createKeyBoardRow(new String[] { "Hole Bons" });
+                KeyboardRow keyboardBonsThirdRow = createKeyBoardRow(new String[] { "PDF aller Bons" });
                 keyboard.add(keyboardBonsThirdRow);
-                KeyboardRow keyboardBonsFourthRow = createKeyBoardRow(new String[] { "Start" });
+                KeyboardRow keyboardBonsFourthRow = createKeyBoardRow(new String[] { "Hole Bons" });
                 keyboard.add(keyboardBonsFourthRow);
+                KeyboardRow keyboardBonsFifthRow = createKeyBoardRow(new String[] { "Start" });
+                keyboard.add(keyboardBonsFifthRow);
                 break;
             case Calendar:
                 KeyboardRow keyboardCalendarFirstRow = createKeyBoardRow(new String[] { "Termine anzeige" });

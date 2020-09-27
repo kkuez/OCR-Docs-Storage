@@ -2,11 +2,13 @@ package com.bot.telegram.processes;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
@@ -27,7 +29,8 @@ public class BonProcess extends Process {
 
     private Document document;
 
-    private static Set<String> commands = Set.of("isSum", "Bon-Optionen", "Bon eingeben", "EnterRightSum");
+    private static Set<String> commands = Set.of("isSum", "Bon-Optionen", "Bon eingeben", "EnterRightSum",
+            "PDF aller Bons");
 
     public BonProcess(ProgressReporter progressReporter, BackendFacade facade) {
         super(progressReporter, facade);
@@ -41,6 +44,13 @@ public class BonProcess extends Process {
         Message message = null;
         try {
             switch (commandValue[0]) {
+                case "PDF aller Bons":
+                    final File pdf = getFacade().getPDF(null, null);
+                    final InputMediaDocument inputMediaDocument = new InputMediaDocument();
+                    inputMediaDocument.setMedia(pdf, "PDF " + LocalDateTime.now().toString() + ".pdf");
+                    bot.sendDocument(update, true, inputMediaDocument);
+                    FileUtils.forceDelete(pdf);
+                    break;
                 case "isBon":
                     if (commandValue[1].equals("confirm")) {
                         user.setBusy(true);
@@ -124,6 +134,8 @@ public class BonProcess extends Process {
             } else {
                 logger.error(((TelegramApiRequestException) e).getApiResponse(), e);
             }
+        } catch (IOException e) {
+            logger.error("Cant remove pdf", e);
         }
         if (message != null) {
             getSentMessages().add(message);
