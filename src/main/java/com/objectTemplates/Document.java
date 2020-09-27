@@ -97,7 +97,7 @@ public abstract class Document {
     }
 
     public String getDate() {
-        return date;
+        return date.trim();
     }
 
     public void setDate(String date) {

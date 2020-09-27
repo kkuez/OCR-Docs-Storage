@@ -61,9 +61,13 @@ public class BackendFacadeImpl implements BackendFacade {
     public File getPDF(LocalDate start, LocalDate end) {
         if (start == null || end == null) {
             final List<Bon> allBons = dbdao.getAllBons();
-            final List<LocalDate> dates = allBons.stream()
-                    .map(bon -> LocalDate.parse(bon.getDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")))
-                    .collect(Collectors.toList());
+            final List<LocalDate> dates = allBons.stream().map(bon -> {
+                final String[] splitDate = bon.getDate().split("\\.");
+                String dayFormat = splitDate[0].length() == 1 ? "d" : "dd";
+                String monthFormat = splitDate[1].length() == 1 ? "M" : "MM";
+                return LocalDate.parse(bon.getDate(),
+                        DateTimeFormatter.ofPattern(dayFormat + "." + monthFormat + ".yyyy"));
+            }).collect(Collectors.toList());
             dates.sort(LocalDate::compareTo);
             return PDFUtil.createPDF(this, dates.get(0), LocalDate.now());
         } else {

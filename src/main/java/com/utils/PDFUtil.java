@@ -26,26 +26,28 @@ public class PDFUtil {
     public static File createPDF(BackendFacade facade, LocalDate beginDate, LocalDate endDate) {
         // ChooseTimeReporter chooseTimeReporter = (beginDate, endDate) -> {
         File resultPdf = null;
-
+        // TODO ganze methode nochmal sauber machen
         try (PDDocument document = new PDDocument()) {
             PDPage firstPage = new PDPage();
             document.addPage(firstPage);
-            PDPageContentStream pdPageContentStream = new PDPageContentStream(document, firstPage);
-            pdPageContentStream.beginText();
-            pdPageContentStream.setFont(PDType1Font.COURIER_BOLD, 24);
-            pdPageContentStream.setLeading(14.5f);
-            pdPageContentStream.newLineAtOffset(25, 725);
+            PDPageContentStream pdPageContentStream = preparePageStream(document, firstPage);
             pdPageContentStream.showText("Zusammenfassung " + beginDate.toString() + " - " + endDate.toString());
             List<LocalDate> relatedMonth = new LinkedList<>();
             relatedMonth.add(beginDate);
             int index = -1;
-            pdPageContentStream.setFont(PDType1Font.COURIER, 16);
             LocalDate nextLocalDate = beginDate.withDayOfMonth(1);
             Map<User, Float> userSumMap = new HashMap<>();
             facade.getAllowedUsers().values().forEach(user -> userSumMap.put(user, 0f));
             pdPageContentStream.newLine();
             float sumOfAll = 0f;
             do {
+                if (index % 8 == 0) {
+                    PDPage nextPage = new PDPage();
+                    document.addPage(nextPage);
+                    pdPageContentStream.endText();
+                    pdPageContentStream.close();
+                    pdPageContentStream = preparePageStream(document, nextPage);
+                }
                 index++;
                 nextLocalDate = beginDate.plusMonths(index).withDayOfMonth(TimeUtil.getdaysOfMonthCount(
                         beginDate.plusMonths(index).getYear(), beginDate.plusMonths(index).getMonth().getValue()));
@@ -73,14 +75,10 @@ public class PDFUtil {
             pdPageContentStream.newLine();
             pdPageContentStream.showText("Alles in allem: " + sumOfAll);
             pdPageContentStream.newLine();
-            userSumMap.keySet().forEach(user -> {
-                try {
-                    pdPageContentStream.showText(user.getName() + ": " + userSumMap.get(user));
-                    pdPageContentStream.newLine();
-                } catch (IOException e) {
-                    logger.error("Failed activating bot", e);
-                }
-            });
+            for (User user : userSumMap.keySet()) {
+                pdPageContentStream.showText(user.getName() + ": " + userSumMap.get(user));
+                pdPageContentStream.newLine();
+            }
             pdPageContentStream.endText();
             pdPageContentStream.close();
             File tempDir = FileUtils.getTempDirectory();
@@ -96,5 +94,14 @@ public class PDFUtil {
         // ControllerStrategy pdfControllerStrategy = new ChooseTimeStrategy(chooseTimeReporter);
         // ControllerUtil.createNewWindow(pdfControllerStrategy);
         return resultPdf;
+    }
+
+    private static PDPageContentStream preparePageStream(PDDocument document, PDPage page) throws IOException {
+        final PDPageContentStream pdPageContentStream = new PDPageContentStream(document, page);
+        pdPageContentStream.beginText();
+        pdPageContentStream.setFont(PDType1Font.COURIER, 16);
+        pdPageContentStream.setLeading(14.5f);
+        pdPageContentStream.newLineAtOffset(25, 725);
+        return pdPageContentStream;
     }
 }

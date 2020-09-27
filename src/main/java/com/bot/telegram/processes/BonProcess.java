@@ -45,6 +45,7 @@ public class BonProcess extends Process {
         try {
             switch (commandValue[0]) {
                 case "PDF aller Bons":
+                    bot.sendMsg("Erstelle PDF...", update, KeyboardFactory.KeyBoardType.NoButtons, true, false);
                     final File pdf = getFacade().getPDF(null, null);
                     final InputMediaDocument inputMediaDocument = new InputMediaDocument();
                     inputMediaDocument.setMedia(pdf, "PDF " + LocalDateTime.now().toString() + ".pdf");
