@@ -7,14 +7,11 @@ import com.backend.taskhandling.Task;
 
 public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
-    private Task task;
-
     private LocalDateTime time;
 
     public SimpleCalendarOneTimeStrategy(Task task, LocalDateTime time, BackendFacade facade) {
-        super(facade);
+        super(facade, task);
         this.time = time;
-        this.task = task;
     }
 
     @Override
@@ -34,11 +31,11 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
         int minute = time.getMinute();
 
-        String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
+        String user = getTask().getUserList().size() > 1 ? "ALL" : getTask().getUserList().get(0).getId() + "";
 
         return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values ("
-                + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + task.getName() + "', '"
-                + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "')";
+                + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + getTask().getName() + "', '"
+                + user + "', '" + getTask().getClass().getSimpleName() + "', '" + getType() + "')";
     }
 
     @Override

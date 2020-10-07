@@ -46,7 +46,6 @@ public class TasksRunnable implements Runnable {
                                 + usersString.toString().replaceFirst(", ", ""));
                         if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
                             task.delete();
-                            facade.deleteTask(task);
                         }
                     }
                 }

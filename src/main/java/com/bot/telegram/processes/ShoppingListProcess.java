@@ -42,20 +42,7 @@ public class ShoppingListProcess extends Process {
         switch (commandValue[0]) {
             case "add":
                 String item = commandValue[1];
-                bot.getShoppingList().add(item);
-                getFacade().insertShoppingItem(item);
-                if (update.hasCallbackQuery()) {
-                    try {
-                        bot.sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false,
-                                update.getCallbackQuery());
-                    } catch (TelegramApiException e) {
-                        logger.error("Failed activating bot", e);
-                    }
-                } else {
-                    message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update,
-                            KeyboardFactory.KeyBoardType.Done, false, true);
-                }
-                getSentMessages().add(message);
+                message = add(update, bot, item);
                 break;
             case "remove":
                 try {
@@ -112,13 +99,30 @@ public class ShoppingListProcess extends Process {
                 }
                 break;
             default:
-                reset(bot, user);
-                user = bot.getAllowedUsersMap().get(update.getMessage().getChatId());
+                add(update, bot, update.getMessage().getText());
         }
         user.setBusy(false);
         if (message != null) {
             getSentMessages().add(message);
         }
+    }
+
+    private Message add(Update update, Bot bot, String item) {
+        Message message = bot.getMassageFromUpdate(update);
+        bot.getShoppingList().add(item);
+        getFacade().insertShoppingItem(item);
+        if (update.hasCallbackQuery()) {
+            try {
+                bot.sendAnswerCallbackQuery(item + " hinzugefügt! :) Noch was?", false, update.getCallbackQuery());
+            } catch (TelegramApiException e) {
+                logger.error("Failed activating bot", e);
+            }
+        } else {
+            message = bot.sendMsg(item + " hinzugefügt! :) Noch was?", update, KeyboardFactory.KeyBoardType.Done, false,
+                    true);
+            getSentMessages().add(message);
+        }
+        return message;
     }
 
     @Override

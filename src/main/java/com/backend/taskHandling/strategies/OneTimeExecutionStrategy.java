@@ -16,7 +16,8 @@ public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
 
     private Task task;
 
-    public OneTimeExecutionStrategy(BackendFacade facade) {
+    public OneTimeExecutionStrategy(BackendFacade facade, Task task) {
+        this.task = task;
         this.facade = facade;
     }
 
@@ -26,11 +27,14 @@ public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
     }
 
     public void delete(String taskName) {
-        // TODO input parameter wird nicht genutzt
         facade.deleteTask(task);
     }
 
     // GETTER SETTER
+
+    public Task getTask() {
+        return task;
+    }
 
     public String getName() {
         return name;
