@@ -1,11 +1,8 @@
-package com.gui.controller.reporter;
+package com.reporter;
 
-import com.gui.ProgressManager;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface ProgressReporter extends Reporter {
-
-    ProgressManager progressManager= new ProgressManager();
 
     void setTotalSteps(int steps, Update updateOrNull);
 

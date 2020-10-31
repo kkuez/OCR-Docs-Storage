@@ -13,13 +13,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import com.Main;
+import com.StartUp;
 import com.backend.BackendFacade;
 import com.utils.TimeUtil;
 
 public class KeyboardFactory {
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
     private static List<InlineKeyboardButton> DONE_ROW = createInlineKeyboardRow(Map.of("Fertig", "done"));
 

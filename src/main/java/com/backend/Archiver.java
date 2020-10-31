@@ -1,10 +1,11 @@
 package com.backend;
 
-import com.Main;
+import com.StartUp;
 import com.objectTemplates.Document;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.File;
@@ -14,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+@Service
 public class Archiver {
 
     private List<Document> documentList;
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
     File archiveFolder;
 
@@ -62,7 +64,7 @@ public class Archiver {
 
     public void archive(String nameOfArchive) {
         logger.info("Gui: " + "Create Zip-Archive");
-        File tempForZip = new File(ObjectHub.getInstance().getArchiver().archiveFolder, "temp");
+        File tempForZip = new File(archiveFolder, "temp");
         tempForZip.mkdir();
 
         documentList.forEach(document -> {
@@ -73,9 +75,9 @@ public class Archiver {
             }
         });
         zipDir(tempForZip, nameOfArchive);
-        File zippedDir = new File(ObjectHub.getInstance().getArchiver().archiveFolder, nameOfArchive + ".zip");
+        File zippedDir = new File(archiveFolder, nameOfArchive + ".zip");
         try {
-            FileUtils.copyFile(zippedDir, new File(ObjectHub.getInstance().getArchiver().getZipFolder(), nameOfArchive + ".zip"));
+            FileUtils.copyFile(zippedDir, new File(getZipFolder(), nameOfArchive + ".zip"));
             FileUtils.deleteDirectory(tempForZip);
             FileUtils.deleteQuietly(zippedDir);
         } catch (IOException e) {
@@ -84,7 +86,7 @@ public class Archiver {
     }
 
     private void zipDir(File dir, String nameOfArchive) {
-        ZipUtil.pack(dir, new File(ObjectHub.getInstance().getArchiver().archiveFolder, nameOfArchive + ".zip"));
+        ZipUtil.pack(dir, new File(archiveFolder, nameOfArchive + ".zip"));
     }
 
     // GETTER SETTER

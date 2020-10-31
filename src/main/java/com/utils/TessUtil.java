@@ -1,5 +1,19 @@
 package com.utils;
 
+import com.StartUp;
+import com.backend.BackendFacade;
+import com.backend.ObjectHub;
+import com.objectTemplates.Document;
+import com.objectTemplates.Image;
+import com.reporter.ProgressReporter;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -10,26 +24,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
-import com.Main;
-import com.backend.BackendFacade;
-import com.backend.ObjectHub;
-import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.Document;
-import com.objectTemplates.Image;
-
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
-
 public class TessUtil {
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
     private static Pattern datePattern = Pattern
             .compile("\\s*(3[01]|[12][0-9]|0?[1-9])\\.(1[012]|0?[1-9])\\.((?:19|20)\\d{2})\\s*");
@@ -42,9 +39,10 @@ public class TessUtil {
     }
 
     public static Set<Document> processFolder(TableView tableView, TableColumn[] tableColumns,
-            PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter, BackendFacade facade) {
+            PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter, BackendFacade facade,
+                                              ObjectHub objectHub) {
         Collection<File> filesInFolder = FileUtils.listFiles(
-                new File(ObjectHub.getInstance().getProperties().getProperty("lastInputPath")),
+                new File(objectHub.getProperties().getProperty("lastInputPath")),
                 new String[] { "pdf", "PDF", "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
         Collection<File> absoluteDifferentFilesSet = IOUtil.createFileSetBySize(filesInFolder);
         Set<String> filePathSet = facade.getFilePathOfDocsContainedInDB();
@@ -55,9 +53,9 @@ public class TessUtil {
         Set<Document> documentSet = new HashSet<>();
         absoluteDifferentFilesSet.forEach(file -> {
             if (!filePathSet.contains(file.getAbsolutePath())) {
-                ObjectHub.getInstance().getExecutorService().submit(() -> {
+                objectHub.getExecutorService().submit(() -> {
                     if (!facade.isFilePresent(file)) {
-                        Document document = processFile(file, 0, null, facade);
+                        Document document = processFile(file, 0, null, facade, objectHub);
                         documentSet.add(document);
                     }
                     progressReporter.addStep(null);
@@ -66,29 +64,27 @@ public class TessUtil {
             }
         });
         try {
-            ExecutorUtil.blockUntilExecutorIsDone(ObjectHub.getInstance().getExecutorService(), filesInFolder.size());
+            ExecutorUtil.blockUntilExecutorIsDone(objectHub, filesInFolder.size());
         } catch (InterruptedException e) {
             logger.error(e);
             Thread.currentThread().interrupt();
             System.exit(2);
         }
-        ObservableList<Document> documentObservableList = ControllerUtil
-                .createObservableList(ObjectHub.getInstance().getArchiver().getDocumentList());
-        ControllerUtil.fillTable(tableView, documentObservableList, tableColumns, propertyValueFactories);
         logger.info(counterProcessedFiles.get() + " Files stored.");
         // FIXME Tags werden nach dem verarbeiten nicht in der tableview angezeigt
         return documentSet;
     }
 
-    public static Document processFile(File inputfile, int userID, Set<String> tagSet, BackendFacade facade) {
+    public static Document processFile(File inputfile, int userID, Set<String> tagSet, BackendFacade facade,
+                                       ObjectHub objectHub) {
         logger.info("Processing " + inputfile.getAbsolutePath());
-        Tesseract tesseract = getTesseract();
+        Tesseract tesseract = getTesseract(objectHub);
         Document document = null;
         try {
             String result = tesseract.doOCR(inputfile);
             document = new Image(result, inputfile, facade.getIdForNextDocument(), userID);
 
-            File newOriginalFilePath = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(),
+            File newOriginalFilePath = new File(objectHub.getArchiver().getDocumentFolder(),
                     document.getOriginalFileName());
             if (!newOriginalFilePath.exists()) {
                 copyFile(document, newOriginalFilePath);
@@ -104,7 +100,7 @@ public class TessUtil {
                 document.setTagSet(tagSet);
             }
 
-            ObjectHub.getInstance().getArchiver().getDocumentList().add(document);
+            objectHub.getArchiver().getDocumentList().add(document);
         } catch (TesseractException e) {
             logger.error(null, e);
         }
@@ -177,12 +173,12 @@ public class TessUtil {
         return lastNumber;
     }
 
-    private static Tesseract getTesseract() {
+    private static Tesseract getTesseract(ObjectHub objectHub) {
         Tesseract instance = new Tesseract();
-        String datapath = ObjectHub.getInstance().getProperties().getProperty("tessData");
-        instance.setHocr(Boolean.parseBoolean(ObjectHub.getInstance().getProperties().getProperty("tessHTML")));
+        String datapath = objectHub.getProperties().getProperty("tessData");
+        instance.setHocr(Boolean.parseBoolean(objectHub.getProperties().getProperty("tessHTML")));
         instance.setDatapath(datapath);
-        instance.setLanguage(ObjectHub.getInstance().getProperties().getProperty("tessLang"));
+        instance.setLanguage(objectHub.getProperties().getProperty("tessLang"));
         return instance;
     }
 }

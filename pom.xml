@@ -18,29 +18,29 @@
         <sonar.projectKey>OCR</sonar.projectKey>
 
         <!-- Optional properties -->
-        <sonar.buildString> [...] </sonar.buildString>
+        <sonar.buildString>[...]</sonar.buildString>
     </properties>
-<profiles>
-    <profile>
-        <id>sonar</id>
-        <properties>
-            <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-            <sonar.organization>kkuez</sonar.organization>
-        </properties>
-        <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                </plugin>
-                <plugin>
-                    <groupId>org.sonarsource.scanner.maven</groupId>
-                    <artifactId>sonar-maven-plugin</artifactId>
-                </plugin>
-            </plugins>
-        </build>
-    </profile>
-</profiles>
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <properties>
+                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+                <sonar.organization>kkuez</sonar.organization>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -86,23 +86,23 @@
                 </executions>
             </plugin>
             <plugin>
-            <!-- NOTE: We don't need a groupId specification because the group is
-                 org.apache.maven.plugins ...which is assumed by default.
-             -->
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.1.1</version>
-            <configuration>
-                <descriptorRefs>
-                    <descriptorRef>jar-with-dependencies</descriptorRef>
-                </descriptorRefs>
-                <archive>
-                    <manifest>
-                        <mainClass>com.Main</mainClass>
-                    </manifest>
-                </archive>
-                <finalName>OCR-Storage</finalName>
-                <appendAssemblyId>false</appendAssemblyId>
-            </configuration>
+                <!-- NOTE: We don't need a groupId specification because the group is
+                     org.apache.maven.plugins ...which is assumed by default.
+                 -->
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.StartUp</mainClass>
+                        </manifest>
+                    </archive>
+                    <finalName>OCR-Storage</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -124,7 +124,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.Main</mainClass>
+                    <mainClass>com.StartUp</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -134,7 +134,7 @@
                     <archive>
                         <manifest>
                             <!--<addClasspath>true</addClasspath>-->
-                            <mainClass>com.Main</mainClass>
+                            <mainClass>com.StartUp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -172,8 +172,8 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
             <version>3.1.2</version>
-        </dependency>
-      <dependency>
+        </dependency><!--
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.6.6</version>
@@ -182,7 +182,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.6</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
@@ -260,7 +260,18 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.28.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.3.4.RELEASE</version>
+        </dependency>
 
-        </dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.3</version>
+        </dependency>
+    </dependencies>
 
 </project>

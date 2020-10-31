@@ -1,10 +1,12 @@
 package com.bot.telegram.processes;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Set;
-
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.objectTemplates.Bon;
+import com.objectTemplates.Document;
+import com.objectTemplates.User;
+import com.reporter.ProgressReporter;
 import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -12,14 +14,10 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMediaDocument;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import com.backend.BackendFacade;
-import com.backend.ObjectHub;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
-import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
-import com.objectTemplates.User;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 public class BonProcess extends Process {
 
@@ -56,7 +54,7 @@ public class BonProcess extends Process {
                     if (commandValue[1].equals("confirm")) {
                         user.setBusy(true);
                         // In Bonfolder kopieren nachdem der User bestätigt hat dass Dok ein Bon ist.
-                        File newOriginalFile = new File(ObjectHub.getInstance().getArchiver().getBonFolder(),
+                        File newOriginalFile = new File(getFacade().getBonFolder(),
                                 bon.getOriginalFileName());
                         try {
                             FileUtils.copyFile(bon.getOriginFile(), newOriginalFile);

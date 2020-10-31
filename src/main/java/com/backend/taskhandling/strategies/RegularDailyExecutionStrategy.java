@@ -1,11 +1,11 @@
 package com.backend.taskhandling.strategies;
 
+import com.backend.taskhandling.Task;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
-
-import com.backend.taskhandling.Task;
 
 public class RegularDailyExecutionStrategy extends RegularExecutionStrategy {
 

@@ -1,19 +1,18 @@
 package com.bot.telegram.processes;
 
-import java.util.ArrayList;
-import java.util.Set;
-
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.objectTemplates.User;
+import com.reporter.ProgressReporter;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import com.backend.BackendFacade;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
-import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.User;
+import java.util.ArrayList;
+import java.util.Set;
 
 public class ShoppingListProcess extends Process {
 

@@ -1,34 +1,41 @@
 package com.backend;
 
-import java.io.File;
-import java.sql.*;
-import java.time.LocalDate;
-import java.util.*;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
-import com.Main;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
 import com.objectTemplates.User;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.*;
+
+@Service
 class DBDAO {
 
-    private Logger logger = Main.getLogger();
+    private Logger logger = Logger.getLogger(DBDAO.class);
 
     private Connection connection = null;
 
     File dbFile = null;
+    private Archiver archiver;
+    private TaskFactory taskFactory;
 
     private Document lastProcessedDoc = null;
 
-    DBDAO(File dbFile) {
-        this.dbFile = dbFile;
+
+    DBDAO(TaskFactory taskFactory, ObjectHub objectHub, Archiver archiver, BackendFacade facade) {
+        dbFile = new File(objectHub.getProperties().getProperty("dbPath"));
+        this.taskFactory = taskFactory;
+        taskFactory.setAllowedUsersMap(getAllowedUsersMap(facade));
+        this.archiver = archiver;
     }
+
 
     List<Document> getDocumentsForSearchTerm(String searchTerm) {
         Map<File, Document> documentMap = new HashMap<>();
@@ -43,7 +50,7 @@ class DBDAO {
         taggedDocuments.forEach(document -> documentMap.putIfAbsent(document.getOriginFile(), document));
         List<Document> documentList = new ArrayList<>();
         documentList.addAll(documentMap.values());
-        ObjectHub.getInstance().getArchiver().setDocumentList(documentList);
+        archiver.setDocumentList(documentList);
         return documentList;
     }
 
@@ -238,7 +245,7 @@ class DBDAO {
         try (Statement statement = getConnection().createStatement();
                 ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
             while (rs.next()) {
-                Task task = TaskFactory.getTask(rs, facade);
+                Task task = taskFactory.getTask(rs, facade);
                 taskList.add(task);
             }
         } catch (SQLException e) {

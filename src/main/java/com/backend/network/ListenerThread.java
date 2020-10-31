@@ -1,17 +1,16 @@
 package com.backend.network;
 
+import com.StartUp;
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 import java.util.Scanner;
-
-import org.apache.log4j.Logger;
-
-import com.Main;
-import com.backend.BackendFacade;
-import com.bot.telegram.Bot;
 
 public class ListenerThread extends Thread {
 
@@ -27,7 +26,7 @@ public class ListenerThread extends Thread {
 
     private static int socketPort = 55555;
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
     public ListenerThread(Bot bot, BackendFacade facade) {
         this.facade = facade;

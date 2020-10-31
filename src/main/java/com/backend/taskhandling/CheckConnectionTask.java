@@ -1,14 +1,14 @@
 package com.backend.taskhandling;
 
-import static com.utils.PinUtil.setGPIO;
+import com.StartUp;
+import com.backend.ObjectHub;
+import com.bot.telegram.Bot;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
-import org.apache.log4j.Logger;
-
-import com.Main;
-import com.bot.telegram.Bot;
+import static com.utils.PinUtil.setGPIO;
 
 public class CheckConnectionTask extends Task {
 
@@ -17,10 +17,12 @@ public class CheckConnectionTask extends Task {
     private final String TELEGRAMM_BOTAPI = "https://api.telegram.org";
 
     private final Logger logger;
+    private ObjectHub objectHub;
 
-    public CheckConnectionTask(Bot bot) {
+    public CheckConnectionTask(Bot bot, ObjectHub objectHub) {
         super(bot);
-        this.logger = Main.getLogger();
+        this.objectHub = objectHub;
+        this.logger = StartUp.getLogger();
     }
 
     @Override
@@ -30,9 +32,9 @@ public class CheckConnectionTask extends Task {
             googleUp = InetAddress.getByName(GOOGLE_DNS).isReachable(1000);
             if (!googleUp) {
                 logger.info("Connection problem. Google: " + googleUp);
-                setGPIO(1);
+                setGPIO(1, objectHub);
             } else {
-                setGPIO(0);
+                setGPIO(0, objectHub);
             }
         } catch (IOException e) {
             logger.error("Could not set Pin.", e);

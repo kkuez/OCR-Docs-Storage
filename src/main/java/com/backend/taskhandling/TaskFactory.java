@@ -1,5 +1,12 @@
 package com.backend.taskhandling;
 
+import com.backend.BackendFacade;
+import com.backend.taskhandling.strategies.*;
+import com.bot.telegram.Bot;
+import com.objectTemplates.User;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -7,23 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.backend.BackendFacade;
-import com.backend.ObjectHub;
-import com.backend.taskhandling.strategies.*;
-import com.bot.telegram.Bot;
-import com.objectTemplates.User;
-
+@Service
 public class TaskFactory {
 
-    private static Map<Integer, User> allowedUsersMap = ObjectHub.getInstance().getAllowedUsersMap();
 
-    private static Bot bot = ObjectHub.getInstance().getBot();
+    private Map<Integer, User> allowedUsersMap;
+    private Bot bot;
 
-    private TaskFactory() {
-        throw new IllegalStateException("Utility class");
+    @Lazy
+    TaskFactory() {
+        allowedUsersMap = null;
     }
 
-    public static Task getTask(ResultSet rs, BackendFacade facade) throws SQLException {
+    public Task getTask(ResultSet rs, BackendFacade facade) throws SQLException {
         List<User> userList = new ArrayList<>();
         if (rs.getString("user").equals("ALL")) {
             userList.addAll(allowedUsersMap.values());
@@ -73,7 +76,7 @@ public class TaskFactory {
         return task;
     }
 
-    public static StrategyType getStrategyTypeOrNull(String taskType) {
+    public StrategyType getStrategyTypeOrNull(String taskType) {
         switch (taskType) {
             case "SIMPLECALENDAR_ONETIME":
                 return StrategyType.SIMPLECALENDAR_ONETIME;
@@ -90,5 +93,13 @@ public class TaskFactory {
             default:
                 return null;
         }
+    }
+
+    public void setAllowedUsersMap(Map<Integer, User> allowedUsersMap) {
+        this.allowedUsersMap = allowedUsersMap;
+    }
+
+    public void setBot(Bot bot) {
+        this.bot = bot;
     }
 }

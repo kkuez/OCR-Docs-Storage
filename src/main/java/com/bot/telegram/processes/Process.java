@@ -1,25 +1,24 @@
 package com.bot.telegram.processes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
+import com.StartUp;
+import com.backend.BackendFacade;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.reporter.ProgressReporter;
+import com.objectTemplates.User;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import com.Main;
-import com.backend.BackendFacade;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
-import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.User;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public abstract class Process {
 
-    public static final Logger logger = Main.getLogger();
+    public static final Logger logger = StartUp.getLogger();
 
     private ProgressReporter progressReporter;
 

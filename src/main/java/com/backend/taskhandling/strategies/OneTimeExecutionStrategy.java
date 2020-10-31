@@ -1,19 +1,22 @@
 package com.backend.taskhandling.strategies;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.log4j.Logger;
 
-import com.Main;
+import com.StartUp;
 import com.backend.BackendFacade;
 import com.backend.taskhandling.Task;
 
 public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
+    @JsonIgnore
     private final BackendFacade facade;
 
     private String name;
 
+    @JsonIgnore
     private Task task;
 
     public OneTimeExecutionStrategy(BackendFacade facade, Task task) {
@@ -32,6 +35,7 @@ public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
 
     // GETTER SETTER
 
+    @JsonIgnore
     public Task getTask() {
         return task;
     }

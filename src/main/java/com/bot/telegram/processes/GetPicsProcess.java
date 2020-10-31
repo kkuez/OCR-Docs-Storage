@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import com.backend.BackendFacade;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.gui.controller.reporter.ProgressReporter;
+import com.reporter.ProgressReporter;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
 

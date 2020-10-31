@@ -1,6 +1,6 @@
 package com.backend;
 
-import com.Main;
+import com.StartUp;
 
 import org.apache.log4j.Logger;
 
@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class CustomProperties extends Properties {
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
     @Override
     public synchronized Object setProperty(String key, String value) {

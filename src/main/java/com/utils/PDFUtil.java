@@ -15,13 +15,13 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import com.Main;
+import com.StartUp;
 import com.backend.BackendFacade;
 import com.objectTemplates.User;
 
 public class PDFUtil {
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
     public static File createPDF(BackendFacade facade, LocalDate beginDate, LocalDate endDate) {
         // ChooseTimeReporter chooseTimeReporter = (beginDate, endDate) -> {

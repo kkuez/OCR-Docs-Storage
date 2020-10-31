@@ -1,15 +1,17 @@
 package com.backend;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.TasksRunnable;
 import com.backend.taskhandling.Task;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
+
+import java.io.File;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 public interface BackendFacade {
 
@@ -74,4 +76,11 @@ public interface BackendFacade {
     void insertUserToAllowedUsers(Integer id, String firstName, Long chatId);
 
     float getSumMonth(LocalDate yearMonth, User userOrNull);
+
+    File getBonFolder();
+
+    TasksRunnable getTasksRunnable();
+    
+    Properties getProperties();
+
 }

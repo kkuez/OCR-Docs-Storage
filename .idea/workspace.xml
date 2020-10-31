@@ -5,11 +5,77 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fixed only one page printed for PDF.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/JacksonConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/StartUp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/TasksRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/TasksRunnable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/OneTimeExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/OneTimeExecutionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/SimpleCalendarOneTimeStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/SimpleCalendarOneTimeStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/Archiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/Archiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/CustomProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/CustomProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/ObjectHub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/ObjectHub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/network/ListenerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/network/ListenerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/CheckConnectionTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/CheckConnectionTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/PhotoTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/PhotoTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/Task.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/TaskFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/TaskFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/ExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/ExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/OneTimeExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/OneTimeExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/RegularDailyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularDailyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/RegularExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/RegularMinutelyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularMinutelyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/RegularMonthlyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularMonthlyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/RegularWeeklyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularWeeklyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/RegularYearlyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularYearlyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/SimpleCalendarOneTimeStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/SimpleCalendarOneTimeStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskHandling/strategies/StrategyType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/StrategyType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/KeyboardFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/KeyboardFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/FurtherOptionsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/FurtherOptionsProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetBonsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetBonsProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetPicsProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/GetPicsProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MapQRItemProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MapQRItemProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MemoProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/MemoProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/NewUserRegProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/NewUserRegProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/Process.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/RemoveLastProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/RemoveLastProcess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StandardListProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StandardListProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StartProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/StartProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/SumProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/SumProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/ProgressManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/AddTags.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/BooleanWindow.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/ChooseTimeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/Controller.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/MainController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/SelectHTMLOrImageController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/SimpleSubmitController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/SingleDocumentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/StartApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/reporter/ChooseTimeReporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/reporter/ChooseTimeReporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/reporter/ProgressReporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/reporter/ProgressReporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/reporter/Reporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/reporter/Reporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/reporter/SubmitBooleanReporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/reporter/SubmitBooleanReporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/reporter/SubmitTagsReporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/reporter/SubmitTagsReporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/strategies/BooleanWIndowStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/strategies/ChooseTimeStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/strategies/ControllerStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/strategies/HTMLOrImageStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gui/controller/strategies/SubmitTagsStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/ControllerUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/ExecutorUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/ExecutorUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/PDFUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/PDFUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/PinUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/PinUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/TessUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/TessUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/backend/taskhandling/TaskFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/backend/taskhandling/TaskFactoryTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,12 +101,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="PDF" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
-    <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="Git.Update.Project.Info.Tabs.Properties">
     <option name="RECENT_FILTERS">
@@ -62,7 +127,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2020.2.2\plugins\maven\lib\maven3" />
+        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2020.2.3\plugins\maven\lib\maven3" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -75,11 +140,12 @@
   </component>
   <component name="PropertiesComponent">
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1571994599512" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="D:/code-formatter/eclipse-code-formatter.xml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.1484375" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -88,9 +154,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com" />
       <recent name="com.backend.taskhandling" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage" />
       <recent name="C:\Users\Marcel\Documents\Projekte\OCR-Docs-Storage" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/target" />
@@ -101,11 +169,18 @@
       <command value="(" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main -bot">
+  <component name="RunManager" selected="Application.Application">
+    <configuration name="Application" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.Application" />
+      <module name="OCR" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main -bot" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="com.Main" />
+      <option name="MAIN_CLASS_NAME" value="com.StartUp" />
       <module name="OCR" />
       <option name="PROGRAM_PARAMETERS" value="-bot" />
       <method v="2">
@@ -115,7 +190,7 @@
     <configuration name="Main -gui" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="com.Main" />
+      <option name="MAIN_CLASS_NAME" value="com.StartUp" />
       <module name="OCR" />
       <option name="PROGRAM_PARAMETERS" value="-gui" />
       <method v="2">
@@ -248,6 +323,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.Application" />
       <item itemvalue="Application.Main -bot" />
       <item itemvalue="Application.Main -gui" />
       <item itemvalue="JUnit.TaskFactoryTest.getStrategyTypeOrNullTest" />
@@ -692,29 +768,46 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="552" y="238" key="#Project_Settings/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596818530096" />
-    <state x="2282" y="205" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596926809598">
-      <screen x="1920" y="0" width="1680" height="1010" />
-    </state>
-    <state x="2282" y="205" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1596926809598" />
-    <state x="765" y="255" width="729" height="581" key="#com.intellij.ide.util.MemberChooser" timestamp="1601378509606">
+    <state x="414" y="235" width="1092" height="715" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1604142947815">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="765" y="229" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1593626014024" />
+    <state x="414" y="235" width="1092" height="715" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604142947815" />
+    <state x="2282" y="205" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1596926809598" />
+    <state x="765" y="255" width="729" height="581" key="#com.intellij.ide.util.MemberChooser" timestamp="1604149287990">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="765" y="255" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604149287990" />
     <state x="765" y="255" width="729" height="581" key="#com.intellij.ide.util.MemberChooser/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601378509606" />
+    <state x="689" y="382" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1604142941055">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="689" y="382" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604142941055" />
+    <state x="569" y="504" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1604144302090">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="569" y="504" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604144302090" />
     <state x="761" y="449" width="398" height="266" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1598651566791">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="761" y="449" width="398" height="266" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1598651566791" />
+    <state x="756" y="461" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages" timestamp="1604144303760">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="756" y="461" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604144303760" />
     <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1598652279905">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596360192135" />
     <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1598652279905" />
-    <state x="682" y="561" width="1067" height="582" key="#xdebugger.evaluate" timestamp="1601238975139">
+    <state x="690" y="326" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1604144969823">
+      <screen x="0" y="0" width="1920" height="1160" />
+    </state>
+    <state x="690" y="326" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604144969823" />
+    <state x="682" y="561" width="1112" height="595" key="#xdebugger.evaluate" timestamp="1604150009056">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="682" y="503" key="#xdebugger.evaluate/0.0.1920.1040@0.0.1920.1040" timestamp="1596360733499" />
-    <state x="715" y="283" width="1067" height="582" key="#xdebugger.evaluate/0.0.1920.1160@0.0.1920.1160" timestamp="1595267359622" />
+    <state x="682" y="561" width="1112" height="595" key="#xdebugger.evaluate/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604150009056" />
     <state x="682" y="561" width="875" height="594" key="#xdebugger.evaluate/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601238975139" />
     <state x="553" y="174" key="CommitChangelistDialog2" timestamp="1601240809627">
       <screen x="0" y="0" width="1920" height="1160" />
@@ -724,70 +817,70 @@
     <state x="92" y="92" width="1736" height="976" key="DiffContextDialog" timestamp="1601218433940">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="92" y="82" width="1736" height="876" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593627832662" />
     <state x="92" y="92" width="1736" height="976" key="DiffContextDialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601218433940" />
     <state x="739" y="321" key="FileChooserDialogImpl" timestamp="1596817645425">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="739" y="321" key="FileChooserDialogImpl/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596817645425" />
-    <state width="221" height="1106" key="Git.Branch.Popup" timestamp="1601240802524">
+    <state width="223" height="1108" key="Git.Branch.Popup" timestamp="1604138646196">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
+    <state width="223" height="1108" key="Git.Branch.Popup/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604138646196" />
     <state width="221" height="1106" key="Git.Branch.Popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601240802524" />
-    <state width="1877" height="451" key="GridCell.Tab.0.bottom" timestamp="1602094463484">
+    <state width="1877" height="328" key="GridCell.Tab.0.bottom" timestamp="1604163317769">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596360668637" />
-    <state width="1877" height="338" key="GridCell.Tab.0.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
+    <state width="1877" height="328" key="GridCell.Tab.0.bottom/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604163317769" />
     <state width="1877" height="451" key="GridCell.Tab.0.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094463484" />
     <state width="1637" height="384" key="GridCell.Tab.0.bottom/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1877" height="451" key="GridCell.Tab.0.center" timestamp="1602094463483">
+    <state width="1877" height="328" key="GridCell.Tab.0.center" timestamp="1604163317769">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="296" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596360668637" />
-    <state width="1877" height="338" key="GridCell.Tab.0.center/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
+    <state width="1877" height="328" key="GridCell.Tab.0.center/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604163317769" />
     <state width="1877" height="451" key="GridCell.Tab.0.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094463483" />
     <state width="1637" height="384" key="GridCell.Tab.0.center/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1877" height="451" key="GridCell.Tab.0.left" timestamp="1602094463483">
+    <state width="1877" height="328" key="GridCell.Tab.0.left" timestamp="1604163317769">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="296" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596360668637" />
-    <state width="1877" height="338" key="GridCell.Tab.0.left/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
+    <state width="1877" height="328" key="GridCell.Tab.0.left/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604163317769" />
     <state width="1877" height="451" key="GridCell.Tab.0.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094463483" />
     <state width="1637" height="384" key="GridCell.Tab.0.left/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1877" height="451" key="GridCell.Tab.0.right" timestamp="1602094463484">
+    <state width="1877" height="328" key="GridCell.Tab.0.right" timestamp="1604163317769">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="296" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596360668637" />
-    <state width="1877" height="338" key="GridCell.Tab.0.right/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
+    <state width="1877" height="328" key="GridCell.Tab.0.right/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604163317769" />
     <state width="1877" height="451" key="GridCell.Tab.0.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094463484" />
     <state width="1637" height="384" key="GridCell.Tab.0.right/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1877" height="451" key="GridCell.Tab.1.bottom" timestamp="1602094448725">
+    <state width="1877" height="328" key="GridCell.Tab.1.bottom" timestamp="1604163317654">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="296" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596360673149" />
-    <state width="1877" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
+    <state width="1877" height="328" key="GridCell.Tab.1.bottom/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604163317654" />
     <state width="1877" height="451" key="GridCell.Tab.1.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094448725" />
     <state width="1637" height="384" key="GridCell.Tab.1.bottom/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1877" height="451" key="GridCell.Tab.1.center" timestamp="1602094448725">
+    <state width="1877" height="328" key="GridCell.Tab.1.center" timestamp="1604163317654">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="296" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596360673149" />
-    <state width="1877" height="338" key="GridCell.Tab.1.center/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
+    <state width="1877" height="328" key="GridCell.Tab.1.center/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604163317654" />
     <state width="1877" height="451" key="GridCell.Tab.1.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094448725" />
     <state width="1637" height="384" key="GridCell.Tab.1.center/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1877" height="451" key="GridCell.Tab.1.left" timestamp="1602094448725">
+    <state width="1877" height="328" key="GridCell.Tab.1.left" timestamp="1604163317654">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="296" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596360673149" />
-    <state width="1877" height="338" key="GridCell.Tab.1.left/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199873" />
+    <state width="1877" height="328" key="GridCell.Tab.1.left/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604163317654" />
     <state width="1877" height="451" key="GridCell.Tab.1.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094448725" />
     <state width="1637" height="384" key="GridCell.Tab.1.left/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1877" height="451" key="GridCell.Tab.1.right" timestamp="1602094448725">
+    <state width="1877" height="328" key="GridCell.Tab.1.right" timestamp="1604163317654">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="296" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596360673149" />
-    <state width="1877" height="338" key="GridCell.Tab.1.right/0.0.1920.1160@0.0.1920.1160" timestamp="1595269199874" />
+    <state width="1877" height="328" key="GridCell.Tab.1.right/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604163317654" />
     <state width="1877" height="451" key="GridCell.Tab.1.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094448725" />
     <state width="1637" height="384" key="GridCell.Tab.1.right/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
     <state x="715" y="258" key="RollbackChangesDialog" timestamp="1598086704154">
@@ -798,61 +891,62 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="461" y="222" key="SettingsEditor/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601584522774" />
-    <state x="857" y="273" width="579" height="524" key="StructurePopup" timestamp="1601219711965">
+    <state x="857" y="273" width="579" height="524" key="StructurePopup" timestamp="1604146198526">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="857" y="245" width="579" height="470" key="StructurePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1596357137388" />
+    <state x="857" y="273" width="579" height="524" key="StructurePopup/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604146198526" />
     <state x="857" y="273" width="579" height="524" key="StructurePopup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601219711965" />
     <state x="552" y="313" key="Vcs.Push.Dialog.v2" timestamp="1601240812961">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="552" y="281" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1596360425534" />
     <state x="552" y="313" key="Vcs.Push.Dialog.v2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601240812961" />
-    <state width="968" height="588" key="XDebugger.FullValuePopup" timestamp="1595266662220">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="968" height="588" key="XDebugger.FullValuePopup/0.0.1920.1160@0.0.1920.1160" timestamp="1595266662220" />
     <state x="92" y="103" width="1736" height="955" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1598651110945">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593627832662" />
     <state x="92" y="103" width="1736" height="955" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1598651110945" />
     <state x="92" y="103" width="1736" height="955" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog" timestamp="1598651110945">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1593627832662" />
     <state x="92" y="103" width="1736" height="955" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1598651110945" />
     <state x="769" y="497" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1598086036536">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="769" y="497" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1598086036536" />
+    <state x="2068" y="75" width="1424" height="724" key="dock-window-1" timestamp="1604162612686">
+      <screen x="1920" y="0" width="1680" height="1010" />
+    </state>
+    <state x="2068" y="75" width="1424" height="724" key="dock-window-1/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604162612686" />
     <state x="690" y="335" key="extract.method.dialog" timestamp="1602094644499">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="690" y="335" key="extract.method.dialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094644499" />
-    <state x="367" y="211" width="1213" height="729" key="find.popup" timestamp="1601241185585">
+    <state x="367" y="211" width="1213" height="801" key="find.popup" timestamp="1604145368524">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="427" y="96" width="926" height="654" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596357284076" />
+    <state x="367" y="211" width="1213" height="801" key="find.popup/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604145368524" />
     <state x="367" y="211" width="1213" height="729" key="find.popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601241185585" />
-    <state x="342" y="200" key="new project wizard" timestamp="1595002305479">
+    <state x="342" y="240" key="new project wizard" timestamp="1604164018292">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="342" y="200" key="new project wizard/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1595002305479" />
-    <state x="668" y="205" key="refactoring.ChangeSignatureDialog" timestamp="1601239882569">
+    <state x="342" y="240" key="new project wizard/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604164018292" />
+    <state x="668" y="205" key="refactoring.ChangeSignatureDialog" timestamp="1604147300304">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
+    <state x="668" y="205" key="refactoring.ChangeSignatureDialog/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604147300304" />
     <state x="668" y="205" key="refactoring.ChangeSignatureDialog/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601239882569" />
     <state x="616" y="242" width="672" height="607" key="run.anything.popup" timestamp="1596360616377">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="242" width="672" height="607" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596360616377" />
     <state x="616" y="270" width="672" height="677" key="run.anything.popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1596303049659" />
-    <state x="2465" y="222" width="672" height="591" key="search.everywhere.popup" timestamp="1602093810154">
-      <screen x="1920" y="0" width="1680" height="1010" />
+    <state x="623" y="255" width="768" height="679" key="search.everywhere.popup" timestamp="1604151537055">
+      <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="623" y="229" width="672" height="608" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596357531373" />
-    <state x="623" y="255" width="672" height="678" key="search.everywhere.popup/0.0.1920.1160@0.0.1920.1160" timestamp="1595266582316" />
+    <state x="623" y="255" width="768" height="679" key="search.everywhere.popup/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604151537055" />
     <state x="623" y="255" width="672" height="678" key="search.everywhere.popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601584883789" />
     <state x="2465" y="222" width="672" height="591" key="search.everywhere.popup/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602093810154" />
   </component>
@@ -866,32 +960,27 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularExecutionStrategy.java</url>
-          <line>30</line>
+          <line>29</line>
           <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Main.java</url>
-          <line>104</line>
-          <option name="timeStamp" value="128" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/CalenderProcess.java</url>
-          <line>49</line>
+          <line>47</line>
           <option name="timeStamp" value="175" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java</url>
-          <line>132</line>
+          <line>131</line>
           <option name="timeStamp" value="177" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java</url>
-          <line>106</line>
+          <line>104</line>
           <option name="timeStamp" value="186" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/BonProcess.java</url>
-          <line>40</line>
+          <line>38</line>
           <option name="timeStamp" value="187" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -915,19 +1004,14 @@
           <option name="timeStamp" value="195" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/TasksRunnable.java</url>
-          <line>44</line>
-          <option name="timeStamp" value="203" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java</url>
-          <line>103</line>
+          <line>102</line>
           <option name="timeStamp" value="206" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/bot/telegram/processes/ShoppingListProcess.java</url>
-          <line>38</line>
-          <option name="timeStamp" value="207" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java</url>
+          <line>201</line>
+          <option name="timeStamp" value="216" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

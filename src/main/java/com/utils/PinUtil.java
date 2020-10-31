@@ -1,6 +1,6 @@
 package com.utils;
 
-import com.Main;
+import com.StartUp;
 import com.backend.ObjectHub;
 import org.apache.log4j.Logger;
 
@@ -16,11 +16,11 @@ public class PinUtil {
 
     private static boolean isSetup = false;
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
     private PinUtil() {}
 
-    public static void setGPIO(int i)  {
+    public static void setGPIO(int i, ObjectHub objectHub)  {
         if (isSetup) {
             ProcessBuilder setpinOutPB = new ProcessBuilder();
             setpinOutPB.command("gpio", "write", PIN + "", i + "");
@@ -33,12 +33,12 @@ public class PinUtil {
                 logger.error("Couldnt start GPIO " + i, e);
             }
         } else {
-            setupRPIGPIO();
+            setupRPIGPIO(objectHub);
         }
     }
 
-    private static void setupRPIGPIO(){
-        if (!ObjectHub.getInstance().getProperties().getProperty("debug").equals("true")) {
+    private static void setupRPIGPIO(ObjectHub objectHub){
+        if (!objectHub.getProperties().getProperty("debug").equals("true")) {
             try {
                 checkWiringPiInstallation();
                 logger.info("Wirpingpi found :)");

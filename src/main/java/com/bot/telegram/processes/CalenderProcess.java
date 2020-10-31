@@ -1,13 +1,13 @@
 package com.bot.telegram.processes;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
+import com.backend.BackendFacade;
+import com.backend.taskhandling.Task;
+import com.backend.taskhandling.strategies.*;
+import com.bot.telegram.Bot;
+import com.bot.telegram.KeyboardFactory;
+import com.objectTemplates.User;
+import com.reporter.ProgressReporter;
+import com.utils.TimeUtil;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -15,15 +15,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import com.backend.BackendFacade;
-import com.backend.ObjectHub;
-import com.backend.taskhandling.Task;
-import com.backend.taskhandling.strategies.*;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
-import com.gui.controller.reporter.ProgressReporter;
-import com.objectTemplates.User;
-import com.utils.TimeUtil;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class CalenderProcess extends Process {
 
@@ -285,7 +283,7 @@ public class CalenderProcess extends Process {
         task.getUserList().add(user);
         getFacade().insertTask(task);
         getSentMessages().add(message);
-        ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
+        getFacade().getTasksRunnable().getTasksToDo().add(task);
         reset(bot, user);
         bot.simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
     }
@@ -294,7 +292,7 @@ public class CalenderProcess extends Process {
         bot.getAllowedUsersMap().values().forEach(user1 -> task.getUserList().add(user1));
         getFacade().insertTask(task);
         getSentMessages().add(message);
-        ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(task);
+        getFacade().getTasksRunnable().getTasksToDo().add(task);
         reset(bot, user);
         bot.simpleEditMessage("Termin eingetragen :)", update, KeyboardFactory.KeyBoardType.NoButtons);
     }

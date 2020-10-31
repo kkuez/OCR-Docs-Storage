@@ -1,26 +1,32 @@
 package com.backend;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.TasksRunnable;
 import com.backend.taskhandling.Task;
 import com.objectTemplates.Bon;
 import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import com.utils.PDFUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Service
 public class BackendFacadeImpl implements BackendFacade {
 
+    @Autowired
     DBDAO dbdao;
-
-    BackendFacadeImpl(File dbFile) {
-        dbdao = new DBDAO(dbFile);
-    }
+    @Autowired
+    private Archiver archiver;
+    @Autowired
+    private ObjectHub objectHub;
 
     @Override
     public void insertQRItem(int itemNumber, String itemName) {
@@ -184,5 +190,20 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public float getSumMonth(LocalDate yearMonth, User userOrNull) {
         return dbdao.getSumMonth(yearMonth, userOrNull);
+    }
+
+    @Override
+    public File getBonFolder() {
+        return archiver.getBonFolder();
+    }
+
+    @Override
+    public TasksRunnable getTasksRunnable() {
+        return getTasksRunnable();
+    }
+
+    @Override
+    public Properties getProperties() {
+        return objectHub.getProperties();
     }
 }

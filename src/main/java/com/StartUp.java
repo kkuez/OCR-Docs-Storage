@@ -1,11 +1,16 @@
 package com;
 
+import com.backend.BackendFacade;
 import com.backend.ObjectHub;
-import com.gui.controller.StartApplication;
 import com.backend.network.ListenerThread;
+import com.backend.taskhandling.TaskFactory;
 import com.bot.telegram.Bot;
-import javafx.application.Application;
-import org.apache.log4j.*;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
@@ -19,46 +24,47 @@ import java.util.Properties;
 
 import static com.utils.PinUtil.setGPIO;
 
-public class Main {
+@Service
+public class StartUp {
 
     private static Logger logger;
 
-    public static void main(String[] args) {
-        logger = createLogger();
+    private BackendFacade facade;
+    private TasksRunnable tasksRunnable;
+    private TaskFactory taskFactory;
 
+    @Lazy
+    public StartUp(ObjectHub objectHub, BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory) {
+        this.facade = facade;
+        this.tasksRunnable = tasksRunnable;
+        this.taskFactory = taskFactory;
+        logger = createLogger();
         logger.info("\n\nStarting.");
-        for(String s : args){
-            if(s.equals("-gui")){
-                launchGui(args);
-            }
-            if(s.equals("-bot")){
-                Bot bot = null;
-                while(bot == null){
-                    ObjectHub objectHub = ObjectHub.getInstance();
-                    bot = activateTGBot(null, objectHub);
-                    ListenerThread listenerThread = new ListenerThread(bot, objectHub.getFacade());
-                    listenerThread.start();
-                }
-            }
+        Bot bot = null;
+        while (bot == null) {
+            bot = activateTGBot(null, objectHub);
+            taskFactory.setBot(bot);
+            ListenerThread listenerThread = new ListenerThread(bot, facade);
+            listenerThread.start();
         }
     }
 
-    private static Bot activateTGBot(Bot inputBotOrNull, ObjectHub objectHub) {
+    private Bot activateTGBot(Bot inputBotOrNull, ObjectHub objectHub) {
         System.out.println("Trying to initialize Telegram-Bot...");
         ApiContextInitializer.init();
         Bot bot = null;
-        bot = inputBotOrNull == null ? new Bot(objectHub.getFacade()) : inputBotOrNull;
+        bot = inputBotOrNull == null ? new Bot(facade, objectHub, tasksRunnable) : inputBotOrNull;
         objectHub.setBot(bot);
-        objectHub.initLater();
+        objectHub.initLater(tasksRunnable);
         BotSession botSession = null;
-        while(botSession == null) {
+        while (botSession == null) {
             try {
                 TelegramBotsApi telegramBotApi = new TelegramBotsApi();
                 botSession = telegramBotApi.registerBot(bot);
-                setGPIO(0);
+                setGPIO(0, objectHub);
             } catch (TelegramApiRequestException e) {
                 logger.error("Failed registering bot.\nTrying again in 30 seconds...", e);
-                setGPIO(1);
+                setGPIO(1,objectHub);
                 pause(30);
             }
         }
@@ -66,7 +72,7 @@ public class Main {
         return bot;
     }
 
-    private static void pause(int seconds) {
+    private void pause(int seconds) {
         try {
             Thread.sleep((seconds * 1000));
         } catch (InterruptedException ex) {
@@ -74,7 +80,7 @@ public class Main {
         }
     }
 
-    private static String getLogFile(){
+    private String getLogFile() {
         Properties properties = new Properties();
         File propertiesFile = new File(".", "setup.properties");
         try {
@@ -85,19 +91,19 @@ public class Main {
             System.exit(2);
         }
 
-        File monthFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv",  LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
-        if(!monthFolder.exists()){
+        File monthFolder = new File(properties.getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
+        if (!monthFolder.exists()) {
             monthFolder.mkdir();
         }
         File logFolder = new File(monthFolder, "Logs");
-        if(!logFolder.exists()){
+        if (!logFolder.exists()) {
             logFolder.mkdir();
         }
         File logFile = new File(logFolder, LocalDate.now().toString().replace(".", "-").replace(":", "_") + ".log");
-        if(!logFile.exists()){
+        if (!logFile.exists()) {
             try {
                 boolean logFileSuccess = logFile.createNewFile();
-                if(!logFileSuccess){
+                if (!logFileSuccess) {
                     throw new RuntimeException("Failed to create logFile.");
                 }
                 System.out.println("Logfile: " + logFile.getAbsolutePath());
@@ -105,7 +111,7 @@ public class Main {
                 //No Logger since this is the algorythm to initilialize logger.
                 e.printStackTrace();
                 System.exit(2);
-            }catch (RuntimeException ex) {
+            } catch (RuntimeException ex) {
                 ex.printStackTrace();
                 System.exit(2);
             }
@@ -113,8 +119,8 @@ public class Main {
         return logFile.getAbsolutePath();
     }
 
-    private static Logger createLogger(){
-        Logger logger = Logger.getLogger(Main.class);
+    private Logger createLogger() {
+        Logger logger = Logger.getLogger(StartUp.class);
         PatternLayout layout = new PatternLayout("%d{HH:mm:ss.SSS} [%t] \t%m%n");
         logger.addAppender(new ConsoleAppender(layout));
         FileAppender logFileAppender = null;
@@ -127,11 +133,8 @@ public class Main {
         logger.addAppender(logFileAppender);
         return logger;
     }
-        private static void launchGui(String[] args){
-            Application.launch(StartApplication.class, args);
-        }
 
-        public static Logger getLogger(){
+    public static Logger getLogger() {
         return logger;
-        }
+    }
 }

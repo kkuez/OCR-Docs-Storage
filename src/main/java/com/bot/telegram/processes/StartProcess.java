@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import com.backend.BackendFacade;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
-import com.gui.controller.reporter.ProgressReporter;
+import com.reporter.ProgressReporter;
 import com.objectTemplates.User;
 
 public class StartProcess extends Process {

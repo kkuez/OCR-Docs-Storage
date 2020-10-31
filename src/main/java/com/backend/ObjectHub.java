@@ -1,42 +1,30 @@
 package com.backend;
 
-import java.io.File;
+import com.TasksRunnable;
+import com.bot.telegram.Bot;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.Logger;
-
-import com.Main;
-import com.TasksRunnable;
-import com.bot.telegram.Bot;
-import com.gui.controller.MainController;
-import com.objectTemplates.User;
-
+@Service
 public class ObjectHub {
 
-    private static ObjectHub instance = null;
-
-    private static Logger logger = Main.getLogger();
-
-    private MainController mainController;
+    private static Logger logger = Logger.getLogger(ObjectHub.class);
 
     private ExecutorService executorService;
 
     private CustomProperties properties;
 
-    private Map<Integer, User> allowedUsersMap;
-
     private Bot bot;
 
-    private TasksRunnable tasksRunnable;
-
-    private BackendFacade facade;
-
-    private ObjectHub() {
+    @Autowired
+    ObjectHub(Archiver archiver) {
         properties = new CustomProperties();
         String root = "";
 
@@ -46,14 +34,11 @@ public class ObjectHub {
             logger.error("Failed activating bot", e);
         }
 
-        File dbFile = new File(getProperties().getProperty("dbPath"));
-        facade = new BackendFacadeImpl(dbFile);
-        archiver = new Archiver(properties);
-
+        this.archiver = archiver;
         executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));
     }
 
-    public void initLater() {
+    public void initLater(TasksRunnable tasksRunnable) {
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(200);
@@ -62,10 +47,7 @@ public class ObjectHub {
                 Thread.currentThread().interrupt();
                 System.exit(2);
             }
-            allowedUsersMap = facade.getAllowedUsers();
-            tasksRunnable = new TasksRunnable();
             tasksRunnable.setBot(getBot());
-            tasksRunnable.setFacade(facade);
             tasksRunnable.run();
         });
         thread.setName("TasksToDoThread");
@@ -74,18 +56,8 @@ public class ObjectHub {
 
     private Archiver archiver;
 
-    public static ObjectHub getInstance() {
-        if (instance == null) {
-            instance = new ObjectHub();
-        }
-        return instance;
-    }
 
     // GETTER SETTER
-    public TasksRunnable getTasksRunnable() {
-        return tasksRunnable;
-    }
-
     public Bot getBot() {
         return bot;
     }
@@ -94,28 +66,12 @@ public class ObjectHub {
         this.bot = bot;
     }
 
-    public Map<Integer, User> getAllowedUsersMap() {
-        return allowedUsersMap;
-    }
-
-    public void setAllowedUsersMap(Map<Integer, User> allowedUsersMap) {
-        this.allowedUsersMap = allowedUsersMap;
-    }
-
     public Properties getProperties() {
         return properties;
     }
 
     public void setProperties(CustomProperties properties) {
         this.properties = properties;
-    }
-
-    public MainController getMainController() {
-        return mainController;
-    }
-
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
     }
 
     public Archiver getArchiver() {
@@ -128,9 +84,5 @@ public class ObjectHub {
 
     public void setExecutorService(ExecutorService executorService) {
         this.executorService = executorService;
-    }
-
-    public BackendFacade getFacade() {
-        return facade;
     }
 }

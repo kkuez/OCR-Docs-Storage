@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import com.backend.BackendFacade;
 import com.bot.telegram.Bot;
-import com.gui.controller.reporter.ProgressReporter;
+import com.reporter.ProgressReporter;
 import com.objectTemplates.User;
 import com.utils.TimeUtil;
 

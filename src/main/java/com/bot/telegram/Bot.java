@@ -1,13 +1,18 @@
 package com.bot.telegram;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.Future;
-
+import com.StartUp;
+import com.TasksRunnable;
+import com.backend.BackendFacade;
+import com.backend.ObjectHub;
+import com.backend.taskhandling.PhotoTask;
+import com.backend.taskhandling.Task;
+import com.bot.telegram.processes.Process;
+import com.bot.telegram.processes.*;
+import com.objectTemplates.Bon;
+import com.objectTemplates.Document;
+import com.objectTemplates.User;
+import com.reporter.ProgressReporter;
+import com.utils.TessUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -32,63 +37,54 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import com.Main;
-import com.backend.BackendFacade;
-import com.backend.ObjectHub;
-import com.backend.taskhandling.PhotoTask;
-import com.backend.taskhandling.Task;
-import com.bot.telegram.processes.*;
-import com.bot.telegram.processes.Process;
-import com.gui.controller.reporter.ProgressReporter;
-import com.gui.controller.reporter.Reporter;
-import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
-import com.objectTemplates.User;
-import com.utils.TessUtil;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.concurrent.Future;
 
 public class Bot extends TelegramLongPollingBot {
 
     private final BackendFacade facade;
+    private ObjectHub objectHub;
+    private TasksRunnable tasksRunnable;
 
     private List<String> shoppingList;
 
     Map<Integer, User> allowedUsersMap;
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = StartUp.getLogger();
 
     Map<Class, Process> processCache = new HashMap<>(10);
 
-    public Bot(BackendFacade BackendFacade) {
+    public Bot(BackendFacade BackendFacade, ObjectHub objectHub, TasksRunnable tasksRunnable) {
         this.facade = BackendFacade;
+        this.objectHub = objectHub;
+        this.tasksRunnable = tasksRunnable;
         this.allowedUsersMap = facade.getAllowedUsers();
         shoppingList = facade.getShoppingList();
-
-        Reporter progressReporter = new ProgressReporter() {
-
+        ProgressReporter progressReporter = new ProgressReporter() {
             @Override
             public void setTotalSteps(int steps, Update updateOrNull) {
-                progressManager.setTotalSteps(steps);
-                sendMsg("Start process " + allowedUsersMap.get(updateOrNull.getMessage().getFrom().getId()).getProcess()
-                        .getProcessName(), updateOrNull, null, false, false);
+
             }
 
             @Override
             public void addStep(Update updateOrNull) {
-                progressManager.addStep();
-                sendMsg(progressManager.getCurrentProgress() + "%", updateOrNull, null, false, false);
+
             }
 
             @Override
             public void setStep(int step, Update updateOrNull) {
-                progressManager.setCurrentStep(step);
-                sendMsg(progressManager.getCurrentProgress() + "%", updateOrNull, null, false, false);
+
             }
         };
         setupProcessCache(facade, progressReporter);
     }
 
-    private void setupProcessCache(BackendFacade facade, Reporter reporter) {
-        ProgressReporter progressReporter = (ProgressReporter) reporter;
+    private void setupProcessCache(BackendFacade facade, ProgressReporter progressReporter) {
         processCache.put(BonProcess.class, new BonProcess(progressReporter, facade));
         processCache.put(CalenderProcess.class, new CalenderProcess(progressReporter, facade));
         processCache.put(GetBonsProcess.class, new GetBonsProcess(progressReporter, facade));
@@ -220,7 +216,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void processPhoto(Update update) {
-        Future photoFuture = ObjectHub.getInstance().getExecutorService().submit(() -> {
+        Future photoFuture = objectHub.getExecutorService().submit(() -> {
             User user = getNonBotUserFromUpdate(update);
             Process process = user.getProcess();
             user.setBusy(true);
@@ -242,7 +238,7 @@ public class Bot extends TelegramLongPollingBot {
                 return;
             }
 
-            File targetFile = new File(ObjectHub.getInstance().getArchiver().getDocumentFolder(),
+            File targetFile = new File(objectHub.getArchiver().getDocumentFolder(),
                     LocalDateTime.now().toString().replace('.', '-').replace(':', '_') + filePath.replace("/", ""));
             try {
                 FileUtils.copyFile(largestPhoto, targetFile);
@@ -256,7 +252,8 @@ public class Bot extends TelegramLongPollingBot {
                 tags = parseTags(update.getMessage().getCaption().replace("tag ", ""));
             }
 
-            Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags, facade);
+            Document document = TessUtil.processFile(targetFile, update.getMessage().getFrom().getId(), tags, facade,
+                    objectHub);
             try {
                 if ((TessUtil.checkIfBon(document.getContent()) || process instanceof BonProcess)) {
                     float sum = TessUtil.getLastNumber(document.getContent());
@@ -282,7 +279,7 @@ public class Bot extends TelegramLongPollingBot {
 
         Task photoAbortTask = new PhotoTask(allowedUsersMap.get(update.getMessage().getFrom().getId()), this,
                 photoFuture, facade);
-        ObjectHub.getInstance().getTasksRunnable().getTasksToDo().add(photoAbortTask);
+        tasksRunnable.getTasksToDo().add(photoAbortTask);
     }
 
     private Set<String> parseTags(String input) {
@@ -395,7 +392,7 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public String getBotToken() {
-        return ObjectHub.getInstance().getProperties().getProperty("tgBotToken");
+        return objectHub.getProperties().getProperty("tgBotToken");
     }
 
     public User getNonBotUserFromUpdate(Update update) {

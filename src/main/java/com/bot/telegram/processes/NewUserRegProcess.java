@@ -1,11 +1,9 @@
 package com.bot.telegram.processes;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
-
 import com.backend.BackendFacade;
-import com.backend.ObjectHub;
 import com.bot.telegram.Bot;
-import com.gui.controller.reporter.ProgressReporter;
+import com.reporter.ProgressReporter;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class NewUserRegProcess extends Process {
 
@@ -15,11 +13,10 @@ public class NewUserRegProcess extends Process {
 
     @Override
     public void performNextStep(String arg, Update update, Bot bot) {
-        if (arg.equals(ObjectHub.getInstance().getProperties().getProperty("pwForNewUsers"))) {
+        if (arg.equals(getFacade().getProperties().getProperty("pwForNewUsers"))) {
             bot.sendMsg("Willkommen :)", update, null, true, false);
             getFacade().insertUserToAllowedUsers(update.getMessage().getFrom().getId(),
                     update.getMessage().getFrom().getFirstName(), update.getMessage().getChatId());
-            ObjectHub.getInstance().setAllowedUsersMap(getFacade().getAllowedUsers());
         } else {
             bot.getAllowedUsersMap().remove(update.getMessage().getFrom().getId());
         }

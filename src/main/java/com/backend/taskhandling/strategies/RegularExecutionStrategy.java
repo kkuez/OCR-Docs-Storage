@@ -1,15 +1,12 @@
 package com.backend.taskhandling.strategies;
 
-import java.util.concurrent.TimeUnit;
-
+import com.backend.taskhandling.Task;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.log4j.Logger;
 
-import com.Main;
-import com.backend.taskhandling.Task;
+import java.util.concurrent.TimeUnit;
 
 public abstract class RegularExecutionStrategy implements ExecutionStrategy {
-
-    Logger LOGGER = Main.getLogger();
 
     int min = 0;
 
@@ -19,9 +16,11 @@ public abstract class RegularExecutionStrategy implements ExecutionStrategy {
 
     int month;
 
+    @JsonIgnore
     Task task;
 
-    public Logger logger = Main.getLogger();
+    @JsonIgnore
+    public Logger logger = Logger.getLogger(RegularExecutionStrategy.class);
 
     public RegularExecutionStrategy() {
     }

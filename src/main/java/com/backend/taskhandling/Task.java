@@ -1,37 +1,40 @@
 package com.backend.taskhandling;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
-import com.Main;
+import com.StartUp;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
 import com.backend.taskhandling.strategies.OneTimeExecutionStrategy;
 import com.bot.telegram.Bot;
 import com.bot.telegram.KeyboardFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.objectTemplates.User;
+import org.apache.log4j.Logger;
+import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Task implements Comparable {
 
-    private static Logger logger = Main.getLogger();
+    @JsonIgnore
+    private static Logger logger = StartUp.getLogger();
 
     private ExecutionStrategy executionStrategy;
 
     private String name;
 
+    @JsonIgnore
     private Bot bot;
 
-    private List<User> userList = new ArrayList<>();
+    private List<Integer> userList = new ArrayList<>();
 
     public Task(Bot bot) {
         this.bot = bot;
     }
 
     public Task(List<User> userList, Bot bot, String actionName) {
-        this.userList = userList;
+        this.userList = userList.stream().map(User::getId).collect(Collectors.toList());
         this.bot = bot;
         this.name = actionName;
     }
@@ -50,45 +53,7 @@ public class Task implements Comparable {
         return executionStrategy.timeIsNow(localDateTime);
     }
 
-    public String getInsertDBString() {
-        return executionStrategy.getInsertDBString();
-    }
 
-    // GETTER SETTER
-
-    public ExecutionStrategy getExecutionStrategy() {
-        return executionStrategy;
-    }
-
-    public void setExecutionStrategy(ExecutionStrategy executionStrategy) {
-        this.executionStrategy = executionStrategy;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Bot getBot() {
-        return bot;
-    }
-
-    public void setBot(Bot bot) {
-        this.bot = bot;
-    }
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
-
-    Task task;
 
     @Override
     public int compareTo(Object o) throws RuntimeException {
@@ -106,5 +71,45 @@ public class Task implements Comparable {
 
     public void delete() {
         executionStrategy.delete(getName());
+    }
+
+    // GETTER SETTER
+
+
+    public String getInsertDBString() {
+        return executionStrategy.getInsertDBString();
+    }
+
+    public ExecutionStrategy getExecutionStrategy() {
+        return executionStrategy;
+    }
+
+    public void setExecutionStrategy(ExecutionStrategy executionStrategy) {
+        this.executionStrategy = executionStrategy;
+    }
+
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @JsonIgnore
+    public Bot getBot() {
+        return bot;
+    }
+
+    public void setBot(Bot bot) {
+        this.bot = bot;
+    }
+
+    @JsonIgnore
+    public List<User> getUserList() {
+        return userList.stream().filter(bot.getAllowedUsersMap()::containsKey)
+                .map(bot.getAllowedUsersMap()::get).collect(Collectors.toList());
     }
 }

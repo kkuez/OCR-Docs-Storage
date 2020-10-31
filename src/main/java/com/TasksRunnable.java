@@ -1,21 +1,24 @@
 package com;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.backend.BackendFacade;
+import com.backend.ObjectHub;
 import com.backend.taskhandling.CheckConnectionTask;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.strategies.RegularExecutionStrategy;
 import com.backend.taskhandling.strategies.RegularMinutelyExecutionStrategy;
 import com.bot.telegram.Bot;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
 public class TasksRunnable implements Runnable {
 
-    private static Logger logger = Main.getLogger();
+    private static Logger logger = Logger.getLogger(TasksRunnable.class);
 
     private List<Task> tasksToDo = new ArrayList<>();
 
@@ -26,6 +29,7 @@ public class TasksRunnable implements Runnable {
     private CheckConnectionTask checkConnectionTask;
 
     private BackendFacade facade;
+    private ObjectHub objectHub;
 
     private void loop() throws InterruptedException {
         loopActive = true;
@@ -57,7 +61,7 @@ public class TasksRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            checkConnectionTask = new CheckConnectionTask(bot);
+            checkConnectionTask = new CheckConnectionTask(bot, objectHub);
             RegularMinutelyExecutionStrategy checkConnectionTaskStrategy = new RegularMinutelyExecutionStrategy(
                     checkConnectionTask);
             checkConnectionTask.setExecutionStrategy(checkConnectionTaskStrategy);
@@ -91,6 +95,12 @@ public class TasksRunnable implements Runnable {
         this.tasksToDo = tasksToDo;
     }
 
+    @Autowired
+    public void setObjectHub(ObjectHub objectHub) {
+        this.objectHub = objectHub;
+    }
+
+    @Autowired
     public void setFacade(BackendFacade facade) {
         this.facade = facade;
     }

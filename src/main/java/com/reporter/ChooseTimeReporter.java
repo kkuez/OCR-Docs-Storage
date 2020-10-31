@@ -1,4 +1,4 @@
-package com.gui.controller.reporter;
+package com.reporter;
 
 import java.time.LocalDate;
 
