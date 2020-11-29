@@ -8,10 +8,7 @@ import com.objectTemplates.User;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public interface BackendFacade {
 
@@ -38,6 +35,8 @@ public interface BackendFacade {
     List<Task> getTasks();
 
     void deleteTask(Task task);
+
+    void deleteTask(UUID uuid);
 
     void insertShoppingItem(String item);
 
@@ -83,4 +82,5 @@ public interface BackendFacade {
     
     Properties getProperties();
 
+    List<Task> getTasks(int userid);
 }

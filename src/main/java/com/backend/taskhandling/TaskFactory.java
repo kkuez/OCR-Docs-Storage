@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class TaskFactory {
@@ -26,6 +27,10 @@ public class TaskFactory {
         allowedUsersMap = null;
     }
 
+    public Task createTask(List<User> users, String taskText) {
+        return new Task(users, bot, taskText, UUID.randomUUID());
+    }
+
     public Task getTask(ResultSet rs, BackendFacade facade) throws SQLException {
         List<User> userList = new ArrayList<>();
         if (rs.getString("user").equals("ALL")) {
@@ -37,7 +42,8 @@ public class TaskFactory {
         Task task;
         String taskType = rs.getString("taskType");
         if ("Task".equals(taskType)) {
-            task = new Task(userList, bot, rs.getString("name"));
+            UUID eID = UUID.fromString(rs.getString("eID"));
+            task = new Task(userList, bot, rs.getString("name"), eID);
         } else {
             throw new IllegalStateException("Unexpected value: " + taskType);
         }

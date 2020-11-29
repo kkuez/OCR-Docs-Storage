@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,7 +96,12 @@ public class BackendFacadeImpl implements BackendFacade {
 
     @Override
     public void deleteTask(Task task) {
-        dbdao.removeTask(task);
+        dbdao.deleteTask(task);
+    }
+
+    @Override
+    public void deleteTask(UUID uuid) {
+        dbdao.deleteTask(uuid);
     }
 
     @Override
@@ -169,7 +171,7 @@ public class BackendFacadeImpl implements BackendFacade {
 
     @Override
     public void deleteLastDocument() {
-        dbdao.removeLastProcressedDocument();
+        dbdao.deleteLastProcressedDocument();
     }
 
     @Override
@@ -205,5 +207,10 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public Properties getProperties() {
         return objectHub.getProperties();
+    }
+
+    @Override
+    public List<Task> getTasks(int userid) {
+        return dbdao.getTasksFromDB(this, userid);
     }
 }

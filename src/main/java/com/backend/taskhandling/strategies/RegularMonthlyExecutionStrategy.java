@@ -5,6 +5,7 @@ import com.backend.taskhandling.Task;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class RegularMonthlyExecutionStrategy extends RegularExecutionStrategy {
@@ -35,9 +36,10 @@ public class RegularMonthlyExecutionStrategy extends RegularExecutionStrategy {
 
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values ("
-                + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user
-                + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "')";
+        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType, eID) " +
+                "Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName()
+                + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "', '"
+                + task.geteID() + "')";
     }
 
     @Override

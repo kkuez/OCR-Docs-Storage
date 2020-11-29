@@ -159,7 +159,7 @@ class DBDAO {
         executeSQL(document.getInsertDBString(document.getId()));
     }
 
-    void removeTask(Task task) {
+    void deleteTask(Task task) {
         int year = task.getExecutionStrategy().getTime().getYear();
         int month = task.getExecutionStrategy().getTime().getMonth().getValue();
         int day = task.getExecutionStrategy().getTime().getDayOfMonth();
@@ -170,7 +170,7 @@ class DBDAO {
                 + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
     }
 
-    void removeLastProcressedDocument() {
+    void deleteLastProcressedDocument() {
         executeSQL("delete from Documents where id=" + lastProcessedDoc.getId() + "");
         executeSQL("delete from Bons where belongsToDocument=" + lastProcessedDoc.getId() + "");
         FileUtils.deleteQuietly(lastProcessedDoc.getOriginFile());
@@ -401,5 +401,25 @@ class DBDAO {
     public void insertUserToAllowedUsers(Integer id, String firstName, Long chatId) {
         executeSQL(
                 "insert into AllowedUsers(id, name, chatId) Values (" + id + ", '" + firstName + "', " + chatId + ")");
+    }
+
+    public void deleteTask(UUID uuid) {
+        executeSQL(
+                "delete from CalendarTasks Where eID='" + uuid + "'");
+    }
+
+    public List<Task> getTasksFromDB(BackendFacadeImpl backendFacade, int userid) {
+        List<Task> taskList = new ArrayList<>();
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select * from CalendarTasks where user='" + userid + "' OR " +
+                     "user='ALL'");) {
+            while (rs.next()) {
+                Task task = taskFactory.getTask(rs, backendFacade);
+                taskList.add(task);
+            }
+        } catch (SQLException e) {
+            logger.error("select * from Task", e);
+        }
+        return taskList;
     }
 }

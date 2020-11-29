@@ -37,9 +37,10 @@ public class RegularYearlyExecutionStrategy extends RegularExecutionStrategy {
 
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values ("
-                + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user
-                + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "')";
+        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType, eID) " +
+                "Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName()
+                + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "', '"
+                + task.geteID() + "')";
 
     }
 
