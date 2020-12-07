@@ -13,7 +13,6 @@ public class Bon extends Document {
         this.setUser(document.getUser());
         this.setDate(document.getDate());
         this.sum = sum;
-
     }
 
     @Override

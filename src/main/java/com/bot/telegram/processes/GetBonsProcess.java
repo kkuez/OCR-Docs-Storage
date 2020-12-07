@@ -46,7 +46,7 @@ public class GetBonsProcess extends Process {
                     year = commandValue[1];
                     user.setBusy(true);
                     List<Bon> bonsForMonth = getFacade()
-                            .getBonsForMonth(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1));
+                            .getSum(LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1));
                     bonsForMonth.forEach(bon -> {
                         String possibleCaption = "Von " + bot.getAllowedUsersMap().get(bon.getUser()).getName() + ": "
                                 + bon.getSum() + "€";

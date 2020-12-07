@@ -125,6 +125,10 @@ public class Task implements Comparable {
                 .map(bot.getAllowedUsersMap()::get).collect(Collectors.toList());
     }
 
+    public String getForWhom() {
+        return userList.size() > 1 ? "All" : String.valueOf(userList.get(0));
+    }
+
     public UUID geteID() {
         return eID;
     }

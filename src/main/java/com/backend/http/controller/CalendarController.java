@@ -54,12 +54,12 @@ public class CalendarController {
     @PostMapping(CALENDAR + "/new")
     public ResponseEntity<String> newEntry(@RequestBody Map map) {
         try {
-            String userString = (String) map.get("UserID");
+            String userString = (String) map.get("For");
             List<User> users;
-            if (userString.equals("ALL")) {
+            if (userString.equals("FORALL")) {
                 users = new ArrayList<>(facade.getAllowedUsers().values());
             } else {
-                users = List.of(facade.getAllowedUsers().get(Integer.parseInt(userString)));
+                users = List.of(facade.getAllowedUsers().get(Integer.parseInt((String) map.get("UserID"))));
             }
 
             String taskText = (String) map.get("Name");

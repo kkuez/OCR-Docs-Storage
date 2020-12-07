@@ -36,6 +36,19 @@ class DBDAO {
         this.archiver = archiver;
     }
 
+    public Float getSum() {
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select SUM(sum) AS Summe from Bons")) {
+            while (rs.next()) {
+                return rs.getFloat("Summe");
+            }
+        } catch (SQLException e) {
+            logger.error("Cannot calc sum", e);
+        }
+        return null;
+
+    }
+
 
     List<Document> getDocumentsForSearchTerm(String searchTerm) {
         Map<File, Document> documentMap = new HashMap<>();
@@ -95,7 +108,7 @@ class DBDAO {
     Map<Integer, User> getAllowedUsersMap(BackendFacade facade) {
         Map<Integer, User> userMap = new HashMap<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
+             ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
 
             while (rs.next()) {
                 User user = new User(rs.getInt("id"), rs.getString("name"), facade);
@@ -110,7 +123,7 @@ class DBDAO {
     List<String> getShoppingListFromDB() {
         List<String> shoppingList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");) {
+             ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");) {
 
             while (rs.next()) {
                 shoppingList.add(rs.getString("item"));
@@ -128,7 +141,7 @@ class DBDAO {
     List<String> getMemos(long userId) {
         List<String> memoList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM Memos where user=" + userId)) {
+             ResultSet rs = statement.executeQuery("SELECT * FROM Memos where user=" + userId)) {
             while (rs.next()) {
                 memoList.add(rs.getString("item"));
             }
@@ -141,7 +154,7 @@ class DBDAO {
     List<String> getStandardListFromDB() {
         List<String> standardList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");) {
+             ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");) {
 
             while (rs.next()) {
                 standardList.add(rs.getString("item"));
@@ -179,8 +192,8 @@ class DBDAO {
     Set<String> getTagsForDocument(Document document) {
         Set<String> tagSet = new HashSet<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement
-                        .executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());) {
+             ResultSet rs = statement
+                     .executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());) {
 
             while (rs.next()) {
                 tagSet.add(rs.getString("Tag"));
@@ -206,7 +219,7 @@ class DBDAO {
                 + (monthAndYear.getMonthValue() + "-" + monthAndYear.getYear()).replace("-", ".") + "%'"
                 + plusUserString;
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery(statementString)) {
+             ResultSet rs = statement.executeQuery(statementString)) {
             while (rs.next()) {
                 resultSum += Float.parseFloat(rs.getString("sum"));
             }
@@ -219,7 +232,7 @@ class DBDAO {
     Map<Integer, String> getQRItemMap() {
         Map<Integer, String> itemMap = new HashMap<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery("select * from QRItems");) {
+             ResultSet rs = statement.executeQuery("select * from QRItems");) {
 
             while (rs.next()) {
                 itemMap.put(rs.getInt("itemNumber"), rs.getString("itemMapped"));
@@ -243,7 +256,7 @@ class DBDAO {
     List<Task> getTasksFromDB(BackendFacade facade) {
         List<Task> taskList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
+             ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
             while (rs.next()) {
                 Task task = taskFactory.getTask(rs, facade);
                 taskList.add(task);
@@ -262,8 +275,8 @@ class DBDAO {
         List<Integer> documentIds = new ArrayList<>();
         List<Document> documentList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement
-                        .executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");) {
+             ResultSet rs = statement
+                     .executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");) {
 
             while (rs.next()) {
                 documentIds.add(rs.getInt("belongsToDocument"));
@@ -280,7 +293,7 @@ class DBDAO {
     List<Document> showDocumentsFromSQLExpression(String sqlExpression) {
         List<Document> documentList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery(sqlExpression);) {
+             ResultSet rs = statement.executeQuery(sqlExpression);) {
 
             documentList = new ArrayList<>();
             while (rs.next()) {
@@ -300,7 +313,7 @@ class DBDAO {
     int countDocuments(String tableName, String sqlAddition) {
         int count = 0;
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);) {
+             ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);) {
 
             while (rs.next()) {
                 count = rs.getInt("Count(*)");
@@ -328,8 +341,8 @@ class DBDAO {
         // TODO es gibt ein dateTime Format von SQLite
         List<Bon> resultBons = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery(
-                        "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument")) {
+             ResultSet rs = statement.executeQuery(
+                     "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument")) {
             while (rs.next()) {
                 String content = rs.getString("content");
                 String originalFilePath = rs.getString("originalFile");
@@ -354,9 +367,9 @@ class DBDAO {
         String monthAndYear = month + "-" + year;
         List<Bon> resultBons = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-                ResultSet rs = statement.executeQuery(
-                        "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%"
-                                + monthAndYear.replace("-", ".") + "%'")) {
+             ResultSet rs = statement.executeQuery(
+                     "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%"
+                             + monthAndYear.replace("-", ".") + "%'")) {
             while (rs.next()) {
                 String content = rs.getString("content");
                 String originalFilePath = rs.getString("originalFile");
@@ -421,5 +434,18 @@ class DBDAO {
             logger.error("select * from Task", e);
         }
         return taskList;
+    }
+
+    public Float getSum(int userid) {
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select SUM(sum) AS Summe from Bons b, Documents d where b.belongsToDocument = d.id AND " +
+                     "d.user =  " + userid)) {
+            while (rs.next()) {
+                return rs.getFloat("Summe");
+            }
+        } catch (SQLException e) {
+            logger.error("Cannot calc sum", e);
+        }
+        return null;
     }
 }

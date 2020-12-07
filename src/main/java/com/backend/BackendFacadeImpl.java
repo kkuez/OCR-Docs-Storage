@@ -56,7 +56,7 @@ public class BackendFacadeImpl implements BackendFacade {
     }
 
     @Override
-    public List<Bon> getBonsForMonth(LocalDate targetYearMonth) {
+    public List<Bon> getSum(LocalDate targetYearMonth) {
         return dbdao.getBonsForMonth(targetYearMonth.getYear(), targetYearMonth.getMonthValue());
     }
 
@@ -212,5 +212,15 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public List<Task> getTasks(int userid) {
         return dbdao.getTasksFromDB(this, userid);
+    }
+
+    @Override
+    public Float getSum(int userid) {
+        return dbdao.getSum(userid);
+    }
+
+    @Override
+    public Float getSum() {
+        return dbdao.getSum();
     }
 }

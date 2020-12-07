@@ -24,7 +24,7 @@ public interface BackendFacade {
 
     // No special getsum method since it has to be calculated from the Client
 
-    List<Bon> getBonsForMonth(LocalDate targetYearMonth);
+    List<Bon> getSum(LocalDate targetYearMonth);
 
     File getPDF(LocalDate start, LocalDate end);
 
@@ -83,4 +83,8 @@ public interface BackendFacade {
     Properties getProperties();
 
     List<Task> getTasks(int userid);
+
+    Float getSum(int userid);
+
+    Float getSum();
 }
