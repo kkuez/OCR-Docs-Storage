@@ -16,6 +16,8 @@ public interface BackendFacade {
 
     Map<Integer, String> getQRItems();
 
+    void insertBon(Bon bon);
+
     void insertDocument(Document document);
 
     void deleteLastDocument();
@@ -87,4 +89,6 @@ public interface BackendFacade {
     Float getSum(int userid);
 
     Float getSum();
+
+    File copyToArchive(File newPic, boolean isBon);
 }

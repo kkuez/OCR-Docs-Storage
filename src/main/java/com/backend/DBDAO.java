@@ -448,4 +448,7 @@ class DBDAO {
         }
         return null;
     }
+
+    public void insertBon() {
+    }
 }

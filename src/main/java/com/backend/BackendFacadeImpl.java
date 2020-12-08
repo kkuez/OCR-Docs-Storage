@@ -41,6 +41,11 @@ public class BackendFacadeImpl implements BackendFacade {
     }
 
     @Override
+    public void insertBon(Bon bon) {
+        dbdao.insertBon();
+    }
+
+    @Override
     public void insertDocument(Document document) {
         dbdao.insertDocument(document);
     }
@@ -222,5 +227,10 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public Float getSum() {
         return dbdao.getSum();
+    }
+
+    @Override
+    public File copyToArchive(File newPic, boolean isBon) {
+        return archiver.copyToArchive(newPic, isBon);
     }
 }

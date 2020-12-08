@@ -144,4 +144,17 @@ public class Archiver {
     public void setDocumentList(List<Document> documentList) {
         this.documentList = documentList;
     }
+
+    public File copyToArchive(File newPic, boolean isBon) {
+        if(isBon) {
+            File copiedFile = new File(bonFolder, newPic.getName());
+            try {
+                FileUtils.copyFile(newPic, copiedFile);
+                return copiedFile;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

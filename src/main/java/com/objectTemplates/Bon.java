@@ -1,5 +1,7 @@
 package com.objectTemplates;
 
+import java.io.File;
+
 public class Bon extends Document {
 
     float sum;
@@ -13,6 +15,10 @@ public class Bon extends Document {
         this.setUser(document.getUser());
         this.setDate(document.getDate());
         this.sum = sum;
+    }
+
+    public Bon(User user, File newPic, float sum) {
+
     }
 
     @Override
