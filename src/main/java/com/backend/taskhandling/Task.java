@@ -3,11 +3,8 @@ package com.backend.taskhandling;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
 import com.backend.taskhandling.strategies.OneTimeExecutionStrategy;
 import com.backend.taskhandling.strategies.StrategyType;
-import com.bot.telegram.Bot;
-import com.bot.telegram.KeyboardFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.objectTemplates.User;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,32 +21,16 @@ public class Task implements Comparable {
     //@JsonSerialize(using = UUIDToString.class, as=String.class)
     private UUID eID;
 
-    @JsonIgnore
-    private Bot bot;
 
     private List<Integer> userList = new ArrayList<>();
 
     public Task(){}
 
-    public Task(Bot bot) {
-        this.bot = bot;
-    }
 
-    public Task(List<User> userList, Bot bot, String actionName, UUID eID) {
+    public Task(List<User> userList,  String actionName, UUID eID) {
         this.userList = userList.stream().map(User::getId).collect(Collectors.toList());
-        this.bot = bot;
         this.name = actionName;
         this.eID = eID;
-    }
-
-    public boolean perform() {
-        Message message = null;
-        for (User user : getUserList()) {
-            String userName = user.getName();
-            message = getBot().sendSimpleMsg("Hey " + userName + ",\n " + getName(), user.getId(),
-                    KeyboardFactory.KeyBoardType.NoButtons, true, null);
-        }
-        return message != null;
     }
 
     public boolean timeIsNow(LocalDateTime localDateTime) {
@@ -110,26 +91,21 @@ public class Task implements Comparable {
         this.name = name;
     }
 
-    @JsonIgnore
-    public Bot getBot() {
-        return bot;
-    }
-
-    public void setBot(Bot bot) {
-        this.bot = bot;
-    }
-
-    @JsonIgnore
-    public List<User> getUserList() {
-        return userList.stream().filter(bot.getAllowedUsersMap()::containsKey)
-                .map(bot.getAllowedUsersMap()::get).collect(Collectors.toList());
-    }
-
     public String getForWhom() {
         return userList.size() > 1 ? "All" : String.valueOf(userList.get(0));
     }
 
     public UUID geteID() {
         return eID;
+    }
+
+    public boolean perform() {
+        //TODO ERINNERUNG SCHREIBEN!
+        return false;
+    }
+
+    public List<User> getUserList() {
+        //TODO schreiben
+        return null;
     }
 }

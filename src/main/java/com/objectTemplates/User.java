@@ -1,10 +1,6 @@
 package com.objectTemplates;
 
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-
 import com.backend.BackendFacade;
-import com.bot.telegram.KeyboardFactory;
-import com.bot.telegram.processes.Process;
 
 public class User {
 
@@ -19,8 +15,6 @@ public class User {
     private boolean isBusy = false;
 
     // NO InlineKeyboards! important to seperat input of the to List processes.
-    private ReplyKeyboard keyboardContext = KeyboardFactory.getKeyBoard(KeyboardFactory.KeyBoardType.Start, false,
-            false, "", facade);
 
     public User(int id, String name, BackendFacade facade) {
         this.facade = facade;
@@ -36,14 +30,6 @@ public class User {
 
     public void setBusy(boolean busy) {
         isBusy = busy;
-    }
-
-    public ReplyKeyboard getKeyboardContext() {
-        return keyboardContext;
-    }
-
-    public void setKeyboardContext(ReplyKeyboard keyboardContext) {
-        this.keyboardContext = keyboardContext;
     }
 
     public Process getProcess() {

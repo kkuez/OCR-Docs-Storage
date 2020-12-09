@@ -6,7 +6,6 @@ import com.backend.taskhandling.CheckConnectionTask;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.strategies.RegularExecutionStrategy;
 import com.backend.taskhandling.strategies.RegularMinutelyExecutionStrategy;
-import com.bot.telegram.Bot;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +22,6 @@ public class TasksRunnable implements Runnable {
     private List<Task> tasksToDo = new ArrayList<>();
 
     private boolean loopActive;
-
-    private Bot bot;
 
     private CheckConnectionTask checkConnectionTask;
 
@@ -61,7 +58,7 @@ public class TasksRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            checkConnectionTask = new CheckConnectionTask(bot, objectHub);
+            checkConnectionTask = new CheckConnectionTask(objectHub);
             RegularMinutelyExecutionStrategy checkConnectionTaskStrategy = new RegularMinutelyExecutionStrategy(
                     checkConnectionTask);
             checkConnectionTask.setExecutionStrategy(checkConnectionTaskStrategy);
@@ -74,11 +71,6 @@ public class TasksRunnable implements Runnable {
     }
 
     // GETTER SETTER
-
-    public void setBot(Bot bot) {
-        this.bot = bot;
-    }
-
     public boolean isLoopActive() {
         return loopActive;
     }

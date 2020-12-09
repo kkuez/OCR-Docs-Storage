@@ -2,9 +2,7 @@ package com;
 
 import com.backend.BackendFacade;
 import com.backend.ObjectHub;
-import com.backend.network.ListenerThread;
 import com.backend.taskhandling.TaskFactory;
-import com.bot.telegram.Bot;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
@@ -12,8 +10,6 @@ import org.apache.log4j.PatternLayout;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.io.File;
@@ -21,8 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Properties;
-
-import static com.utils.PinUtil.setGPIO;
 
 @Service
 public class StartUp {
@@ -40,36 +34,13 @@ public class StartUp {
         this.taskFactory = taskFactory;
         logger = createLogger();
         logger.info("\n\nStarting.");
-        Bot bot = null;
-        while (bot == null) {
-            bot = activateTGBot(null, objectHub);
-            taskFactory.setBot(bot);
-            ListenerThread listenerThread = new ListenerThread(bot, facade);
-            listenerThread.start();
-        }
     }
 
-    private Bot activateTGBot(Bot inputBotOrNull, ObjectHub objectHub) {
+    private void startUp(ObjectHub objectHub) {
         System.out.println("Trying to initialize Telegram-Bot...");
         ApiContextInitializer.init();
-        Bot bot = null;
-        bot = inputBotOrNull == null ? new Bot(facade, objectHub, tasksRunnable) : inputBotOrNull;
-        objectHub.setBot(bot);
         objectHub.initLater(tasksRunnable);
         BotSession botSession = null;
-        while (botSession == null) {
-            try {
-                TelegramBotsApi telegramBotApi = new TelegramBotsApi();
-                botSession = telegramBotApi.registerBot(bot);
-                setGPIO(0, objectHub);
-            } catch (TelegramApiRequestException e) {
-                logger.error("Failed registering bot.\nTrying again in 30 seconds...", e);
-                setGPIO(1,objectHub);
-                pause(30);
-            }
-        }
-        logger.info("System: Activated Bot");
-        return bot;
     }
 
     private void pause(int seconds) {

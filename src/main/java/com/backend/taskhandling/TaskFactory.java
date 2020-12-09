@@ -2,7 +2,6 @@ package com.backend.taskhandling;
 
 import com.backend.BackendFacade;
 import com.backend.taskhandling.strategies.*;
-import com.bot.telegram.Bot;
 import com.objectTemplates.User;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ public class TaskFactory {
 
 
     private Map<Integer, User> allowedUsersMap;
-    private Bot bot;
 
     @Lazy
     TaskFactory() {
@@ -28,7 +26,7 @@ public class TaskFactory {
     }
 
     public Task createTask(List<User> users, String taskText) {
-        return new Task(users, bot, taskText, UUID.randomUUID());
+        return new Task(users, taskText, UUID.randomUUID());
     }
 
     public Task getTask(ResultSet rs, BackendFacade facade) throws SQLException {
@@ -43,7 +41,7 @@ public class TaskFactory {
         String taskType = rs.getString("taskType");
         if ("Task".equals(taskType)) {
             UUID eID = UUID.fromString(rs.getString("eID"));
-            task = new Task(userList, bot, rs.getString("name"), eID);
+            task = new Task(userList, rs.getString("name"), eID);
         } else {
             throw new IllegalStateException("Unexpected value: " + taskType);
         }
@@ -105,7 +103,4 @@ public class TaskFactory {
         this.allowedUsersMap = allowedUsersMap;
     }
 
-    public void setBot(Bot bot) {
-        this.bot = bot;
-    }
 }

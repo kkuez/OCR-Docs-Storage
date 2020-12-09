@@ -1,7 +1,6 @@
 package com.backend;
 
 import com.TasksRunnable;
-import com.bot.telegram.Bot;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,6 @@ public class ObjectHub {
     private ExecutorService executorService;
 
     private CustomProperties properties;
-
-    private Bot bot;
 
     @Autowired
     ObjectHub(Archiver archiver) {
@@ -47,7 +44,6 @@ public class ObjectHub {
                 Thread.currentThread().interrupt();
                 System.exit(2);
             }
-            tasksRunnable.setBot(getBot());
             tasksRunnable.run();
         });
         thread.setName("TasksToDoThread");
@@ -58,14 +54,6 @@ public class ObjectHub {
 
 
     // GETTER SETTER
-    public Bot getBot() {
-        return bot;
-    }
-
-    public void setBot(Bot bot) {
-        this.bot = bot;
-    }
-
     public Properties getProperties() {
         return properties;
     }

@@ -2,7 +2,6 @@ package com.backend.taskhandling;
 
 import com.StartUp;
 import com.backend.ObjectHub;
-import com.bot.telegram.Bot;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -19,8 +18,7 @@ public class CheckConnectionTask extends Task {
     private final Logger logger;
     private ObjectHub objectHub;
 
-    public CheckConnectionTask(Bot bot, ObjectHub objectHub) {
-        super(bot);
+    public CheckConnectionTask(ObjectHub objectHub) {
         this.objectHub = objectHub;
         this.logger = StartUp.getLogger();
     }
