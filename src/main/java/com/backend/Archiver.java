@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,7 +35,17 @@ public class Archiver {
 
     File resourceFolder;
 
-    public Archiver(Properties properties) {
+    public Archiver() {
+        Properties properties = new Properties();
+        File propertiesFile = new File(".", "setup.properties");
+        try {
+            System.out.println("Properties: " + propertiesFile.getCanonicalPath());
+            properties.load(new FileInputStream(propertiesFile));
+        } catch (IOException e) {
+            //TODO Properties iwie zentral laden? wegen spring initialization nicht einfach
+            e.printStackTrace();
+            System.exit(2);
+        }
         documentList = new ArrayList<>();
         archiveFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv", LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
         if(!archiveFolder.exists()){

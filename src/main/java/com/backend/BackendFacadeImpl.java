@@ -42,7 +42,7 @@ public class BackendFacadeImpl implements BackendFacade {
 
     @Override
     public void insertBon(Bon bon) {
-        dbdao.insertBon();
+        dbdao.insertBon(bon);
     }
 
     @Override

@@ -1,45 +1,63 @@
 package com.objectTemplates;
 
+import com.backend.OperatingSys;
+import com.utils.IOUtil;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.time.LocalDate;
+import java.util.Set;
 
 public class Bon extends Document {
 
     float sum;
 
-    public Bon(Document document, float sum) {
-        this.setContent(document.getContent());
-        this.setOriginFile(document.getOriginFile());
-        this.setOriginalFileName(document.getOriginalFileName());
-        this.setTagSet(document.getTagSet());
-        this.setId(document.getId());
-        this.setUser(document.getUser());
-        this.setDate(document.getDate());
+    public Bon(int id, User user, File newPic, float sum) {
+        this.setContent("Bon");
+        this.setOriginFile(newPic);
+        this.setOriginalFileName(newPic.getName());
+        this.setTagSet(Set.of());
+        this.setId(id);
+        this.setUser(user.getId());
+        this.setDate(LocalDate.now().toString());
         this.sum = sum;
     }
 
-    public Bon(User user, File newPic, float sum) {
+    public Bon(Document document, float sum) {
 
     }
 
     @Override
     public String getInsertDBString(int docCount) {
-        String divider = ", '";
-        /*
-         * StringBuilder docStatement = new
-         * StringBuilder("insert into Documents (id, content, originalFile, date, user, sizeOfOriginalFile) Values (");
-         * docStatement.append(docCount); docStatement.append(divider); docStatement.append(getContent().replaceAll("'",
-         * "''")); docStatement.append(divider); docStatement.append(getOriginFile().getAbsolutePath());
-         * docStatement.append(divider); docStatement.append(getDate()); docStatement.append(divider);
-         * docStatement.append(getUser()); docStatement.append(", ");
-         * docStatement.append(FileUtils.sizeOf(getOriginFile())); docStatement.append(");");
-         */
+        if (getDate() == null) {
+            setDate(LocalDate.now().toString());
+        }
+        StringBuilder documentStringBuilder = new StringBuilder("insert into Documents (id, content, originalFile, " +
+                "date, user, sizeOfOriginalFile) Values (");
 
-        StringBuilder bonStatement = new StringBuilder("insert into Bons (belongsToDocument, sum) Values (");
-        bonStatement.append(docCount);
+        String originFilePath = getOriginFile().getAbsolutePath();
+        originFilePath = IOUtil.convertFilePathOSDependent(originFilePath, OperatingSys.Linux);
+
+        documentStringBuilder.append(getId());
+        documentStringBuilder.append(", '");
+        documentStringBuilder.append(getContent().replace("'", "''"));
+        documentStringBuilder.append("', '");
+        documentStringBuilder.append(originFilePath);
+        documentStringBuilder.append("', '");
+        documentStringBuilder.append(getDate());
+        documentStringBuilder.append("', ");
+        documentStringBuilder.append(getUser());
+        documentStringBuilder.append(",");
+        documentStringBuilder.append(FileUtils.sizeOf(getOriginFile()));
+        documentStringBuilder.append(");\n");
+
+        StringBuilder bonStatement = new StringBuilder(documentStringBuilder.toString());
+        bonStatement.append("insert into Bons (belongsToDocument, sum) Values (");
+        bonStatement.append(getId());
         bonStatement.append(", ");
         bonStatement.append(sum);
         bonStatement.append(")");
-        return /* docStatement.toString() + ";" + */ bonStatement.toString();
+        return bonStatement.toString();
     }
 
     // GETTER SETTER

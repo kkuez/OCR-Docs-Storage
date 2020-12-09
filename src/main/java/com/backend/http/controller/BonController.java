@@ -3,7 +3,6 @@ package com.backend.http.controller;
 import com.backend.BackendFacadeImpl;
 import com.lowagie.text.pdf.codec.Base64;
 import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
 import com.objectTemplates.User;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -45,17 +44,18 @@ public class BonController {
             float sum = Float.parseFloat(String.valueOf(map.get("sum")));
             byte[] fileBytes = Base64.decode(String.valueOf(map.get("file")));
             User user = backendFacade.getAllowedUsers().get(Integer.parseInt(String.valueOf(map.get("userid"))));
-            File newPic = new File(FileUtils.getTempDirectory(), user.getName() + "_" + LocalDateTime.now().toString().replace(".", "-")".jpg");
+            File newPic = new File(FileUtils.getTempDirectory(), user.getName() + "_" + LocalDateTime.now().toString().replace(".", "-").replace(":", "-") + ".jpg");
+            newPic.createNewFile();
             FileOutputStream fos = new FileOutputStream(newPic);
             fos.write(fileBytes);
             fos.flush();
 
             File archivedPic = backendFacade.copyToArchive(newPic, true);
-            Bon bon = new Bon(user, archivedPic, sum);
+            Bon bon = new Bon(backendFacade.getIdForNextDocument(), user, archivedPic, sum);
             backendFacade.insertBon(bon);
         } catch (Exception e ) {
-            logger.error("Could not parse incoming Task", e);
-            return ResponseEntity.ok("Could not parse incoming Task");
+            logger.error("Could not parse incoming Bon", e);
+            return ResponseEntity.ok("Could not parse incoming Bon");
         }
         return ResponseEntity.ok("");
     }

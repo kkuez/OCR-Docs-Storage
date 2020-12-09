@@ -449,6 +449,7 @@ class DBDAO {
         return null;
     }
 
-    public void insertBon() {
+    public void insertBon(Bon bon) {
+        executeSQL(bon.getInsertDBString(0));
     }
 }
