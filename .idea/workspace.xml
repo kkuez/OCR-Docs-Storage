@@ -6,13 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/StartUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/StartUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/Archiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/Archiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/CustomProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/CustomProperties.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/ObjectHub.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/ObjectHub.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/ShoppingListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/ShoppingListController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/TasksRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/TasksRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/Task.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularDailyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularDailyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularMinutelyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularMinutelyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularMonthlyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularMonthlyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularYearlyExecutionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularYearlyExecutionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/SimpleCalendarOneTimeStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/SimpleCalendarOneTimeStrategy.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -319,13 +320,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Fixed Bot sending docs.">
-      <created>1570216805865</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1570216805865</updated>
     </task>
     <task id="LOCAL-00028" summary="Init Shoppinglist refurbishing.">
       <created>1571295444561</created>
@@ -663,7 +657,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607538634235</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="Added all of Shoppinglist.">
+      <created>1607627469780</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1607627469780</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -703,7 +704,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="More elaborated errorhandling when sending message." />
     <MESSAGE value="Tasks will be checked if they should have send ealier and sent then." />
     <MESSAGE value="Implemented ConnectionCheck + GPIO reaction." />
     <MESSAGE value="Commenting on WiringPi installation." />
@@ -728,7 +728,8 @@
     <MESSAGE value="Receiving Bons successful.&#10;&#10;Next: Store dem." />
     <MESSAGE value="Insertion of Bons requests and pics." />
     <MESSAGE value="Deleted Bot traces." />
-    <option name="LAST_COMMIT_MESSAGE" value="Deleted Bot traces." />
+    <MESSAGE value="Added all of Shoppinglist." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added all of Shoppinglist." />
   </component>
   <component name="WindowStateProjectService">
     <state x="414" y="235" width="1092" height="715" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607447630895">
@@ -763,16 +764,16 @@
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state x="690" y="326" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604144969823" />
-    <state x="334" y="113" width="1411" height="595" key="#xdebugger.evaluate" timestamp="1607627012215">
+    <state x="334" y="113" width="1411" height="595" key="#xdebugger.evaluate" timestamp="1607627856529">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="334" y="113" width="1411" height="595" key="#xdebugger.evaluate/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627012215" />
+    <state x="334" y="113" width="1411" height="595" key="#xdebugger.evaluate/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627856529" />
     <state x="2548" y="415" width="952" height="595" key="#xdebugger.evaluate/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589156038" />
     <state x="682" y="561" width="875" height="594" key="#xdebugger.evaluate/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601238975139" />
-    <state x="553" y="174" key="CommitChangelistDialog2" timestamp="1607538633705">
+    <state x="553" y="174" key="CommitChangelistDialog2" timestamp="1607627469252">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="553" y="174" key="CommitChangelistDialog2/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607538633705" />
+    <state x="553" y="174" key="CommitChangelistDialog2/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627469252" />
     <state x="553" y="174" key="CommitChangelistDialog2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601240809627" />
     <state x="92" y="92" width="1736" height="976" key="DiffContextDialog" timestamp="1601218433940">
       <screen x="0" y="0" width="1920" height="1160" />
@@ -783,67 +784,67 @@
     </state>
     <state width="223" height="1108" key="Git.Branch.Popup/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1604138646196" />
     <state width="221" height="1106" key="Git.Branch.Popup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601240802524" />
-    <state width="1663" height="405" key="GridCell.Tab.0.bottom" timestamp="1607626969969">
+    <state width="1663" height="405" key="GridCell.Tab.0.bottom" timestamp="1607627961151">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="287" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604237302285" />
-    <state width="1663" height="405" key="GridCell.Tab.0.bottom/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607626969969" />
+    <state width="1663" height="405" key="GridCell.Tab.0.bottom/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627961151" />
     <state width="1681" height="510" key="GridCell.Tab.0.bottom/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589599324" />
     <state width="1877" height="451" key="GridCell.Tab.0.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094463484" />
     <state width="1637" height="384" key="GridCell.Tab.0.bottom/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1663" height="405" key="GridCell.Tab.0.center" timestamp="1607626969969">
+    <state width="1663" height="405" key="GridCell.Tab.0.center" timestamp="1607627961151">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="287" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604237302285" />
-    <state width="1663" height="405" key="GridCell.Tab.0.center/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607626969969" />
+    <state width="1663" height="405" key="GridCell.Tab.0.center/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627961151" />
     <state width="1681" height="510" key="GridCell.Tab.0.center/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589599324" />
     <state width="1877" height="451" key="GridCell.Tab.0.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094463483" />
     <state width="1637" height="384" key="GridCell.Tab.0.center/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1663" height="405" key="GridCell.Tab.0.left" timestamp="1607626969969">
+    <state width="1663" height="405" key="GridCell.Tab.0.left" timestamp="1607627961151">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="287" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604237302285" />
-    <state width="1663" height="405" key="GridCell.Tab.0.left/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607626969969" />
+    <state width="1663" height="405" key="GridCell.Tab.0.left/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627961151" />
     <state width="1681" height="510" key="GridCell.Tab.0.left/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589599324" />
     <state width="1877" height="451" key="GridCell.Tab.0.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094463483" />
     <state width="1637" height="384" key="GridCell.Tab.0.left/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1663" height="405" key="GridCell.Tab.0.right" timestamp="1607626969969">
+    <state width="1663" height="405" key="GridCell.Tab.0.right" timestamp="1607627961151">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="287" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604237302285" />
-    <state width="1663" height="405" key="GridCell.Tab.0.right/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607626969969" />
+    <state width="1663" height="405" key="GridCell.Tab.0.right/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627961151" />
     <state width="1681" height="510" key="GridCell.Tab.0.right/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589599324" />
     <state width="1877" height="451" key="GridCell.Tab.0.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094463484" />
     <state width="1637" height="384" key="GridCell.Tab.0.right/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1663" height="405" key="GridCell.Tab.1.bottom" timestamp="1607626984064">
+    <state width="1663" height="405" key="GridCell.Tab.1.bottom" timestamp="1607627951975">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="287" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604237313662" />
-    <state width="1663" height="405" key="GridCell.Tab.1.bottom/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607626984064" />
+    <state width="1663" height="405" key="GridCell.Tab.1.bottom/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627951975" />
     <state width="1681" height="510" key="GridCell.Tab.1.bottom/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589596195" />
     <state width="1877" height="451" key="GridCell.Tab.1.bottom/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094448725" />
     <state width="1637" height="384" key="GridCell.Tab.1.bottom/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1663" height="405" key="GridCell.Tab.1.center" timestamp="1607626984063">
+    <state width="1663" height="405" key="GridCell.Tab.1.center" timestamp="1607627951975">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="287" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604237313662" />
-    <state width="1663" height="405" key="GridCell.Tab.1.center/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607626984063" />
+    <state width="1663" height="405" key="GridCell.Tab.1.center/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627951975" />
     <state width="1681" height="510" key="GridCell.Tab.1.center/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589596195" />
     <state width="1877" height="451" key="GridCell.Tab.1.center/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094448725" />
     <state width="1637" height="384" key="GridCell.Tab.1.center/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1663" height="405" key="GridCell.Tab.1.left" timestamp="1607626984063">
+    <state width="1663" height="405" key="GridCell.Tab.1.left" timestamp="1607627951975">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="287" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604237313662" />
-    <state width="1663" height="405" key="GridCell.Tab.1.left/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607626984063" />
+    <state width="1663" height="405" key="GridCell.Tab.1.left/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627951975" />
     <state width="1681" height="510" key="GridCell.Tab.1.left/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589596195" />
     <state width="1877" height="451" key="GridCell.Tab.1.left/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094448725" />
     <state width="1637" height="384" key="GridCell.Tab.1.left/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
-    <state width="1663" height="405" key="GridCell.Tab.1.right" timestamp="1607626984064">
+    <state width="1663" height="405" key="GridCell.Tab.1.right" timestamp="1607627951975">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
     <state width="1877" height="287" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604237313662" />
-    <state width="1663" height="405" key="GridCell.Tab.1.right/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607626984064" />
+    <state width="1663" height="405" key="GridCell.Tab.1.right/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627951975" />
     <state width="1681" height="510" key="GridCell.Tab.1.right/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606589596195" />
     <state width="1877" height="451" key="GridCell.Tab.1.right/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1602094448725" />
     <state width="1637" height="384" key="GridCell.Tab.1.right/1920.0.1680.1010/0.0.1920.1160@1920.0.1680.1010" timestamp="1602094007664" />
@@ -862,10 +863,10 @@
     <state x="857" y="273" width="579" height="524" key="StructurePopup/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607454630608" />
     <state x="2670" y="238" width="579" height="457" key="StructurePopup/0.0.1920.1160/1920.0.1680.1010@1920.0.1680.1010" timestamp="1606587732782" />
     <state x="857" y="273" width="579" height="524" key="StructurePopup/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1606514924772" />
-    <state x="552" y="313" key="Vcs.Push.Dialog.v2" timestamp="1607538635895">
+    <state x="552" y="313" key="Vcs.Push.Dialog.v2" timestamp="1607627471574">
       <screen x="0" y="0" width="1920" height="1160" />
     </state>
-    <state x="552" y="313" key="Vcs.Push.Dialog.v2/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607538635895" />
+    <state x="552" y="313" key="Vcs.Push.Dialog.v2/0.0.1920.1160/1920.0.1680.1010@0.0.1920.1160" timestamp="1607627471574" />
     <state x="552" y="313" key="Vcs.Push.Dialog.v2/1920.0.1680.1010/0.0.1920.1160@0.0.1920.1160" timestamp="1601240812961" />
     <state x="769" y="497" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605556220268">
       <screen x="0" y="0" width="1920" height="1160" />
@@ -971,6 +972,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
           <line>54</line>
           <option name="timeStamp" value="222" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/SimpleCalendarOneTimeStrategy.java</url>
+          <line>33</line>
+          <option name="timeStamp" value="229" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

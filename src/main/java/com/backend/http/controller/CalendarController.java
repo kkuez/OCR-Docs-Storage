@@ -71,6 +71,7 @@ public class CalendarController {
             task.setExecutionStrategy(strategy);
             facade.insertTask(task);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Could not parse incoming Task", e);
             return ResponseEntity.ok("Could not parse incoming Task");
         }

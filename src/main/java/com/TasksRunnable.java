@@ -42,7 +42,8 @@ public class TasksRunnable implements Runnable {
                     // if successfully performed and is NOT a regular task, remove from list
                     if (success) {
                         StringBuilder usersString = new StringBuilder();
-                        task.getUserList().forEach(user -> usersString.append(", " + user.getName()));
+                        task.getUserList().forEach(user -> usersString.append(", " +
+                                facade.getAllowedUsers().get(user).getName()));
                         logger.info("Task " + task.getName() + " for user "
                                 + usersString.toString().replaceFirst(", ", ""));
                         if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {

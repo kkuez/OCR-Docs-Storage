@@ -104,8 +104,8 @@ public class Task implements Comparable {
         return false;
     }
 
-    public List<User> getUserList() {
+    public List<Integer> getUserList() {
         //TODO schreiben
-        return null;
+        return userList;
     }
 }

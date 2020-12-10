@@ -3,7 +3,6 @@ package com.backend.taskhandling.strategies;
 import com.backend.taskhandling.Task;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class RegularMinutelyExecutionStrategy extends RegularExecutionStrategy {
@@ -30,7 +29,7 @@ public class RegularMinutelyExecutionStrategy extends RegularExecutionStrategy {
 
         int day = 99;
 
-        String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
+        String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0) + "";
 
         return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType, eID) " +
                 "Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName()
