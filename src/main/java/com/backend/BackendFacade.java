@@ -12,15 +12,9 @@ import java.util.*;
 
 public interface BackendFacade {
 
-    void insertQRItem(int slot, String itemName);
-
-    Map<Integer, String> getQRItems();
-
     void insertBon(Bon bon);
 
     void insertDocument(Document document);
-
-    void deleteLastDocument();
 
     int getIdForNextDocument();
 
@@ -82,8 +76,6 @@ public interface BackendFacade {
 
     TasksRunnable getTasksRunnable();
     
-    Properties getProperties();
-
     List<Task> getTasks(int userid);
 
     Float getSum(int userid);

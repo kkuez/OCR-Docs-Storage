@@ -1,6 +1,7 @@
 package com;
 
 import com.backend.BackendFacade;
+import com.backend.CustomProperties;
 import com.backend.ObjectHub;
 import com.backend.taskhandling.TaskFactory;
 import org.apache.log4j.ConsoleAppender;
@@ -13,22 +14,22 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Properties;
 
 @Service
 public class StartUp {
 
     private static Logger logger;
-
+    private final CustomProperties properties;
     private BackendFacade facade;
     private TasksRunnable tasksRunnable;
     private TaskFactory taskFactory;
 
     @Lazy
-    public StartUp(ObjectHub objectHub, BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory) {
+    public StartUp(ObjectHub objectHub, BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory,
+                   CustomProperties properties) {
+        this.properties = properties;
         this.facade = facade;
         this.tasksRunnable = tasksRunnable;
         this.taskFactory = taskFactory;
@@ -52,16 +53,6 @@ public class StartUp {
     }
 
     private String getLogFile() {
-        Properties properties = new Properties();
-        File propertiesFile = new File(".", "setup.properties");
-        try {
-            System.out.println("Properties: " + propertiesFile.getCanonicalPath());
-            properties.load(new FileInputStream(propertiesFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(2);
-        }
-
         File monthFolder = new File(properties.getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
         if (!monthFolder.exists()) {
             monthFolder.mkdir();

@@ -6,16 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
 @RestController
 public class ShoppingListController {
 
-    private static final String SHOPPINGLIST = "shoppinglist/";
+    private static final String SHOPPINGLIST = "/shoppinglist";
     private static Logger logger = Logger.getLogger(ShoppingListController.class);
 
     private BackendFacade facade;
@@ -26,12 +26,24 @@ public class ShoppingListController {
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping(SHOPPINGLIST + "/new")
-    public String newEntry(HttpServletRequest request) {
+    @PostMapping(SHOPPINGLIST + "/delete")
+    public String deleteEntry(@RequestBody Map map) {
         try {
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            String userString = parameterMap.get("user")[0];
+            String item = String.valueOf(map.get("item"));
+            facade.deleteFromShoppingList(item);
+        } catch (Exception e ) {
+            logger.error("Could not parse incoming Task", e);
+            return "Failed";
+        }
+        return "Ok";
+    }
 
+    @PostMapping(SHOPPINGLIST + "/send")
+    public String newEntry(@RequestBody Map map) {
+        try {
+            String userString = String.valueOf(map.get("userid"));
+            String item = String.valueOf(map.get("item"));
+            facade.insertShoppingItem(item);
 
         } catch (Exception e ) {
             logger.error("Could not parse incoming Task", e);
@@ -43,19 +55,6 @@ public class ShoppingListController {
     @GetMapping(SHOPPINGLIST + "/get")
     public String getList() throws JsonProcessingException {
         return objectMapper.writeValueAsString(facade.getShoppingList());
-    }
-
-    @PostMapping(SHOPPINGLIST + "/delete")
-    public String deleteEntry(HttpServletRequest request) {
-        try {
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            String itemString = parameterMap.get("item")[0];
-            facade.deleteFromShoppingList(itemString);
-        } catch (Exception e ) {
-            logger.error("Could not parse incoming item", e);
-            return "Failed";
-        }
-        return "Ok";
     }
 
     @PostMapping(SHOPPINGLIST + "/deleteAll")

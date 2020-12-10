@@ -5,8 +5,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,16 +19,8 @@ public class ObjectHub {
     private CustomProperties properties;
 
     @Autowired
-    ObjectHub(Archiver archiver) {
-        properties = new CustomProperties();
-        String root = "";
-
-        try {
-            properties.load(new FileInputStream(root + "setup.properties"));
-        } catch (IOException e) {
-            logger.error("Failed activating bot", e);
-        }
-
+    ObjectHub(Archiver archiver, CustomProperties properties) {
+        this.properties = properties;
         this.archiver = archiver;
         executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));
     }

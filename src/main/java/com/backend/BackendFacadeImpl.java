@@ -26,18 +26,8 @@ public class BackendFacadeImpl implements BackendFacade {
     private ObjectHub objectHub;
 
     @Override
-    public void insertQRItem(int itemNumber, String itemName) {
-        dbdao.updateQRItem(itemNumber, itemName);
-    }
-
-    @Override
     public void updateQRItem(Integer itemNumber, String itemName) {
         dbdao.updateQRItem(itemNumber, itemName);
-    }
-
-    @Override
-    public Map<Integer, String> getQRItems() {
-        return dbdao.getQRItemMap();
     }
 
     @Override
@@ -175,11 +165,6 @@ public class BackendFacadeImpl implements BackendFacade {
     }
 
     @Override
-    public void deleteLastDocument() {
-        dbdao.deleteLastProcressedDocument();
-    }
-
-    @Override
     public List<Document> getDocuments(String searchTerm) {
         return dbdao.getDocumentsForSearchTerm(searchTerm);
     }
@@ -207,11 +192,6 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public TasksRunnable getTasksRunnable() {
         return getTasksRunnable();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return objectHub.getProperties();
     }
 
     @Override
