@@ -5,7 +5,6 @@ import com.lowagie.text.pdf.codec.Base64;
 import com.objectTemplates.Bon;
 import com.objectTemplates.User;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +19,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
-public class BonController {
+public class BonController extends Controller{
 
-    private static Logger logger = Logger.getLogger(BonController.class);
     private final static String BON = "/bon";
     private BackendFacadeImpl backendFacade = null;
 

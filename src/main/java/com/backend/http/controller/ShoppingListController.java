@@ -3,7 +3,6 @@ package com.backend.http.controller;
 import com.backend.BackendFacade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +15,6 @@ import java.util.Map;
 public class ShoppingListController extends Controller {
 
     private static final String SHOPPINGLIST = "/shoppinglist";
-    private static Logger logger = Logger.getLogger(ShoppingListController.class);
-
     private BackendFacade facade;
     private ObjectMapper objectMapper;
 

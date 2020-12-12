@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.objectTemplates.User;
-import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +24,6 @@ import java.util.UUID;
 
 @RestController
 public class CalendarController extends Controller {
-
-    private static Logger logger = Logger.getLogger(CalendarController.class);
     private final static String CALENDAR = "/calendar";
     private BackendFacade facade;
     private ObjectHub objectHub;
@@ -45,21 +42,17 @@ public class CalendarController extends Controller {
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE);
     }
 
-/*
-    @PostMapping(CALENDAR + "/delete")
-    public String deleteEntry(HttpServletRequest request) {
-        //TODO
-    }*/
-
     @PostMapping(CALENDAR + "/new")
     public ResponseEntity<String> newEntry(@RequestBody Map map) {
+        String userId = String.valueOf(map.get("userId"));
+        logger.info(getLogPrefrix() + CALENDAR + "/new from " + userId);
         try {
             String userString = (String) map.get("For");
             List<User> users;
             if (userString.equals("FORALL")) {
                 users = new ArrayList<>(facade.getAllowedUsers().values());
             } else {
-                users = List.of(facade.getAllowedUsers().get(Integer.parseInt((String) map.get("UserID"))));
+                users = List.of(facade.getAllowedUsers().get(Integer.parseInt(userId)));
             }
 
             String taskText = (String) map.get("Name");
@@ -80,6 +73,7 @@ public class CalendarController extends Controller {
 
     @PostMapping(CALENDAR + "/delete")
     public ResponseEntity<String> deleteEntry(@RequestBody Map map) {
+        logger.info(getLogPrefrix() + CALENDAR + "/delete from " + String.valueOf(map.get("userId")));
         try {
             String eID = (String) map.get("eID");
             facade.deleteTask(UUID.fromString(eID));
@@ -93,8 +87,8 @@ public class CalendarController extends Controller {
     @ResponseBody
     @RequestMapping(CALENDAR + "/getList")
     public ResponseEntity<Map<String, List<Task>>> getEntries(HttpServletRequest request) throws JsonProcessingException {
+        logger.info("/getList from " + request.getHeader("userid"));
         List<Task> tasks = facade.getTasks(Integer.parseInt(request.getHeader("userid")));
-        logger.info("/getList from " + request.getRemoteUser());
         return ResponseEntity.ok(Map.of("Tasks", tasks));
     }
 }
