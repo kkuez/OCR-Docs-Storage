@@ -413,7 +413,8 @@ class DBDAO {
 
     public void insertUserToAllowedUsers(Integer id, String firstName, Long chatId) {
         executeSQL(
-                "insert into AllowedUsers(id, name, chatId) Values (" + id + ", '" + firstName + "', " + chatId + ")");
+                "insert into AllowedUsers(id, name, chatId, hasXORKey) Values (" + id + ", '" + firstName
+                        + "', " + chatId + ", 0)");
     }
 
     public void deleteTask(UUID uuid) {
@@ -451,5 +452,49 @@ class DBDAO {
 
     public void insertBon(Bon bon) {
         executeSQL(bon.getInsertDBString(0));
+    }
+
+    public String getXORKey() {
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select key from Settings") {
+            while (rs.next()) {
+                return rs.getString("key");
+            }
+        } catch (SQLException e) {
+            logger.error("Cannot get XORKey", e);
+        }
+        return null;
+    }
+
+    public void setXORKey(String key) {
+        executeSQL("UPDATE Settings Set key='" + key + "',lastRenewalDate='" + LocalDate.now() + "'");
+    }
+
+    public LocalDate getLastKeyRenewalDate() {
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select lastRenewalDate from Settings") {
+            while (rs.next()) {
+                return LocalDate.parse(rs.getString("lastRenewalDate"));
+            }
+        } catch (SQLException e) {
+            logger.error("Cannot get lastRenewalDate", e);
+        }
+        return null;
+    }
+
+    public void setUserHasXORKey(Integer userID, boolean has) {
+        executeSQL("UPDATE AllowedUsers Set hasXORKey=" + (has ? "1": "0") + " where id=" + userID);
+    }
+
+    public boolean hasXORKey(Integer userID) {
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select hasXORKey from AllowedUsers where id=" + userID) {
+            while (rs.next()) {
+                return rs.getInt("hasXORKey") == 1;
+            }
+        } catch (SQLException e) {
+            logger.error("Cannot get lastRenewalDate", e);
+        }
+        return false;
     }
 }

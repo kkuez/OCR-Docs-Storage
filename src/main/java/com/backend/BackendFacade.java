@@ -9,8 +9,21 @@ import com.objectTemplates.User;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 public interface BackendFacade {
+
+    boolean hasXORKey(Integer userID);
+
+    void setUserHasXORKey(Integer userID, boolean has);
+
+    String getXORKey();
+
+    void setXORKey(String key);
+
+    LocalDate getLastKeyRenewalDate();
+
+    ExecutorService getExecutorService();
 
     void insertBon(Bon bon);
 

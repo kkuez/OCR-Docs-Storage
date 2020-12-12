@@ -1,6 +1,7 @@
 package com.backend.http.controller;
 
 import com.backend.BackendFacade;
+import com.backend.encryption.XORCrypt;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 
 @RestController
-public class ShoppingListController {
+public class ShoppingListController extends Controller {
 
     private static final String SHOPPINGLIST = "/shoppinglist";
     private static Logger logger = Logger.getLogger(ShoppingListController.class);
@@ -21,7 +22,8 @@ public class ShoppingListController {
     private BackendFacade facade;
     private ObjectMapper objectMapper;
 
-    public ShoppingListController(BackendFacade facade, ObjectMapper objectMapper) {
+    public ShoppingListController(BackendFacade facade, ObjectMapper objectMapper, XORCrypt xorCrypt) {
+        super(xorCrypt);
         this.facade = facade;
         this.objectMapper = objectMapper;
     }

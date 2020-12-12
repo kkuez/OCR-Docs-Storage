@@ -13,6 +13,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +29,36 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public void updateQRItem(Integer itemNumber, String itemName) {
         dbdao.updateQRItem(itemNumber, itemName);
+    }
+
+    @Override
+    public boolean hasXORKey(Integer userID) {
+        return dbdao.hasXORKey(userID);
+    }
+
+    @Override
+    public void setUserHasXORKey(Integer userID, boolean has) {
+        dbdao.setUserHasXORKey(userID, has);
+    }
+
+    @Override
+    public String getXORKey() {
+        return dbdao.getXORKey();
+    }
+
+    @Override
+    public void setXORKey(String key) {
+        dbdao.setXORKey(key);
+    }
+
+    @Override
+    public LocalDate getLastKeyRenewalDate() {
+        return dbdao.getLastKeyRenewalDate();
+    }
+
+    @Override
+    public ExecutorService getExecutorService() {
+        return objectHub.getExecutorService();
     }
 
     @Override

@@ -15,9 +15,13 @@ tessHTML=false
 tgBotToken=
 #!!!NEEDED!!!PW
 pwForNewUsers=Nuss
-//Path written by Host system in DB
+#Path written by Host system in DB
 projectFolderOnHost=
-//Path to remote folder, seen from local system. Will be replaced with localpath when fetching docs in GUI.
+#Path to remote folder, seen from local system. Will be replaced with localpath when fetching docs in GUI.
 pathToProjectFolder=
 birdVidFolder=
 debug=
+#key which will be used for encryption
+xorKey=
+#Socket Port for keysharing in local network
+keySharePort=

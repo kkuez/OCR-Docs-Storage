@@ -3,7 +3,7 @@ create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT, 
 Drop Table Bons;
 create table Bons (belongsToDocument INTEGER, sum REAL);
 Drop Table AllowedUsers;
-create Table AllowedUsers(id INTEGER, name TEXT, chatId INTEGER);
+create Table AllowedUsers(id INTEGER, name TEXT, chatId INTEGER, hasXORKey INTEGER);
 Drop Table Tags;
 create Table Tags(belongsToDocument INTEGER, Tag TEXT);
 Drop Table ShoppingList;
@@ -32,3 +32,5 @@ insert Into QRItems (itemNumber, itemMapped) VALUES (13, "-");
 insert Into QRItems (itemNumber, itemMapped) VALUES (14, "-");
 insert Into QRItems (itemNumber, itemMapped) VALUES (15, "-");
 insert Into QRItems (itemNumber, itemMapped) VALUES (16, "-");
+Drop Table Settings;
+create Table Settings(key Text, lastRenewalDate TEXT);

@@ -2,6 +2,7 @@ package com.backend.http.controller;
 
 import com.backend.BackendFacade;
 import com.backend.ObjectHub;
+import com.backend.encryption.XORCrypt;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
@@ -24,7 +25,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-public class CalendarController {
+public class CalendarController extends Controller {
 
     private static Logger logger = Logger.getLogger(CalendarController.class);
     private final static String CALENDAR = "/calendar";
@@ -34,7 +35,8 @@ public class CalendarController {
     private TaskFactory taskFactory;
 
     public CalendarController(BackendFacade facade, ObjectHub objectHub, ObjectMapper objectMapper,
-                              TaskFactory taskFactory){
+                              TaskFactory taskFactory, XORCrypt xorCrypt) {
+        super(xorCrypt);
         this.facade = facade;
         this.objectHub = objectHub;
         this.objectMapper = objectMapper;

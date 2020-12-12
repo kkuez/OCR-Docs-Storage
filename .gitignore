@@ -13,3 +13,5 @@ target/OCR-1.0-SNAPSHOT.jar
 target/setup.properties
 out/*
 /.idea/
+src/main/resources/keystore/*
+src/main/resources/application.properties
