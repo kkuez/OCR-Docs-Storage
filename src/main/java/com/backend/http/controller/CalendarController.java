@@ -2,7 +2,6 @@ package com.backend.http.controller;
 
 import com.backend.BackendFacade;
 import com.backend.ObjectHub;
-import com.backend.encryption.XORCrypt;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
@@ -35,8 +34,7 @@ public class CalendarController extends Controller {
     private TaskFactory taskFactory;
 
     public CalendarController(BackendFacade facade, ObjectHub objectHub, ObjectMapper objectMapper,
-                              TaskFactory taskFactory, XORCrypt xorCrypt) {
-        super(xorCrypt);
+                              TaskFactory taskFactory) {
         this.facade = facade;
         this.objectHub = objectHub;
         this.objectMapper = objectMapper;

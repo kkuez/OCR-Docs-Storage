@@ -1,7 +1,6 @@
 package com.backend.http.controller;
 
 import com.backend.BackendFacadeImpl;
-import com.backend.encryption.XORCrypt;
 import com.lowagie.text.pdf.codec.Base64;
 import com.objectTemplates.Bon;
 import com.objectTemplates.User;
@@ -21,15 +20,14 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
-public class BonController extends Controller {
+public class BonController {
 
     private static Logger logger = Logger.getLogger(BonController.class);
     private final static String BON = "/bon";
     private BackendFacadeImpl backendFacade = null;
 
     @Autowired
-    public BonController(BackendFacadeImpl backendFacade, XORCrypt xorCrypt) {
-        super(xorCrypt);
+    public BonController(BackendFacadeImpl backendFacade) {
         this.backendFacade = backendFacade;
     }
 

@@ -456,7 +456,7 @@ class DBDAO {
 
     public String getXORKey() {
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select key from Settings") {
+             ResultSet rs = statement.executeQuery("select key from Settings")) {
             while (rs.next()) {
                 return rs.getString("key");
             }
@@ -472,7 +472,7 @@ class DBDAO {
 
     public LocalDate getLastKeyRenewalDate() {
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select lastRenewalDate from Settings") {
+             ResultSet rs = statement.executeQuery("select lastRenewalDate from Settings")) {
             while (rs.next()) {
                 return LocalDate.parse(rs.getString("lastRenewalDate"));
             }
@@ -488,7 +488,7 @@ class DBDAO {
 
     public boolean hasXORKey(Integer userID) {
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select hasXORKey from AllowedUsers where id=" + userID) {
+             ResultSet rs = statement.executeQuery("select hasXORKey from AllowedUsers where id=" + userID)) {
             while (rs.next()) {
                 return rs.getInt("hasXORKey") == 1;
             }

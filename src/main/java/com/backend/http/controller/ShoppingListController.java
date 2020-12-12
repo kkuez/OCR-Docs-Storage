@@ -1,7 +1,6 @@
 package com.backend.http.controller;
 
 import com.backend.BackendFacade;
-import com.backend.encryption.XORCrypt;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
@@ -22,8 +21,7 @@ public class ShoppingListController extends Controller {
     private BackendFacade facade;
     private ObjectMapper objectMapper;
 
-    public ShoppingListController(BackendFacade facade, ObjectMapper objectMapper, XORCrypt xorCrypt) {
-        super(xorCrypt);
+    public ShoppingListController(BackendFacade facade, ObjectMapper objectMapper) {
         this.facade = facade;
         this.objectMapper = objectMapper;
     }
