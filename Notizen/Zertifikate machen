@@ -1,0 +1,2 @@
+1) keytool -genkeypair -alias NAME -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore NAME.p12 -storepass PASSWORT -validity 3650 -ext san=dns:www.HOST,dns:HOST,dns:HOST,dns:HOST,ip:IPS
+2) keytool -v -certreq -keystore NAME.p12 -alias NAME
