@@ -87,7 +87,7 @@ public class CalendarController extends Controller {
     @ResponseBody
     @RequestMapping(CALENDAR + "/getList")
     public ResponseEntity<Map<String, List<Task>>> getEntries(HttpServletRequest request) throws JsonProcessingException {
-        logger.info("/getList from " + request.getHeader("userid"));
+        logger.info(CALENDAR + "/getList from " + request.getHeader("userid"));
         List<Task> tasks = facade.getTasks(Integer.parseInt(request.getHeader("userid")));
         return ResponseEntity.ok(Map.of("Tasks", tasks));
     }
