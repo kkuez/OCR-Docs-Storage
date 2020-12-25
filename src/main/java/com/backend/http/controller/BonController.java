@@ -31,7 +31,9 @@ public class BonController extends Controller{
 
     @GetMapping(BON + "/get")
     public ResponseEntity<Map<String, Float>> getMe(HttpServletRequest request)  {
-        Float sumMe = backendFacade.getSum(Integer.parseInt(request.getHeader("userid")));
+        final int userid = Integer.parseInt(request.getHeader("userid"));
+        logger.info(getLogPrefrix() + BON + "/get from " + userid);
+        Float sumMe = backendFacade.getSum(userid);
         Float sumAll = backendFacade.getSum();
         return ResponseEntity.ok(Map.of("me", sumMe, "all", sumAll));
     }
@@ -42,6 +44,7 @@ public class BonController extends Controller{
             float sum = Float.parseFloat(String.valueOf(map.get("sum")));
             byte[] fileBytes = Base64.decode(String.valueOf(map.get("file")));
             User user = backendFacade.getAllowedUsers().get(Integer.parseInt(String.valueOf(map.get("userid"))));
+            logger.info(getLogPrefrix() + BON + "/send from " + user.getId());
             File newPic = new File(FileUtils.getTempDirectory(), user.getName() + "_" + LocalDateTime.now().toString().replace(".", "-").replace(":", "-") + ".jpg");
             newPic.createNewFile();
             FileOutputStream fos = new FileOutputStream(newPic);

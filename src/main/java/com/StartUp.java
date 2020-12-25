@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
 @Service
@@ -28,7 +29,7 @@ public class StartUp {
 
     @Lazy
     public StartUp(ObjectHub objectHub, BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory,
-                   CustomProperties properties) {
+                   CustomProperties properties) throws NoSuchAlgorithmException, IOException {
         this.properties = properties;
         this.facade = facade;
         this.tasksRunnable = tasksRunnable;

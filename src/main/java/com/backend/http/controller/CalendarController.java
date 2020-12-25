@@ -2,6 +2,7 @@ package com.backend.http.controller;
 
 import com.backend.BackendFacade;
 import com.backend.ObjectHub;
+import com.backend.taskhandling.GetTasksNetworkRunnable;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
@@ -40,12 +41,20 @@ public class CalendarController extends Controller {
         objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE);
+        startSocketThread();
+    }
+
+    private void startSocketThread() {
+        final GetTasksNetworkRunnable getTasksNetworkRunnable = new GetTasksNetworkRunnable(facade);
+        Thread getTasksThread = new Thread(getTasksNetworkRunnable);
+        getTasksThread.setName("TasksToDoThreadNetwork");
+        getTasksThread.start();
     }
 
     @PostMapping(CALENDAR + "/new")
     public ResponseEntity<String> newEntry(@RequestBody Map map) {
         String userId = String.valueOf(map.get("userId"));
-        logger.info(getLogPrefrix() + CALENDAR + "/new from " + userId);
+        logger.info(CALENDAR + "/new from " + userId + " " + (CharSequence) map.get("Time") + " für " + map.get("For"));
         try {
             String userString = (String) map.get("For");
             List<User> users;
