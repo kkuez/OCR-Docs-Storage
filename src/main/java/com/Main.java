@@ -38,6 +38,8 @@ public class Main {
                     bot = activateTGBot(null, objectHub);
                     ListenerThread listenerThread = new ListenerThread(bot, objectHub.getFacade());
                     listenerThread.start();
+                    Thread tasksNWThread = new Thread(new GetTasksNetworkRunnable(objectHub.getFacade()));
+                    tasksNWThread.start();
                 }
             }
         }
