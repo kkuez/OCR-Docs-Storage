@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -424,12 +425,17 @@ class DBDAO {
 
     public List<Task> getTasksFromDB(BackendFacadeImpl backendFacade, int userid) {
         List<Task> taskList = new ArrayList<>();
+        final LocalDateTime now = LocalDateTime.now();
         try (Statement statement = getConnection().createStatement();
              ResultSet rs = statement.executeQuery("select * from CalendarTasks where user='" + userid + "' OR " +
                      "user='ALL'");) {
             while (rs.next()) {
                 Task task = taskFactory.getTask(rs, backendFacade);
-                taskList.add(task);
+                if(task.getExecutionStrategy().getTime().isBefore(now)) {
+                    deleteTask(task.geteID());
+                } else {
+                    taskList.add(task);
+                }
             }
         } catch (SQLException e) {
             logger.error("select * from Task", e);
