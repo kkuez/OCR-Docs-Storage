@@ -8,7 +8,10 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class GetTasksNetworkRunnable implements Runnable {
 
@@ -39,11 +42,21 @@ public class GetTasksNetworkRunnable implements Runnable {
         while (reader.available() > 0) {
             stringBuilder.append((char)reader.read());
         }
-        final String requestedCmd = stringBuilder.toString();
+        final String incoming = stringBuilder.toString();
+        final String requestedCmd = incoming.contains(";") ? incoming.split(";")[0] : incoming;
         System.out.println(requestedCmd);
         switch (requestedCmd) {
             case "getTasks":
                 facade.getTasks().forEach(task -> printWriter.print(parseTask(task) + "*"));
+                break;
+            case "timeTo":
+                final String[] split = incoming.split(";");
+                final int hour = Integer.parseInt(split[1]);
+                final int minutes = Integer.parseInt(split[2]);
+                final LocalTime now = LocalTime.now();
+                final LocalTime plus = now.plus(hour, ChronoUnit.HOURS).plus(minutes, ChronoUnit.MINUTES);
+                final Duration between = Duration.between(now, plus);
+                printWriter.print(between.getSeconds() * 1000);
                 break;
             default:
         }
