@@ -171,4 +171,9 @@ public class FacadeController implements BackendFacade {
     public float getSumMonth(LocalDate yearMonth, User userOrNull) {
         return dbdao.getSumMonth(yearMonth, userOrNull);
     }
+
+    @Override
+    public List<Task> getTasksForAll(BackendFacade facade, User userOrNull, int number) {
+        return dbdao.getTasksFromDB(facade, userOrNull, number);
+    }
 }

@@ -79,4 +79,6 @@ public interface BackendFacade {
     void insertUserToAllowedUsers(Integer id, String firstName, Long chatId);
 
     float getSumMonth(LocalDate yearMonth, User userOrNull);
+
+    List<Task> getTasksForAll(BackendFacade facade, User userOrNull, int number);
 }

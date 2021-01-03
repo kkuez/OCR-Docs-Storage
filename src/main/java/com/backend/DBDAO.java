@@ -360,4 +360,22 @@ class DBDAO {
         executeSQL("insert into AllowedUsers(id, name, chatId) Values (" + id + ", '" +
                 firstName + "', " + chatId + ")");
     }
+
+    public List<Task> getTasksFromDB(BackendFacade facade, User userOrNull, int number) {
+        // When userOrNull == null then get for all
+        List<Task> taskList = new ArrayList<>();
+        try(Statement statement = getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("select * from CalendarTasks where user ='"
+            + (userOrNull == null ? "ALL" : userOrNull.getId()) + "'");) {
+            while (rs.next()) {
+                Task task = TaskFactory.getTask(rs, facade);
+                taskList.add(task);
+            }
+        } catch (SQLException e) {
+            logger.error("select * from Task", e);
+        }
+        taskList.sort(Comparator.comparing(task -> task.getExecutionStrategy().getTime()));
+
+        return taskList.subList(0, number);
+    }
 }

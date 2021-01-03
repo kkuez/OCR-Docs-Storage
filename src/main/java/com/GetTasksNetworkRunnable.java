@@ -2,6 +2,7 @@ package com;
 
 import com.backend.BackendFacade;
 import com.backend.taskHandling.Task;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +18,7 @@ public class GetTasksNetworkRunnable implements Runnable {
 
     private BackendFacade facade;
 
+    private Logger logger = Main.getLogger();
     public GetTasksNetworkRunnable(BackendFacade facade) {
         this.facade = facade;
     }
@@ -28,7 +30,7 @@ public class GetTasksNetworkRunnable implements Runnable {
                 try(Socket client = serverSocket.accept();
                     InputStream reader = client.getInputStream();
                     final PrintWriter printWriter = new PrintWriter(client.getOutputStream())) {
-                    System.out.println("New client: " + client.getInetAddress().getHostAddress());
+                    logger.info("New client: " + client.getInetAddress().getHostAddress());
                     processIncoming(reader, printWriter);
                 }
             } catch (IOException e) {
@@ -43,20 +45,22 @@ public class GetTasksNetworkRunnable implements Runnable {
             stringBuilder.append((char)reader.read());
         }
         final String incoming = stringBuilder.toString();
+        logger.info("Request: " + incoming);
         final String requestedCmd = incoming.contains(";") ? incoming.split(";")[0] : incoming;
-        System.out.println(requestedCmd);
         switch (requestedCmd) {
             case "getTasks":
-                facade.getTasks().forEach(task -> printWriter.print(parseTask(task) + "*"));
+                // Only send 13 Temins to prevent heap overflow on ESP
+                facade.getTasksForAll(facade, null, 13)
+                        .forEach(task -> printWriter.print(parseTask(task) + "*"));
                 break;
             case "timeTo":
                 final String[] split = incoming.split(";");
                 final int hour = Integer.parseInt(split[1]);
                 final int minutes = Integer.parseInt(split[2]);
-                final LocalTime now = LocalTime.now();
-                final LocalTime plus = now.plus(hour, ChronoUnit.HOURS).plus(minutes, ChronoUnit.MINUTES);
+                final LocalTime now = LocalTime.now().withSecond(0).withNano(0);
+                final LocalTime plus = LocalTime.of(hour, minutes);
                 final Duration between = Duration.between(now, plus);
-                printWriter.print(between.getSeconds() * 1000);
+                printWriter.print(String.valueOf(between.getSeconds() * 1000));
                 break;
             default:
         }
