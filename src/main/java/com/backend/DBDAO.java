@@ -376,6 +376,6 @@ class DBDAO {
         }
         taskList.sort(Comparator.comparing(task -> task.getExecutionStrategy().getTime()));
 
-        return taskList.subList(0, number);
+        return taskList.size() > number ? taskList.subList(0, number) : taskList;
     }
 }

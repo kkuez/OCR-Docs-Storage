@@ -4,6 +4,7 @@ import com.backend.BackendFacade;
 import com.backend.taskHandling.Task;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
@@ -37,7 +38,7 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getId() + "";
 
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + task.getName() + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() +"')";
+        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType, eID) Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '" + task.getName() + "', '" + user + "', '" + task.getClass().getSimpleName() + "', '" + getType() +"', '" + UUID.randomUUID() +"')";
     }
 
     @Override
