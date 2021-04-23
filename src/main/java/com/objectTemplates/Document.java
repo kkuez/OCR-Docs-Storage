@@ -1,13 +1,12 @@
 package com.objectTemplates;
 
+import com.backend.OperatingSys;
+import com.utils.IOUtil;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Set;
-
-import org.apache.commons.io.FileUtils;
-
-import com.backend.OperatingSys;
-import com.utils.IOUtil;
 
 public abstract class Document {
 
@@ -23,14 +22,14 @@ public abstract class Document {
 
     private int id;
 
-    private int user;
+    private String user;
 
     private String inZipFile;
 
     public Document() {
     }
 
-    public Document(String content, File originalFile, int user) {
+    public Document(String content, File originalFile, String user) {
         this.setContent(content);
         this.setOriginFile(originalFile);
         this.user = user;
@@ -59,11 +58,11 @@ public abstract class Document {
         this.inZipFile = inZipFile;
     }
 
-    public int getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(int user) {
+    public void setUser(String user) {
         this.user = user;
     }
 

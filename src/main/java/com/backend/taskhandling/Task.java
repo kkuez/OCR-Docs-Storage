@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class Task implements Comparable {
 
@@ -21,14 +20,14 @@ public class Task implements Comparable {
     //@JsonSerialize(using = UUIDToString.class, as=String.class)
     private UUID eID;
 
-
-    private List<Integer> userList = new ArrayList<>();
+    @JsonIgnore
+    private List<User> userList = new ArrayList<>();
 
     public Task(){}
 
 
     public Task(List<User> userList,  String actionName, UUID eID) {
-        this.userList = userList.stream().map(User::getId).collect(Collectors.toList());
+        this.userList = userList;
         this.name = actionName;
         this.eID = eID;
     }
@@ -78,7 +77,6 @@ public class Task implements Comparable {
         this.executionStrategy = executionStrategy;
     }
 
-    @JsonIgnore
     public String getName() {
         return name;
     }
@@ -92,7 +90,7 @@ public class Task implements Comparable {
     }
 
     public String getForWhom() {
-        return userList.size() > 1 ? "All" : String.valueOf(userList.get(0));
+        return userList.size() > 1 ? "All" : String.valueOf(userList.get(0).getName());
     }
 
     public UUID geteID() {
@@ -104,7 +102,8 @@ public class Task implements Comparable {
         return false;
     }
 
-    public List<Integer> getUserList() {
+    @JsonIgnore
+    public List<User> getUserList() {
         //TODO schreiben
         return userList;
     }

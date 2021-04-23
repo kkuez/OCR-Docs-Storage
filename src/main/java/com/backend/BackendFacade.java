@@ -73,7 +73,7 @@ public interface BackendFacade {
 
     List<Document> getDocuments(String searchTerm);
 
-    Map<Integer, User> getAllowedUsers();
+    Map<String, User> getAllowedUsers();
 
     Document getDocument(int id);
 
@@ -89,11 +89,9 @@ public interface BackendFacade {
 
     TasksRunnable getTasksRunnable();
     
-    List<Task> getTasks(int userid);
+    List<Task> getTasks(String userid);
 
-    Float getSum(int userid);
-
-    Float getSum();
+    Float getSum(String userid);
 
     File copyToArchive(File newPic, boolean isBon);
 }

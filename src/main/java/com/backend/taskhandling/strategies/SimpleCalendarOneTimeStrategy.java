@@ -31,7 +31,7 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
         int minute = time.getMinute();
 
-        String user = getTask().getUserList().size() > 1 ? "ALL" : getTask().getUserList().get(0) + "";
+        String user = getTask().getUserList().size() > 1 ? "ALL" : getTask().getUserList().get(0).getName();
 
         return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType, eID) " +
                 "Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '"

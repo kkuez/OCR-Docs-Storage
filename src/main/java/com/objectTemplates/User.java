@@ -6,8 +6,6 @@ public class User {
 
     private BackendFacade facade = null;
 
-    private int id;
-
     private String name;
 
     private Process process = null;
@@ -16,9 +14,8 @@ public class User {
 
     // NO InlineKeyboards! important to seperat input of the to List processes.
 
-    public User(int id, String name, BackendFacade facade) {
+    public User(String name, BackendFacade facade) {
         this.facade = facade;
-        this.id = id;
         this.name = name;
     }
 
@@ -38,14 +35,6 @@ public class User {
 
     public void setProcess(Process process) {
         this.process = process;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

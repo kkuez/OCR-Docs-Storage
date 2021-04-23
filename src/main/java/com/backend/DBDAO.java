@@ -11,19 +11,24 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-class DBDAO {
+public class DBDAO {
 
     private Logger logger = Logger.getLogger(DBDAO.class);
 
     private Connection connection = null;
 
-    File dbFile = null;
+    private static File dbFile = null;
     private Archiver archiver;
     private TaskFactory taskFactory;
 
@@ -35,6 +40,36 @@ class DBDAO {
         this.taskFactory = taskFactory;
         taskFactory.setAllowedUsersMap(getAllowedUsersMap(facade));
         this.archiver = archiver;
+    }
+
+    public static boolean insertNewUser(String name, String password) {
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileInputStream("setup.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        dbFile = new File(properties.getProperty("dbPath"));
+
+
+        try (Connection connectionStatic = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
+             PreparedStatement statement = connectionStatic.prepareStatement
+                     ("insert into AllowedUsers(name, password) Values (?,?)")) {
+
+            final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+            final byte[] hashbytes = digest.digest(
+                    password.getBytes(StandardCharsets.UTF_8));
+            String sha3Hex = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(hashbytes);
+
+            statement.setString(1, name);
+            statement.setString(2, sha3Hex);
+            statement.executeUpdate();
+        } catch (NoSuchAlgorithmException | SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public Float getSum() {
@@ -106,14 +141,14 @@ class DBDAO {
         executeSQL(updateStatement.toString());
     }
 
-    Map<Integer, User> getAllowedUsersMap(BackendFacade facade) {
-        Map<Integer, User> userMap = new HashMap<>();
+    Map<String, User> getAllowedUsersMap(BackendFacade facade) {
+        Map<String, User> userMap = new HashMap<>();
         try (Statement statement = getConnection().createStatement();
              ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
 
             while (rs.next()) {
-                User user = new User(rs.getInt("id"), rs.getString("name"), facade);
-                userMap.put(rs.getInt("id"), user);
+                User user = new User(rs.getString("name"), facade);
+                userMap.put(user.getName(), user);
             }
         } catch (SQLException e) {
             logger.error("select * from AllowedUsers", e);
@@ -215,7 +250,7 @@ class DBDAO {
 
     float getSumMonth(LocalDate monthAndYear, User userOrNull) {
         float resultSum = 0f;
-        String plusUserString = userOrNull == null ? "" : " AND USER=" + userOrNull.getId();
+        String plusUserString = userOrNull == null ? "" : " AND USER=" + userOrNull.getName();
         String statementString = "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%"
                 + (monthAndYear.getMonthValue() + "-" + monthAndYear.getYear()).replace("-", ".") + "%'"
                 + plusUserString;
@@ -228,20 +263,6 @@ class DBDAO {
             logger.error("Couldnt execute\n" + statementString, e);
         }
         return resultSum;
-    }
-
-    Map<Integer, String> getQRItemMap() {
-        Map<Integer, String> itemMap = new HashMap<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select * from QRItems");) {
-
-            while (rs.next()) {
-                itemMap.put(rs.getInt("itemNumber"), rs.getString("itemMapped"));
-            }
-        } catch (SQLException e) {
-            logger.error("select * from QRItems", e);
-        }
-        return itemMap;
     }
 
     void updateQRItem(Integer itemNumber, String itemName) {
@@ -300,7 +321,7 @@ class DBDAO {
             while (rs.next()) {
                 // TODO auch pdfs eigene klasse schreiben
                 Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")),
-                        rs.getInt("id"), rs.getInt("user"));
+                        rs.getInt("id"), rs.getString("user"));
                 image.setTagSet(getTagsForDocument(image));
                 documentList.add(image);
             }
@@ -347,12 +368,12 @@ class DBDAO {
             while (rs.next()) {
                 String content = rs.getString("content");
                 String originalFilePath = rs.getString("originalFile");
-                int userInt = rs.getInt("user");
+                String userName = rs.getString("user");
                 float sum = rs.getFloat("sum");
                 int id = rs.getInt("id");
                 String date = rs.getString("date");
 
-                Document document = new Image(content, new File(originalFilePath), id, userInt);
+                Document document = new Image(content, new File(originalFilePath), id, userName);
                 document.setDate(date);
                 Bon bon = new Bon(document, sum);
                 resultBons.add(bon);
@@ -374,11 +395,11 @@ class DBDAO {
             while (rs.next()) {
                 String content = rs.getString("content");
                 String originalFilePath = rs.getString("originalFile");
-                int userInt = rs.getInt("user");
+                String userName = rs.getString("user");
                 float sum = rs.getFloat("sum");
                 int id = rs.getInt("id");
 
-                Document document = new Image(content, new File(originalFilePath), id, userInt);
+                Document document = new Image(content, new File(originalFilePath), id, userName);
                 Bon bon = new Bon(document, sum);
                 resultBons.add(bon);
             }
@@ -419,11 +440,10 @@ class DBDAO {
     }
 
     public void deleteTask(UUID uuid) {
-        executeSQL(
-                "delete from CalendarTasks Where eID='" + uuid + "'");
+        executeSQL("delete from CalendarTasks Where eID='" + uuid + "'");
     }
 
-    public List<Task> getTasksFromDB(BackendFacadeImpl backendFacade, int userid) {
+    public List<Task> getTasksFromDB(BackendFacadeImpl backendFacade, String userid) {
         List<Task> taskList = new ArrayList<>();
         final LocalDateTime now = LocalDateTime.now();
         try (Statement statement = getConnection().createStatement();
@@ -431,7 +451,7 @@ class DBDAO {
                      "user='ALL'");) {
             while (rs.next()) {
                 Task task = taskFactory.getTask(rs, backendFacade);
-                if(task.getExecutionStrategy().getTime().isBefore(now)) {
+                if (task.getExecutionStrategy().getTime().isBefore(now)) {
                     deleteTask(task.geteID());
                 } else {
                     taskList.add(task);
@@ -443,17 +463,18 @@ class DBDAO {
         return taskList;
     }
 
-    public Float getSum(int userid) {
+    public Float getSum(String userid) {
+        String sqlString = "select SUM(sum) AS Summe from Bons b, Documents d where " +
+                "b.belongsToDocument = d.id" + (userid.equals("") ? "" : " AND d.user = '" + userid + "'");
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select SUM(sum) AS Summe from Bons b, Documents d where b.belongsToDocument = d.id AND " +
-                     "d.user =  " + userid)) {
+             ResultSet rs = statement.executeQuery(sqlString)) {
             while (rs.next()) {
                 return rs.getFloat("Summe");
             }
         } catch (SQLException e) {
             logger.error("Cannot calc sum", e);
         }
-        return null;
+        return 0F;
     }
 
     public void insertBon(Bon bon) {
@@ -489,7 +510,7 @@ class DBDAO {
     }
 
     public void setUserHasXORKey(Integer userID, boolean has) {
-        executeSQL("UPDATE AllowedUsers Set hasXORKey=" + (has ? "1": "0") + " where id=" + userID);
+        executeSQL("UPDATE AllowedUsers Set hasXORKey=" + (has ? "1" : "0") + " where id=" + userID);
     }
 
     public boolean hasXORKey(Integer userID) {
@@ -502,5 +523,32 @@ class DBDAO {
             logger.error("Cannot get lastRenewalDate", e);
         }
         return false;
+    }
+
+    public boolean checkCredentials(String userid, String passw) {
+        final MessageDigest digest;
+        String sha3Hex = "";
+        try {
+            digest = MessageDigest.getInstance("SHA3-256");
+            final byte[] hashbytes = digest.digest(
+                    passw.getBytes(StandardCharsets.UTF_8));
+            sha3Hex = org.apache.commons.codec.binary.Base64.encodeBase64URLSafeString(hashbytes);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return sha3Hex.equals(getPassWHashForUser(userid));
+    }
+
+    private String getPassWHashForUser(String name) {
+        String password = "";
+        try (PreparedStatement statement =
+                     getConnection().prepareStatement("select password from AllowedUsers where name=?");) {
+            statement.setString(1, name);
+            final ResultSet resultSet = statement.executeQuery();
+            password = resultSet.getString("password");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return password;
     }
 }

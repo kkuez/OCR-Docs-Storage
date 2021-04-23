@@ -5,10 +5,6 @@ import com.backend.BackendFacade;
 import com.backend.ObjectHub;
 import com.objectTemplates.Document;
 import com.objectTemplates.Image;
-import com.reporter.ProgressReporter;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.FileUtils;
@@ -19,8 +15,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,51 +36,14 @@ public class TessUtil {
     private TessUtil() {
     }
 
-    public static Set<Document> processFolder(TableView tableView, TableColumn[] tableColumns,
-            PropertyValueFactory[] propertyValueFactories, ProgressReporter progressReporter, BackendFacade facade,
-                                              ObjectHub objectHub) {
-        Collection<File> filesInFolder = FileUtils.listFiles(
-                new File(objectHub.getProperties().getProperty("lastInputPath")),
-                new String[] { "pdf", "PDF", "png", "PNG", "jpg", "JPG", "jpeg", "JPEG" }, false);
-        Collection<File> absoluteDifferentFilesSet = IOUtil.createFileSetBySize(filesInFolder);
-        Set<String> filePathSet = facade.getFilePathOfDocsContainedInDB();
-        AtomicInteger counterProcessedFiles = new AtomicInteger();
-
-        progressReporter.setTotalSteps(absoluteDifferentFilesSet.size(), null);
-
-        Set<Document> documentSet = new HashSet<>();
-        absoluteDifferentFilesSet.forEach(file -> {
-            if (!filePathSet.contains(file.getAbsolutePath())) {
-                objectHub.getExecutorService().submit(() -> {
-                    if (!facade.isFilePresent(file)) {
-                        Document document = processFile(file, 0, null, facade, objectHub);
-                        documentSet.add(document);
-                    }
-                    progressReporter.addStep(null);
-                    counterProcessedFiles.getAndIncrement();
-                });
-            }
-        });
-        try {
-            ExecutorUtil.blockUntilExecutorIsDone(objectHub, filesInFolder.size());
-        } catch (InterruptedException e) {
-            logger.error(e);
-            Thread.currentThread().interrupt();
-            System.exit(2);
-        }
-        logger.info(counterProcessedFiles.get() + " Files stored.");
-        // FIXME Tags werden nach dem verarbeiten nicht in der tableview angezeigt
-        return documentSet;
-    }
-
-    public static Document processFile(File inputfile, int userID, Set<String> tagSet, BackendFacade facade,
+    public static Document processFile(File inputfile, String userName, Set<String> tagSet, BackendFacade facade,
                                        ObjectHub objectHub) {
         logger.info("Processing " + inputfile.getAbsolutePath());
         Tesseract tesseract = getTesseract(objectHub);
         Document document = null;
         try {
             String result = tesseract.doOCR(inputfile);
-            document = new Image(result, inputfile, facade.getIdForNextDocument(), userID);
+            document = new Image(result, inputfile, facade.getIdForNextDocument(), userName);
 
             File newOriginalFilePath = new File(objectHub.getArchiver().getDocumentFolder(),
                     document.getOriginalFileName());

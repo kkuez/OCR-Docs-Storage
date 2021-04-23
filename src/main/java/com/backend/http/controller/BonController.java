@@ -3,7 +3,6 @@ package com.backend.http.controller;
 import com.backend.BackendFacadeImpl;
 import com.lowagie.text.pdf.codec.Base64;
 import com.objectTemplates.Bon;
-import com.objectTemplates.User;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,29 +29,30 @@ public class BonController extends Controller{
     }
 
     @GetMapping(BON + "/get")
-    public ResponseEntity<Map<String, Float>> getMe(HttpServletRequest request)  {
-        final int userid = Integer.parseInt(request.getHeader("userid"));
+    public ResponseEntity<Map<String, Float>> get(HttpServletRequest request)  {
+        final String userid = (String)request.getHeader("userid");
         logger.info(getLogPrefrix() + BON + "/get from " + userid);
         Float sumMe = backendFacade.getSum(userid);
-        Float sumAll = backendFacade.getSum();
+        Float sumAll = backendFacade.getSum("");
         return ResponseEntity.ok(Map.of("me", sumMe, "all", sumAll));
     }
 
     @PostMapping(BON + "/send")
     public ResponseEntity<String> send(@RequestBody Map map) {
         try {
+            final String userid = (String)map.get("userid");
             float sum = Float.parseFloat(String.valueOf(map.get("sum")));
             byte[] fileBytes = Base64.decode(String.valueOf(map.get("file")));
-            User user = backendFacade.getAllowedUsers().get(Integer.parseInt(String.valueOf(map.get("userid"))));
-            logger.info(getLogPrefrix() + BON + "/send from " + user.getId());
-            File newPic = new File(FileUtils.getTempDirectory(), user.getName() + "_" + LocalDateTime.now().toString().replace(".", "-").replace(":", "-") + ".jpg");
+            logger.info(getLogPrefrix() + BON + "/send from " + userid);
+            File newPic = new File(FileUtils.getTempDirectory(),  userid + "_" + LocalDateTime.now().toString().replace(".", "-").replace(":", "-") + ".jpg");
             newPic.createNewFile();
             FileOutputStream fos = new FileOutputStream(newPic);
             fos.write(fileBytes);
             fos.flush();
 
             File archivedPic = backendFacade.copyToArchive(newPic, true);
-            Bon bon = new Bon(backendFacade.getIdForNextDocument(), user, archivedPic, sum);
+            Bon bon = new Bon(backendFacade.getIdForNextDocument(), backendFacade.getAllowedUsers().get(userid),
+                    archivedPic, sum);
             backendFacade.insertBon(bon);
         } catch (Exception e ) {
             logger.error("Could not parse incoming Bon", e);

@@ -18,7 +18,7 @@ public class Bon extends Document {
         this.setOriginalFileName(newPic.getName());
         this.setTagSet(Set.of());
         this.setId(id);
-        this.setUser(user.getId());
+        this.setUser(user.getName());
         this.setDate(LocalDate.now().toString());
         this.sum = sum;
     }
@@ -45,9 +45,9 @@ public class Bon extends Document {
         documentStringBuilder.append(originFilePath);
         documentStringBuilder.append("', '");
         documentStringBuilder.append(getDate());
-        documentStringBuilder.append("', ");
+        documentStringBuilder.append("', '");
         documentStringBuilder.append(getUser());
-        documentStringBuilder.append(",");
+        documentStringBuilder.append("',");
         documentStringBuilder.append(FileUtils.sizeOf(getOriginFile()));
         documentStringBuilder.append(");\n");
 

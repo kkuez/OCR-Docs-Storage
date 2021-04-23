@@ -10,7 +10,7 @@ public class Image extends Document implements Comparable<Image>{
 
     DateTimeFormatter germanFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
 
-    public Image(String content, File originalFile, int id, int user) {
+    public Image(String content, File originalFile, int id, String user) {
         setId(id);
         setContent(content);
         setOriginFile(originalFile);

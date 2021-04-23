@@ -1,7 +1,6 @@
 package com.backend.http.controller;
 
 import com.backend.BackendFacade;
-import com.backend.ObjectHub;
 import com.backend.taskhandling.GetTasksNetworkRunnable;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
@@ -26,17 +25,14 @@ import java.util.UUID;
 @RestController
 public class CalendarController extends Controller {
     private final static String CALENDAR = "/calendar";
+    private final ObjectMapper objectMapper;
     private BackendFacade facade;
-    private ObjectHub objectHub;
-    private ObjectMapper objectMapper;
     private TaskFactory taskFactory;
 
-    public CalendarController(BackendFacade facade, ObjectHub objectHub, ObjectMapper objectMapper,
-                              TaskFactory taskFactory) {
+    public CalendarController(BackendFacade facade, ObjectMapper objectMapper, TaskFactory taskFactory) {
         this.facade = facade;
-        this.objectHub = objectHub;
-        this.objectMapper = objectMapper;
         this.taskFactory = taskFactory;
+        this.objectMapper = objectMapper;
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
@@ -53,21 +49,20 @@ public class CalendarController extends Controller {
 
     @PostMapping(CALENDAR + "/new")
     public ResponseEntity<String> newEntry(@RequestBody Map map) {
-        String userId = String.valueOf(map.get("userId"));
-        logger.info(CALENDAR + "/new from " + userId + " " + (CharSequence) map.get("Time") + " für " + map.get("For"));
+        String userId = String.valueOf(map.get("userid"));
         try {
-            String userString = (String) map.get("For");
+            String userString = (String) map.get("for");
             List<User> users;
             if (userString.equals("FORALL")) {
                 users = new ArrayList<>(facade.getAllowedUsers().values());
             } else {
-                users = List.of(facade.getAllowedUsers().get(Integer.parseInt(userId)));
+                users = List.of(facade.getAllowedUsers().get(userId));
             }
 
-            String taskText = (String) map.get("Name");
+            String taskText = (String) map.get("name");
             Task task = taskFactory.createTask(users, taskText);
-            String taskType = (String) map.get("Type");
-            LocalDateTime taskTime = LocalDateTime.parse((CharSequence) map.get("Time"));
+            LocalDateTime taskTime = LocalDateTime.parse((CharSequence) map.get("time"));
+            String taskType = (String) map.get("type");
             ExecutionStrategy strategy =
                     StrategyFactory.getStrategy(StrategyType.valueOf(taskType), taskTime, task, facade);
             task.setExecutionStrategy(strategy);
@@ -82,7 +77,6 @@ public class CalendarController extends Controller {
 
     @PostMapping(CALENDAR + "/delete")
     public ResponseEntity<String> deleteEntry(@RequestBody Map map) {
-        logger.info(getLogPrefrix() + CALENDAR + "/delete from " + String.valueOf(map.get("userId")));
         try {
             String eID = (String) map.get("eID");
             facade.deleteTask(UUID.fromString(eID));
@@ -96,8 +90,7 @@ public class CalendarController extends Controller {
     @ResponseBody
     @RequestMapping(CALENDAR + "/getList")
     public ResponseEntity<Map<String, List<Task>>> getEntries(HttpServletRequest request) throws JsonProcessingException {
-        logger.info(CALENDAR + "/getList from " + request.getHeader("userid"));
-        List<Task> tasks = facade.getTasks(Integer.parseInt(request.getHeader("userid")));
+        List<Task> tasks = facade.getTasks(request.getHeader("userid"));
         return ResponseEntity.ok(Map.of("Tasks", tasks));
     }
 }

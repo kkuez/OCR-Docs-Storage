@@ -201,7 +201,7 @@ public class BackendFacadeImpl implements BackendFacade {
     }
 
     @Override
-    public Map<Integer, User> getAllowedUsers() {
+    public Map<String, User> getAllowedUsers() {
         return dbdao.getAllowedUsersMap(this);
     }
 
@@ -226,18 +226,13 @@ public class BackendFacadeImpl implements BackendFacade {
     }
 
     @Override
-    public List<Task> getTasks(int userid) {
+    public List<Task> getTasks(String userid) {
         return dbdao.getTasksFromDB(this, userid);
     }
 
     @Override
-    public Float getSum(int userid) {
+    public Float getSum(String userid) {
         return dbdao.getSum(userid);
-    }
-
-    @Override
-    public Float getSum() {
-        return dbdao.getSum();
     }
 
     @Override

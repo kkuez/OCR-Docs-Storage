@@ -18,7 +18,7 @@ import java.util.UUID;
 public class TaskFactory {
 
 
-    private Map<Integer, User> allowedUsersMap;
+    private Map<String, User> allowedUsersMap;
 
     @Lazy
     TaskFactory() {
@@ -34,7 +34,7 @@ public class TaskFactory {
         if (rs.getString("user").equals("ALL")) {
             userList.addAll(allowedUsersMap.values());
         } else {
-            userList.add(allowedUsersMap.get(Integer.parseInt(rs.getString("user"))));
+            userList.add(allowedUsersMap.get(rs.getString("user")));
         }
 
         Task task;
@@ -99,7 +99,7 @@ public class TaskFactory {
         }
     }
 
-    public void setAllowedUsersMap(Map<Integer, User> allowedUsersMap) {
+    public void setAllowedUsersMap(Map<String, User> allowedUsersMap) {
         this.allowedUsersMap = allowedUsersMap;
     }
 
