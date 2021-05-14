@@ -23,13 +23,13 @@ import java.util.Scanner;
 public class Application {
     private static ApplicationContext applicationContext;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         if(!Arrays.stream(args).anyMatch(arg -> arg.equals("-newUser"))) {
             applicationContext = SpringApplication.run(Application.class, args);
         } else {
             System.out.println("New User\nName?");
-            String name = "";
-            String password = "";
+            String name = "-";
+            String password = "-";
             try(InputStream inputStream = System.in;
                 Scanner scanner = new Scanner(inputStream)) {
                 if(scanner.hasNextLine()) {

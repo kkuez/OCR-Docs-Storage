@@ -551,4 +551,50 @@ public class DBDAO {
         }
         return password;
     }
+
+    public List<Float> getLastSums(String userid, Integer lastMany) {
+        List<Float> sums = new ArrayList<>(lastMany);
+        String sqlString = "select b.sum from Bons b, Documents d where " +
+                "b.belongsToDocument = d.id" + (userid.equals("") ? "" : " AND d.user = '" + userid + "'");
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery(sqlString)) {
+            int i = 0;
+            while (rs.next() && i < lastMany) {
+                sums.add(rs.getFloat("sum"));
+                i++;
+            }
+        } catch (SQLException e) {
+            logger.error("Cannot get sums for user " + userid, e);
+        }
+        return sums;
+    }
+
+    public void deleteBon(String userid, float sum) {
+        //get Document id
+        String sqlString = "select d.id, d.originalFile from Bons b, Documents d where b.belongsToDocument = d.id " +
+                "AND sum=" + sum;
+        int id = 99999;
+        String filePath = "";
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery(sqlString)) {
+            int i = 0;
+            if(rs.next()) {
+                id = rs.getInt("id");
+                filePath = rs.getString("originalFile");
+            }
+        } catch (SQLException e) {
+            logger.error("Cannot get sums for user " + userid, e);
+        }
+
+        executeSQL("delete from Bons where belongsToDocument=" + id);
+        executeSQL("delete from Documents where id=" + id);
+        //FIXME sollte woanders deleten
+        if(!filePath.equals("")) {
+            try {
+                FileUtils.forceDelete(new File(filePath));
+            } catch (IOException e) {
+                logger.error("Cant delete bon " + filePath, e);
+            }
+        }
+    }
 }

@@ -239,4 +239,14 @@ public class BackendFacadeImpl implements BackendFacade {
     public File copyToArchive(File newPic, boolean isBon) {
         return archiver.copyToArchive(newPic, isBon);
     }
+
+    @Override
+    public List<Float> getLastBons(String userid, Integer lastMany) {
+        return dbdao.getLastSums(userid, lastMany);
+    }
+
+    @Override
+    public void delete(String userid, float sum) {
+        dbdao.deleteBon(userid, sum);
+    }
 }

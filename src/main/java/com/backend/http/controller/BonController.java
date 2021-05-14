@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,6 +38,16 @@ public class BonController extends Controller{
         return ResponseEntity.ok(Map.of("me", sumMe, "all", sumAll));
     }
 
+    @GetMapping(BON + "/getLastBons")
+    public ResponseEntity<List<Float>> getLastBons(HttpServletRequest request)  {
+        final String userid = (String)request.getHeader("userid");
+        final Integer lastMany = Integer.parseInt(request.getHeader("lastMany"));
+        logger.info(getLogPrefrix() + BON + "/get from " + userid);
+        List<Float> lastSums = backendFacade.getLastBons(userid, lastMany);
+        Float sumMe = backendFacade.getSum(userid);
+        return ResponseEntity.ok(lastSums);
+    }
+
     @PostMapping(BON + "/send")
     public ResponseEntity<String> send(@RequestBody Map map) {
         try {
@@ -54,6 +65,19 @@ public class BonController extends Controller{
             Bon bon = new Bon(backendFacade.getIdForNextDocument(), backendFacade.getAllowedUsers().get(userid),
                     archivedPic, sum);
             backendFacade.insertBon(bon);
+        } catch (Exception e ) {
+            logger.error("Could not parse incoming Bon", e);
+            return ResponseEntity.ok("Could not parse incoming Bon");
+        }
+        return ResponseEntity.ok("");
+    }
+
+    @PostMapping(BON + "/delete")
+    public ResponseEntity<String> delete(@RequestBody Map map) {
+        try {
+            final String userid = (String)map.get("userid");
+            float sum = Float.parseFloat(String.valueOf(map.get("sum")));
+            backendFacade.delete(userid, sum);
         } catch (Exception e ) {
             logger.error("Could not parse incoming Bon", e);
             return ResponseEntity.ok("Could not parse incoming Bon");
