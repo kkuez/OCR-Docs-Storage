@@ -555,7 +555,8 @@ public class DBDAO {
     public List<Float> getLastSums(String userid, Integer lastMany) {
         List<Float> sums = new ArrayList<>(lastMany);
         String sqlString = "select b.sum from Bons b, Documents d where " +
-                "b.belongsToDocument = d.id" + (userid.equals("") ? "" : " AND d.user = '" + userid + "'");
+                "b.belongsToDocument = d.id" + (userid.equals("") ? "" : " AND d.user = '" + userid + "' " +
+                "order by d.id desc");
         try (Statement statement = getConnection().createStatement();
              ResultSet rs = statement.executeQuery(sqlString)) {
             int i = 0;

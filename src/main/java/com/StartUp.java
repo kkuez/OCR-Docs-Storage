@@ -45,14 +45,6 @@ public class StartUp {
         BotSession botSession = null;
     }
 
-    private void pause(int seconds) {
-        try {
-            Thread.sleep((seconds * 1000));
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private String getLogFile() {
         File monthFolder = new File(properties.getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
         if (!monthFolder.exists()) {
