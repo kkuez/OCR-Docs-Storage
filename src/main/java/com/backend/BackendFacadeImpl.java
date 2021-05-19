@@ -227,7 +227,9 @@ public class BackendFacadeImpl implements BackendFacade {
 
     @Override
     public List<Task> getTasks(String userid) {
-        return dbdao.getTasksFromDB(this, userid);
+        List<Task> tasksFromDB = dbdao.getTasksFromDB(this, userid);
+        Collections.reverse(tasksFromDB);
+        return tasksFromDB;
     }
 
     @Override
