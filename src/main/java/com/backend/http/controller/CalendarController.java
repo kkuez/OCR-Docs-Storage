@@ -1,7 +1,6 @@
 package com.backend.http.controller;
 
 import com.backend.BackendFacade;
-import com.backend.taskhandling.GetTasksNetworkRunnable;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
@@ -37,14 +36,6 @@ public class CalendarController extends Controller {
         objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE);
-        startSocketThread();
-    }
-
-    private void startSocketThread() {
-        final GetTasksNetworkRunnable getTasksNetworkRunnable = new GetTasksNetworkRunnable(facade);
-        Thread getTasksThread = new Thread(getTasksNetworkRunnable);
-        getTasksThread.setName("TasksToDoThreadNetwork");
-        getTasksThread.start();
     }
 
     @PostMapping(CALENDAR + "/new")

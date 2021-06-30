@@ -135,7 +135,7 @@
       <command value="mvn clean" />
     </option>
   </component>
-  <component name="RunManager" selected="Remote.RPI">
+  <component name="RunManager" selected="Application.Application newUser">
     <configuration name="Application newUser" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.Application" />
       <module name="OCR" />
@@ -277,6 +277,7 @@
             <option name="outputLevel" value="INFO" />
             <option name="pluginUpdatePolicy" value="DEFAULT" />
             <option name="printErrorStackTraces" value="false" />
+            <option name="showDialogWithAdvancedSettings" value="false" />
             <option name="threads" value="8" />
             <option name="usePluginRegistry" value="false" />
             <option name="userSettingsFile" value="" />
@@ -331,7 +332,7 @@
       <item itemvalue="Maven.OCR [clean]" />
       <item itemvalue="Maven.OCR [clean,exec:exec]" />
       <item itemvalue="Maven.OCR [clean,package,assembly:single]" />
-      <item itemvalue="Remote.RPI" />
+      <item itemvalue="Remote JVM Debug.RPI" />
     </list>
     <recent_temporary>
       <list>
