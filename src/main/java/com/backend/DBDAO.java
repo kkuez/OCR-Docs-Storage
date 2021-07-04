@@ -1,5 +1,6 @@
 package com.backend;
 
+import com.StartUp;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
 import com.objectTemplates.Bon;
@@ -8,6 +9,7 @@ import com.objectTemplates.Image;
 import com.objectTemplates.User;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -24,7 +26,7 @@ import java.util.*;
 @Service
 public class DBDAO {
 
-    private Logger logger = Logger.getLogger(DBDAO.class);
+    private Logger logger = StartUp.createLogger(DBDAO.class);
 
     private Connection connection = null;
 
@@ -34,8 +36,8 @@ public class DBDAO {
 
     private Document lastProcessedDoc = null;
 
-
-    DBDAO(TaskFactory taskFactory, ObjectHub objectHub, Archiver archiver, BackendFacade facade) {
+    @Autowired
+    public DBDAO(TaskFactory taskFactory, ObjectHub objectHub, Archiver archiver, BackendFacade facade) {
         dbFile = new File(objectHub.getProperties().getProperty("dbPath"));
         this.taskFactory = taskFactory;
         taskFactory.setAllowedUsersMap(getAllowedUsersMap(facade));

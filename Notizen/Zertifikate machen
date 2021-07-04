@@ -24,3 +24,6 @@ keytool -importkeystore \
    	-alias mydomain.be
 
 3) .p12 umbenennen in keystore.p12 und in resources/keystore/ packen, dann neues Jahr mit spring plugin bauen
+
+Um lokal zu installieren:
+keytool -v -certreq -keystore NAME.p12 -alias NAME

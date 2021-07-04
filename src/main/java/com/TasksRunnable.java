@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class TasksRunnable implements Runnable {
 
-    private static Logger logger = Logger.getLogger(TasksRunnable.class);
+    private static Logger logger = StartUp.createLogger(TasksRunnable.class);
 
     private List<Task> tasksToDo = new ArrayList<>();
 

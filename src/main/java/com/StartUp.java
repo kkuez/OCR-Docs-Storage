@@ -22,7 +22,7 @@ import java.time.LocalDate;
 public class StartUp {
 
     private static Logger logger;
-    private final CustomProperties properties;
+    private static CustomProperties properties;
     private BackendFacade facade;
     private TasksRunnable tasksRunnable;
     private TaskFactory taskFactory;
@@ -34,7 +34,7 @@ public class StartUp {
         this.facade = facade;
         this.tasksRunnable = tasksRunnable;
         this.taskFactory = taskFactory;
-        logger = createLogger();
+        logger = createLogger(StartUp.class);
         logger.info("\n\nStarting.");
     }
 
@@ -45,7 +45,10 @@ public class StartUp {
         BotSession botSession = null;
     }
 
-    private String getLogFile() {
+    private static String getLogFile() {
+        if(properties == null) {
+            properties = new CustomProperties();
+        }
         File monthFolder = new File(properties.getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
         if (!monthFolder.exists()) {
             monthFolder.mkdir();
@@ -74,8 +77,8 @@ public class StartUp {
         return logFile.getAbsolutePath();
     }
 
-    private Logger createLogger() {
-        Logger logger = Logger.getLogger(StartUp.class);
+    public static Logger createLogger(Class clazz) {
+        Logger logger = Logger.getLogger(clazz);
         PatternLayout layout = new PatternLayout("%d{HH:mm:ss.SSS} [%t] \t%m%n");
         logger.addAppender(new ConsoleAppender(layout));
         FileAppender logFileAppender = null;

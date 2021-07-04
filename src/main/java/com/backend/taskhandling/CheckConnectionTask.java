@@ -13,7 +13,6 @@ public class CheckConnectionTask extends Task {
 
     private final String GOOGLE_DNS = "1.1.1.1";
 
-    private final String TELEGRAMM_BOTAPI = "https://api.telegram.org";
 
     private final Logger logger;
     private ObjectHub objectHub;

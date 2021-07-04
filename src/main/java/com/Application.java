@@ -63,7 +63,7 @@ public class Application {
             @Override
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
                 if(logger == null) {
-                    logger = Logger.getLogger(Controller.class);
+                    logger = StartUp.createLogger(Controller.class);
                     PropertyConfigurator.configure(getClass().getResourceAsStream("/log4j.properties"));
                     logger.addAppender(new ConsoleAppender());
                 }

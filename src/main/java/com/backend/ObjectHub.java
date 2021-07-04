@@ -1,5 +1,6 @@
 package com.backend;
 
+import com.StartUp;
 import com.TasksRunnable;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,14 @@ import java.util.concurrent.Executors;
 @Service
 public class ObjectHub {
 
-    private static Logger logger = Logger.getLogger(ObjectHub.class);
+    private static Logger logger = StartUp.createLogger(ObjectHub.class);
 
     private ExecutorService executorService;
 
     private CustomProperties properties;
 
     @Autowired
-    ObjectHub(Archiver archiver, CustomProperties properties) {
+    public ObjectHub(Archiver archiver, CustomProperties properties) {
         this.properties = properties;
         this.archiver = archiver;
         executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));

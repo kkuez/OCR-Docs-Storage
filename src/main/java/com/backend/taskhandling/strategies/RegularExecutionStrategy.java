@@ -1,5 +1,6 @@
 package com.backend.taskhandling.strategies;
 
+import com.StartUp;
 import com.backend.taskhandling.Task;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.log4j.Logger;
@@ -20,7 +21,7 @@ public abstract class RegularExecutionStrategy implements ExecutionStrategy {
     Task task;
 
     @JsonIgnore
-    public Logger logger = Logger.getLogger(RegularExecutionStrategy.class);
+    public Logger logger = StartUp.createLogger(RegularExecutionStrategy.class);
 
     public RegularExecutionStrategy() {
     }
