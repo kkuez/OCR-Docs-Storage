@@ -72,6 +72,23 @@ public class BonController extends Controller{
         return ResponseEntity.ok("");
     }
 
+    @PostMapping(BON + "/sendWithPath")
+    public ResponseEntity<String> sendWithPath(@RequestBody Map map) {
+        try {
+            final String userid = (String)map.get("userid");
+            float sum = Float.parseFloat(String.valueOf(map.get("sum")));
+
+            File archivedPic = new File((String) map.get("pathToPic"));
+            Bon bon = new Bon(backendFacade.getIdForNextDocument(), backendFacade.getAllowedUsers().get(userid),
+                    archivedPic, sum);
+            backendFacade.insertBon(bon);
+        } catch (Exception e ) {
+            logger.error("Could not parse incoming Bon", e);
+            return ResponseEntity.ok("Could not parse incoming Bon");
+        }
+        return ResponseEntity.ok("");
+    }
+
     @PostMapping(BON + "/delete")
     public ResponseEntity<String> delete(@RequestBody Map map) {
         try {

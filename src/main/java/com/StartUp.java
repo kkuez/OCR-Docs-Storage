@@ -22,15 +22,13 @@ import java.time.LocalDate;
 public class StartUp {
 
     private static Logger logger;
-    private static CustomProperties properties;
     private BackendFacade facade;
     private TasksRunnable tasksRunnable;
     private TaskFactory taskFactory;
 
     @Lazy
-    public StartUp(ObjectHub objectHub, BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory,
-                   CustomProperties properties) throws NoSuchAlgorithmException, IOException {
-        this.properties = properties;
+    public StartUp(BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory)
+            throws NoSuchAlgorithmException, IOException {
         this.facade = facade;
         this.tasksRunnable = tasksRunnable;
         this.taskFactory = taskFactory;
@@ -46,10 +44,8 @@ public class StartUp {
     }
 
     private static String getLogFile() {
-        if(properties == null) {
-            properties = new CustomProperties();
-        }
-        File monthFolder = new File(properties.getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
+
+        File monthFolder = new File(new CustomProperties().getProperty("localArchivePath"), LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
         if (!monthFolder.exists()) {
             monthFolder.mkdir();
         }

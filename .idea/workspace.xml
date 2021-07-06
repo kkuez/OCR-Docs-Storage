@@ -22,12 +22,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="">
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Logfeile appended to every logger.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notizen/Zertifikate machen" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Zertifikate machen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/StartUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/StartUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/IOUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/IOUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/TessUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,12 +76,13 @@
       </map>
     </option>
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2020.2.3\plugins\maven\lib\maven3" />
-      </MavenGeneralSettings>
-    </option>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1Qb6Egp0JmSrEDoijrezpploG2D" />
   <component name="ProjectLevelVcsManager">
@@ -103,9 +103,20 @@
     <property name="project.structure.proportion" value="0.1484375" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Android Logcat" />
+    <property name="settings.editor.selected.configurable" value="project.propDebugger" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com" />
+      <recent name="com.backend.taskhandling" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/keystore" />
+      <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage\src\main\resources\keystore" />
+      <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage" />
+      <recent name="C:\Users\Marcel\Documents\Projekte\OCR-Docs-Storage" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage" />
       <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage\src\main\resources" />
@@ -116,26 +127,17 @@
       <recent name="com" />
       <recent name="com.backend.taskhandling" />
     </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="com" />
-      <recent name="com.backend.taskhandling" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage\src\main\resources\keystore" />
-      <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage" />
-      <recent name="C:\Users\Marcel\Documents\Projekte\OCR-Docs-Storage" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/target" />
-    </key>
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="(" />
       <command value="mvn spring-boot:run" />
       <command value="mvn clean" />
+      <command value="mvn spring-boot:repackage" />
+      <command value="mvn clean package spring-boot:repackage" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.Application newUser">
+  <component name="RunManager" selected="Application.Application">
     <configuration name="Application newUser" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.Application" />
       <module name="OCR" />
@@ -190,7 +192,22 @@
     <configuration name="Build jar with Spring plugin" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
-        <option name="myRunnerSettings" />
+        <option name="myRunnerSettings">
+          <MavenRunnerSettings>
+            <option name="delegateBuildToMaven" value="false" />
+            <option name="environmentProperties">
+              <map />
+            </option>
+            <option name="jreName" value="11" />
+            <option name="mavenProperties">
+              <map />
+            </option>
+            <option name="passParentEnv" value="true" />
+            <option name="runMavenInBackground" value="true" />
+            <option name="skipTests" value="true" />
+            <option name="vmOptions" value="" />
+          </MavenRunnerSettings>
+        </option>
         <option name="myRunnerParameters">
           <MavenRunnerParameters>
             <option name="profiles">
@@ -200,6 +217,8 @@
               <list>
                 <option value="clean" />
                 <option value="package" />
+                <option value="spring-boot:repackage" />
+                <option value="-e" />
               </list>
             </option>
             <option name="pomFileName" />
@@ -355,27 +374,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Minor fixes stuck at selecting year f.e.">
-      <created>1571776872603</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1571776872603</updated>
-    </task>
-    <task id="LOCAL-00037" summary="StandardList Keyboards implemented.">
-      <created>1571777733191</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1571777733191</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Fixed getBons process.">
-      <created>1571815512971</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1571815512971</updated>
     </task>
     <task id="LOCAL-00039" summary="Refactoring.">
       <created>1571834979560</created>
@@ -699,16 +697,37 @@
       <option name="project" value="LOCAL" />
       <updated>1620996876047</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="Deleted superfluous network socket runner.">
+      <created>1625075584041</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1625075584042</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Changed description on how to renew certificate.">
+      <created>1625252735285</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1625252735285</updated>
+    </task>
+    <task id="LOCAL-00087" summary="Logfeile appended to every logger.">
+      <created>1625385785679</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1625385785680</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
-    <option name="COLUMN_ORDER">
+    <option name="COLUMN_ID_ORDER">
       <list>
-        <option value="0" />
-        <option value="2" />
-        <option value="3" />
-        <option value="1" />
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
       </list>
     </option>
   </component>
@@ -739,9 +758,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Changed script description." />
-    <MESSAGE value="Pi flashing signalPin when no Bot could be initialized." />
-    <MESSAGE value="Deleted superfluous property entry. Refactoring." />
     <MESSAGE value="Written FacadeInterface." />
     <MESSAGE value="WIP." />
     <MESSAGE value="Now QA ready I guess?" />
@@ -764,125 +780,10 @@
     <MESSAGE value="Logging CalendarController." />
     <MESSAGE value="WIP many changes to API." />
     <MESSAGE value="Added possibility to delete Bons." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added possibility to delete Bons." />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="425" y="235" width="1092" height="739" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621444385995">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state x="425" y="235" width="1092" height="739" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1160@0.0.1920.1160" timestamp="1616157447509" />
-    <state x="425" y="235" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444385995" />
-    <state x="2345" y="235" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1619187140625" />
-    <state x="2685" y="286" key="#com.intellij.ide.util.MemberChooser" timestamp="1620995841839">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state x="765" y="286" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1620991032950" />
-    <state x="2685" y="286" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620995841839" />
-    <state x="307" y="476" width="937" height="595" key="#xdebugger.evaluate" timestamp="1620906210137">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state x="307" y="476" key="#xdebugger.evaluate/0.0.1920.1160@0.0.1920.1160" timestamp="1616159055201" />
-    <state x="307" y="476" key="#xdebugger.evaluate/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1620906210137" />
-    <state x="2227" y="476" width="937" height="595" key="#xdebugger.evaluate/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1618686969083" />
-    <state x="2507" y="148" key="CommitChangelistDialog2" timestamp="1620996875514">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state x="2507" y="148" key="CommitChangelistDialog2/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996875514" />
-    <state width="1921" height="411" key="GridCell.Tab.0.bottom" timestamp="1621444369102">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="1904" height="392" key="GridCell.Tab.0.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1616159123228" />
-    <state width="1921" height="411" key="GridCell.Tab.0.bottom/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444369102" />
-    <state width="1921" height="421" key="GridCell.Tab.0.bottom/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996883107" />
-    <state width="1921" height="411" key="GridCell.Tab.0.center" timestamp="1621444369102">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="1904" height="392" key="GridCell.Tab.0.center/0.0.1920.1160@0.0.1920.1160" timestamp="1616159123228" />
-    <state width="1921" height="411" key="GridCell.Tab.0.center/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444369102" />
-    <state width="1921" height="421" key="GridCell.Tab.0.center/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996883107" />
-    <state width="1921" height="411" key="GridCell.Tab.0.left" timestamp="1621444369102">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="1904" height="392" key="GridCell.Tab.0.left/0.0.1920.1160@0.0.1920.1160" timestamp="1616159123228" />
-    <state width="1921" height="411" key="GridCell.Tab.0.left/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444369102" />
-    <state width="1921" height="421" key="GridCell.Tab.0.left/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996883107" />
-    <state width="1921" height="411" key="GridCell.Tab.0.right" timestamp="1621444369102">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="1904" height="392" key="GridCell.Tab.0.right/0.0.1920.1160@0.0.1920.1160" timestamp="1616159123228" />
-    <state width="1921" height="411" key="GridCell.Tab.0.right/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444369102" />
-    <state width="1921" height="421" key="GridCell.Tab.0.right/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996883107" />
-    <state width="1921" height="411" key="GridCell.Tab.1.bottom" timestamp="1621444445562">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="1904" height="392" key="GridCell.Tab.1.bottom/0.0.1920.1160@0.0.1920.1160" timestamp="1616159102900" />
-    <state width="1921" height="411" key="GridCell.Tab.1.bottom/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444445562" />
-    <state width="1921" height="421" key="GridCell.Tab.1.bottom/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996882927" />
-    <state width="1921" height="411" key="GridCell.Tab.1.center" timestamp="1621444445562">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="1904" height="392" key="GridCell.Tab.1.center/0.0.1920.1160@0.0.1920.1160" timestamp="1616159102900" />
-    <state width="1921" height="411" key="GridCell.Tab.1.center/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444445562" />
-    <state width="1921" height="421" key="GridCell.Tab.1.center/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996882927" />
-    <state width="1921" height="411" key="GridCell.Tab.1.left" timestamp="1621444445562">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="1904" height="392" key="GridCell.Tab.1.left/0.0.1920.1160@0.0.1920.1160" timestamp="1616159102900" />
-    <state width="1921" height="411" key="GridCell.Tab.1.left/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444445562" />
-    <state width="1921" height="421" key="GridCell.Tab.1.left/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996882927" />
-    <state width="1921" height="411" key="GridCell.Tab.1.right" timestamp="1621444445562">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state width="1904" height="392" key="GridCell.Tab.1.right/0.0.1920.1160@0.0.1920.1160" timestamp="1616159102900" />
-    <state width="1921" height="411" key="GridCell.Tab.1.right/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444445562" />
-    <state width="1921" height="421" key="GridCell.Tab.1.right/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996882927" />
-    <state x="2381" y="224" key="SettingsEditor" timestamp="1618686765096">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state x="2381" y="224" key="SettingsEditor/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1618686765096" />
-    <state x="1256" y="273" width="662" height="525" key="StructurePopup" timestamp="1621444249288">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state x="857" y="273" width="662" height="525" key="StructurePopup/0.0.1920.1160@0.0.1920.1160" timestamp="1616158056024" />
-    <state x="1256" y="273" width="662" height="525" key="StructurePopup/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444249288" />
-    <state x="1920" y="273" width="662" height="525" key="StructurePopup/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996101908" />
-    <state x="2472" y="299" key="Vcs.Push.Dialog.v2" timestamp="1620996877634">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state x="2472" y="299" key="Vcs.Push.Dialog.v2/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996877634" />
-    <state width="968" height="588" key="XDebugger.FullValuePopup" timestamp="1618686419685">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state width="968" height="588" key="XDebugger.FullValuePopup/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1618686419685" />
-    <state x="769" y="497" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1615923528001">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state x="769" y="497" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1615923528001" />
-    <state x="2287" y="211" width="1214" height="802" key="find.popup" timestamp="1620996156110">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state x="367" y="211" width="1214" height="802" key="find.popup/0.0.1920.1160@0.0.1920.1160" timestamp="1616158903024" />
-    <state x="409" y="325" width="1214" height="802" key="find.popup/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1620906051833" />
-    <state x="2287" y="211" width="1214" height="802" key="find.popup/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1620996156110" />
-    <state x="2262" y="240" key="new project wizard" timestamp="1619117849151">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state x="2262" y="240" key="new project wizard/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1619117849151" />
-    <state x="2656" y="338" key="refactoring.ChangeSignatureDialog" timestamp="1618684861765">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state x="2656" y="338" key="refactoring.ChangeSignatureDialog/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1618684861765" />
-    <state x="2536" y="270" width="672" height="678" key="run.anything.popup" timestamp="1618684940730">
-      <screen x="1920" y="0" width="1920" height="1160" />
-    </state>
-    <state x="616" y="270" width="672" height="678" key="run.anything.popup/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1616098770606" />
-    <state x="2536" y="270" width="672" height="678" key="run.anything.popup/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1618684940730" />
-    <state x="623" y="255" width="768" height="679" key="search.everywhere.popup" timestamp="1621444243074">
-      <screen x="0" y="0" width="1920" height="1160" />
-    </state>
-    <state x="623" y="255" width="768" height="679" key="search.everywhere.popup/0.0.1920.1160@0.0.1920.1160" timestamp="1616158781837" />
-    <state x="623" y="255" width="768" height="679" key="search.everywhere.popup/1920.0.1920.1160/0.0.1920.1160@0.0.1920.1160" timestamp="1621444243074" />
-    <state x="2543" y="255" width="768" height="679" key="search.everywhere.popup/1920.0.1920.1160/0.0.1920.1160@1920.0.1920.1160" timestamp="1619186272294" />
+    <MESSAGE value="Deleted superfluous network socket runner." />
+    <MESSAGE value="Changed description on how to renew certificate." />
+    <MESSAGE value="Logfeile appended to every logger." />
+    <option name="LAST_COMMIT_MESSAGE" value="Logfeile appended to every logger." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -894,7 +795,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularExecutionStrategy.java</url>
-          <line>29</line>
+          <line>30</line>
           <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -952,11 +853,46 @@
           <line>53</line>
           <option name="timeStamp" value="236" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java</url>
+          <line>294</line>
+          <option name="timeStamp" value="239" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="240" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java</url>
+          <line>62</line>
+          <option name="timeStamp" value="241" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
+          <line>77</line>
+          <option name="timeStamp" value="242" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/Application.java</url>
+          <line>72</line>
+          <option name="timeStamp" value="249" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/Application.java</url>
+          <line>69</line>
+          <option name="timeStamp" value="250" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/Application.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="252" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Application.ic" NAME="Application Coverage Results" MODIFIED="1618686194517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Main__gui.ic" NAME="Main -gui Coverage Results" MODIFIED="1592600045848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Application.ic" NAME="Application Coverage Results" MODIFIED="1618686194517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
