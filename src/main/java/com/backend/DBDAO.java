@@ -321,7 +321,6 @@ public class DBDAO {
 
             documentList = new ArrayList<>();
             while (rs.next()) {
-                // TODO auch pdfs eigene klasse schreiben
                 Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")),
                         rs.getInt("id"), rs.getString("user"));
                 image.setTagSet(getTagsForDocument(image));
