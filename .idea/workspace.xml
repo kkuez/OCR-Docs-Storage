@@ -22,7 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Added endpoint for log.">
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fixed multiple logging issue.">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/MemoController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/data/Memo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -391,13 +391,6 @@
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
     </task>
-    <task id="LOCAL-00041" summary="Comparison of tasktime with realtime implemented.">
-      <created>1572177903361</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1572177903361</updated>
-    </task>
     <task id="LOCAL-00042" summary="OneTimeTasks now sending when time has come.">
       <created>1572180137525</created>
       <option name="number" value="00042" />
@@ -734,7 +727,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626009055761</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="Fixed multiple logging issue.">
+      <created>1627753089757</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1627753089757</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -774,7 +774,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Now QA ready I guess?" />
     <MESSAGE value="Removed some superfluous methods." />
     <MESSAGE value="WIP" />
     <MESSAGE value="PDF added to bon menu." />
@@ -799,7 +798,8 @@
     <MESSAGE value="Logfeile appended to every logger." />
     <MESSAGE value="Added description about certs." />
     <MESSAGE value="Added endpoint for log." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added endpoint for log." />
+    <MESSAGE value="Fixed multiple logging issue." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed multiple logging issue." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
