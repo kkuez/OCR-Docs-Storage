@@ -28,11 +28,11 @@ public class LogController extends Controller {
         final List<File> logFiles = new ArrayList();
         logFiles.addAll(Arrays.asList(logFolder.listFiles()));
         logFiles.sort((o1, o2) -> {
-            File log1 = o1;
-            File log2 = o2;
-            if(log1.lastModified() > log2.lastModified()) {
+            long log1LastMod = o1.lastModified();
+            long log2LastMod = o2.lastModified();
+            if(log1LastMod > log2LastMod) {
                 return 1;
-            } else if (log1.lastModified() < log2.lastModified()) {
+            } else if (log1LastMod < log2LastMod) {
                 return -1;
             }
             return 0;

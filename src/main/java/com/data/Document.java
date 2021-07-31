@@ -1,4 +1,4 @@
-package com.objectTemplates;
+package com.data;
 
 import com.backend.OperatingSys;
 import com.utils.IOUtil;

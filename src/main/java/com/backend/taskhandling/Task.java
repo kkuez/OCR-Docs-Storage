@@ -4,7 +4,7 @@ import com.backend.taskhandling.strategies.ExecutionStrategy;
 import com.backend.taskhandling.strategies.OneTimeExecutionStrategy;
 import com.backend.taskhandling.strategies.StrategyType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.objectTemplates.User;
+import com.data.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

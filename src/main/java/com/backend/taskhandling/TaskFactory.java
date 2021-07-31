@@ -2,7 +2,7 @@ package com.backend.taskhandling;
 
 import com.backend.BackendFacade;
 import com.backend.taskhandling.strategies.*;
-import com.objectTemplates.User;
+import com.data.User;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 

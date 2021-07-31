@@ -3,7 +3,6 @@ package com;
 import com.backend.DBDAO;
 import com.backend.http.controller.Controller;
 import org.apache.catalina.connector.RequestFacade;
-import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.boot.CommandLineRunner;
@@ -65,7 +64,6 @@ public class Application {
                 if(logger == null) {
                     logger = StartUp.createLogger(Controller.class);
                     PropertyConfigurator.configure(getClass().getResourceAsStream("/log4j.properties"));
-                    logger.addAppender(new ConsoleAppender());
                 }
                 final RequestFacade requestFacade = (RequestFacade) request;
                 final DBDAO dbdao = (DBDAO)applicationContext.getBean("DBDAO");

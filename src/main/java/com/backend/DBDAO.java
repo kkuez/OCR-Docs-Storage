@@ -3,10 +3,7 @@ package com.backend;
 import com.StartUp;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
-import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
-import com.objectTemplates.Image;
-import com.objectTemplates.User;
+import com.data.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,15 +173,19 @@ public class DBDAO {
         executeSQL("insert into ShoppingList(item) Values ('" + item + "')");
     }
 
-    List<String> getMemos(long userId) {
-        List<String> memoList = new ArrayList<>();
+    List<Memo> getMemos(User user) {
+        List<Memo> memoList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("SELECT * FROM Memos where user=" + userId)) {
-            while (rs.next()) {
-                memoList.add(rs.getString("item"));
+             ResultSet rs = statement.executeQuery("select * from Memos m where "+
+                     "(select memoid from Users_Memos um where username ='" + user.getName() + "')")){
+
+
+            while(rs.next()) {
+                memoList.add(new Memo(List.of(user), rs.getString("memoText"),
+                        LocalDateTime.parse(rs.getString("dateTime"))));
             }
         } catch (SQLException e) {
-            logger.error("SELECT * FROM Memos where user=" + userId + ")", e);
+            logger.error("Could not get Memos for " + user.getName(), e);
         }
         return memoList;
     }
@@ -422,10 +423,6 @@ public class DBDAO {
         executeSQL("delete from StandardList where item='" + itemName + "'");
     }
 
-    public void insertMemo(String itemName, long userId) {
-        executeSQL("insert into Memos(item, user) Values ('" + itemName + "', " + userId + ")");
-    }
-
     public void deleteMemo(String memoName) {
         executeSQL("delete from Memos where item='" + memoName + "'");
     }
@@ -597,6 +594,28 @@ public class DBDAO {
             } catch (IOException e) {
                 logger.error("Cant delete bon " + filePath, e);
             }
+        }
+    }
+
+    public void insertMemo(Memo memo) {
+        executeSQL("insert into Memos(memoText, dateTime) Values ('" + memo.getMemoText() + "', '" +
+        memo.getFromTime().toString() + "')");
+
+        String sqlString = "select id from Memos where memoText='" + memo.getMemoText() + "'";
+        int memoId = 99999;
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery(sqlString)) {
+            while (rs.next()) {
+                memoId = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            logger.error("Could not enter memo + " + memo.getMemoText(), e);
+            return;
+        }
+
+        for(User user: memo.getUsers()) {
+            executeSQL("insert into Users_Memos(user, memoid) VALUES('" + user.getName() + "'," +
+                    memoId + ")");
         }
     }
 }

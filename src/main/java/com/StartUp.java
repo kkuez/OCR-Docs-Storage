@@ -22,6 +22,8 @@ import java.time.LocalDate;
 public class StartUp {
 
     private static Logger logger;
+    private static FileAppender logFileAppender;
+    private static ConsoleAppender consoleAppender;
     private BackendFacade facade;
     private TasksRunnable tasksRunnable;
     private TaskFactory taskFactory;
@@ -76,10 +78,15 @@ public class StartUp {
     public static Logger createLogger(Class clazz) {
         Logger logger = Logger.getLogger(clazz);
         PatternLayout layout = new PatternLayout("%d{HH:mm:ss.SSS} [%t] \t%m%n");
-        logger.addAppender(new ConsoleAppender(layout));
-        FileAppender logFileAppender = null;
+
+/*        if(consoleAppender == null) {
+            consoleAppender = new ConsoleAppender(layout);
+        }
+        logger.addAppender(consoleAppender);*/
         try {
-            logFileAppender = new FileAppender(layout, getLogFile(), true);
+            if(logFileAppender == null) {
+                logFileAppender = new FileAppender(layout, getLogFile(), true);
+            }
         } catch (IOException e) {
             logger.error("Failed initializing logger", e);
             System.exit(2);

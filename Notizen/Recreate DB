@@ -1,5 +1,5 @@
 Drop Table AllowedUsers;
-create Table AllowedUsers(name TEXT, password TEXT);
+create Table AllowedUsers(name TEXT PRIMARY KEY, password TEXT);
 Drop Table Bons;
 create table Bons (belongsToDocument INTEGER, sum REAL);
 Drop Table CalendarTasks;
@@ -10,3 +10,7 @@ Drop Table ShoppingList;
 create Table ShoppingList(item TEXT);
 Drop Table StandardList;
 create Table StandardList(item TEXT);
+Drop Table Memos;
+create Table Memos(id INTEGER PRIMARY KEY, memoText TEXT, dateTime TEXT);
+Drop Table Users_Memos;
+create Table Users_Memos(username TEXT, memoid INTEGER, FOREIGN KEY (username) REFERENCES AllowedUsers(name), FOREIGN KEY (memoid) REFERENCES Memos(id), PRIMARY KEY(username, memoid));

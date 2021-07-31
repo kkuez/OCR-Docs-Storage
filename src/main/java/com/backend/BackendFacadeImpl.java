@@ -2,9 +2,10 @@ package com.backend;
 
 import com.TasksRunnable;
 import com.backend.taskhandling.Task;
-import com.objectTemplates.Bon;
-import com.objectTemplates.Document;
-import com.objectTemplates.User;
+import com.data.Bon;
+import com.data.Document;
+import com.data.Memo;
+import com.data.User;
 import com.utils.PDFUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,6 @@ public class BackendFacadeImpl implements BackendFacade {
     private Archiver archiver;
     @Autowired
     private ObjectHub objectHub;
-
-    @Override
-    public void updateQRItem(Integer itemNumber, String itemName) {
-        dbdao.updateQRItem(itemNumber, itemName);
-    }
 
     @Override
     public boolean hasXORKey(Integer userID) {
@@ -105,12 +101,6 @@ public class BackendFacadeImpl implements BackendFacade {
     }
 
     @Override
-    public File getLogs() {
-        // TODO whole new feature, first do the other stuff plox
-        return null;
-    }
-
-    @Override
     public void insertTask(Task task) {
         dbdao.insertTaskToDB(task);
     }
@@ -143,36 +133,6 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public void deleteFromShoppingList(String itemName) {
         dbdao.deleteFromShoppingList(itemName);
-    }
-
-    @Override
-    public void insertToStandartList(String item) {
-        dbdao.insertToStandartList(item);
-    }
-
-    @Override
-    public List<String> getStandartList() {
-        return dbdao.getStandardListFromDB();
-    }
-
-    @Override
-    public void deleteFromStandartList(String itemName) {
-        dbdao.deleteFromStandartList(itemName);
-    }
-
-    @Override
-    public void insertMemo(String itemName, long userId) {
-        dbdao.insertMemo(itemName, userId);
-    }
-
-    @Override
-    public List<String> getMemos(long userId) {
-        return dbdao.getMemos(userId);
-    }
-
-    @Override
-    public void deleteMemo(String memoName) {
-        dbdao.deleteMemo(memoName);
     }
 
     @Override
@@ -250,5 +210,15 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public void delete(String userid, float sum) {
         dbdao.deleteBon(userid, sum);
+    }
+
+    @Override
+    public void insertMemo(Memo memo) {
+        dbdao.insertMemo(memo);
+    }
+
+    @Override
+    public List<Memo> getMemos(User userid) {
+        return dbdao.getMemos(userid);
     }
 }

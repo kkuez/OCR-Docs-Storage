@@ -22,11 +22,27 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Logfeile appended to every logger.">
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Added endpoint for log.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/MemoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/data/Memo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notizen/Zertifikate machen" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Zertifikate machen" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notizen/Recreate DB" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Recreate DB" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/StartUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/StartUp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/Archiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/Archiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/LogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/LogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/Task.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/TaskFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/TaskFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/Bon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/data/Bon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/Document.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/data/Document.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/data/Image.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/data/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/PDFUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/PDFUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +119,7 @@
     <property name="project.structure.proportion" value="0.1484375" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="project.propDebugger" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -374,20 +390,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00039" summary="Refactoring.">
-      <created>1571834979560</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1571834979560</updated>
-    </task>
-    <task id="LOCAL-00040" summary="OneTimeTask working.">
-      <created>1571994621320</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1571994621320</updated>
     </task>
     <task id="LOCAL-00041" summary="Comparison of tasktime with realtime implemented.">
       <created>1572177903361</created>
@@ -718,7 +720,21 @@
       <option name="project" value="LOCAL" />
       <updated>1625385785680</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="Added description about certs.">
+      <created>1625586492799</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1625586492800</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Added endpoint for log.">
+      <created>1626009055759</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1626009055761</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -758,8 +774,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Written FacadeInterface." />
-    <MESSAGE value="WIP." />
     <MESSAGE value="Now QA ready I guess?" />
     <MESSAGE value="Removed some superfluous methods." />
     <MESSAGE value="WIP" />
@@ -783,7 +797,9 @@
     <MESSAGE value="Deleted superfluous network socket runner." />
     <MESSAGE value="Changed description on how to renew certificate." />
     <MESSAGE value="Logfeile appended to every logger." />
-    <option name="LAST_COMMIT_MESSAGE" value="Logfeile appended to every logger." />
+    <MESSAGE value="Added description about certs." />
+    <MESSAGE value="Added endpoint for log." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added endpoint for log." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -840,7 +856,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java</url>
-          <line>193</line>
+          <line>153</line>
           <option name="timeStamp" value="216" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -855,7 +871,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java</url>
-          <line>294</line>
+          <line>295</line>
           <option name="timeStamp" value="239" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -872,21 +888,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
           <line>77</line>
           <option name="timeStamp" value="242" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Application.java</url>
-          <line>72</line>
-          <option name="timeStamp" value="249" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Application.java</url>
-          <line>69</line>
-          <option name="timeStamp" value="250" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/Application.java</url>
-          <line>64</line>
-          <option name="timeStamp" value="252" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,7 +1,7 @@
 package com.backend;
 
 import com.StartUp;
-import com.objectTemplates.Document;
+import com.data.Document;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
