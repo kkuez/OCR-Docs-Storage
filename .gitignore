@@ -14,4 +14,4 @@ target/setup.properties
 out/*
 /.idea/
 application.properties
-/src/main/resources/keystore/keystore.p12
+/src/main/resources/keystore/nussbot.p12

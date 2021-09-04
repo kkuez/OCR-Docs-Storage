@@ -23,26 +23,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fixed multiple logging issue.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/MemoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/data/Memo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notizen/Recreate DB" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Recreate DB" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/StartUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/StartUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/Archiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/Archiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/LogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/LogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/Task.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/TaskFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/TaskFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/Bon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/data/Bon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/Document.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/data/Document.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/data/Image.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/objectTemplates/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/data/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/PDFUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/PDFUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notizen/Zertifikate machen" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Zertifikate machen" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +137,7 @@
       <command value="mvn clean package spring-boot:repackage" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.Application">
+  <component name="RunManager" selected="Maven.Build jar with Spring plugin">
     <configuration name="Application newUser" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.Application" />
       <module name="OCR" />
@@ -390,13 +374,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00042" summary="OneTimeTasks now sending when time has come.">
-      <created>1572180137525</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1572180137525</updated>
     </task>
     <task id="LOCAL-00043" summary="BirdVidTask removed.">
       <created>1589138461261</created>
@@ -734,7 +711,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627753089757</updated>
     </task>
-    <option name="localTasksCounter" value="91" />
+    <task id="LOCAL-00091" summary="Fixed multiple logging issue.">
+      <created>1627753120831</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1627753120831</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -863,11 +847,6 @@
           <url>jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.17/log4j-1.2.17-sources.jar!/org/apache/log4j/PropertyConfigurator.java</url>
           <line>368</line>
           <option name="timeStamp" value="232" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/ShoppingListController.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="236" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java</url>

@@ -1,29 +1,12 @@
 https://ordina-jworks.github.io/security/2019/08/14/Using-Lets-Encrypt-Certificates-In-Java.html
 
 0) certbot renew
+    -Certifikate anzeigen mit certbot certificates
+1) taren und verschieben
 
-1) Domain und pw ändern
-openssl pkcs12 -export \
-	 -in /etc/letsencrypt/live/mydomain.be/cert.pem \
-	 -inkey /etc/letsencrypt/live/mydomain.be/privkey.pem \
-	 -out /tmp/mydomain.be.p12 \
-	 -name mydomain.be \
-	 -CAfile /etc/letsencrypt/live/mydomain.be/fullchain.pem \
-	 -caname "Let's Encrypt Authority X3" \
-	 -password pass:changeit
+2)https://www.sslplus.de/wiki/Zertifikatsdateien_in_PKCS12_Format_umwandeln
 
-2) Domain und pw ändern
-keytool -importkeystore \
-   	-deststorepass changeit \
-   	-destkeypass changeit \
-   	-deststoretype pkcs12 \
-   	-srckeystore /tmp/mydomain.be.p12 \
-   	-srcstoretype PKCS12 \
-   	-srcstorepass changeit \
-   	-destkeystore /tmp/mydomain.be.keystore \
-   	-alias mydomain.be
-
-3) .p12 umbenennen in keystore.p12 und in resources/keystore/ packen, dann neues Jahr mit spring plugin bauen
+3) .p12 in keystore ablegen
 
 Um lokal zu installieren:
 keytool -v -certreq -keystore NAME.p12 -alias NAME
