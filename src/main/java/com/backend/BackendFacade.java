@@ -80,9 +80,9 @@ public interface BackendFacade {
 
     File copyToArchive(File newPic, boolean isBon);
 
-    List<Float> getLastBons(String userid, Integer lastMany);
+    List<Bon> getLastBons(String userid, Integer lastMany);
 
-    void delete(String userid, float sum);
+    void delete(String userid, UUID sum);
 
     void insertMemo(Memo memo);
 

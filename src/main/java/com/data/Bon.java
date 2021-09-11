@@ -1,18 +1,21 @@
 package com.data;
 
 import com.backend.OperatingSys;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.utils.IOUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 public class Bon extends Document {
 
     float sum;
+    UUID uud;
 
-    public Bon(int id, User user, File newPic, float sum) {
+    public Bon(int id, User user, File newPic, float sum, UUID uuid) {
         this.setContent("Bon");
         this.setOriginFile(newPic);
         this.setOriginalFileName(newPic.getName());
@@ -21,12 +24,15 @@ public class Bon extends Document {
         this.setUser(user.getName());
         this.setDate(LocalDate.now().toString());
         this.sum = sum;
+    this.uud = uuid;
     }
 
-    public Bon(Document document, float sum) {
-
+    public Bon(Document document, float sum, UUID uuid) {
+        this.sum = sum;
+        this.uud = uuid;
     }
 
+    @JsonIgnore
     @Override
     public String getInsertDBString(int docCount) {
         if (getDate() == null) {
@@ -52,10 +58,12 @@ public class Bon extends Document {
         documentStringBuilder.append(");\n");
 
         StringBuilder bonStatement = new StringBuilder(documentStringBuilder.toString());
-        bonStatement.append("insert into Bons (belongsToDocument, sum) Values (");
+        bonStatement.append("insert into Bons (belongsToDocument, sum, uid) Values (");
         bonStatement.append(getId());
         bonStatement.append(", ");
         bonStatement.append(sum);
+        bonStatement.append(", ");
+        bonStatement.append(uud.toString());
         bonStatement.append(")");
         return bonStatement.toString();
     }
@@ -70,4 +78,7 @@ public class Bon extends Document {
         this.sum = sum;
     }
 
+    public UUID getUud() {
+        return uud;
+    }
 }

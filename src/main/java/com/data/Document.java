@@ -1,6 +1,7 @@
 package com.data;
 
 import com.backend.OperatingSys;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.utils.IOUtil;
 import org.apache.commons.io.FileUtils;
 
@@ -10,20 +11,28 @@ import java.util.Set;
 
 public abstract class Document {
 
+    @JsonIgnore
     private String date;
 
+    @JsonIgnore
     private String content;
 
+    @JsonIgnore
     private File originFile;
 
+    @JsonIgnore
     private String originalFileName;
 
+    @JsonIgnore
     private Set<String> tags;
 
+    @JsonIgnore
     private int id;
 
+    @JsonIgnore
     private String user;
 
+    @JsonIgnore
     private String inZipFile;
 
     public Document() {

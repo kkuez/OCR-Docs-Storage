@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 public class BonController extends Controller{
@@ -39,12 +40,11 @@ public class BonController extends Controller{
     }
 
     @GetMapping(BON + "/getLastBons")
-    public ResponseEntity<List<Float>> getLastBons(HttpServletRequest request)  {
+    public ResponseEntity<List<Bon>> getLastBons(HttpServletRequest request)  {
         final String userid = (String)request.getHeader("userid");
         final Integer lastMany = Integer.parseInt(request.getHeader("lastMany"));
         logger.info(getLogPrefrix() + BON + "/get from " + userid);
-        List<Float> lastSums = backendFacade.getLastBons(userid, lastMany);
-        Float sumMe = backendFacade.getSum(userid);
+        List<Bon> lastSums = backendFacade.getLastBons(userid, lastMany);
         return ResponseEntity.ok(lastSums);
     }
 
@@ -63,7 +63,7 @@ public class BonController extends Controller{
 
             File archivedPic = backendFacade.copyToArchive(newPic, true);
             Bon bon = new Bon(backendFacade.getIdForNextDocument(), backendFacade.getAllowedUsers().get(userid),
-                    archivedPic, sum);
+                    archivedPic, sum, UUID.randomUUID());
             backendFacade.insertBon(bon);
         } catch (Exception e ) {
             logger.error("Could not parse incoming Bon", e);
@@ -80,7 +80,7 @@ public class BonController extends Controller{
 
             File archivedPic = new File((String) map.get("pathToPic"));
             Bon bon = new Bon(backendFacade.getIdForNextDocument(), backendFacade.getAllowedUsers().get(userid),
-                    archivedPic, sum);
+                    archivedPic, sum, UUID.randomUUID());
             backendFacade.insertBon(bon);
         } catch (Exception e ) {
             logger.error("Could not parse incoming Bon", e);
@@ -93,8 +93,8 @@ public class BonController extends Controller{
     public ResponseEntity<String> delete(@RequestBody Map map) {
         try {
             final String userid = (String)map.get("userid");
-            float sum = Float.parseFloat(String.valueOf(map.get("sum")));
-            backendFacade.delete(userid, sum);
+            final UUID uuid = UUID.fromString((String) map.get("uuid"));
+            backendFacade.delete(userid, uuid);
         } catch (Exception e ) {
             logger.error("Could not parse incoming Bon", e);
             return ResponseEntity.ok("Could not parse incoming Bon");

@@ -39,6 +39,7 @@ public class DBDAO {
         this.taskFactory = taskFactory;
         taskFactory.setAllowedUsersMap(getAllowedUsersMap(facade));
         this.archiver = archiver;
+        setBonUUIDs();
     }
 
     public static boolean insertNewUser(String name, String password) {
@@ -373,11 +374,12 @@ public class DBDAO {
                 String userName = rs.getString("user");
                 float sum = rs.getFloat("sum");
                 int id = rs.getInt("id");
+                String uuid = rs.getString("uid");
                 String date = rs.getString("date");
 
                 Document document = new Image(content, new File(originalFilePath), id, userName);
                 document.setDate(date);
-                Bon bon = new Bon(document, sum);
+                Bon bon = new Bon(document, sum, uuid == null ? null : UUID.fromString(uuid));
                 resultBons.add(bon);
             }
         } catch (SQLException e) {
@@ -400,9 +402,10 @@ public class DBDAO {
                 String userName = rs.getString("user");
                 float sum = rs.getFloat("sum");
                 int id = rs.getInt("id");
+                String uuid = rs.getString("uid");
 
                 Document document = new Image(content, new File(originalFilePath), id, userName);
-                Bon bon = new Bon(document, sum);
+                Bon bon = new Bon(document, sum, uuid == null ? null : UUID.fromString(uuid));
                 resultBons.add(bon);
             }
         } catch (SQLException e) {
@@ -550,28 +553,30 @@ public class DBDAO {
         return password;
     }
 
-    public List<Float> getLastSums(String userid, Integer lastMany) {
-        List<Float> sums = new ArrayList<>(lastMany);
-        String sqlString = "select b.sum from Bons b, Documents d where " +
+    public List<Bon> getLastBons(String userid, Integer lastMany) {
+        List<Bon> bons = new ArrayList<>(lastMany);
+        String sqlString = "select * from Bons b, Documents d where " +
                 "b.belongsToDocument = d.id" + (userid.equals("") ? "" : " AND d.user = '" + userid + "' " +
                 "order by d.id desc");
         try (Statement statement = getConnection().createStatement();
              ResultSet rs = statement.executeQuery(sqlString)) {
             int i = 0;
             while (rs.next() && i < lastMany) {
-                sums.add(rs.getFloat("sum"));
+                final UUID uid = UUID.fromString(rs.getString("uid"));
+                Bon bon = new Bon(null, rs.getFloat("sum"), uid);
+                bons.add(bon);
                 i++;
             }
         } catch (SQLException e) {
             logger.error("Cannot get sums for user " + userid, e);
         }
-        return sums;
+        return bons;
     }
 
-    public void deleteBon(String userid, float sum) {
+    public void deleteBon(String userid, UUID uid) {
         //get Document id
         String sqlString = "select d.id, d.originalFile from Bons b, Documents d where b.belongsToDocument = d.id " +
-                "AND sum=" + sum;
+                "AND uid='" + uid + "'";
         int id = 99999;
         String filePath = "";
         try (Statement statement = getConnection().createStatement();
@@ -616,6 +621,15 @@ public class DBDAO {
         for(User user: memo.getUsers()) {
             executeSQL("insert into Users_Memos(user, memoid) VALUES('" + user.getName() + "'," +
                     memoId + ")");
+        }
+    }
+
+    private void setBonUUIDs() {
+        for (int i = 1; i < 300; i++) {
+            try {
+                executeSQL("update Bons set uid='" + UUID.randomUUID() + "' where belongsToDocument=" + i);
+            } catch (Exception e) {
+            }
         }
     }
 }

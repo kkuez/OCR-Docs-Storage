@@ -203,13 +203,13 @@ public class BackendFacadeImpl implements BackendFacade {
     }
 
     @Override
-    public List<Float> getLastBons(String userid, Integer lastMany) {
-        return dbdao.getLastSums(userid, lastMany);
+    public List<Bon> getLastBons(String userid, Integer lastMany) {
+        return dbdao.getLastBons(userid, lastMany);
     }
 
     @Override
-    public void delete(String userid, float sum) {
-        dbdao.deleteBon(userid, sum);
+    public void delete(String userid, UUID uuid) {
+        dbdao.deleteBon(userid, uuid);
     }
 
     @Override
