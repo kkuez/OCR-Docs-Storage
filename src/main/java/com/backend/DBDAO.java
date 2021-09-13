@@ -28,17 +28,15 @@ public class DBDAO {
     private Connection connection = null;
 
     private static File dbFile = null;
-    private Archiver archiver;
     private TaskFactory taskFactory;
 
     private Document lastProcessedDoc = null;
 
     @Autowired
-    public DBDAO(TaskFactory taskFactory, ObjectHub objectHub, Archiver archiver, BackendFacade facade) {
+    public DBDAO(TaskFactory taskFactory, ObjectHub objectHub, BackendFacade facade) {
         dbFile = new File(objectHub.getProperties().getProperty("dbPath"));
         this.taskFactory = taskFactory;
         taskFactory.setAllowedUsersMap(getAllowedUsersMap(facade));
-        this.archiver = archiver;
         setBonUUIDs();
     }
 
@@ -70,75 +68,6 @@ public class DBDAO {
             return false;
         }
         return true;
-    }
-
-    public Float getSum() {
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select SUM(sum) AS Summe from Bons")) {
-            while (rs.next()) {
-                return rs.getFloat("Summe");
-            }
-        } catch (SQLException e) {
-            logger.error("Cannot calc sum", e);
-        }
-        return null;
-
-    }
-
-
-    List<Document> getDocumentsForSearchTerm(String searchTerm) {
-        Map<File, Document> documentMap = new HashMap<>();
-
-        showDocumentsFromSQLExpression("select * from Documents where content like '%" + searchTerm + "%'")
-                .forEach(document -> {
-                    document.setTagSet(getTagsForDocument(document));
-                    documentMap.put(document.getOriginFile(), document);
-                });
-
-        List<Document> taggedDocuments = getDocumentsByTag(searchTerm);
-        taggedDocuments.forEach(document -> documentMap.putIfAbsent(document.getOriginFile(), document));
-        List<Document> documentList = new ArrayList<>();
-        documentList.addAll(documentMap.values());
-        archiver.setDocumentList(documentList);
-        return documentList;
-    }
-
-    Document getDocument(int id) {
-        return showDocumentsFromSQLExpression("select * from Documents where id =" + id + "").get(0);
-    }
-
-    Set<String> getFilePathOfDocsContainedInDB() {
-        Set<String> filePathSet = new HashSet<>();
-        List<Document> documentList = showDocumentsFromSQLExpression("select * from Documents");
-        documentList.forEach(document -> filePathSet.add(document.getOriginFile().getAbsolutePath()));
-        return filePathSet;
-    }
-
-    void updateDocument(Document document) {
-        String divider = ", ";
-        StringBuilder updateStatement = new StringBuilder("update Documents set ");
-        updateStatement.append("content = '");
-        updateStatement.append(document.getContent());
-        updateStatement.append("'");
-        updateStatement.append(divider);
-        updateStatement.append("originalFile = '");
-        updateStatement.append(document.getOriginFile().getAbsolutePath());
-        updateStatement.append("'");
-        updateStatement.append(divider);
-        updateStatement.append("date = '");
-        updateStatement.append(document.getDate());
-        updateStatement.append("'");
-        updateStatement.append(divider);
-        updateStatement.append("inZipFile = '");
-        updateStatement.append(document.getInZipFile());
-        updateStatement.append("'");
-        updateStatement.append(divider);
-        updateStatement.append("sizeOfOriginalFile = ");
-        updateStatement.append(document.getOriginFile().length());
-        updateStatement.append(" where id = ");
-        updateStatement.append(document.getId());
-        updateStatement.append(";");
-        executeSQL(updateStatement.toString());
     }
 
     Map<String, User> getAllowedUsersMap(BackendFacade facade) {
@@ -191,27 +120,6 @@ public class DBDAO {
         return memoList;
     }
 
-    List<String> getStandardListFromDB() {
-        List<String> standardList = new ArrayList<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("SELECT * FROM StandardList");) {
-
-            while (rs.next()) {
-                standardList.add(rs.getString("item"));
-            }
-        } catch (SQLException e) {
-            logger.error("SELECT * FROM StandardList", e);
-        }
-        return standardList;
-    }
-
-    void insertDocument(Document document) {
-        if (!(document instanceof Bon)) {
-            lastProcessedDoc = document;
-        }
-        executeSQL(document.getInsertDBString(document.getId()));
-    }
-
     void deleteTask(Task task) {
         int year = task.getExecutionStrategy().getTime().getYear();
         int month = task.getExecutionStrategy().getTime().getMonth().getValue();
@@ -221,14 +129,8 @@ public class DBDAO {
 
         executeSQL("delete from CalendarTasks where name='" + task.getName() + "' AND year=" + year + " AND month="
                 + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
-    }
 
-    void deleteLastProcressedDocument() {
-        executeSQL("delete from Documents where id=" + lastProcessedDoc.getId() + "");
-        executeSQL("delete from Bons where belongsToDocument=" + lastProcessedDoc.getId() + "");
-        FileUtils.deleteQuietly(lastProcessedDoc.getOriginFile());
     }
-
     Set<String> getTagsForDocument(Document document) {
         Set<String> tagSet = new HashSet<>();
         try (Statement statement = getConnection().createStatement();
@@ -267,16 +169,6 @@ public class DBDAO {
             logger.error("Couldnt execute\n" + statementString, e);
         }
         return resultSum;
-    }
-
-    void updateQRItem(Integer itemNumber, String itemName) {
-        executeSQL("UPDATE QRItems Set itemMapped=\"" + itemName + "\" where itemNumber=" + itemNumber);
-    }
-
-    boolean isFilePresent(File newFile) {
-        int filesSizeOfNewFile = countDocuments("Documents", "where sizeOfOriginalFile=" + FileUtils.sizeOf(newFile));
-
-        return filesSizeOfNewFile > 0;
     }
 
     List<Task> getTasksFromDB(BackendFacade facade) {
@@ -379,7 +271,7 @@ public class DBDAO {
 
                 Document document = new Image(content, new File(originalFilePath), id, userName);
                 document.setDate(date);
-                Bon bon = new Bon(document, sum, uuid == null ? null : UUID.fromString(uuid));
+                Bon bon = new Bon(sum, uuid == null ? null : UUID.fromString(uuid), date);
                 resultBons.add(bon);
             }
         } catch (SQLException e) {
@@ -397,15 +289,11 @@ public class DBDAO {
                      "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%"
                              + monthAndYear.replace("-", ".") + "%'")) {
             while (rs.next()) {
-                String content = rs.getString("content");
-                String originalFilePath = rs.getString("originalFile");
-                String userName = rs.getString("user");
                 float sum = rs.getFloat("sum");
-                int id = rs.getInt("id");
                 String uuid = rs.getString("uid");
+                String date = rs.getString("date");
 
-                Document document = new Image(content, new File(originalFilePath), id, userName);
-                Bon bon = new Bon(document, sum, uuid == null ? null : UUID.fromString(uuid));
+                Bon bon = new Bon(sum, uuid == null ? null : UUID.fromString(uuid), date);
                 resultBons.add(bon);
             }
         } catch (SQLException e) {
@@ -416,28 +304,6 @@ public class DBDAO {
 
     public void deleteFromShoppingList(String item) {
         executeSQL("delete from ShoppingList where item='" + item + "'");
-    }
-
-    public void insertToStandartList(String item) {
-        executeSQL("insert into StandardList(item) Values ('" + item + "')");
-    }
-
-    public void deleteFromStandartList(String itemName) {
-        executeSQL("delete from StandardList where item='" + itemName + "'");
-    }
-
-    public void deleteMemo(String memoName) {
-        executeSQL("delete from Memos where item='" + memoName + "'");
-    }
-
-    public void insertTag(int documentId, String tag) {
-        executeSQL("insert into Tags (belongsToDocument, Tag) Values (" + documentId + ", '" + tag + "');");
-    }
-
-    public void insertUserToAllowedUsers(Integer id, String firstName, Long chatId) {
-        executeSQL(
-                "insert into AllowedUsers(id, name, chatId, hasXORKey) Values (" + id + ", '" + firstName
-                        + "', " + chatId + ", 0)");
     }
 
     public void deleteTask(UUID uuid) {
@@ -494,38 +360,6 @@ public class DBDAO {
         return null;
     }
 
-    public void setXORKey(String key) {
-        executeSQL("UPDATE Settings Set key='" + key + "',lastRenewalDate='" + LocalDate.now() + "'");
-    }
-
-    public LocalDate getLastKeyRenewalDate() {
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select lastRenewalDate from Settings")) {
-            while (rs.next()) {
-                return LocalDate.parse(rs.getString("lastRenewalDate"));
-            }
-        } catch (SQLException e) {
-            logger.error("Cannot get lastRenewalDate", e);
-        }
-        return null;
-    }
-
-    public void setUserHasXORKey(Integer userID, boolean has) {
-        executeSQL("UPDATE AllowedUsers Set hasXORKey=" + (has ? "1" : "0") + " where id=" + userID);
-    }
-
-    public boolean hasXORKey(Integer userID) {
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select hasXORKey from AllowedUsers where id=" + userID)) {
-            while (rs.next()) {
-                return rs.getInt("hasXORKey") == 1;
-            }
-        } catch (SQLException e) {
-            logger.error("Cannot get lastRenewalDate", e);
-        }
-        return false;
-    }
-
     public boolean checkCredentials(String userid, String passw) {
         final MessageDigest digest;
         String sha3Hex = "";
@@ -563,7 +397,8 @@ public class DBDAO {
             int i = 0;
             while (rs.next() && i < lastMany) {
                 final UUID uid = UUID.fromString(rs.getString("uid"));
-                Bon bon = new Bon(null, rs.getFloat("sum"), uid);
+                final String date = rs.getString("date");
+                Bon bon = new Bon(rs.getFloat("sum"), uid, date);
                 bons.add(bon);
                 i++;
             }

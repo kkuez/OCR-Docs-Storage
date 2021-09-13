@@ -11,7 +11,6 @@ import java.util.Set;
 
 public abstract class Document {
 
-    @JsonIgnore
     private String date;
 
     @JsonIgnore

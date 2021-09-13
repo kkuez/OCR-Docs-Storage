@@ -35,7 +35,7 @@ public class RegularYearlyExecutionStrategy extends RegularExecutionStrategy {
     public String getInsertDBString() {
         int year = 99;
 
-        String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0) + "";
+        String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getName() + "";
 
         return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType, eID) " +
                 "Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName()

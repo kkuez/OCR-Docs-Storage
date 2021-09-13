@@ -27,9 +27,10 @@ public class Bon extends Document {
     this.uud = uuid;
     }
 
-    public Bon(Document document, float sum, UUID uuid) {
+    public Bon(float sum, UUID uuid, String date) {
         this.sum = sum;
         this.uud = uuid;
+        this.setDate(date);
     }
 
     @JsonIgnore
