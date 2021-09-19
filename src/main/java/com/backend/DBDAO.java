@@ -3,6 +3,7 @@ package com.backend;
 import com.StartUp;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
+import com.backend.taskhandling.strategies.RegularExecutionStrategy;
 import com.data.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -318,7 +319,8 @@ public class DBDAO {
                      "user='ALL'");) {
             while (rs.next()) {
                 Task task = taskFactory.getTask(rs, backendFacade);
-                if (task.getExecutionStrategy().getTime().isBefore(now)) {
+                if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)
+                        && task.getExecutionStrategy().getTime().isBefore(now)) {
                     deleteTask(task.geteID());
                 } else {
                     taskList.add(task);
