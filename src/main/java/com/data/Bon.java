@@ -63,9 +63,9 @@ public class Bon extends Document {
         bonStatement.append(getId());
         bonStatement.append(", ");
         bonStatement.append(sum);
-        bonStatement.append(", ");
+        bonStatement.append(", '");
         bonStatement.append(uud.toString());
-        bonStatement.append(")");
+        bonStatement.append("')");
         return bonStatement.toString();
     }
 

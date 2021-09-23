@@ -22,11 +22,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fixed multiple logging issue.">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fixed deleteting tasks if instanceof Regular.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notizen/Zertifikate machen" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Zertifikate machen" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +99,6 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.1484375" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
@@ -137,7 +133,7 @@
       <command value="mvn clean package spring-boot:repackage" />
     </option>
   </component>
-  <component name="RunManager" selected="Maven.Build jar with Spring plugin">
+  <component name="RunManager" selected="Application.Application">
     <configuration name="Application newUser" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.Application" />
       <module name="OCR" />
@@ -374,34 +370,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00043" summary="BirdVidTask removed.">
-      <created>1589138461261</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1589138461261</updated>
-    </task>
-    <task id="LOCAL-00044" summary="Checking TaskStrategy now by enum.">
-      <created>1589134249803</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1589134249804</updated>
-    </task>
-    <task id="LOCAL-00045" summary="Impl getTime in RegularTaskStrategies.">
-      <created>1589135843085</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1589135843085</updated>
-    </task>
-    <task id="LOCAL-00046" summary="getType() now enums.">
-      <created>1589136961240</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1589136961240</updated>
     </task>
     <task id="LOCAL-00047" summary="Few SonarLint refactorings.">
       <created>1590229417786</created>
@@ -718,7 +686,35 @@
       <option name="project" value="LOCAL" />
       <updated>1627753120831</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="Updated certs.">
+      <created>1630786091843</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1630786091844</updated>
+    </task>
+    <task id="LOCAL-00093" summary="Fixed bug delete Bon by sum.">
+      <created>1631350763922</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1631350763922</updated>
+    </task>
+    <task id="LOCAL-00094" summary="Fixed wrong user String to regular tasks.&#10;&#10;Relates to the writing in the DB.">
+      <created>1631554250085</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1631554250086</updated>
+    </task>
+    <task id="LOCAL-00095" summary="Fixed deleteting tasks if instanceof Regular.">
+      <created>1632035651963</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1632035651964</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -758,10 +754,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Removed some superfluous methods." />
-    <MESSAGE value="WIP" />
-    <MESSAGE value="PDF added to bon menu." />
-    <MESSAGE value="Fixed only one page printed for PDF." />
     <MESSAGE value="First impl of Springweb etc. Controller first." />
     <MESSAGE value="CalendarController complete I guess." />
     <MESSAGE value="Sending Bons." />
@@ -783,7 +775,11 @@
     <MESSAGE value="Added description about certs." />
     <MESSAGE value="Added endpoint for log." />
     <MESSAGE value="Fixed multiple logging issue." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed multiple logging issue." />
+    <MESSAGE value="Updated certs." />
+    <MESSAGE value="Fixed bug delete Bon by sum." />
+    <MESSAGE value="Fixed wrong user String to regular tasks.&#10;&#10;Relates to the writing in the DB." />
+    <MESSAGE value="Fixed deleteting tasks if instanceof Regular." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed deleteting tasks if instanceof Regular." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -839,37 +835,27 @@
           <option name="timeStamp" value="195" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/BackendFacadeImpl.java</url>
-          <line>153</line>
-          <option name="timeStamp" value="216" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.17/log4j-1.2.17-sources.jar!/org/apache/log4j/PropertyConfigurator.java</url>
           <line>368</line>
           <option name="timeStamp" value="232" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java</url>
-          <line>295</line>
+          <line>189</line>
           <option name="timeStamp" value="239" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java</url>
-          <line>52</line>
-          <option name="timeStamp" value="240" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java</url>
           <line>62</line>
           <option name="timeStamp" value="241" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
-          <line>77</line>
-          <option name="timeStamp" value="242" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Main__gui.ic" NAME="Main -gui Coverage Results" MODIFIED="1592600045848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
