@@ -506,7 +506,7 @@ public class DBDAO {
 
             executeSQL("update CalendarTasks set year=" + timeToShift.getYear() + ", " +
                     "month=" + timeToShift.getMonthValue() + ", day=" + timeToShift.getDayOfMonth()
-            + " where eID='" + task.geteID() + "'");
+            + ", eID='" + UUID.randomUUID() + " where eID='" + task.geteID() + "'");
         }
     }
 }
