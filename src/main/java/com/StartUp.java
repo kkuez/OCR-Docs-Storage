@@ -2,7 +2,6 @@ package com;
 
 import com.backend.BackendFacade;
 import com.backend.CustomProperties;
-import com.backend.ObjectHub;
 import com.backend.taskhandling.TaskFactory;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
@@ -10,8 +9,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,13 +33,7 @@ public class StartUp {
         this.taskFactory = taskFactory;
         logger = createLogger(StartUp.class);
         logger.info("\n\nStarting.");
-    }
-
-    private void startUp(ObjectHub objectHub) {
-        System.out.println("Trying to initialize Telegram-Bot...");
-        ApiContextInitializer.init();
-        objectHub.initLater(tasksRunnable);
-        BotSession botSession = null;
+        facade.getObjectHub().initLater(tasksRunnable);
     }
 
     private static String getLogFile() {

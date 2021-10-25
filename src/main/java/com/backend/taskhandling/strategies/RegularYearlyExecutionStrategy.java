@@ -26,7 +26,7 @@ public class RegularYearlyExecutionStrategy extends RegularExecutionStrategy {
 
     @Override
     public boolean timeIsNow(LocalDateTime localDateTime) {
-        return localDateTime.equals(getTime());
+        return localDateTime.equals(getTime()) || localDateTime.isAfter(getTime());
     }
 
 

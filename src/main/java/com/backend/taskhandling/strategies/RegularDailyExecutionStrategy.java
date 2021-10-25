@@ -50,4 +50,5 @@ public class RegularDailyExecutionStrategy extends RegularExecutionStrategy {
     public TimeUnit getExecutionTimeUnit() {
         return null;
     }
+
 }

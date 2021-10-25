@@ -120,4 +120,14 @@ public class BackendFacadeImpl implements BackendFacade {
     public List<Memo> getMemos(User userid) {
         return dbdao.getMemos(userid);
     }
+
+    @Override
+    public DBDAO getDBDAO() {
+        return dbdao;
+    }
+
+    @Override
+    public ObjectHub getObjectHub() {
+        return objectHub;
+    }
 }

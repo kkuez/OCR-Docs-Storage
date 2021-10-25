@@ -51,4 +51,8 @@ public interface BackendFacade {
     void insertMemo(Memo memo);
 
     List<Memo> getMemos(User userid);
+
+    public DBDAO getDBDAO();
+
+    ObjectHub getObjectHub();
 }

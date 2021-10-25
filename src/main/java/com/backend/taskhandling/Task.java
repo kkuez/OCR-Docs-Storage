@@ -3,8 +3,8 @@ package com.backend.taskhandling;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
 import com.backend.taskhandling.strategies.OneTimeExecutionStrategy;
 import com.backend.taskhandling.strategies.StrategyType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.data.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -99,6 +99,7 @@ public class Task implements Comparable {
 
     public boolean perform() {
         //TODO ERINNERUNG SCHREIBEN!
+
         return false;
     }
 

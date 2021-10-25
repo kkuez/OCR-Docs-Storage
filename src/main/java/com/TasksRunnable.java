@@ -46,9 +46,11 @@ public class TasksRunnable implements Runnable {
                                 facade.getAllowedUsers().get(user).getName()));
                         logger.info("Task " + task.getName() + " for user "
                                 + usersString.toString().replaceFirst(", ", ""));
-                        if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
-                            task.delete();
-                        }
+                    }
+                    if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
+                        task.delete();
+                    } else {
+                        facade.getDBDAO().shift(task);
                     }
                 }
             }

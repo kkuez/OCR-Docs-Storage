@@ -3,7 +3,9 @@ package com.backend;
 import com.StartUp;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
+import com.backend.taskhandling.strategies.ExecutionStrategy;
 import com.backend.taskhandling.strategies.RegularExecutionStrategy;
+import com.backend.taskhandling.strategies.StrategyType;
 import com.data.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -172,20 +174,6 @@ public class DBDAO {
         return resultSum;
     }
 
-    List<Task> getTasksFromDB(BackendFacade facade) {
-        List<Task> taskList = new ArrayList<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
-            while (rs.next()) {
-                Task task = taskFactory.getTask(rs, facade);
-                taskList.add(task);
-            }
-        } catch (SQLException e) {
-            logger.error("select * from Task", e);
-        }
-        return taskList;
-    }
-
     void insertTaskToDB(Task task) {
         executeSQL(task.getInsertDBString());
     }
@@ -309,6 +297,21 @@ public class DBDAO {
 
     public void deleteTask(UUID uuid) {
         executeSQL("delete from CalendarTasks Where eID='" + uuid + "'");
+    }
+
+    List<Task> getTasksFromDB(BackendFacade facade) {
+        //TODO getTasksFromDB nur über eine Methode machen lassen!
+        List<Task> taskList = new ArrayList<>();
+        try (Statement statement = getConnection().createStatement();
+             ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
+            while (rs.next()) {
+                Task task = taskFactory.getTask(rs, facade);
+                taskList.add(task);
+            }
+        } catch (SQLException e) {
+            logger.error("select * from Task", e);
+        }
+        return taskList;
     }
 
     public List<Task> getTasksFromDB(BackendFacadeImpl backendFacade, String userid) {
@@ -467,6 +470,43 @@ public class DBDAO {
                 executeSQL("update Bons set uid='" + UUID.randomUUID() + "' where belongsToDocument=" + i);
             } catch (Exception e) {
             }
+        }
+    }
+
+    public void shift(Task task) {
+        shift(task, 1);
+    }
+
+    public void shift(Task task, long times) {
+        ExecutionStrategy executionStrategy = task.getExecutionStrategy();
+
+        if (executionStrategy instanceof RegularExecutionStrategy) {
+            StrategyType executionStrategyType = executionStrategy.getType();
+            LocalDateTime time = task.getExecutionStrategy().getTime();
+
+            LocalDateTime timeToShift;
+            switch (executionStrategyType) {
+                case DAILY:
+                    timeToShift = time.plusDays(times);
+                    break;
+                case WEEKLY:
+                    timeToShift = time.plusWeeks(times);
+                    break;
+                case MONTHLY:
+                    timeToShift = time.plusMonths(times);
+                    break;
+                case YEARLY:
+                    timeToShift = time.plusYears(times);
+                    break;
+                case MINUTELY:
+                    //TODO Why would anyone wish for a minutely reminder :D
+                default:
+                    return;
+            }
+
+            executeSQL("update CalendarTasks set year=" + timeToShift.getYear() + ", " +
+                    "month=" + timeToShift.getMonthValue() + ", day=" + timeToShift.getDayOfMonth()
+            + " where eID='" + task.geteID() + "'");
         }
     }
 }
