@@ -21,22 +21,12 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
     @Override
     public String getInsertDBString() {
-        int year = time.getYear();
-
-        int month = time.getMonth().getValue();
-
-        int day = time.getDayOfMonth();
-
-        int hour = time.getHour();
-
-        int minute = time.getMinute();
 
         String user = getTask().getUserList().size() > 1 ? "ALL" : getTask().getUserList().get(0).getName();
 
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType, eID) " +
-                "Values (" + year + ", " + month + ", " + day + ", " + hour + ", " + minute + ", '"
-                + getTask().getName() + "', '" + user + "', '" + getTask().getClass().getSimpleName() + "', '"
-                + getType() + "', '" + getTask().geteID() + "')";
+        return "insert into CalendarTasks (name, user, taskType, strategyType, eID; time) " +
+                "Values ('" + getTask().getName() + "', '" + user + "', '" + getTask().getClass().getSimpleName() + "', '"
+                + getType() + "', '" + getTask().geteID() + "', ' " + getTime().toString() + "')";
     }
 
     @Override
