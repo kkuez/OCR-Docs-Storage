@@ -54,24 +54,23 @@ public class TaskFactory {
             throw new RuntimeException("Couldnt parse StrategyType from DB: " + strategyTypeString);
         }
 
+        LocalDateTime time = LocalDateTime.parse(rs.getString("time"));
         switch (strategyType) {
             case SIMPLECALENDAR_ONETIME:
-                LocalDateTime time = LocalDateTime.of(rs.getInt("year"), rs.getInt("month"), rs.getInt("day"),
-                        rs.getInt("hour"), rs.getInt("minute"));
                 executionStrategy = new SimpleCalendarOneTimeStrategy(task, time, facade);
                 task.setExecutionStrategy(executionStrategy);
                 break;
-            case MINUTELY:
-                executionStrategy = new RegularMinutelyExecutionStrategy(task);
-                break;
             case DAILY:
-                executionStrategy = new RegularDailyExecutionStrategy(task);
+                executionStrategy = new RegularDailyExecutionStrategy(task, time);
+                break;
+            case WEEKLY:
+                executionStrategy = new RegularWeeklyExecutionStrategy(task, time);
                 break;
             case MONTHLY:
-                executionStrategy = new RegularMonthlyExecutionStrategy(task, rs.getInt("day"));
+                executionStrategy = new RegularMonthlyExecutionStrategy(task, time);
                 break;
             case YEARLY:
-                executionStrategy = new RegularYearlyExecutionStrategy(task, rs.getInt("day"), rs.getInt("month"));
+                executionStrategy = new RegularYearlyExecutionStrategy(task, time);
                 break;
             default:
                 throw new RuntimeException("Couldnt parse StrategyType from DB: " + strategyTypeString);

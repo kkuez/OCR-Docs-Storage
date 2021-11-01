@@ -59,6 +59,7 @@ public class Task implements Comparable {
         return executionStrategy.getType();
     }
 
+    //We need this for sending over to client
     public String getTimeString() {
         return executionStrategy.getTime().toString();
     }

@@ -5,25 +5,20 @@ import com.backend.taskhandling.Task;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.log4j.Logger;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 public abstract class RegularExecutionStrategy implements ExecutionStrategy {
-
-    int min = 0;
-
-    int hour = 0;
-
-    int day;
-
-    int month;
-
     @JsonIgnore
     Task task;
 
     @JsonIgnore
     public Logger logger = StartUp.createLogger(RegularExecutionStrategy.class);
 
-    public RegularExecutionStrategy() {
+    private LocalDateTime time;
+
+    public RegularExecutionStrategy(LocalDateTime time) {
+        this.time = time;
     }
 
     public abstract TimeUnit getExecutionTimeUnit();
@@ -35,23 +30,12 @@ public abstract class RegularExecutionStrategy implements ExecutionStrategy {
 
     // GETTER SETTER
 
-    public int getMin() {
-        return min;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
     public Task getTask() {
         return task;
+    }
+
+    @Override
+    public LocalDateTime getTime() {
+        return time;
     }
 }

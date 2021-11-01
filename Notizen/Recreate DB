@@ -3,7 +3,7 @@ create Table AllowedUsers(name TEXT PRIMARY KEY, password TEXT);
 Drop Table Bons;
 create table Bons (belongsToDocument INTEGER, sum REAL, uid TEXT);
 Drop Table CalendarTasks;
-create Table CalendarTasks(year INTEGER, month INTEGER, day INTEGER, hour INTEGER, minute INTEGER, name TEXT, user TEXT, taskType TEXT, strategyType TEXT, eID TEXT, Foreign key(user) References AllowedUsers(name));
+create Table CalendarTasks(name TEXT, user TEXT, taskType TEXT, strategyType TEXT, eID TEXT, time TEXT, Foreign key(user) References AllowedUsers(name));
 Drop Table Documents;
 create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT, user TEXT, inZipFile TEXT, sizeOfOriginalFile INTEGER);
 Drop Table ShoppingList;

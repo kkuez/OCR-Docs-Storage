@@ -134,20 +134,6 @@ public class DBDAO {
                 + month + " AND day=" + day + " AND hour=" + hour + " AND minute=" + minute);
 
     }
-    Set<String> getTagsForDocument(Document document) {
-        Set<String> tagSet = new HashSet<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement
-                     .executeQuery("SELECT Tag FROM Tags where belongsToDocument=" + document.getId());) {
-
-            while (rs.next()) {
-                tagSet.add(rs.getString("Tag"));
-            }
-        } catch (SQLException e) {
-            logger.error("SELECT Tag FROM Tags where belongsToDocument=" + document.getId(), e);
-        }
-        return tagSet;
-    }
 
     void executeSQL(String sqlStatement) {
         try (Statement statement = getConnection().createStatement();) {
@@ -176,44 +162,6 @@ public class DBDAO {
 
     void insertTaskToDB(Task task) {
         executeSQL(task.getInsertDBString());
-    }
-
-    List<Document> getDocumentsByTag(String tag) {
-        List<Integer> documentIds = new ArrayList<>();
-        List<Document> documentList = new ArrayList<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement
-                     .executeQuery("select belongsToDocument from Tags where Tag like '%" + tag + "%'");) {
-
-            while (rs.next()) {
-                documentIds.add(rs.getInt("belongsToDocument"));
-            }
-        } catch (SQLException e) {
-            logger.error("select belongsToDocument from Tags where Tag like '%" + tag + "%'", e);
-        }
-        for (Integer id : documentIds) {
-            documentList.addAll(showDocumentsFromSQLExpression("select * from Documents where id=" + id + ""));
-        }
-        return documentList;
-    }
-
-    List<Document> showDocumentsFromSQLExpression(String sqlExpression) {
-        List<Document> documentList = new ArrayList<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery(sqlExpression);) {
-
-            documentList = new ArrayList<>();
-            while (rs.next()) {
-                Image image = new Image(rs.getString("content"), new File(rs.getString("originalFile")),
-                        rs.getInt("id"), rs.getString("user"));
-                image.setTagSet(getTagsForDocument(image));
-                documentList.add(image);
-            }
-
-        } catch (SQLException e) {
-            logger.error(sqlExpression, e);
-        }
-        return documentList;
     }
 
     int countDocuments(String tableName, String sqlAddition) {
@@ -500,13 +448,13 @@ public class DBDAO {
                     break;
                 case MINUTELY:
                     //TODO Why would anyone wish for a minutely reminder :D
+                    //TODO for Checkconnection Task dooooooh
                 default:
                     return;
             }
 
-            executeSQL("update CalendarTasks set year=" + timeToShift.getYear() + ", " +
-                    "month=" + timeToShift.getMonthValue() + ", day=" + timeToShift.getDayOfMonth()
-            + ", eID='" + UUID.randomUUID() + " where eID='" + task.geteID() + "'");
+            executeSQL("update CalendarTasks set eID='" + UUID.randomUUID() + "'," +
+                    "time='" + timeToShift.withNano(0).toString() + "' where eID='" + task.geteID() + "'");
         }
     }
 }

@@ -2,17 +2,14 @@ package com.backend.taskhandling.strategies;
 
 import com.backend.taskhandling.Task;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
 public class RegularDailyExecutionStrategy extends RegularExecutionStrategy {
 
-    public RegularDailyExecutionStrategy(Task task) {
+    public RegularDailyExecutionStrategy(Task task, LocalDateTime time) {
+        super(time);
         this.task = task;
-        min = 0;
-        hour = 4;
     }
 
     @Override
@@ -27,23 +24,17 @@ public class RegularDailyExecutionStrategy extends RegularExecutionStrategy {
 
     @Override
     public String getInsertDBString() {
-        int year = 99;
-
-        int month = 99;
-
-        int day = 99;
-
         String user = task.getUserList().size() > 1 ? "ALL" : task.getUserList().get(0).getName() + "";
 
-        return "insert into CalendarTasks (year, month, day, hour, minute, name, user, taskType, strategyType, eID) Values ("
-                + year + ", " + month + ", " + day + ", " + hour + ", " + min + ", '" + task.getName() + "', '" + user
-                + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "', '" + task.geteID() + "')";
-
+        return "insert into CalendarTasks (name, user, taskType, strategyType, eID, time) Values ("
+                + "'" + task.getName() + "', '" + user
+                + "', '" + task.getClass().getSimpleName() + "', '" + getType() + "', '" + task.geteID() + "', '"
+                + getTime().toString() + "')";
     }
 
     @Override
     public LocalDateTime getTime() {
-        return LocalDateTime.of(LocalDate.now(), LocalTime.of(hour, min));
+        return super.getTime();
     }
 
     @Override

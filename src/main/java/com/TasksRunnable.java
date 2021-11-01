@@ -5,7 +5,6 @@ import com.backend.ObjectHub;
 import com.backend.taskhandling.CheckConnectionTask;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.strategies.RegularExecutionStrategy;
-import com.backend.taskhandling.strategies.RegularMinutelyExecutionStrategy;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,8 @@ public class TasksRunnable implements Runnable {
 
         while (loopActive) {
             tasksToDo = facade.getTasks();
-            tasksToDo.add(checkConnectionTask);
+            //TODO
+            //tasksToDo.add(checkConnectionTask);
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
                 localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
@@ -62,9 +62,12 @@ public class TasksRunnable implements Runnable {
     public void run() {
         try {
             checkConnectionTask = new CheckConnectionTask(objectHub);
-            RegularMinutelyExecutionStrategy checkConnectionTaskStrategy = new RegularMinutelyExecutionStrategy(
-                    checkConnectionTask);
-            checkConnectionTask.setExecutionStrategy(checkConnectionTaskStrategy);
+            //TODO
+            //FIXME
+            /*RegularMinutelyExecutionStrategy checkConnectionTaskStrategy = new RegularMinutelyExecutionStrategy(
+                    checkConnectionTask, time);
+            checkConnectionTask.setExecutionStrategy(checkConnectionTaskStrategy);*/
+
             loop();
         } catch (InterruptedException e) {
             logger.error("Couldn't run CalendarTasks.", e);

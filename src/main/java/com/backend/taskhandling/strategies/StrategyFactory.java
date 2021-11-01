@@ -10,16 +10,14 @@ public class StrategyFactory {
     public static ExecutionStrategy getStrategy(StrategyType strategyType, LocalDateTime time, Task task,
                                                 BackendFacade facade) {
         switch (strategyType) {
-            case MINUTELY:
-                return new RegularMinutelyExecutionStrategy(task);
             case DAILY:
-                return new RegularDailyExecutionStrategy(task);
+                return new RegularDailyExecutionStrategy(task, time);
             case WEEKLY:
-                return new RegularWeeklyExecutionStrategy();
+                return new RegularWeeklyExecutionStrategy(task, time);
             case YEARLY:
-                return new RegularYearlyExecutionStrategy(task, time.getDayOfMonth(), time.getMonthValue());
+                return new RegularYearlyExecutionStrategy(task, time);
             case MONTHLY:
-                return new RegularMonthlyExecutionStrategy(task, time.getDayOfMonth());
+                return new RegularMonthlyExecutionStrategy(task, time);
             case SIMPLECALENDAR_ONETIME:
             case ONETIME:
                 return new SimpleCalendarOneTimeStrategy(task, time, facade);
