@@ -26,7 +26,7 @@ public class SimpleCalendarOneTimeStrategy extends OneTimeExecutionStrategy {
 
         return "insert into CalendarTasks (name, user, taskType, strategyType, eID, time) " +
                 "Values ('" + getTask().getName() + "', '" + user + "', '" + getTask().getClass().getSimpleName() + "', '"
-                + getType() + "', '" + getTask().geteID() + "', ' " + getTime().toString() + "')";
+                + getType() + "', '" + getTask().geteID() + "', '" + getTime().toString() + "')";
     }
 
     @Override
