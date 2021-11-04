@@ -37,7 +37,9 @@ public class TasksRunnable implements Runnable {
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
                 localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);
-                if (task.timeIsNow(localDateTimeNow)) {
+                final boolean timeToExecute = task.timeIsNow(localDateTimeNow)
+                        || task.getExecutionStrategy().getTime().isBefore(localDateTimeNow);
+                if (timeToExecute) {
                     boolean success = task.perform();
                     // if successfully performed and is NOT a regular task, remove from list
                     if (success) {
