@@ -20,6 +20,8 @@
 
         <!-- Optional properties -->
         <sonar.buildString>[...]</sonar.buildString>
+
+        <log4j2.version>2.15.0</log4j2.version>
     </properties>
     <profiles>
         <profile>
