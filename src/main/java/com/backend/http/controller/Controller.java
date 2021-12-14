@@ -1,7 +1,7 @@
 package com.backend.http.controller;
 
 import com.StartUp;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 

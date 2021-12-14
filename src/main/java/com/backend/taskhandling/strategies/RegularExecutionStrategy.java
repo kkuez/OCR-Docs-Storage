@@ -1,12 +1,12 @@
 package com.backend.taskhandling.strategies;
 
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.logging.log4j.Logger;
 import com.StartUp;
 import com.backend.taskhandling.Task;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.log4j.Logger;
-
-import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
 
 public abstract class RegularExecutionStrategy implements ExecutionStrategy {
     @JsonIgnore
@@ -25,7 +25,6 @@ public abstract class RegularExecutionStrategy implements ExecutionStrategy {
 
     public void delete(String taskName) {
         // TODO
-        Logger.getLogger("Deletion of regular tasks not supported... yet :)");
     };
 
     // GETTER SETTER

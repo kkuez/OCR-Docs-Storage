@@ -1,17 +1,17 @@
 package com.backend;
 
-import com.StartUp;
-import com.data.Document;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
-import org.zeroturnaround.zip.ZipUtil;
-
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.zeroturnaround.zip.ZipUtil;
+import com.StartUp;
+import com.data.Document;
 
 @Service
 public class Archiver {
@@ -80,7 +80,7 @@ public class Archiver {
             FileUtils.deleteDirectory(tempForZip);
             FileUtils.deleteQuietly(zippedDir);
         } catch (IOException e) {
-            logger.error(null, e);
+            logger.error("Could not archive", e);
         }
     }
 

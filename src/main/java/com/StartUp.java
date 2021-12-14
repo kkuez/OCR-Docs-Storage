@@ -1,19 +1,19 @@
 package com;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import com.backend.BackendFacade;
 import com.backend.CustomProperties;
 import com.backend.taskhandling.TaskFactory;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
 
 @Service
 public class StartUp {
@@ -26,8 +26,7 @@ public class StartUp {
     private TaskFactory taskFactory;
 
     @Lazy
-    public StartUp(BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory)
-            throws NoSuchAlgorithmException, IOException {
+    public StartUp(BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory) {
         this.facade = facade;
         this.tasksRunnable = tasksRunnable;
         this.taskFactory = taskFactory;
@@ -67,23 +66,7 @@ public class StartUp {
     }
 
     public static Logger createLogger(Class clazz) {
-        Logger logger = Logger.getLogger(clazz);
-        PatternLayout layout = new PatternLayout("%d{HH:mm:ss.SSS} [%t] \t%m%n");
-
-/*        if(consoleAppender == null) {
-            consoleAppender = new ConsoleAppender(layout);
-        }
-        logger.addAppender(consoleAppender);*/
-        try {
-            if(logFileAppender == null) {
-                logFileAppender = new FileAppender(layout, getLogFile(), true);
-            }
-        } catch (IOException e) {
-            logger.error("Failed initializing logger", e);
-            System.exit(2);
-        }
-        logger.addAppender(logFileAppender);
-        return logger;
+        return LogManager.getLogger(clazz);
     }
 
     public static Logger getLogger() {

@@ -1,7 +1,7 @@
 package com.backend.taskhandling.strategies;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import com.StartUp;
 import com.backend.BackendFacade;

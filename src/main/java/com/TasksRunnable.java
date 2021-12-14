@@ -1,17 +1,17 @@
 package com;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.backend.BackendFacade;
 import com.backend.ObjectHub;
 import com.backend.taskhandling.CheckConnectionTask;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.strategies.RegularExecutionStrategy;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TasksRunnable implements Runnable {

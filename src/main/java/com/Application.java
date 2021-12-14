@@ -1,22 +1,22 @@
 package com;
 
-import com.backend.DBDAO;
-import com.backend.http.controller.Controller;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Scanner;
+
+import javax.servlet.*;
+
 import org.apache.catalina.connector.RequestFacade;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-
-import javax.servlet.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Scanner;
+import com.backend.DBDAO;
+import com.backend.http.controller.Controller;
 
 @SpringBootApplication
 public class Application {
@@ -63,7 +63,6 @@ public class Application {
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
                 if(logger == null) {
                     logger = StartUp.createLogger(Controller.class);
-                    PropertyConfigurator.configure(getClass().getResourceAsStream("/log4j.properties"));
                 }
                 final RequestFacade requestFacade = (RequestFacade) request;
                 final DBDAO dbdao = (DBDAO)applicationContext.getBean("DBDAO");

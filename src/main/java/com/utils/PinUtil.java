@@ -2,7 +2,7 @@ package com.utils;
 
 import com.StartUp;
 import com.backend.ObjectHub;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 

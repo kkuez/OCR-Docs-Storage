@@ -2,7 +2,7 @@ package com.backend.taskhandling;
 
 import com.StartUp;
 import com.backend.ObjectHub;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetAddress;
