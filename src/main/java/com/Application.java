@@ -1,12 +1,7 @@
 package com;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Scanner;
-
-import javax.servlet.*;
-
+import com.backend.DBDAO;
+import com.backend.http.controller.Controller;
 import org.apache.catalina.connector.RequestFacade;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
@@ -15,8 +10,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import com.backend.DBDAO;
-import com.backend.http.controller.Controller;
+
+import javax.servlet.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class Application {
@@ -66,6 +66,12 @@ public class Application {
                 }
                 final RequestFacade requestFacade = (RequestFacade) request;
                 final DBDAO dbdao = (DBDAO)applicationContext.getBean("DBDAO");
+                if(requestFacade.getRequestURI().toLowerCase(Locale.ROOT).contains("ldap")
+                || requestFacade.getHeader("userid").toLowerCase(Locale.ROOT).contains("ldap")) {
+                    logger.error("Found invalid ldap String!!!");
+                    System.exit(3);
+                }
+
                 logger.info(requestFacade.getRequestURI() + " from " + requestFacade.getHeader("userid"));
                 if(dbdao.checkCredentials(requestFacade.getHeader("userid"),
                         requestFacade.getHeader("passw"))) {
