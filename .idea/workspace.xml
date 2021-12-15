@@ -22,8 +22,63 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fixed deleteting tasks if instanceof Regular.">
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fixed regular task shift when time is before now.">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notizen/Zertifikate machen" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Zertifikate machen" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/api_config" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/bazaar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/digits" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/hocr" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/quiet" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/unlv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/eng.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/osd.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/pdf.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/deu.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/eng.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Arabic.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Armenian.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Bengali.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Canadian_Aboriginal.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Cherokee.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Cyrillic.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Devanagari.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Ethiopic.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Fraktur.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Georgian.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Greek.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Gujarati.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Gurmukhi.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/HanS.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/HanS_vert.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/HanT.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/HanT_vert.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Hangul.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Hangul_vert.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Hebrew.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Japanese.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Japanese_vert.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Kannada.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Khmer.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Lao.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Latin.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Malayalam.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Myanmar.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Oriya.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Sinhala.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Syriac.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Tamil.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Telugu.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Thaana.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Thai.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Tibetan.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Vietnamese.traineddata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +105,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Old_Telegram_Network-ESP-Faehig" />
+        <entry key="$PROJECT_DIR$" value="RegularTasks_Refactoring" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -91,6 +146,7 @@
   <component name="PropertiesComponent">
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1571994599512" />
     <property name="extract.method.default.visibility" value="public" />
@@ -99,7 +155,8 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.1484375" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -107,9 +164,9 @@
       <recent name="com.backend.taskhandling" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/resources/keystore" />
       <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage\src\main\resources\keystore" />
       <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage" />
+      <recent name="$PROJECT_DIR$/src/main/resources/keystore" />
       <recent name="C:\Users\Marcel\Documents\Projekte\OCR-Docs-Storage" />
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -133,7 +190,7 @@
       <command value="mvn clean package spring-boot:repackage" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.Application">
+  <component name="RunManager" selected="Maven.Build jar with Spring plugin">
     <configuration name="Application newUser" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.Application" />
       <module name="OCR" />
@@ -370,55 +427,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Few SonarLint refactorings.">
-      <created>1590229417786</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1590229417786</updated>
-    </task>
-    <task id="LOCAL-00048" summary="Calendar now ordered by weekDays.">
-      <created>1590236999610</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1590236999610</updated>
-    </task>
-    <task id="LOCAL-00049" summary="Fixed Days being on the right place.">
-      <created>1590244436627</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1590244436628</updated>
-    </task>
-    <task id="LOCAL-00050" summary="More elaborated errorhandling when sending message.">
-      <created>1590427857603</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1590427857604</updated>
-    </task>
-    <task id="LOCAL-00051" summary="Tasks will be checked if they should have send ealier and sent then.">
-      <created>1590873663519</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1590873663520</updated>
-    </task>
-    <task id="LOCAL-00052" summary="Implemented ConnectionCheck + GPIO reaction.">
-      <created>1590924946505</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1590924946506</updated>
-    </task>
-    <task id="LOCAL-00053" summary="Commenting on WiringPi installation.">
-      <created>1590925110547</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1590925110548</updated>
     </task>
     <task id="LOCAL-00054" summary="Added CheckConnection Task to TaskRunnable's tasksList.">
       <created>1590925498178</created>
@@ -714,7 +722,56 @@
       <option name="project" value="LOCAL" />
       <updated>1632035651964</updated>
     </task>
-    <option name="localTasksCounter" value="96" />
+    <task id="LOCAL-00096" summary="Tasks shifted when RegularTask.">
+      <created>1635185551754</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1635185551754</updated>
+    </task>
+    <task id="LOCAL-00097" summary="New eid to task when shifted.">
+      <created>1635185675402</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1635185675402</updated>
+    </task>
+    <task id="LOCAL-00098" summary="RegularTasks now with real timeStrings.">
+      <created>1635756940445</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1635756940445</updated>
+    </task>
+    <task id="LOCAL-00099" summary="Now right inserting of SimpleCalendarOneTime Task.">
+      <created>1635771544893</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1635771544894</updated>
+    </task>
+    <task id="LOCAL-00100" summary="Fixed Typo in sql.">
+      <created>1635772157657</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1635772157657</updated>
+    </task>
+    <task id="LOCAL-00101" summary="Fixed Typo in sql.">
+      <created>1635772655626</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1635772655626</updated>
+    </task>
+    <task id="LOCAL-00102" summary="Fixed regular task shift when time is before now.">
+      <created>1636053117400</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1636053117401</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -754,12 +811,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="First impl of Springweb etc. Controller first." />
-    <MESSAGE value="CalendarController complete I guess." />
-    <MESSAGE value="Sending Bons." />
-    <MESSAGE value="Receiving Bons successful.&#10;&#10;Next: Store dem." />
-    <MESSAGE value="Insertion of Bons requests and pics." />
-    <MESSAGE value="Deleted Bot traces." />
     <MESSAGE value="Added all of Shoppinglist." />
     <MESSAGE value="Fixed user parsing." />
     <MESSAGE value="Impl key renewal and db changes." />
@@ -779,7 +830,13 @@
     <MESSAGE value="Fixed bug delete Bon by sum." />
     <MESSAGE value="Fixed wrong user String to regular tasks.&#10;&#10;Relates to the writing in the DB." />
     <MESSAGE value="Fixed deleteting tasks if instanceof Regular." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed deleteting tasks if instanceof Regular." />
+    <MESSAGE value="Tasks shifted when RegularTask." />
+    <MESSAGE value="New eid to task when shifted." />
+    <MESSAGE value="RegularTasks now with real timeStrings." />
+    <MESSAGE value="Now right inserting of SimpleCalendarOneTime Task." />
+    <MESSAGE value="Fixed Typo in sql." />
+    <MESSAGE value="Fixed regular task shift when time is before now." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed regular task shift when time is before now." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -791,7 +848,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/taskhandling/strategies/RegularExecutionStrategy.java</url>
-          <line>30</line>
+          <line>25</line>
           <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -838,16 +895,6 @@
           <url>jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.17/log4j-1.2.17-sources.jar!/org/apache/log4j/PropertyConfigurator.java</url>
           <line>368</line>
           <option name="timeStamp" value="232" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java</url>
-          <line>189</line>
-          <option name="timeStamp" value="239" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java</url>
-          <line>62</line>
-          <option name="timeStamp" value="241" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
