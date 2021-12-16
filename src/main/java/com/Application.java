@@ -1,25 +1,30 @@
 package com;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Scanner;
-
-import javax.servlet.*;
-
+import com.backend.DBDAO;
+import com.backend.http.controller.Controller;
+import org.apache.catalina.connector.Connector;
 import org.apache.catalina.connector.RequestFacade;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import com.backend.DBDAO;
-import com.backend.http.controller.Controller;
+
+import javax.servlet.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class Application {
+    //@Value("${http.port}")
+    private int httpPort = 8088;
+
     private static ApplicationContext applicationContext;
 
     public static void main(String[] args) throws InterruptedException {
@@ -88,5 +93,18 @@ public class Application {
                 System.out.println(beanName);
             }
         };
+    }
+
+    @Bean
+    public ServletWebServerFactory servletContainer() {
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        tomcat.addAdditionalTomcatConnectors(createStandardConnector());
+        return tomcat;
+    }
+
+    private Connector createStandardConnector() {
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setPort(httpPort);
+        return connector;
     }
 }
