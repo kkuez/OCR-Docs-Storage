@@ -1,8 +1,8 @@
 package com.backend;
 
-import com.StartUp;
 import com.TasksRunnable;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 @Service
 public class ObjectHub {
 
-    private static Logger logger = StartUp.createLogger(ObjectHub.class);
+    private static Logger logger = LoggerFactory.getLogger(ObjectHub.class);
 
     private ExecutorService executorService;
 

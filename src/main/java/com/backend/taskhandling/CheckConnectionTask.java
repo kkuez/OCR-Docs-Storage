@@ -1,8 +1,8 @@
 package com.backend.taskhandling;
 
-import com.StartUp;
 import com.backend.ObjectHub;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -19,7 +19,7 @@ public class CheckConnectionTask extends Task {
 
     public CheckConnectionTask(ObjectHub objectHub) {
         this.objectHub = objectHub;
-        this.logger = StartUp.getLogger();
+        this.logger = LoggerFactory.getLogger(CheckConnectionTask.class);
     }
 
     @Override

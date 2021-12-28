@@ -1,22 +1,23 @@
 package com;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.backend.BackendFacade;
 import com.backend.ObjectHub;
 import com.backend.taskhandling.CheckConnectionTask;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.strategies.RegularExecutionStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TasksRunnable implements Runnable {
 
-    private static Logger logger = StartUp.createLogger(TasksRunnable.class);
+    private static Logger logger = LoggerFactory.getLogger(TasksRunnable.class);
 
     private List<Task> tasksToDo = new ArrayList<>();
 

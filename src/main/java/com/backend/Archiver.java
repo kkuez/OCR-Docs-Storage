@@ -1,24 +1,23 @@
 package com.backend;
 
+import com.data.Document;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Service;
-import org.zeroturnaround.zip.ZipUtil;
-import com.StartUp;
-import com.data.Document;
-
 @Service
 public class Archiver {
 
     private List<Document> documentList;
 
-    private static Logger logger = StartUp.getLogger();
+    private static Logger logger = LoggerFactory.getLogger(Archiver.class);
 
     File archiveFolder;
 
@@ -60,36 +59,6 @@ public class Archiver {
             resourceFolder.mkdir();
         }
     }
-
-    public void archive(String nameOfArchive) {
-        logger.info("Gui: " + "Create Zip-Archive");
-        File tempForZip = new File(archiveFolder, "temp");
-        tempForZip.mkdir();
-
-        documentList.forEach(document -> {
-            try {
-                FileUtils.copyFile(document.getOriginFile(), new File(tempForZip, document.getOriginalFileName()));
-            } catch (IOException e) {
-                logger.error(document.getOriginFile().getAbsolutePath(), e);
-            }
-        });
-        zipDir(tempForZip, nameOfArchive);
-        File zippedDir = new File(archiveFolder, nameOfArchive + ".zip");
-        try {
-            FileUtils.copyFile(zippedDir, new File(getZipFolder(), nameOfArchive + ".zip"));
-            FileUtils.deleteDirectory(tempForZip);
-            FileUtils.deleteQuietly(zippedDir);
-        } catch (IOException e) {
-            logger.error("Could not archive", e);
-        }
-    }
-
-    private void zipDir(File dir, String nameOfArchive) {
-        ZipUtil.pack(dir, new File(archiveFolder, nameOfArchive + ".zip"));
-    }
-
-    // GETTER SETTER
-
 
     public File getResourceFolder() {
         return resourceFolder;

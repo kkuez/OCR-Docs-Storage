@@ -1,26 +1,21 @@
 package com;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.appender.ConsoleAppender;
-import org.apache.logging.log4j.core.appender.FileAppender;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 import com.backend.BackendFacade;
 import com.backend.CustomProperties;
 import com.backend.taskhandling.TaskFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
 
 @Service
 public class StartUp {
 
     private static Logger logger;
-    private static FileAppender logFileAppender;
-    private static ConsoleAppender consoleAppender;
     private BackendFacade facade;
     private TasksRunnable tasksRunnable;
     private TaskFactory taskFactory;
@@ -30,7 +25,7 @@ public class StartUp {
         this.facade = facade;
         this.tasksRunnable = tasksRunnable;
         this.taskFactory = taskFactory;
-        logger = createLogger(StartUp.class);
+        logger = LoggerFactory.getLogger(StartUp.class);
         logger.info("\n\nStarting.");
         facade.getObjectHub().initLater(tasksRunnable);
     }
@@ -63,13 +58,5 @@ public class StartUp {
             }
         }
         return logFile.getAbsolutePath();
-    }
-
-    public static Logger createLogger(Class clazz) {
-        return LogManager.getLogger(clazz);
-    }
-
-    public static Logger getLogger() {
-        return logger;
     }
 }

@@ -1,10 +1,10 @@
 package com;
 
 import com.backend.DBDAO;
-import com.backend.http.controller.Controller;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.connector.RequestFacade;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,6 +26,7 @@ public class Application {
     //@Value("${http.port}")
     private int httpPort = 8088;
 
+    Logger Logger = LoggerFactory.getLogger(Application.class);
     private static ApplicationContext applicationContext;
 
     public static void main(String[] args) throws InterruptedException {
@@ -63,13 +64,10 @@ public class Application {
     public FilterRegistrationBean<Filter> testMethode() {
         FilterRegistrationBean<Filter> filterRegBean = new FilterRegistrationBean<>();
         filterRegBean.setFilter(new Filter() {
-            private Logger logger;
 
+            Logger logger = LoggerFactory.getLogger(FilterRegistrationBean.class);
             @Override
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-                if(logger == null) {
-                    logger = StartUp.createLogger(Controller.class);
-                }
                 final RequestFacade requestFacade = (RequestFacade) request;
                 final DBDAO dbdao = (DBDAO)applicationContext.getBean("DBDAO");
                 if(requestFacade.getRequestURI().toLowerCase(Locale.ROOT).contains("ldap")

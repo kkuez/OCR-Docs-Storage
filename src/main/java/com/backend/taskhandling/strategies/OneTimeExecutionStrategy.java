@@ -1,15 +1,14 @@
 package com.backend.taskhandling.strategies;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.logging.log4j.Logger;
-
-import com.StartUp;
 import com.backend.BackendFacade;
 import com.backend.taskhandling.Task;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
 
-    private static Logger logger = StartUp.getLogger();
+    private static Logger logger = LoggerFactory.getLogger(OneTimeExecutionStrategy.class);
 
     @JsonIgnore
     private final BackendFacade facade;

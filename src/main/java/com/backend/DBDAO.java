@@ -1,6 +1,5 @@
 package com.backend;
 
-import com.StartUp;
 import com.backend.taskhandling.Task;
 import com.backend.taskhandling.TaskFactory;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
@@ -8,7 +7,8 @@ import com.backend.taskhandling.strategies.RegularExecutionStrategy;
 import com.backend.taskhandling.strategies.StrategyType;
 import com.data.*;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ import java.util.*;
 @Service
 public class DBDAO {
 
-    private Logger logger = StartUp.createLogger(DBDAO.class);
+    private Logger logger = LoggerFactory.getLogger(DBDAO.class);
 
     private Connection connection = null;
 

@@ -1,8 +1,8 @@
 package com.utils;
 
-import com.StartUp;
 import com.backend.ObjectHub;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ public class PinUtil {
 
     private static boolean isSetup = false;
 
-    private static Logger logger = StartUp.getLogger();
+    private static Logger logger = LoggerFactory.getLogger(PinUtil.class);
 
     private PinUtil() {}
 

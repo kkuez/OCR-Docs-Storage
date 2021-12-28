@@ -1,19 +1,19 @@
 package com.backend.taskhandling.strategies;
 
-import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.logging.log4j.Logger;
-import com.StartUp;
 import com.backend.taskhandling.Task;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 public abstract class RegularExecutionStrategy implements ExecutionStrategy {
     @JsonIgnore
     Task task;
 
     @JsonIgnore
-    public Logger logger = StartUp.createLogger(RegularExecutionStrategy.class);
+    public Logger logger = LoggerFactory.getLogger(RegularExecutionStrategy.class);
 
     private LocalDateTime time;
 

@@ -1,14 +1,14 @@
 package com.utils;
 
-import com.StartUp;
 import com.backend.BackendFacade;
 import com.data.User;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class PDFUtil {
 
-    private static Logger logger = StartUp.getLogger();
+    private static Logger logger = LoggerFactory.getLogger(PDFUtil.class);
 
     public static File createPDF(BackendFacade facade, LocalDate beginDate, LocalDate endDate) {
         // ChooseTimeReporter chooseTimeReporter = (beginDate, endDate) -> {
