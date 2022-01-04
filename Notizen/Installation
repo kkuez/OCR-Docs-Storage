@@ -6,9 +6,6 @@ export TESSDATA_PREFIX=$PATH:/myNewDir
 HACK wenn jvm crash:
 export LC_ALL=C
 
-ffmpeg für BirdCamVid installieren
-birdVidTask anlegen in DB.
-
 //SCRIPT ON STARTUP
 1. Fill out the script, pathes pw etc.
 2. install tmux
