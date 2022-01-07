@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class MemoController extends Controller{
@@ -27,18 +28,17 @@ public class MemoController extends Controller{
 
     @PostMapping(MEMOS + "/new")
     public ResponseEntity<String> newEntry(@RequestBody Map map) {
-        String userId = String.valueOf(map.get("userid"));
         try {
             String userString = (String) map.get("for");
-            List<User> users;
+            List<String> userNames;
             if (userString.equals("FORALL")) {
-                users = new ArrayList<>(facade.getAllowedUsers().values());
+                userNames = facade.getAllowedUsers().values().stream().map(User::getName).collect(Collectors.toList());
             } else {
-                users = List.of(facade.getAllowedUsers().get(userId));
+                userNames = List.of(userString);
             }
 
             String memoText = (String) map.get("name");
-            final Memo memo = new Memo(users, memoText, LocalDateTime.now());
+            final Memo memo = new Memo(userNames, memoText, LocalDateTime.now());
             facade.insertMemo(memo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,6 +47,33 @@ public class MemoController extends Controller{
         }
         return ResponseEntity.ok("");
 
+    }
+
+    @PostMapping(MEMOS + "/delete")
+    public ResponseEntity.HeadersBuilder<?> delete(@RequestBody Map map, HttpServletRequest request) {
+        final User user = facade.getAllowedUsers().get(request.getHeader("userid"));
+        String userString = (String) map.get("for");
+        String memoText = (String) map.get("name");
+        final List<Memo> memosToDelete = new ArrayList<>();
+        for (Memo memo : facade.getMemos(user)) {
+            if(memo.getMemoText().equals(memoText)) {
+                memosToDelete.add(memo);
+            }
+        }
+
+        if(memosToDelete.isEmpty()) {
+            return ResponseEntity.notFound();
+        }
+
+        List<User> users = new ArrayList<>();
+        if(userString.equals("FORALL")) {
+            users.addAll(facade.getAllowedUsers().values());
+        } else {
+            users.add(user);
+        }
+
+        facade.deleteMemo(memosToDelete, users);
+        return ResponseEntity.ok();
     }
 
     @ResponseBody

@@ -110,11 +110,10 @@ public class DBDAO {
         List<Memo> memoList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
              ResultSet rs = statement.executeQuery("select * from Memos m where "+
-                     "(select memoid from Users_Memos um where username ='" + user.getName() + "')")){
-
+                     "(select memoid from Users_Memos where username ='" + user.getName() + "')")){
 
             while(rs.next()) {
-                memoList.add(new Memo(List.of(user), rs.getString("memoText"),
+                memoList.add(new Memo(rs.getInt("id"), List.of(user.getName()), rs.getString("memoText"),
                         LocalDateTime.parse(rs.getString("dateTime"))));
             }
         } catch (SQLException e) {
@@ -406,8 +405,8 @@ public class DBDAO {
             return;
         }
 
-        for(User user: memo.getUsers()) {
-            executeSQL("insert into Users_Memos(user, memoid) VALUES('" + user.getName() + "'," +
+        for(String username: memo.getUsers()) {
+            executeSQL("insert into Users_Memos(username, memoid) VALUES('" + username + "'," +
                     memoId + ")");
         }
     }
@@ -456,5 +455,18 @@ public class DBDAO {
             executeSQL("update CalendarTasks set eID='" + UUID.randomUUID() + "'," +
                     "time='" + timeToShift.withNano(0).toString() + "' where eID='" + task.geteID() + "'");
         }
+    }
+
+    public void deleteMemos(List<Memo> memos, List<User> users) {
+        memos.forEach(memo -> deleteMemo(memo, users));
+    }
+
+    public void deleteMemo(Memo memo, List<User> users) {
+        for (User user : users) {
+            executeSQL("delete from Users_Memos where username='" + user.getName()
+                    + "' and memoid=" + memo.getId());
+        }
+
+        executeSQL("delete from Memos where id=" + memo.getId());
     }
 }

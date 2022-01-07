@@ -130,4 +130,9 @@ public class BackendFacadeImpl implements BackendFacade {
     public ObjectHub getObjectHub() {
         return objectHub;
     }
+
+    @Override
+    public void deleteMemo(List<Memo> memos, List<User> users) {
+        dbdao.deleteMemos(memos, users);
+    }
 }

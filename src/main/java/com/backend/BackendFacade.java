@@ -55,4 +55,6 @@ public interface BackendFacade {
     public DBDAO getDBDAO();
 
     ObjectHub getObjectHub();
+
+    void deleteMemo(List<Memo> memos, List<User> users);
 }

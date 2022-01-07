@@ -22,9 +22,7 @@ public class LogController extends Controller {
     @ResponseBody
     @RequestMapping("log/getLog")
     public ResponseEntity<String> getLog(HttpServletRequest request) {
-        File monthFolder = new File(new CustomProperties().getProperty("localArchivePath"),
-                LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
-        File logFolder = new File(monthFolder, "Logs");
+        final File logFolder = getCurrentLogFolder();
         final List<File> logFiles = new ArrayList();
         logFiles.addAll(Arrays.asList(logFolder.listFiles()));
         logFiles.sort((o1, o2) -> {
@@ -49,5 +47,13 @@ public class LogController extends Controller {
             logger.error("Could not read logFile", e);
         }
         return ResponseEntity.ok(builder.toString());
+    }
+
+    private File getCurrentLogFolder() {
+        File logFolder = new File(new CustomProperties().getProperty("localArchivePath"), ".log");
+        final String monthValue = LocalDate.now().getMonthValue() + "";
+        final String monthVal = monthValue.length() == 1 ? 0 + monthValue : monthValue;
+        final File yearMonthLogFolder = new File(logFolder, LocalDate.now().getYear() + "-" + monthVal);
+        return yearMonthLogFolder;
     }
 }
