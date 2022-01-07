@@ -29,7 +29,7 @@ public class Memo {
         return id;
     }
 
-    public List<String> getUsers() {
+    public List<String> getUserNames() {
         return userNames;
     }
 

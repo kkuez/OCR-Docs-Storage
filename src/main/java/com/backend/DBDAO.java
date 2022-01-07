@@ -405,7 +405,7 @@ public class DBDAO {
             return;
         }
 
-        for(String username: memo.getUsers()) {
+        for(String username: memo.getUserNames()) {
             executeSQL("insert into Users_Memos(username, memoid) VALUES('" + username + "'," +
                     memoId + ")");
         }
