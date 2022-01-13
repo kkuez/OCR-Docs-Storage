@@ -108,6 +108,7 @@ public class DBDAO {
 
     List<Memo> getMemos(User user) {
         List<Memo> memoList = new ArrayList<>();
+        // Get Memos
         try (Statement statement = getConnection().createStatement();
              ResultSet rs = statement.executeQuery("select * from Memos m where "+
                      "(select memoid from Users_Memos where username ='" + user.getName() + "')")){
@@ -119,6 +120,25 @@ public class DBDAO {
         } catch (SQLException e) {
             logger.error("Could not get Memos for " + user.getName(), e);
         }
+
+        //TODO Eleganter lösen als NOCHMAL über alle Memos zu iterieren
+        //TODO Ausserdem kacke: Die ganze Zeit neue Verbindungen öffnen und schließen
+
+        // Get Users
+        for (Memo memo : memoList) {
+            try (Statement statement = getConnection().createStatement();
+                 ResultSet rs = statement.executeQuery("select username from Users_Memos um where "+
+                         "memoid=" + memo.getId())){
+                List<String> userNames = new ArrayList<>();
+                while(rs.next()) {
+                    userNames.add(rs.getString("username"));
+                }
+                memo.setUserNames(userNames);
+            } catch (SQLException e) {
+                logger.error("Could not get Memos for " + user.getName(), e);
+            }
+        }
+
         return memoList;
     }
 

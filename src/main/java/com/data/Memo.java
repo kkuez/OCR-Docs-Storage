@@ -45,4 +45,8 @@ public class Memo {
     public String getFromTimeString() {
         return fromTime.withNano(0).toString();
     }
+
+    public void setUserNames(List<String> userNames) {
+        this.userNames = userNames;
+    }
 }
