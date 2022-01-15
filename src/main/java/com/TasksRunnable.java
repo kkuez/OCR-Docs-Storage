@@ -33,8 +33,7 @@ public class TasksRunnable implements Runnable {
 
         while (loopActive) {
             tasksToDo = facade.getTasks();
-            //TODO
-            //tasksToDo.add(checkConnectionTask);
+            tasksToDo.add(checkConnectionTask);
             LocalDateTime localDateTimeNow;
             for (Task task : tasksToDo) {
                 localDateTimeNow = LocalDateTime.now().withSecond(0).withNano(0);

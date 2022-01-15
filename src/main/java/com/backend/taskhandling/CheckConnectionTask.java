@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.time.LocalDateTime;
 
 import static com.utils.PinUtil.setGPIO;
 
@@ -41,4 +42,12 @@ public class CheckConnectionTask extends Task {
         return false;
     }
 
+    @Override
+    public boolean timeIsNow(LocalDateTime localDateTime) {
+        return true;
+    }
+
+    @Override
+    public void delete() {
+    }
 }
