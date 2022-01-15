@@ -107,35 +107,29 @@ public class DBDAO {
     }
 
     List<Memo> getMemos(User user) {
-        List<Memo> memoList = new ArrayList<>();
         // Get Memos
+        Map<Integer, Memo> memoMap = new HashMap<>();
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select * from Memos m where "+
-                     "(select memoid from Users_Memos where username ='" + user.getName() + "')")){
+             ResultSet rs = statement.executeQuery("select * from Memos m " +
+                     "inner Join Users_Memos um on m.id = um.memoid")){
 
             while(rs.next()) {
-                memoList.add(new Memo(rs.getInt("id"), List.of(user.getName()), rs.getString("memoText"),
-                        LocalDateTime.parse(rs.getString("dateTime"))));
+                final int memoId = rs.getInt("id");
+                if(!memoMap.containsKey(memoId)) {
+                    memoMap.put(memoId, new Memo(memoId,  rs.getString("memoText"),
+                            LocalDateTime.parse(rs.getString("dateTime"))));
+                }
+                memoMap.get(memoId).addUserName(rs.getString("username"));
             }
         } catch (SQLException e) {
             logger.error("Could not get Memos for " + user.getName(), e);
         }
 
-        //TODO Eleganter lösen als NOCHMAL über alle Memos zu iterieren
-        //TODO Ausserdem kacke: Die ganze Zeit neue Verbindungen öffnen und schließen
-
-        // Get Users
-        for (Memo memo : memoList) {
-            try (Statement statement = getConnection().createStatement();
-                 ResultSet rs = statement.executeQuery("select username from Users_Memos um where "+
-                         "memoid=" + memo.getId())){
-                List<String> userNames = new ArrayList<>();
-                while(rs.next()) {
-                    userNames.add(rs.getString("username"));
-                }
-                memo.setUserNames(userNames);
-            } catch (SQLException e) {
-                logger.error("Could not get Memos for " + user.getName(), e);
+        final Collection<Memo> values = memoMap.values();
+        List<Memo> memoList = new ArrayList<>(values);
+        for(Memo memo: values) {
+            if(!memo.getUserNames().contains(user.getName())) {
+                memoList.remove(memo);
             }
         }
 
