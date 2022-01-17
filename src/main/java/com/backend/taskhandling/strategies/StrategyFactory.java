@@ -6,7 +6,6 @@ import com.backend.taskhandling.Task;
 import java.time.LocalDateTime;
 
 public class StrategyFactory {
-    //TODO
     public static ExecutionStrategy getStrategy(StrategyType strategyType, LocalDateTime time, Task task,
                                                 BackendFacade facade) {
         switch (strategyType) {

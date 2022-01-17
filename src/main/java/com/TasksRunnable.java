@@ -28,6 +28,18 @@ public class TasksRunnable implements Runnable {
     private BackendFacade facade;
     private ObjectHub objectHub;
 
+    @Override
+    public void run() {
+        try {
+            checkConnectionTask = new CheckConnectionTask(objectHub);
+            loop();
+        } catch (InterruptedException e) {
+            logger.error("Couldn't run CalendarTasks.", e);
+            Thread.currentThread().interrupt();
+            System.exit(2);
+        }
+    }
+
     private void loop() throws InterruptedException {
         loopActive = true;
 
@@ -57,24 +69,6 @@ public class TasksRunnable implements Runnable {
                 }
             }
             Thread.sleep(60000);
-        }
-    }
-
-    @Override
-    public void run() {
-        try {
-            checkConnectionTask = new CheckConnectionTask(objectHub);
-            //TODO
-            //FIXME
-            /*RegularMinutelyExecutionStrategy checkConnectionTaskStrategy = new RegularMinutelyExecutionStrategy(
-                    checkConnectionTask, time);
-            checkConnectionTask.setExecutionStrategy(checkConnectionTaskStrategy);*/
-
-            loop();
-        } catch (InterruptedException e) {
-            logger.error("Couldn't run CalendarTasks.", e);
-            Thread.currentThread().interrupt();
-            System.exit(2);
         }
     }
 

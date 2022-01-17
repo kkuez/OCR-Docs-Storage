@@ -33,8 +33,6 @@ public class DBDAO {
     private static File dbFile = null;
     private TaskFactory taskFactory;
 
-    private Document lastProcessedDoc = null;
-
     @Autowired
     public DBDAO(TaskFactory taskFactory, ObjectHub objectHub, BackendFacade facade) {
         dbFile = new File(objectHub.getProperties().getProperty("dbPath"));
@@ -202,54 +200,6 @@ public class DBDAO {
         }
 
         return connection;
-    }
-
-    List<Bon> getAllBons() {
-        // TODO es gibt ein dateTime Format von SQLite
-        List<Bon> resultBons = new ArrayList<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery(
-                     "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument")) {
-            while (rs.next()) {
-                String content = rs.getString("content");
-                String originalFilePath = rs.getString("originalFile");
-                String userName = rs.getString("user");
-                float sum = rs.getFloat("sum");
-                int id = rs.getInt("id");
-                String uuid = rs.getString("uid");
-                String date = rs.getString("date");
-
-                Document document = new Image(content, new File(originalFilePath), id, userName);
-                document.setDate(date);
-                Bon bon = new Bon(sum, uuid == null ? null : UUID.fromString(uuid), date);
-                resultBons.add(bon);
-            }
-        } catch (SQLException e) {
-            logger.error("Couldnt sql to get Bons", e);
-        }
-        return resultBons;
-    }
-
-    public List<Bon> getBonsForMonth(int year, int month) {
-        // TODO es gibt ein dateTime Format von SQLite
-        String monthAndYear = month + "-" + year;
-        List<Bon> resultBons = new ArrayList<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery(
-                     "SELECT * FROM Documents INNER JOIN Bons ON Documents.id=Bons.belongsToDocument where date like '%"
-                             + monthAndYear.replace("-", ".") + "%'")) {
-            while (rs.next()) {
-                float sum = rs.getFloat("sum");
-                String uuid = rs.getString("uid");
-                String date = rs.getString("date");
-
-                Bon bon = new Bon(sum, uuid == null ? null : UUID.fromString(uuid), date);
-                resultBons.add(bon);
-            }
-        } catch (SQLException e) {
-            logger.error("Couldnt sql to get Bons for time " + month + "-" + year, e);
-        }
-        return resultBons;
     }
 
     public void deleteFromShoppingList(String item) {

@@ -23,7 +23,6 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class Application {
-    //@Value("${http.port}")
     private int httpPort = 8088;
 
     Logger Logger = LoggerFactory.getLogger(Application.class);
