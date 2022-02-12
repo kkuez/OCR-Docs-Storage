@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BackendFacadeImpl implements BackendFacade {
@@ -86,7 +83,7 @@ public class BackendFacadeImpl implements BackendFacade {
 
     @Override
     public List<Task> getTasks(String userid) {
-        List<Task> tasksFromDB = dbdao.getTasksFromDB(this, userid);
+        List<Task> tasksFromDB = dbdao.getTasksFromDB(this, Optional.of(userid));
         Collections.reverse(tasksFromDB);
         return tasksFromDB;
     }

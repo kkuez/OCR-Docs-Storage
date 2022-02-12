@@ -211,30 +211,23 @@ public class DBDAO {
     }
 
     List<Task> getTasksFromDB(BackendFacade facade) {
-        //TODO getTasksFromDB nur über eine Methode machen lassen!
-        List<Task> taskList = new ArrayList<>();
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select * from CalendarTasks");) {
-            while (rs.next()) {
-                Task task = taskFactory.getTask(rs, facade);
-                taskList.add(task);
-            }
-        } catch (SQLException e) {
-            logger.error("select * from Task", e);
-        }
-        return taskList;
+        return getTasksFromDB(facade, Optional.empty());
     }
 
-    public List<Task> getTasksFromDB(BackendFacadeImpl backendFacade, String userid) {
+    public List<Task> getTasksFromDB(BackendFacade backendFacade, Optional<String> userid) {
         List<Task> taskList = new ArrayList<>();
         final LocalDateTime now = LocalDateTime.now();
+        String statementString = "select * from CalendarTasks";
+        if(userid.isPresent()) {
+            statementString += " where user='" + userid.get() + "' OR " + "user='ALL'";
+        }
+
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select * from CalendarTasks where user='" + userid + "' OR " +
-                     "user='ALL'");) {
+             ResultSet rs = statement.executeQuery(statementString);) {
             while (rs.next()) {
                 Task task = taskFactory.getTask(rs, backendFacade);
                 if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)
-                        && task.getExecutionStrategy().getTime().isBefore(now)) {
+                        && task.getExecutionStrategy().getTime().toLocalDate().isBefore(now.toLocalDate())) {
                     deleteTask(task.geteID());
                 } else {
                     taskList.add(task);
