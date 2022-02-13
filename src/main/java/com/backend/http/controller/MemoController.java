@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 public class MemoController extends Controller{
 
-    private final static String MEMOS = "/memos";
+    private static final String MEMOS = "/memos";
     private final BackendFacade facade;
     private final ObjectMapper objectMapper;
 

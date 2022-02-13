@@ -21,8 +21,9 @@ import java.util.UUID;
 
 @RestController
 public class BonController extends Controller{
-
-    private final static String BON = "/bon";
+    private static final String COULD_NOT_PARSE_INCOMING_BON = "Could not parse incoming Bon";
+    private static final String USERID = "userid";
+    private static final String BON = "/bon";
     private BackendFacadeImpl backendFacade = null;
 
     @Autowired
@@ -32,8 +33,8 @@ public class BonController extends Controller{
 
     @GetMapping(BON + "/get")
     public ResponseEntity<Map<String, Float>> get(HttpServletRequest request)  {
-        final String userid = request.getHeader("userid");
-        logger.info(getLogPrefrix() + BON + "/get from " + userid);
+        final String userid = request.getHeader(USERID);
+        logger.info("{}{}/get from {}", getLogPrefrix(), BON, userid);
         Float sumMe = backendFacade.getSum(userid);
         Float sumAll = backendFacade.getSum("");
         return ResponseEntity.ok(Map.of("me", sumMe, "all", sumAll));
@@ -41,9 +42,9 @@ public class BonController extends Controller{
 
     @GetMapping(BON + "/getLastBons")
     public ResponseEntity<List<Bon>> getLastBons(HttpServletRequest request)  {
-        final String userid = request.getHeader("userid");
+        final String userid = request.getHeader(USERID);
         final Integer lastMany = Integer.parseInt(request.getHeader("lastMany"));
-        logger.info(getLogPrefrix() + BON + "/get from " + userid);
+        logger.info("{}{}/get from {}", getLogPrefrix(), BON, userid);
         List<Bon> lastSums = backendFacade.getLastBons(userid, lastMany);
         return ResponseEntity.ok(lastSums);
     }
@@ -51,23 +52,25 @@ public class BonController extends Controller{
     @PostMapping(BON + "/send")
     public ResponseEntity<String> send(@RequestBody Map map) {
         try {
-            final String userid = (String)map.get("userid");
+            final String userid = (String)map.get(USERID);
             float sum = Float.parseFloat(String.valueOf(map.get("sum")));
             byte[] fileBytes = Base64.decode(String.valueOf(map.get("file")));
-            logger.info(getLogPrefrix() + BON + "/send from " + userid);
+            logger.info("{}{}/send from {}", getLogPrefrix(), BON, userid);
             File newPic = new File(FileUtils.getTempDirectory(),  userid + "_" + LocalDateTime.now().toString().replace(".", "-").replace(":", "-") + ".jpg");
             newPic.createNewFile();
-            FileOutputStream fos = new FileOutputStream(newPic);
-            fos.write(fileBytes);
-            fos.flush();
+
+            try (FileOutputStream fos = new FileOutputStream(newPic)) {
+                fos.write(fileBytes);
+                fos.flush();
+            }
 
             File archivedPic = backendFacade.copyToArchive(newPic, true);
             Bon bon = new Bon(backendFacade.getIdForNextDocument(), backendFacade.getAllowedUsers().get(userid),
                     archivedPic, sum, UUID.randomUUID());
             backendFacade.insertBon(bon);
         } catch (Exception e ) {
-            logger.error("Could not parse incoming Bon", e);
-            return ResponseEntity.ok("Could not parse incoming Bon");
+            logger.error(COULD_NOT_PARSE_INCOMING_BON, e);
+            return ResponseEntity.ok(COULD_NOT_PARSE_INCOMING_BON);
         }
         return ResponseEntity.ok("");
     }
@@ -75,7 +78,7 @@ public class BonController extends Controller{
     @PostMapping(BON + "/sendWithPath")
     public ResponseEntity<String> sendWithPath(@RequestBody Map map) {
         try {
-            final String userid = (String)map.get("userid");
+            final String userid = (String)map.get(USERID);
             float sum = Float.parseFloat(String.valueOf(map.get("sum")));
 
             File archivedPic = new File((String) map.get("pathToPic"));
@@ -83,8 +86,8 @@ public class BonController extends Controller{
                     archivedPic, sum, UUID.randomUUID());
             backendFacade.insertBon(bon);
         } catch (Exception e ) {
-            logger.error("Could not parse incoming Bon", e);
-            return ResponseEntity.ok("Could not parse incoming Bon");
+            logger.error(COULD_NOT_PARSE_INCOMING_BON, e);
+            return ResponseEntity.ok(COULD_NOT_PARSE_INCOMING_BON);
         }
         return ResponseEntity.ok("");
     }
@@ -92,12 +95,12 @@ public class BonController extends Controller{
     @PostMapping(BON + "/delete")
     public ResponseEntity<String> delete(@RequestBody Map map) {
         try {
-            final String userid = (String)map.get("userid");
+            final String userid = (String)map.get(USERID);
             final UUID uuid = UUID.fromString((String) map.get("uuid"));
             backendFacade.delete(userid, uuid);
         } catch (Exception e ) {
-            logger.error("Could not parse incoming Bon", e);
-            return ResponseEntity.ok("Could not parse incoming Bon");
+            logger.error(COULD_NOT_PARSE_INCOMING_BON, e);
+            return ResponseEntity.ok(COULD_NOT_PARSE_INCOMING_BON);
         }
         return ResponseEntity.ok("");
     }

@@ -2,7 +2,6 @@ package com;
 
 import com.backend.BackendFacade;
 import com.backend.CustomProperties;
-import com.backend.taskhandling.TaskFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -15,17 +14,10 @@ import java.time.LocalDate;
 @Service
 public class StartUp {
 
-    private static Logger logger;
-    private final BackendFacade facade;
-    private final TasksRunnable tasksRunnable;
-    private final TaskFactory taskFactory;
+    private static Logger logger = LoggerFactory.getLogger(StartUp.class);;
 
     @Lazy
-    public StartUp(BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory) {
-        this.facade = facade;
-        this.tasksRunnable = tasksRunnable;
-        this.taskFactory = taskFactory;
-        logger = LoggerFactory.getLogger(StartUp.class);
+    public StartUp(BackendFacade facade, TasksRunnable tasksRunnable) {
         logger.info("\n\nStarting.");
         facade.getObjectHub().initLater(tasksRunnable);
     }

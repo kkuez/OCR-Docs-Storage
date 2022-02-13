@@ -13,13 +13,15 @@ import java.util.Properties;
 @Service
 public class CustomProperties extends Properties {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomProperties.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomProperties.class);
+    private static final String SETUPPROPERTIES_NAME = "setup.properties";
 
     @Autowired
     public CustomProperties() {
         String root = "";
         try {
-            this.load(new FileInputStream(root + "setup.properties"));
+
+            this.load(new FileInputStream(root + SETUPPROPERTIES_NAME));
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(2);
@@ -28,10 +30,10 @@ public class CustomProperties extends Properties {
 
     @Override
     public synchronized Object setProperty(String key, String value) {
-        try {
-            this.store(new FileOutputStream("setup.properties"), null);
+        try(final FileOutputStream fos = new FileOutputStream(SETUPPROPERTIES_NAME)) {
+            this.store(fos, null);
         } catch (IOException e) {
-            logger.error("setup.properties", e);
+            LOGGER.error(SETUPPROPERTIES_NAME, e);
         }
         return put(key, value);
     }

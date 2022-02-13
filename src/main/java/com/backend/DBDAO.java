@@ -43,8 +43,8 @@ public class DBDAO {
 
     public static boolean insertNewUser(String name, String password) {
         Properties properties = new Properties();
-        try {
-            properties.load(new FileInputStream("setup.properties"));
+        try(final FileInputStream setupPropertiesInputStream = new FileInputStream("setup.properties")) {
+            properties.load(setupPropertiesInputStream);
         } catch (IOException e) {
             e.printStackTrace();
             return false;

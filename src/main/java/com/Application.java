@@ -22,13 +22,12 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class Application {
-    private final int httpPort = 8088;
+    private static final int httpPort = 8088;
 
-    Logger Logger = LoggerFactory.getLogger(Application.class);
     private static ApplicationContext applicationContext;
 
     public static void main(String[] args) {
-        if(!Arrays.stream(args).anyMatch(arg -> arg.equals("-newUser"))) {
+        if(Arrays.stream(args).noneMatch(arg -> arg.equals("-newUser"))) {
             applicationContext = SpringApplication.run(Application.class, args);
         } else {
             System.out.println("New User\nName?");
@@ -63,19 +62,20 @@ public class Application {
         FilterRegistrationBean<Filter> filterRegBean = new FilterRegistrationBean<>();
         filterRegBean.setFilter(new Filter() {
 
-            final Logger logger = LoggerFactory.getLogger(FilterRegistrationBean.class);
+            final Logger logger = LoggerFactory.getLogger(Filter.class);
             @Override
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
                 final RequestFacade requestFacade = (RequestFacade) request;
                 final DBDAO dbdao = (DBDAO)applicationContext.getBean("DBDAO");
+                final String userid = "userid";
                 if(requestFacade.getRequestURI().toLowerCase(Locale.ROOT).contains("ldap")
-                || requestFacade.getHeader("userid").toLowerCase(Locale.ROOT).contains("ldap")) {
+                || requestFacade.getHeader(userid).toLowerCase(Locale.ROOT).contains("ldap")) {
                     logger.error("Found invalid ldap String!!!");
                     System.exit(3);
                 }
 
-                logger.info(requestFacade.getRequestURI() + " from " + requestFacade.getHeader("userid"));
-                if(dbdao.checkCredentials(requestFacade.getHeader("userid"),
+                logger.info("{} from {}", requestFacade.getRequestURI(),requestFacade.getHeader(userid));
+                if(dbdao.checkCredentials(requestFacade.getHeader(userid),
                         requestFacade.getHeader("passw"))) {
                     chain.doFilter(request, response);
                 }

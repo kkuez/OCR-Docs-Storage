@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @RestController
 public class CalendarController extends Controller {
-    private final static String CALENDAR = "/calendar";
+    private static final String CALENDAR = "/calendar";
     private final ObjectMapper objectMapper;
     private final BackendFacade facade;
     private final TaskFactory taskFactory;
@@ -39,6 +39,7 @@ public class CalendarController extends Controller {
 
     @PostMapping(CALENDAR + "/new")
     public ResponseEntity<String> newEntry(@RequestBody Map map) {
+        // TODO Das ganze parsen über den ObjectMapper machen, nicht über die Map
         String userId = String.valueOf(map.get("userid"));
         try {
             String userString = (String) map.get("for");

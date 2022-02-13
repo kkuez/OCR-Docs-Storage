@@ -57,9 +57,9 @@ public class TasksRunnable implements Runnable {
                     if (success) {
                         StringBuilder usersString = new StringBuilder();
                         task.getUserList().forEach(user -> usersString.append(", ")
-                                .append(facade.getAllowedUsers().get(user).getName()));
-                        logger.info("Task " + task.getName() + " for user "
-                                + usersString.toString().replaceFirst(", ", ""));
+                                .append(user.getName()));
+                        logger.info("Task {} for user {}", task.getName(),
+                                usersString.toString().replaceFirst(", ", ""));
                     }
                     if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)) {
                         task.delete();

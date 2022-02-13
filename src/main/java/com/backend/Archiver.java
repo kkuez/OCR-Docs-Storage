@@ -1,19 +1,14 @@
 package com.backend;
 
-import com.data.Document;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class Archiver {
-
-    private List<Document> documentList;
 
     File archiveFolder;
 
@@ -26,8 +21,6 @@ public class Archiver {
     final File resourceFolder;
 
     public Archiver(CustomProperties properties) {
-
-        documentList = new ArrayList<>();
         archiveFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv", LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
         if(!archiveFolder.exists()){
             archiveFolder.mkdir();
