@@ -6,11 +6,10 @@ import com.backend.taskhandling.TaskFactory;
 import com.backend.taskhandling.strategies.ExecutionStrategy;
 import com.backend.taskhandling.strategies.StrategyFactory;
 import com.backend.taskhandling.strategies.StrategyType;
+import com.data.User;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.data.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +24,8 @@ import java.util.UUID;
 public class CalendarController extends Controller {
     private final static String CALENDAR = "/calendar";
     private final ObjectMapper objectMapper;
-    private BackendFacade facade;
-    private TaskFactory taskFactory;
+    private final BackendFacade facade;
+    private final TaskFactory taskFactory;
 
     public CalendarController(BackendFacade facade, ObjectMapper objectMapper, TaskFactory taskFactory) {
         this.facade = facade;
@@ -80,8 +79,7 @@ public class CalendarController extends Controller {
 
     @ResponseBody
     @RequestMapping(CALENDAR + "/getList")
-    public ResponseEntity<List<Task>> getEntries(HttpServletRequest request)
-            throws JsonProcessingException {
+    public ResponseEntity<List<Task>> getEntries(HttpServletRequest request) {
         List<Task> tasks = facade.getTasks(request.getHeader("userid"));
 
         return ResponseEntity.ok(tasks);

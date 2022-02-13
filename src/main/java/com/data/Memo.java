@@ -9,9 +9,9 @@ import java.util.List;
 public class Memo {
 
     private  int id;
-    private List<String> userNames;
-    private String memoText;
-    private LocalDateTime fromTime;
+    private final List<String> userNames;
+    private final String memoText;
+    private final LocalDateTime fromTime;
 
     public Memo(int id, String memoText, LocalDateTime fromTime) {
         this.id = id;

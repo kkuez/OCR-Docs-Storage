@@ -15,14 +15,15 @@ import java.util.Map;
 public class ShoppingListController extends Controller {
 
     private static final String SHOPPINGLIST = "/shoppinglist";
-    private BackendFacade facade;
-    private ObjectMapper objectMapper;
+    private final BackendFacade facade;
+    private final ObjectMapper objectMapper;
 
     public ShoppingListController(BackendFacade facade, ObjectMapper objectMapper) {
         this.facade = facade;
         this.objectMapper = objectMapper;
     }
 
+    // TODO return ResponseBody!
     @PostMapping(SHOPPINGLIST + "/delete")
     public String deleteEntry(@RequestBody Map map) {
         try {
@@ -35,6 +36,7 @@ public class ShoppingListController extends Controller {
         return "Ok";
     }
 
+    // TODO return ResponseBody!
     @PostMapping(SHOPPINGLIST + "/send")
     public String newEntry(@RequestBody Map map) {
         try {
@@ -49,11 +51,13 @@ public class ShoppingListController extends Controller {
         return "Ok";
     }
 
+    // TODO return ResponseBody!
     @GetMapping(SHOPPINGLIST + "/get")
     public String getList() throws JsonProcessingException {
         return objectMapper.writeValueAsString(facade.getShoppingList());
     }
 
+    // TODO return ResponseBody!
     @PostMapping(SHOPPINGLIST + "/deleteAll")
     public String deleteAll() {
         facade.getShoppingList().forEach(facade::deleteFromShoppingList);

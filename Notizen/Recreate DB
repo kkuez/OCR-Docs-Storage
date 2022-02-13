@@ -8,8 +8,6 @@ Drop Table Documents;
 create table Documents (id INTEGER, content TEXT, originalFile TEXT, date TEXT, user TEXT, inZipFile TEXT, sizeOfOriginalFile INTEGER);
 Drop Table ShoppingList;
 create Table ShoppingList(item TEXT);
-Drop Table StandardList;
-create Table StandardList(item TEXT);
 Drop Table Memos;
 create Table Memos(id INTEGER PRIMARY KEY, memoText TEXT, dateTime TEXT);
 Drop Table Users_Memos;

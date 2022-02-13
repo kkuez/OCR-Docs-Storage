@@ -16,9 +16,9 @@ import java.time.LocalDate;
 public class StartUp {
 
     private static Logger logger;
-    private BackendFacade facade;
-    private TasksRunnable tasksRunnable;
-    private TaskFactory taskFactory;
+    private final BackendFacade facade;
+    private final TasksRunnable tasksRunnable;
+    private final TaskFactory taskFactory;
 
     @Lazy
     public StartUp(BackendFacade facade, TasksRunnable tasksRunnable, TaskFactory taskFactory) {

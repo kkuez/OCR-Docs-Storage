@@ -32,7 +32,7 @@ public class BonController extends Controller{
 
     @GetMapping(BON + "/get")
     public ResponseEntity<Map<String, Float>> get(HttpServletRequest request)  {
-        final String userid = (String)request.getHeader("userid");
+        final String userid = request.getHeader("userid");
         logger.info(getLogPrefrix() + BON + "/get from " + userid);
         Float sumMe = backendFacade.getSum(userid);
         Float sumAll = backendFacade.getSum("");
@@ -41,7 +41,7 @@ public class BonController extends Controller{
 
     @GetMapping(BON + "/getLastBons")
     public ResponseEntity<List<Bon>> getLastBons(HttpServletRequest request)  {
-        final String userid = (String)request.getHeader("userid");
+        final String userid = request.getHeader("userid");
         final Integer lastMany = Integer.parseInt(request.getHeader("lastMany"));
         logger.info(getLogPrefrix() + BON + "/get from " + userid);
         List<Bon> lastSums = backendFacade.getLastBons(userid, lastMany);

@@ -26,12 +26,12 @@ import java.util.*;
 @Service
 public class DBDAO {
 
-    private Logger logger = LoggerFactory.getLogger(DBDAO.class);
+    private final Logger logger = LoggerFactory.getLogger(DBDAO.class);
 
     private Connection connection = null;
 
     private static File dbFile = null;
-    private TaskFactory taskFactory;
+    private final TaskFactory taskFactory;
 
     @Autowired
     public DBDAO(TaskFactory taskFactory, ObjectHub objectHub, BackendFacade facade) {
@@ -74,7 +74,7 @@ public class DBDAO {
     Map<String, User> getAllowedUsersMap(BackendFacade facade) {
         Map<String, User> userMap = new HashMap<>();
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select * from AllowedUsers");) {
+             ResultSet rs = statement.executeQuery("select * from AllowedUsers")) {
 
             while (rs.next()) {
                 User user = new User(rs.getString("name"), facade);
@@ -89,7 +89,7 @@ public class DBDAO {
     List<String> getShoppingListFromDB() {
         List<String> shoppingList = new ArrayList<>();
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList");) {
+             ResultSet rs = statement.executeQuery("SELECT * FROM ShoppingList")) {
 
             while (rs.next()) {
                 shoppingList.add(rs.getString("item"));
@@ -147,7 +147,7 @@ public class DBDAO {
     }
 
     void executeSQL(String sqlStatement) {
-        try (Statement statement = getConnection().createStatement();) {
+        try (Statement statement = getConnection().createStatement()) {
             statement.executeUpdate(sqlStatement);
         } catch (SQLException e) {
             logger.error(sqlStatement, e);
@@ -175,16 +175,16 @@ public class DBDAO {
         executeSQL(task.getInsertDBString());
     }
 
-    int countDocuments(String tableName, String sqlAddition) {
+    int countDocuments() {
         int count = 0;
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition);) {
+             ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM Documents")) {
 
             while (rs.next()) {
                 count = rs.getInt("Count(*)");
             }
         } catch (SQLException e) {
-            logger.error("SELECT COUNT(*) FROM " + tableName + " " + sqlAddition, e);
+            logger.error("SELECT COUNT(*) FROM Documents", e);
         }
         return count;
     }
@@ -223,7 +223,7 @@ public class DBDAO {
         }
 
         try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery(statementString);) {
+             ResultSet rs = statement.executeQuery(statementString)) {
             while (rs.next()) {
                 Task task = taskFactory.getTask(rs, backendFacade);
                 if (!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)
@@ -257,18 +257,6 @@ public class DBDAO {
         executeSQL(bon.getInsertDBString(0));
     }
 
-    public String getXORKey() {
-        try (Statement statement = getConnection().createStatement();
-             ResultSet rs = statement.executeQuery("select key from Settings")) {
-            while (rs.next()) {
-                return rs.getString("key");
-            }
-        } catch (SQLException e) {
-            logger.error("Cannot get XORKey", e);
-        }
-        return null;
-    }
-
     public boolean checkCredentials(String userid, String passw) {
         final MessageDigest digest;
         String sha3Hex = "";
@@ -286,7 +274,7 @@ public class DBDAO {
     private String getPassWHashForUser(String name) {
         String password = "";
         try (PreparedStatement statement =
-                     getConnection().prepareStatement("select password from AllowedUsers where name=?");) {
+                     getConnection().prepareStatement("select password from AllowedUsers where name=?")) {
             statement.setString(1, name);
             final ResultSet resultSet = statement.executeQuery();
             password = resultSet.getString("password");
@@ -325,7 +313,6 @@ public class DBDAO {
         String filePath = "";
         try (Statement statement = getConnection().createStatement();
              ResultSet rs = statement.executeQuery(sqlString)) {
-            int i = 0;
             if(rs.next()) {
                 id = rs.getInt("id");
                 filePath = rs.getString("originalFile");
@@ -410,7 +397,7 @@ public class DBDAO {
             }
 
             executeSQL("update CalendarTasks set eID='" + UUID.randomUUID() + "'," +
-                    "time='" + timeToShift.withNano(0).toString() + "' where eID='" + task.geteID() + "'");
+                    "time='" + timeToShift.withNano(0) + "' where eID='" + task.geteID() + "'");
         }
     }
 

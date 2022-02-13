@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class TasksRunnable implements Runnable {
 
-    private static Logger logger = LoggerFactory.getLogger(TasksRunnable.class);
+    private static final Logger logger = LoggerFactory.getLogger(TasksRunnable.class);
 
     private List<Task> tasksToDo = new ArrayList<>();
 
@@ -56,8 +56,8 @@ public class TasksRunnable implements Runnable {
                     // if successfully performed and is NOT a regular task, remove from list
                     if (success) {
                         StringBuilder usersString = new StringBuilder();
-                        task.getUserList().forEach(user -> usersString.append(", " +
-                                facade.getAllowedUsers().get(user).getName()));
+                        task.getUserList().forEach(user -> usersString.append(", ")
+                                .append(facade.getAllowedUsers().get(user).getName()));
                         logger.info("Task " + task.getName() + " for user "
                                 + usersString.toString().replaceFirst(", ", ""));
                     }

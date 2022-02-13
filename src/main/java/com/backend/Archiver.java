@@ -2,8 +2,6 @@ package com.backend;
 
 import com.data.Document;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -17,8 +15,6 @@ public class Archiver {
 
     private List<Document> documentList;
 
-    private static Logger logger = LoggerFactory.getLogger(Archiver.class);
-
     File archiveFolder;
 
     File documentFolder;
@@ -27,9 +23,7 @@ public class Archiver {
 
     File zipFolder;
 
-    File currentLogFile;
-
-    File resourceFolder;
+    final File resourceFolder;
 
     public Archiver(CustomProperties properties) {
 
@@ -58,59 +52,6 @@ public class Archiver {
         if(!resourceFolder.exists()){
             resourceFolder.mkdir();
         }
-    }
-
-    public File getResourceFolder() {
-        return resourceFolder;
-    }
-
-    public File getCurrentLogFile() {
-        return currentLogFile;
-    }
-
-    public void setCurrentLogFile(File currentLogFile) {
-        this.currentLogFile = currentLogFile;
-    }
-
-    public File getZipFolder() {
-        return zipFolder;
-    }
-
-    public void setZipFolder(File zipFolder) {
-        this.zipFolder = zipFolder;
-    }
-
-    public File getArchiveFolder() {
-        return archiveFolder;
-    }
-
-    public void setArchiveFolder(File archiveFolder) {
-        this.archiveFolder = archiveFolder;
-    }
-
-    public File getDocumentFolder() {
-        return documentFolder;
-    }
-
-    public void setDocumentFolder(File documentFolder) {
-        this.documentFolder = documentFolder;
-    }
-
-    public File getBonFolder() {
-        return bonFolder;
-    }
-
-    public void setBonFolder(File bonFolder) {
-        this.bonFolder = bonFolder;
-    }
-
-
-    public List<Document> getDocumentList() {
-        return documentList;
-    }
-
-    public void setDocumentList(List<Document> documentList) {
-        this.documentList = documentList;
     }
 
     public File copyToArchive(File newPic, boolean isBon) {

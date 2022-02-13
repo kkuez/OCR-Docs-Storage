@@ -23,8 +23,8 @@ public class LogController extends Controller {
     @RequestMapping("log/getLog")
     public ResponseEntity<String> getLog(HttpServletRequest request) {
         final File logFolder = getCurrentLogFolder();
-        final List<File> logFiles = new ArrayList();
-        logFiles.addAll(Arrays.asList(logFolder.listFiles()));
+        final File[] files = logFolder.listFiles();
+        final List<File> logFiles = new ArrayList(Arrays.asList(files));
         logFiles.sort((o1, o2) -> {
             long log1LastMod = o1.lastModified();
             long log2LastMod = o2.lastModified();

@@ -5,7 +5,6 @@ import org.apache.catalina.connector.Connector;
 import org.apache.catalina.connector.RequestFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -23,12 +22,12 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class Application {
-    private int httpPort = 8088;
+    private final int httpPort = 8088;
 
     Logger Logger = LoggerFactory.getLogger(Application.class);
     private static ApplicationContext applicationContext;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         if(!Arrays.stream(args).anyMatch(arg -> arg.equals("-newUser"))) {
             applicationContext = SpringApplication.run(Application.class, args);
         } else {
@@ -64,7 +63,7 @@ public class Application {
         FilterRegistrationBean<Filter> filterRegBean = new FilterRegistrationBean<>();
         filterRegBean.setFilter(new Filter() {
 
-            Logger logger = LoggerFactory.getLogger(FilterRegistrationBean.class);
+            final Logger logger = LoggerFactory.getLogger(FilterRegistrationBean.class);
             @Override
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
                 final RequestFacade requestFacade = (RequestFacade) request;
@@ -83,20 +82,6 @@ public class Application {
             }
         });
         return filterRegBean;
-    }
-
-    @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-
-            System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
-            }
-        };
     }
 
     @Bean

@@ -1,13 +1,11 @@
 package com.backend;
 
-import com.TasksRunnable;
 import com.backend.taskhandling.Task;
 import com.data.Bon;
 import com.data.Memo;
 import com.data.User;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -34,10 +32,6 @@ public interface BackendFacade {
 
     Map<String, User> getAllowedUsers();
 
-    float getSumMonth(LocalDate yearMonth, User userOrNull);
-
-    TasksRunnable getTasksRunnable();
-    
     List<Task> getTasks(String userid);
 
     Float getSum(String userid);
@@ -52,7 +46,7 @@ public interface BackendFacade {
 
     List<Memo> getMemos(User userid);
 
-    public DBDAO getDBDAO();
+    DBDAO getDBDAO();
 
     ObjectHub getObjectHub();
 

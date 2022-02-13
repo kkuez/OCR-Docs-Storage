@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
 
-    private static Logger logger = LoggerFactory.getLogger(OneTimeExecutionStrategy.class);
+    private static final Logger logger = LoggerFactory.getLogger(OneTimeExecutionStrategy.class);
 
     @JsonIgnore
     private final BackendFacade facade;
@@ -16,7 +16,7 @@ public abstract class OneTimeExecutionStrategy implements ExecutionStrategy {
     private String name;
 
     @JsonIgnore
-    private Task task;
+    private final Task task;
 
     public OneTimeExecutionStrategy(BackendFacade facade, Task task) {
         this.task = task;

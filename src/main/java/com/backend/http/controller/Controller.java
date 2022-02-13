@@ -7,14 +7,14 @@ import java.time.LocalDateTime;
 
 public abstract class Controller {
 
-    public Logger logger;
+    public final Logger logger;
 
     public Controller() {
         logger = LoggerFactory.getLogger(Controller.class);
     }
 
     public String getLogPrefrix() {
-        return LocalDateTime.now().toString() + "\t";
+        return LocalDateTime.now() + "\t";
     }
 
 

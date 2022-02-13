@@ -13,7 +13,7 @@ import java.util.Properties;
 @Service
 public class CustomProperties extends Properties {
 
-    private static Logger logger = LoggerFactory.getLogger(CustomProperties.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomProperties.class);
 
     @Autowired
     public CustomProperties() {

@@ -1,6 +1,5 @@
 package com.backend;
 
-import com.TasksRunnable;
 import com.backend.taskhandling.Task;
 import com.data.Bon;
 import com.data.Memo;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -53,7 +51,7 @@ public class BackendFacadeImpl implements BackendFacade {
 
     @Override
     public int getIdForNextDocument() {
-        return dbdao.countDocuments("Documents", "");
+        return dbdao.countDocuments();
     }
 
     @Override
@@ -69,16 +67,6 @@ public class BackendFacadeImpl implements BackendFacade {
     @Override
     public Map<String, User> getAllowedUsers() {
         return dbdao.getAllowedUsersMap(this);
-    }
-
-    @Override
-    public float getSumMonth(LocalDate yearMonth, User userOrNull) {
-        return dbdao.getSumMonth(yearMonth, userOrNull);
-    }
-
-    @Override
-    public TasksRunnable getTasksRunnable() {
-        return getTasksRunnable();
     }
 
     @Override

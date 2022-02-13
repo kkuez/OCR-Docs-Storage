@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 public class MemoController extends Controller{
 
     private final static String MEMOS = "/memos";
-    private BackendFacade facade;
-    private ObjectMapper objectMapper;
+    private final BackendFacade facade;
+    private final ObjectMapper objectMapper;
 
     public MemoController(BackendFacade facade, ObjectMapper objectMapper) {
         this.facade = facade;

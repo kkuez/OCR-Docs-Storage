@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 @Service
 public class ObjectHub {
 
-    private static Logger logger = LoggerFactory.getLogger(ObjectHub.class);
+    private static final Logger logger = LoggerFactory.getLogger(ObjectHub.class);
 
     private ExecutorService executorService;
 
@@ -41,7 +41,7 @@ public class ObjectHub {
         thread.start();
     }
 
-    private Archiver archiver;
+    private final Archiver archiver;
 
 
     // GETTER SETTER
@@ -49,19 +49,4 @@ public class ObjectHub {
         return properties;
     }
 
-    public void setProperties(CustomProperties properties) {
-        this.properties = properties;
-    }
-
-    public Archiver getArchiver() {
-        return archiver;
-    }
-
-    public ExecutorService getExecutorService() {
-        return executorService;
-    }
-
-    public void setExecutorService(ExecutorService executorService) {
-        this.executorService = executorService;
-    }
 }

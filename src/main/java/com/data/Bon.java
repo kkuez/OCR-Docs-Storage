@@ -13,7 +13,7 @@ import java.util.UUID;
 public class Bon extends Document {
 
     float sum;
-    UUID uud;
+    final UUID uud;
 
     public Bon(int id, User user, File newPic, float sum, UUID uuid) {
         this.setContent("Bon");

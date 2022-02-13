@@ -15,7 +15,7 @@ public abstract class RegularExecutionStrategy implements ExecutionStrategy {
     @JsonIgnore
     public Logger logger = LoggerFactory.getLogger(RegularExecutionStrategy.class);
 
-    private LocalDateTime time;
+    private final LocalDateTime time;
 
     public RegularExecutionStrategy(LocalDateTime time) {
         this.time = time;
@@ -25,7 +25,7 @@ public abstract class RegularExecutionStrategy implements ExecutionStrategy {
 
     public void delete(String taskName) {
         // TODO
-    };
+    }
 
     // GETTER SETTER
 

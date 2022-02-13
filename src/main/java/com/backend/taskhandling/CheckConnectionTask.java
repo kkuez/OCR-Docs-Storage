@@ -16,7 +16,7 @@ public class CheckConnectionTask extends Task {
 
 
     private final Logger logger;
-    private ObjectHub objectHub;
+    private final ObjectHub objectHub;
 
     public CheckConnectionTask(ObjectHub objectHub) {
         this.objectHub = objectHub;
@@ -29,7 +29,7 @@ public class CheckConnectionTask extends Task {
         try {
             googleUp = InetAddress.getByName(GOOGLE_DNS).isReachable(1000);
             if (!googleUp) {
-                logger.info("Connection problem. Google: " + googleUp);
+                logger.info("Connection problem. " + GOOGLE_DNS + " not reachable.");
                 setGPIO(1, objectHub);
             } else {
                 setGPIO(0, objectHub);

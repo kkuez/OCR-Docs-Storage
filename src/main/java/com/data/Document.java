@@ -96,7 +96,7 @@ public abstract class Document {
     public String getTags() {
         StringBuilder stringBuilder = new StringBuilder();
         if (tags != null) {
-            tags.forEach(tag -> stringBuilder.append(tag + ", "));
+            tags.forEach(tag -> stringBuilder.append(tag).append(", "));
         } else {
             return "";
         }

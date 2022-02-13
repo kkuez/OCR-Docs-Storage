@@ -16,7 +16,7 @@ public class PinUtil {
 
     private static boolean isSetup = false;
 
-    private static Logger logger = LoggerFactory.getLogger(PinUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(PinUtil.class);
 
     private PinUtil() {}
 
