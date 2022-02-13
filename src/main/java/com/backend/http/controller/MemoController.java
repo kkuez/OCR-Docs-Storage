@@ -3,7 +3,6 @@ package com.backend.http.controller;
 import com.backend.BackendFacade;
 import com.data.Memo;
 import com.data.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +18,9 @@ public class MemoController extends Controller{
 
     private static final String MEMOS = "/memos";
     private final BackendFacade facade;
-    private final ObjectMapper objectMapper;
 
-    public MemoController(BackendFacade facade, ObjectMapper objectMapper) {
+    public MemoController(BackendFacade facade) {
         this.facade = facade;
-        this.objectMapper = objectMapper;
     }
 
     @PostMapping(MEMOS + "/new")

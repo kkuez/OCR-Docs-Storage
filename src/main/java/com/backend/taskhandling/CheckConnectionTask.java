@@ -13,8 +13,6 @@ import static com.utils.PinUtil.setGPIO;
 public class CheckConnectionTask extends Task {
 
     private final String GOOGLE_DNS = "1.1.1.1";
-
-
     private final Logger logger;
     private final ObjectHub objectHub;
 

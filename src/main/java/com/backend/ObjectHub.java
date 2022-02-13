@@ -7,23 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 public class ObjectHub {
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectHub.class);
-
-    private ExecutorService executorService;
-
     private CustomProperties properties;
 
     @Autowired
-    public ObjectHub(Archiver archiver, CustomProperties properties) {
+    public ObjectHub(CustomProperties properties) {
         this.properties = properties;
-        this.archiver = archiver;
-        executorService = Executors.newFixedThreadPool(Integer.parseInt(properties.getProperty("threads")));
     }
 
     public void initLater(TasksRunnable tasksRunnable) {
@@ -40,9 +33,6 @@ public class ObjectHub {
         thread.setName("TasksToDoThread");
         thread.start();
     }
-
-    private final Archiver archiver;
-
 
     // GETTER SETTER
     public Properties getProperties() {

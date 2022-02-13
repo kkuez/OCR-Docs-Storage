@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Service
 public class StartUp {
 
-    private static Logger logger = LoggerFactory.getLogger(StartUp.class);;
+    private static final Logger logger = LoggerFactory.getLogger(StartUp.class);
 
     @Lazy
     public StartUp(BackendFacade facade, TasksRunnable tasksRunnable) {
