@@ -1,6 +1,8 @@
 package com.backend;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -10,27 +12,29 @@ import java.time.LocalDate;
 @Service
 public class Archiver {
 
-    private File archiveFolder;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Archiver.class);
 
-    private File documentFolder;
-
-    private File bonFolder;
+    private final File bonFolder;
 
     public Archiver(CustomProperties properties) {
-        archiveFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv",
+        File archiveFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv",
                 LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
+       boolean exit = false;
         if(!archiveFolder.exists()){
-            archiveFolder.mkdir();
+            exit = !archiveFolder.mkdir();
         }
-
-        documentFolder = new File(archiveFolder, "Documents");
-        if(!documentFolder.exists()){
-            documentFolder.mkdir();
+        if(exit) {
+            LOGGER.error("Could not create dir {}", archiveFolder.getAbsolutePath());
+            System.exit(6);
         }
 
         bonFolder = new File(archiveFolder, "Bons");
         if(!bonFolder.exists()){
-            bonFolder.mkdir();
+            exit = !bonFolder.mkdir();
+        }
+        if(exit) {
+            LOGGER.error("Could not create dir {}", bonFolder.getAbsolutePath());
+            System.exit(8);
         }
     }
 
