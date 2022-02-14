@@ -1,10 +1,7 @@
 package com.data;
 
-import com.backend.BackendFacade;
-
 public class User {
 
-    private BackendFacade facade = null;
 
     private String name;
 
@@ -12,10 +9,7 @@ public class User {
 
     private boolean isBusy = false;
 
-    // NO InlineKeyboards! important to seperat input of the to List processes.
-
-    public User(String name, BackendFacade facade) {
-        this.facade = facade;
+    public User(String name) {
         this.name = name;
     }
 

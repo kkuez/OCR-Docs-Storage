@@ -24,7 +24,7 @@ public class BonController extends Controller{
     private static final String COULD_NOT_PARSE_INCOMING_BON = "Could not parse incoming Bon";
     private static final String USERID = "userid";
     private static final String BON = "/bon";
-    private BackendFacadeImpl backendFacade = null;
+    private BackendFacadeImpl backendFacade;
 
     @Autowired
     public BonController(BackendFacadeImpl backendFacade) {

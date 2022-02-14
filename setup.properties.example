@@ -1,27 +1,6 @@
 #!!!NEEDED!!!Path to SQLite DB
 dbPath=
-threads=4
-#Stores last in Gui browser inputFolder. No need to feel in manually
-lastInputPath=
-#!!!NEEDED!!!Path to tessData Files
-tessData=
-#eng, ger, etc. default is eng
-tessLang=
-#output result als html?
-tessHTML=false
-#Testibot:
-#tgBotToken=888027877:AAFMukIwai_JiiHjNS9aj7nWZHdsIsfer48
-#!!!NEEDED!!! token for Telegram bot
-tgBotToken=
-#!!!NEEDED!!!PW
-pwForNewUsers=Nuss
-#Path written by Host system in DB
-projectFolderOnHost=
+localArchivePath
 #Path to remote folder, seen from local system. Will be replaced with localpath when fetching docs in GUI.
 pathToProjectFolder=
-birdVidFolder=
 debug=
-#key which will be used for encryption
-xorKey=
-#Socket Port for keysharing in local network
-keySharePort=

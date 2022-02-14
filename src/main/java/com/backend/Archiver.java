@@ -10,25 +10,17 @@ import java.time.LocalDate;
 @Service
 public class Archiver {
 
-    File archiveFolder;
+    private File archiveFolder;
 
-    File documentFolder;
+    private File documentFolder;
 
-    File bonFolder;
-
-    File zipFolder;
-
-    final File resourceFolder;
+    private File bonFolder;
 
     public Archiver(CustomProperties properties) {
-        archiveFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv", LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
+        archiveFolder = new File(properties.getProperty("pathToProjectFolder") + File.separator + "Archiv",
+                LocalDate.now().getMonth().toString() + "_" + LocalDate.now().getYear());
         if(!archiveFolder.exists()){
             archiveFolder.mkdir();
-        }
-
-        zipFolder = new File(archiveFolder.getParent(), "Zips");
-        if(!zipFolder.exists()){
-            zipFolder.mkdir();
         }
 
         documentFolder = new File(archiveFolder, "Documents");
@@ -39,11 +31,6 @@ public class Archiver {
         bonFolder = new File(archiveFolder, "Bons");
         if(!bonFolder.exists()){
             bonFolder.mkdir();
-        }
-
-        resourceFolder = new File(archiveFolder, "resources");
-        if(!resourceFolder.exists()){
-            resourceFolder.mkdir();
         }
     }
 

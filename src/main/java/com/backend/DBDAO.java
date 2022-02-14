@@ -77,7 +77,7 @@ public class DBDAO {
              ResultSet rs = statement.executeQuery("select * from AllowedUsers")) {
 
             while (rs.next()) {
-                User user = new User(rs.getString("name"), facade);
+                User user = new User(rs.getString("name"));
                 userMap.put(user.getName(), user);
             }
         } catch (SQLException e) {

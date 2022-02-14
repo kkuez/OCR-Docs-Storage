@@ -46,7 +46,7 @@ public class TaskFactory {
             throw new IllegalStateException("Unexpected value: " + taskType);
         }
 
-        ExecutionStrategy executionStrategy = null;
+        ExecutionStrategy executionStrategy;
 
         String strategyTypeString = rs.getString("strategyType");
         StrategyType strategyType = getStrategyTypeOrNull(strategyTypeString);

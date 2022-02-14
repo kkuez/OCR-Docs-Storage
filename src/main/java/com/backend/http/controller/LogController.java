@@ -1,6 +1,8 @@
 package com.backend.http.controller;
 
 import com.backend.CustomProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,11 +21,18 @@ import java.util.Scanner;
 @RestController
 public class LogController extends Controller {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogController.class);
+
     @ResponseBody
     @RequestMapping("log/getLog")
     public ResponseEntity<String> getLog(HttpServletRequest request) {
         final File logFolder = getCurrentLogFolder();
         final File[] files = logFolder.listFiles();
+        if (files == null) {
+            LOGGER.error("Could not find logs in {}", logFolder.getAbsolutePath());
+            return ResponseEntity.ok("Could not find logs");
+        }
+
         final List<File> logFiles = new ArrayList(Arrays.asList(files));
         logFiles.sort((o1, o2) -> {
             long log1LastMod = o1.lastModified();
@@ -44,7 +53,7 @@ public class LogController extends Controller {
                 builder.append(scanner.nextLine()).append("\n");
             }
         } catch (IOException e) {
-            logger.error("Could not read logFile", e);
+            LOGGER.error("Could not read logFile", e);
         }
         return ResponseEntity.ok(builder.toString());
     }
