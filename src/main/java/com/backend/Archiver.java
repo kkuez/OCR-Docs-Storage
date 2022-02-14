@@ -34,7 +34,7 @@ public class Archiver {
         }
         if(exit) {
             LOGGER.error("Could not create dir {}", bonFolder.getAbsolutePath());
-            System.exit(8);
+            System.exit(7);
         }
     }
 
