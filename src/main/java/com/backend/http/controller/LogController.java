@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,9 +61,22 @@ public class LogController extends Controller {
 
     private File getCurrentLogFolder() {
         File logFolder = new File(new CustomProperties().getProperty("localArchivePath"), ".log");
-        final String monthValue = LocalDate.now().getMonthValue() + "";
-        final String monthVal = monthValue.length() == 1 ? 0 + monthValue : monthValue;
-        final File yearMonthLogFolder = new File(logFolder, LocalDate.now().getYear() + "-" + monthVal);
+        File yearMonthLogFolder;
+        LocalDate currentDate = LocalDate.now();
+
+        // To prevent infinite loops stop when certain index is reached
+        int errorIndex = 0;
+        do {
+            Integer monthInt = currentDate.getMonthValue();
+            String monthVal = (monthInt + "").length() == 1 ? 0 + "" + monthInt : monthInt + "";
+            yearMonthLogFolder = new File(logFolder, currentDate.getYear() + "-" + monthVal);
+            currentDate = currentDate.minus(1, ChronoUnit.MONTHS);
+            errorIndex++;
+            if(errorIndex > 99) {
+                throw new RuntimeException("Could not find any logfolder!");
+            }
+        } while (!yearMonthLogFolder.exists());
+
         return yearMonthLogFolder;
     }
 }
