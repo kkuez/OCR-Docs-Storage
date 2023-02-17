@@ -21,7 +21,9 @@ public class PinUtil {
     private PinUtil() {}
 
     public static void setGPIO(int i, ObjectHub objectHub)  {
-        if (isSetup) {
+        //TODO Abfragen ob RPI oder nicht und dann setzen
+        logger.info("Not setting GPIOs");
+        /*if (isSetup) {
             ProcessBuilder setpinOutPB = new ProcessBuilder();
             setpinOutPB.command("gpio", "write", PIN + "", i + "");
             setpinOutPB.redirectErrorStream();
@@ -34,7 +36,7 @@ public class PinUtil {
             }
         } else {
             setupRPIGPIO(objectHub);
-        }
+        }*/
     }
 
     private static void setupRPIGPIO(ObjectHub objectHub){

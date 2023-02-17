@@ -9,7 +9,7 @@
         </layout>
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/home/pi/Dokumente/Projekte/OCR-Docs-Storage/Archiv/.log/${timestampyearmonth}/${timestamp}.log</file>
+        <file>/home/marcel/Dokumente/Projekte/OCR-Docs-Storage/Archiv/.log/${timestampyearmonth}/${timestamp}.log</file>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
         </encoder>

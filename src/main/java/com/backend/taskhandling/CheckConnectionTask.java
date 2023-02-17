@@ -4,11 +4,7 @@ import com.backend.ObjectHub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.InetAddress;
 import java.time.LocalDateTime;
-
-import static com.utils.PinUtil.setGPIO;
 
 public class CheckConnectionTask extends Task {
 
@@ -23,6 +19,9 @@ public class CheckConnectionTask extends Task {
 
     @Override
     public boolean perform() {
+        //TODO abreissen?
+
+        return true;/*
         boolean googleUp = false;
         try {
             googleUp = InetAddress.getByName(GOOGLE_DNS).isReachable(1000);
@@ -37,7 +36,7 @@ public class CheckConnectionTask extends Task {
         }
         // TODO
         // Return false so it will not be tried to be deleted x) Hack?
-        return false;
+        return false;*/
     }
 
     @Override

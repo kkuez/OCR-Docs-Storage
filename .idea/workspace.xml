@@ -22,63 +22,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Fixed regular task shift when time is before now.">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Adjusted to nusstop.">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notizen/Zertifikate machen" beforeDir="false" afterPath="$PROJECT_DIR$/Notizen/Zertifikate machen" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/api_config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/bazaar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/digits" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/hocr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/quiet" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/tsv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/configs/unlv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/eng.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/osd.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata/pdf.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/deu.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/eng.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Arabic.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Armenian.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Bengali.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Canadian_Aboriginal.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Cherokee.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Cyrillic.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Devanagari.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Ethiopic.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Fraktur.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Georgian.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Greek.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Gujarati.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Gurmukhi.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/HanS.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/HanS_vert.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/HanT.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/HanT_vert.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Hangul.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Hangul_vert.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Hebrew.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Japanese.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Japanese_vert.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Kannada.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Khmer.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Lao.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Latin.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Malayalam.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Myanmar.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Oriya.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Sinhala.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Syriac.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Tamil.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Telugu.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Thaana.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Thai.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Tibetan.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/external_libs/tessdata_best/script/Vietnamese.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/CheckConnectionTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/CheckConnectionTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/PinUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/PinUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/logback-spring.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback-spring.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +87,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1Qb6Egp0JmSrEDoijrezpploG2D" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -143,30 +97,25 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1571994599512" />
-    <property name="extract.method.default.visibility" value="public" />
-    <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/keystore" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.1484375" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/marcel/IdeaProjects/OCR-Docs-Storage/src/main/resources/keystore&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.3632184&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com" />
       <recent name="com.backend.taskhandling" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/keystore" />
       <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage\src\main\resources\keystore" />
       <recent name="C:\Users\Marcel\IdeaProjects\OCR-Docs-Storage" />
-      <recent name="$PROJECT_DIR$/src/main/resources/keystore" />
       <recent name="C:\Users\Marcel\Documents\Projekte\OCR-Docs-Storage" />
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -251,7 +200,7 @@
             <option name="environmentProperties">
               <map />
             </option>
-            <option name="jreName" value="11" />
+            <option name="jreName" value="openjdk-19" />
             <option name="mavenProperties">
               <map />
             </option>
@@ -351,6 +300,7 @@
             <option name="printErrorStackTraces" value="false" />
             <option name="showDialogWithAdvancedSettings" value="false" />
             <option name="threads" value="8" />
+            <option name="useMavenConfig" value="false" />
             <option name="usePluginRegistry" value="false" />
             <option name="userSettingsFile" value="" />
             <option name="workOffline" value="false" />
@@ -808,10 +758,8 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added all of Shoppinglist." />
     <MESSAGE value="Fixed user parsing." />
     <MESSAGE value="Impl key renewal and db changes." />
     <MESSAGE value="SSL setup." />
@@ -836,7 +784,8 @@
     <MESSAGE value="Now right inserting of SimpleCalendarOneTime Task." />
     <MESSAGE value="Fixed Typo in sql." />
     <MESSAGE value="Fixed regular task shift when time is before now." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed regular task shift when time is before now." />
+    <MESSAGE value="Adjusted to nusstop." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adjusted to nusstop." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
