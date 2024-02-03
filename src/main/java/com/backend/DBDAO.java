@@ -257,7 +257,16 @@ public class DBDAO {
         executeSQL(bon.getInsertDBString(0));
     }
 
-    public boolean checkCredentials(String userid, String passw) {
+    public boolean checkCredentials(Map<String, String[]> parameterMap, String userid, String passw) {
+        if(userid == null || passw == null) {
+            if (parameterMap.size() != 2 || (!parameterMap.containsKey("userid") || ! parameterMap.containsKey("passw"))) {
+                throw new RuntimeException("User ID or password not given!");
+            } else {
+                userid = parameterMap.get("userid")[0];
+                passw = parameterMap.get("passw")[0];
+            }
+        }
+
         final MessageDigest digest;
         String sha3Hex = "";
         try {
@@ -276,7 +285,7 @@ public class DBDAO {
         try (PreparedStatement statement =
                      getConnection().prepareStatement("select password from AllowedUsers where name=?")) {
             statement.setString(1, name);
-            final ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             password = resultSet.getString("password");
         } catch (SQLException throwables) {
             throwables.printStackTrace();

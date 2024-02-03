@@ -7,6 +7,7 @@ import com.backend.taskhandling.strategies.ExecutionStrategy;
 import com.backend.taskhandling.strategies.StrategyFactory;
 import com.backend.taskhandling.strategies.StrategyType;
 import com.data.User;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +30,22 @@ public class CalendarController extends Controller {
         this.taskFactory = taskFactory;
     }
 
+    @PostMapping(value = CALENDAR + "/news", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    //public ResponseEntity<String> newEntry(@RequestParam("productDto") String jsonString) {
+    public ResponseEntity<String> newEntry(@RequestParam("userid") String userid,
+                                           @RequestParam("passw") String passw,
+                                           @RequestParam("for") String forIn,
+                                           @RequestParam("name") String name,
+                                           @RequestParam("time") String time,
+                                           @RequestParam("type") String type) {
+        return addNewTask(Map.of("userid", userid, "passw", passw, "for", forIn, "name", name, "time", time, "type", type));
+    }
     @PostMapping(CALENDAR + "/new")
     public ResponseEntity<String> newEntry(@RequestBody Map<String, String> map) {
+        return addNewTask(map);
+    }
+
+    private ResponseEntity<String> addNewTask(Map<String, String> map) {
         String userId = String.valueOf(map.get("userid"));
         try {
             String userString = map.get("for");
@@ -74,5 +89,33 @@ public class CalendarController extends Controller {
     public ResponseEntity<List<Task>> getEntries(HttpServletRequest request) {
         List<Task> tasks = facade.getTasks(request.getHeader("userid"));
         return ResponseEntity.ok(tasks);
+    }
+
+    @ResponseBody
+    @RequestMapping(CALENDAR + "/getListHTML")
+    public ResponseEntity<String> getEntriesHTML(HttpServletRequest request) {
+        String userid;
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        if (parameterMap.size() != 2 || (!parameterMap.containsKey("userid") || ! parameterMap.containsKey("passw"))) {
+                throw new RuntimeException("User ID or password not given!");
+            } else {
+                userid = parameterMap.get("userid")[0];
+            }
+        List<Task> tasks = facade.getTasks(userid);
+
+        StringBuilder htmlBuilder = new StringBuilder("<html><head></head><body>");
+        for (Task task : tasks) {
+            htmlBuilder.append("<b>");
+            htmlBuilder.append(task.getName());
+            htmlBuilder.append("</b>");
+            htmlBuilder.append("<br>");
+            htmlBuilder.append(task.getTimeString());
+            htmlBuilder.append("<br>");
+            htmlBuilder.append(task.getForWhom());
+            htmlBuilder.append("<br>");
+            htmlBuilder.append("<br>");
+        }
+        htmlBuilder.append("</body></html>");
+        return ResponseEntity.ok(htmlBuilder.toString());
     }
 }
