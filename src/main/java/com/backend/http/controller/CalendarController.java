@@ -102,6 +102,7 @@ public class CalendarController extends Controller {
                 userid = parameterMap.get("userid")[0];
             }
         List<Task> tasks = facade.getTasks(userid);
+        tasks.sort((t1, t2) -> t1.getExecutionStrategy().getTime().compareTo(t2.getExecutionStrategy().getTime()));
 
         StringBuilder htmlBuilder = new StringBuilder("<html><head></head><body>");
         for (Task task : tasks) {
