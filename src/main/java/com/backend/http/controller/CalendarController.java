@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -105,12 +106,14 @@ public class CalendarController extends Controller {
         tasks.sort((t1, t2) -> t1.getExecutionStrategy().getTime().compareTo(t2.getExecutionStrategy().getTime()));
 
         StringBuilder htmlBuilder = new StringBuilder("<html><head></head><body>");
+        DateTimeFormatter taskTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         for (Task task : tasks) {
             htmlBuilder.append("<b>");
             htmlBuilder.append(task.getName());
             htmlBuilder.append("</b>");
             htmlBuilder.append("<br>");
-            htmlBuilder.append(task.getTimeString());
+            String timeString = taskTimeFormatter.format(task.getExecutionStrategy().getTime());
+            htmlBuilder.append(timeString);
             htmlBuilder.append("<br>");
             htmlBuilder.append(task.getForWhom());
             htmlBuilder.append("<br>");
