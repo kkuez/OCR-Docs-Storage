@@ -107,7 +107,24 @@ public class CalendarController extends Controller {
 
         StringBuilder htmlBuilder = new StringBuilder("<html><head></head><body>");
         DateTimeFormatter taskTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nowPlusSevenDays = now.plusDays(7);
+        LocalDateTime nowPlusThreeDays = now.plusDays(3);
+        LocalDateTime nowPlusOneDay = now.plusDays(1);
         for (Task task : tasks) {
+            htmlBuilder.append("<p style=\"font-family:arial;");
+            LocalDateTime taskTime = task.getExecutionStrategy().getTime();
+
+            if(taskTime.isBefore(nowPlusSevenDays) && taskTime.isAfter(nowPlusThreeDays)) {
+                htmlBuilder.append(" color:green\">");
+            } else if(taskTime.isBefore(nowPlusThreeDays) && taskTime.isAfter(nowPlusOneDay)) {
+                htmlBuilder.append(" color:#FF5733\">");
+            } else if(taskTime.isBefore(nowPlusOneDay)) {
+                htmlBuilder.append(" color:red\">");
+            } else {
+                htmlBuilder.append(">");
+            }
+
             htmlBuilder.append("<b>");
             htmlBuilder.append(task.getName());
             htmlBuilder.append("</b>");
@@ -118,8 +135,9 @@ public class CalendarController extends Controller {
             htmlBuilder.append(task.getForWhom());
             htmlBuilder.append("<br>");
             htmlBuilder.append("<br>");
+            htmlBuilder.append("</p>");
         }
-        htmlBuilder.append("</body></html>");
+        htmlBuilder.append("</p></body></html>");
         return ResponseEntity.ok(htmlBuilder.toString());
     }
 }
