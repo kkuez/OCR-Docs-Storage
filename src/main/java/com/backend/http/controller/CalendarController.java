@@ -118,7 +118,8 @@ public class CalendarController extends Controller {
             if(taskTime.isBefore(nowPlusSevenDays) && taskTime.isAfter(nowPlusThreeDays)) {
                 htmlBuilder.append(" color:green\">");
             } else if(taskTime.isBefore(nowPlusThreeDays) && taskTime.isAfter(nowPlusOneDay)) {
-                htmlBuilder.append(" color:#FF5733\">");
+                htmlBuilder.append(" color:orange\">");
+                //htmlBuilder.append(" color:#FF5733\">");
             } else if(taskTime.isBefore(nowPlusOneDay)) {
                 htmlBuilder.append(" color:red\">");
             } else {
