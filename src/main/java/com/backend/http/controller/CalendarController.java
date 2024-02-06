@@ -122,7 +122,7 @@ public class CalendarController extends Controller {
             } else if(taskTime.isBefore(nowPlusOneDay)) {
                 htmlBuilder.append(" color:red\">");
             } else {
-                htmlBuilder.append(">");
+                htmlBuilder.append("\">");
             }
 
             htmlBuilder.append("<b>");
