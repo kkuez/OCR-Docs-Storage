@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -69,13 +70,13 @@ public class Application {
                 final DBDAO dbdao = (DBDAO)applicationContext.getBean("DBDAO");
                 final String userid = "userid";
                 if(requestFacade.getRequestURI().toLowerCase(Locale.ROOT).contains("ldap")
-                || requestFacade.getHeader(userid).toLowerCase(Locale.ROOT).contains("ldap")) {
+                || requestFacade.getHeader(userid) != null && requestFacade.getHeader(userid).toLowerCase(Locale.ROOT).contains("ldap")) {
                     logger.error("Found invalid ldap String!!!");
                     System.exit(3);
                 }
 
                 logger.info("{} from {}", requestFacade.getRequestURI(),requestFacade.getHeader(userid));
-                if(dbdao.checkCredentials(requestFacade.getHeader(userid),
+                if(dbdao.checkCredentials(requestFacade.getParameterMap(), requestFacade.getHeader(userid),
                         requestFacade.getHeader("passw"))) {
                     chain.doFilter(request, response);
                 }
