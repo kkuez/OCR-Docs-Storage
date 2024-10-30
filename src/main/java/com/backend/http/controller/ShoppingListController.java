@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -17,6 +19,7 @@ public class ShoppingListController extends Controller {
     private static final String SHOPPINGLIST = "/shoppinglist";
     private final BackendFacade facade;
     private final ObjectMapper objectMapper;
+    private final static String LIST_ITEM_SEPERATOR = "´#§";
 
     public ShoppingListController(BackendFacade facade, ObjectMapper objectMapper) {
         this.facade = facade;
@@ -54,7 +57,11 @@ public class ShoppingListController extends Controller {
     // TODO return ResponseBody!
     @GetMapping(SHOPPINGLIST + "/get")
     public String getList() throws JsonProcessingException {
-        return objectMapper.writeValueAsString(facade.getShoppingList());
+        List<String> shoppingList = facade.getShoppingList().stream()
+                .map(itemString -> itemString.replace(",", LIST_ITEM_SEPERATOR))
+                .collect(Collectors.toList());
+
+        return objectMapper.writeValueAsString(shoppingList);
     }
 
     // TODO return ResponseBody!
