@@ -149,7 +149,7 @@ public class DBDAO {
     void executeSQL(String sqlStatement) {
         try (Statement statement = getConnection().createStatement()) {
             statement.executeUpdate(sqlStatement);
-        } catch (SQLException e) {
+         } catch (SQLException e) {
             logger.error(sqlStatement, e);
         }
     }
@@ -259,8 +259,9 @@ public class DBDAO {
 
     public boolean checkCredentials(Map<String, String[]> parameterMap, String userid, String passw) {
         if(userid == null || passw == null) {
-            if (parameterMap.size() != 2 || (!parameterMap.containsKey("userid") || ! parameterMap.containsKey("passw"))) {
-                throw new RuntimeException("User ID or password not given!");
+            if (parameterMap.size() <= 1 || (!parameterMap.containsKey("userid") || ! parameterMap.containsKey("passw"))) {
+                logger.error("User ID or password not given!");
+                return false;
             } else {
                 userid = parameterMap.get("userid")[0];
                 passw = parameterMap.get("passw")[0];

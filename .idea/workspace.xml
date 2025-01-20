@@ -22,14 +22,20 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Adjusted to nusstop.">
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Item mangling for shoppinglist items.&#10;Before, seperation of items in the outputstream by &quot;,&quot;. This led to flaws in the client, as &quot;,&quot; was the seperator of the list. Changed to &quot;´#§&quot;, in the client, too.">
+      <change beforePath="$PROJECT_DIR$/.idea/OCR-Docs-Storage.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OCR-Docs-Storage.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/CheckConnectionTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/taskhandling/CheckConnectionTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/utils/PinUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/utils/PinUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application.properties.example" beforeDir="false" afterPath="$PROJECT_DIR$/application.properties.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/logback-spring.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback-spring.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +62,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="RegularTasks_Refactoring" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -79,6 +85,12 @@
       </map>
     </option>
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;kkuez&quot;
+  }
+}</component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
       <filtered-out-file-type name="LOCAL_BRANCH" />
@@ -87,9 +99,18 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/kkuez/OCR-Docs-Storage&quot;,
+    &quot;accountId&quot;: &quot;7f1df3cd-9ce0-4fdd-b969-fd7298fb3c62&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="1Qb6Egp0JmSrEDoijrezpploG2D" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -99,12 +120,23 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.Application.executor&quot;: &quot;Debug&quot;,
+    &quot;Maven.Build jar with Spring plugin.executor&quot;: &quot;Run&quot;,
+    &quot;Remote JVM Debug.RPI.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/marcel/IdeaProjects/OCR-Docs-Storage/src/main/resources/keystore&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/marcel/IdeaProjects/OCR-Docs-Storage&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.3632184&quot;
+    &quot;project.structure.side.proportion&quot;: &quot;0.3632184&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -139,7 +171,7 @@
       <command value="mvn clean package spring-boot:repackage" />
     </option>
   </component>
-  <component name="RunManager" selected="Maven.Build jar with Spring plugin">
+  <component name="RunManager" selected="Application.Application">
     <configuration name="Application newUser" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.Application" />
       <module name="OCR" />
@@ -200,7 +232,7 @@
             <option name="environmentProperties">
               <map />
             </option>
-            <option name="jreName" value="openjdk-19" />
+            <option name="jreName" value="corretto-17" />
             <option name="mavenProperties">
               <map />
             </option>
@@ -212,6 +244,7 @@
         </option>
         <option name="myRunnerParameters">
           <MavenRunnerParameters>
+            <option name="cmdOptions" />
             <option name="profiles">
               <set />
             </option>
@@ -223,9 +256,13 @@
                 <option value="-e" />
               </list>
             </option>
+            <option name="multimoduleDir" />
             <option name="pomFileName" />
             <option name="profilesMap">
               <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
             </option>
             <option name="resolveToWorkspace" value="false" />
             <option name="workingDirPath" value="$PROJECT_DIR$" />
@@ -240,6 +277,7 @@
         <option name="myRunnerSettings" />
         <option name="myRunnerParameters">
           <MavenRunnerParameters>
+            <option name="cmdOptions" />
             <option name="profiles">
               <set />
             </option>
@@ -248,9 +286,13 @@
                 <option value="clean" />
               </list>
             </option>
+            <option name="multimoduleDir" />
             <option name="pomFileName" />
             <option name="profilesMap">
               <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
             </option>
             <option name="resolveToWorkspace" value="false" />
             <option name="workingDirPath" value="$PROJECT_DIR$" />
@@ -265,6 +307,7 @@
         <option name="myRunnerSettings" />
         <option name="myRunnerParameters">
           <MavenRunnerParameters>
+            <option name="cmdOptions" />
             <option name="profiles">
               <set />
             </option>
@@ -274,9 +317,13 @@
                 <option value="exec:exec" />
               </list>
             </option>
+            <option name="multimoduleDir" />
             <option name="pomFileName" />
             <option name="profilesMap">
               <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
             </option>
             <option name="resolveToWorkspace" value="false" />
             <option name="workingDirPath" value="$PROJECT_DIR$" />
@@ -291,17 +338,18 @@
           <MavenGeneralSettings>
             <option name="alwaysUpdateSnapshots" value="false" />
             <option name="checksumPolicy" value="NOT_SET" />
+            <option name="customMavenHome" />
+            <option name="emulateTerminal" value="false" />
             <option name="failureBehavior" value="NOT_SET" />
             <option name="localRepository" value="" />
             <option name="mavenHome" value="Bundled (Maven 3)" />
+            <option name="mavenHomeTypeForPersistence" value="BUNDLED3" />
             <option name="nonRecursive" value="false" />
             <option name="outputLevel" value="INFO" />
-            <option name="pluginUpdatePolicy" value="DEFAULT" />
             <option name="printErrorStackTraces" value="false" />
             <option name="showDialogWithAdvancedSettings" value="false" />
             <option name="threads" value="8" />
             <option name="useMavenConfig" value="false" />
-            <option name="usePluginRegistry" value="false" />
             <option name="userSettingsFile" value="" />
             <option name="workOffline" value="false" />
           </MavenGeneralSettings>
@@ -309,6 +357,7 @@
         <option name="myRunnerSettings" />
         <option name="myRunnerParameters">
           <MavenRunnerParameters>
+            <option name="cmdOptions" />
             <option name="profiles">
               <set />
             </option>
@@ -319,9 +368,13 @@
                 <option value="assembly:single" />
               </list>
             </option>
+            <option name="multimoduleDir" />
             <option name="pomFileName" />
             <option name="profilesMap">
               <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
             </option>
             <option name="resolveToWorkspace" value="false" />
             <option name="workingDirPath" value="$PROJECT_DIR$" />
@@ -343,6 +396,13 @@
         <option name="LOCAL" value="false" />
       </RunnerSettings>
       <method v="2" />
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="OCR" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <list>
       <item itemvalue="Application.Application newUser" />
@@ -377,6 +437,41 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1568026838417</updated>
+      <workItem from="1706274069258" duration="777000" />
+      <workItem from="1706280034748" duration="13000" />
+      <workItem from="1706280153337" duration="13000" />
+      <workItem from="1706280196350" duration="202000" />
+      <workItem from="1706280409452" duration="7000" />
+      <workItem from="1706280439216" duration="28000" />
+      <workItem from="1706280482473" duration="14000" />
+      <workItem from="1706280527115" duration="54000" />
+      <workItem from="1706466467228" duration="24000" />
+      <workItem from="1706470674763" duration="3000" />
+      <workItem from="1706470759242" duration="34000" />
+      <workItem from="1706472250251" duration="600000" />
+      <workItem from="1706561132580" duration="11000" />
+      <workItem from="1706624222466" duration="10000" />
+      <workItem from="1706954552611" duration="1761000" />
+      <workItem from="1706956427499" duration="1318000" />
+      <workItem from="1706967041597" duration="4681000" />
+      <workItem from="1706995107152" duration="338000" />
+      <workItem from="1707038034886" duration="4000" />
+      <workItem from="1707067843091" duration="1090000" />
+      <workItem from="1707121540058" duration="18000" />
+      <workItem from="1707133413990" duration="286000" />
+      <workItem from="1707145385481" duration="1102000" />
+      <workItem from="1707203682929" duration="819000" />
+      <workItem from="1707381290708" duration="4000" />
+      <workItem from="1707844885996" duration="25000" />
+      <workItem from="1707994708849" duration="2000" />
+      <workItem from="1707997576943" duration="20000" />
+      <workItem from="1708252194677" duration="607000" />
+      <workItem from="1710231502380" duration="50000" />
+      <workItem from="1710919934407" duration="43000" />
+      <workItem from="1711009790678" duration="2000" />
+      <workItem from="1711035666128" duration="194000" />
+      <workItem from="1713000239313" duration="20789000" />
+      <workItem from="1713100845925" duration="284000" />
     </task>
     <task id="LOCAL-00054" summary="Added CheckConnection Task to TaskRunnable's tasksList.">
       <created>1590925498178</created>
@@ -721,8 +816,11 @@
       <option name="project" value="LOCAL" />
       <updated>1636053117401</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <option name="localTasksCounter" value="109" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.History.Properties">
     <option name="COLUMN_ID_ORDER">
@@ -735,15 +833,6 @@
     </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="Branch">
@@ -758,14 +847,17 @@
         </entry>
       </map>
     </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed user parsing." />
-    <MESSAGE value="Impl key renewal and db changes." />
-    <MESSAGE value="SSL setup." />
-    <MESSAGE value="Delete Sym. Key stuff." />
-    <MESSAGE value="Delete application.properties from ressource folder." />
-    <MESSAGE value="Logging CalendarController." />
     <MESSAGE value="WIP many changes to API." />
     <MESSAGE value="Added possibility to delete Bons." />
     <MESSAGE value="Deleted superfluous network socket runner." />
@@ -785,7 +877,13 @@
     <MESSAGE value="Fixed Typo in sql." />
     <MESSAGE value="Fixed regular task shift when time is before now." />
     <MESSAGE value="Adjusted to nusstop." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adjusted to nusstop." />
+    <MESSAGE value="Added new endpoint for calender in browser." />
+    <MESSAGE value="tasks on Calendar/getListHTML sorted after time." />
+    <MESSAGE value="Formating of times on getListHTML CalendarController." />
+    <MESSAGE value="Formating of colors on getListHTML CalendarController." />
+    <MESSAGE value="Fix getListHTML missing Gänsefüsschen." />
+    <MESSAGE value="Item mangling for shoppinglist items.&#10;Before, seperation of items in the outputstream by &quot;,&quot;. This led to flaws in the client, as &quot;,&quot; was the seperator of the list. Changed to &quot;´#§&quot;, in the client, too." />
+    <option name="LAST_COMMIT_MESSAGE" value="Item mangling for shoppinglist items.&#10;Before, seperation of items in the outputstream by &quot;,&quot;. This led to flaws in the client, as &quot;,&quot; was the seperator of the list. Changed to &quot;´#§&quot;, in the client, too." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -845,16 +943,91 @@
           <line>368</line>
           <option name="timeStamp" value="232" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="237" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/MemoController.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="263" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/ShoppingListController.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="272" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/StartUp.java</url>
+          <line>26</line>
+          <option name="timeStamp" value="277" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/CalendarController.java</url>
+          <line>98</line>
+          <option name="timeStamp" value="289" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.2.9.RELEASE/spring-web-5.2.9.RELEASE-sources.jar!/org/springframework/web/HttpMediaTypeNotSupportedException.java</url>
+          <line>42</line>
+          <option name="timeStamp" value="300" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.2.9.RELEASE/spring-web-5.2.9.RELEASE-sources.jar!/org/springframework/web/HttpMediaTypeNotSupportedException.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="302" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
+          <line>71</line>
+          <option name="timeStamp" value="335" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
+          <line>123</line>
+          <option name="timeStamp" value="337" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
+          <line>36</line>
+          <option name="timeStamp" value="338" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="339" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
+          <line>110</line>
+          <option name="timeStamp" value="344" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
+          <line>105</line>
+          <option name="timeStamp" value="346" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
+          <line>99</line>
+          <option name="timeStamp" value="347" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="!(task.getExecutionStrategy() instanceof RegularExecutionStrategy)" language="JAVA" />
+        <watch expression="((Collections.UnmodifiableMap.UnmodifiableEntrySet.UnmodifiableEntry)((org.apache.catalina.util.ParameterMap)parameterMap).entrySet().toArray()[0]).getValue()" custom="java.util.Collections.UnmodifiableMap.UnmodifiableEntrySet.UnmodifiableEntry,org.apache.catalina.util.ParameterMap" />
       </configuration>
     </watches-manager>
   </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Main__gui.ic" NAME="Main -gui Coverage Results" MODIFIED="1592600045848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Application.ic" NAME="Application Coverage Results" MODIFIED="1618686194517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Application.ic" NAME="Application Coverage Results" MODIFIED="1737378497436" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>
