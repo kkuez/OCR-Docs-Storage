@@ -80,6 +80,7 @@ public class BonController extends Controller {
     }
 
     @RequestMapping(value = BON + "/send", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
     public ResponseEntity<String> send(@RequestParam Map<String, String> map, @RequestParam("file") MultipartFile[] submissions, HttpServletRequest request) {
         String betrag = map.get("betrag").replace(",", ".");
 
@@ -147,29 +148,26 @@ public class BonController extends Controller {
         //htmlBuilder.append("<form action=\"\\bon\\send\" name=\"myForm\" enctype=\"text\" method=\"post\">");
 
 
-            htmlBuilder.append("<form action=\"\\bon\\send\" onsubmit=\"this.submit();this.reset();return false;\" name=\"myForm\" id=\"myForm\" enctype=\"multipart/form-data\" method=\"post\">");
+        htmlBuilder.append("<form action=\"\\bon\\send?userid=" + userid + "&passw=" + passw + "\" onsubmit=\"this.submit();this.reset();return false;\" id=\"myForm\" enctype=\"multipart/form-data\" method=\"post\">");
+        htmlBuilder.append("<p style=\"font-family:arial;\">");
 
         htmlBuilder.append("<input type=\"hidden\" name=\"userid\" id=\"userid\" value=\"" + userid + "\">");
         htmlBuilder.append("<input type=\"hidden\" name=\"passw\" id=\"passw\" value=\"" + passw + "\">");
-
-        htmlBuilder.append("<p style=\"font-family:arial;\">");
         htmlBuilder.append("<label for=\"betrag\">Betrag:</label>");
         htmlBuilder.append("<input autocomplete=\"one-time-code\" type=\"text\" name=\"betrag\" id=\"betrag\">");
 
         htmlBuilder.append("<br><br><label for=\"file\">Bon-Bild</label><br>");
         htmlBuilder.append("<input autocomplete=\"one-time-code\" type=\"file\" id=\"file\" accept=\"image/*\" name=\"file\">");
-        //htmlBuilder.append("<button>Upload</button>");
-
         htmlBuilder.append("</label>");
 
         if (!pictureFilled || !betragFilledFloat) {
             htmlBuilder.append("Da fehlt noch was...");
         }
 
-        htmlBuilder.append("<br><br><input autocomplete=\"one-time-code\" value=\"Abschicken\" type=\"submit\" onclick=\"send()\">");
+        htmlBuilder.append("<br><br><input autocomplete=\"one-time-code\" value=\"Abschicken\" type=\"submit\" name=\"submit\" onclick=\"send()\">");
+        htmlBuilder.append("</form>");
 
         htmlBuilder.append("<br><br><label for=\"Bisher\">Bisher:</label>");
-        htmlBuilder.append("</form>");
 
         Float sum = backendFacade.getSum(userid);
         Map<String, User> allowedUsers = backendFacade.getAllowedUsers();
