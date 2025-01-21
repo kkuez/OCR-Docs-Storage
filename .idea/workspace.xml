@@ -22,20 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Item mangling for shoppinglist items.&#10;Before, seperation of items in the outputstream by &quot;,&quot;. This led to flaws in the client, as &quot;,&quot; was the seperator of the list. Changed to &quot;´#§&quot;, in the client, too.">
-      <change beforePath="$PROJECT_DIR$/.idea/OCR-Docs-Storage.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OCR-Docs-Storage.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="00c4a8cf-8147-46bf-9d85-33f4ef78cf95" name="Default Changelist" comment="Added new Bon insertion very dirtyly without file being parsed.">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OCR.iml" beforeDir="false" afterPath="$PROJECT_DIR$/OCR.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application.properties.example" beforeDir="false" afterPath="$PROJECT_DIR$/application.properties.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/keystore/nussbot.p12" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +51,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="list_item_seperation" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -118,27 +107,27 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Application.executor&quot;: &quot;Debug&quot;,
-    &quot;Maven.Build jar with Spring plugin.executor&quot;: &quot;Run&quot;,
-    &quot;Remote JVM Debug.RPI.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/marcel/IdeaProjects/OCR-Docs-Storage&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.3632184&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Application.executor": "Debug",
+    "Maven.Build jar with Spring plugin.executor": "Run",
+    "Remote JVM Debug.RPI.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/marcel/IdeaProjects/OCR-Docs-Storage",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.3632184",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com" />
@@ -816,7 +805,7 @@
       <option name="project" value="LOCAL" />
       <updated>1636053117401</updated>
     </task>
-    <option name="localTasksCounter" value="109" />
+    <option name="localTasksCounter" value="113" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -858,9 +847,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="WIP many changes to API." />
-    <MESSAGE value="Added possibility to delete Bons." />
-    <MESSAGE value="Deleted superfluous network socket runner." />
     <MESSAGE value="Changed description on how to renew certificate." />
     <MESSAGE value="Logfeile appended to every logger." />
     <MESSAGE value="Added description about certs." />
@@ -883,7 +869,10 @@
     <MESSAGE value="Formating of colors on getListHTML CalendarController." />
     <MESSAGE value="Fix getListHTML missing Gänsefüsschen." />
     <MESSAGE value="Item mangling for shoppinglist items.&#10;Before, seperation of items in the outputstream by &quot;,&quot;. This led to flaws in the client, as &quot;,&quot; was the seperator of the list. Changed to &quot;´#§&quot;, in the client, too." />
-    <option name="LAST_COMMIT_MESSAGE" value="Item mangling for shoppinglist items.&#10;Before, seperation of items in the outputstream by &quot;,&quot;. This led to flaws in the client, as &quot;,&quot; was the seperator of the list. Changed to &quot;´#§&quot;, in the client, too." />
+    <MESSAGE value="FileUpload finally working." />
+    <MESSAGE value="Form formated." />
+    <MESSAGE value="Added new Bon insertion very dirtyly without file being parsed." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added new Bon insertion very dirtyly without file being parsed." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -979,39 +968,19 @@
           <option name="timeStamp" value="302" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
-          <line>71</line>
-          <option name="timeStamp" value="335" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java</url>
+          <line>262</line>
+          <option name="timeStamp" value="371" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
-          <line>123</line>
-          <option name="timeStamp" value="337" />
+          <line>150</line>
+          <option name="timeStamp" value="372" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
-          <line>36</line>
-          <option name="timeStamp" value="338" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="339" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
-          <line>110</line>
-          <option name="timeStamp" value="344" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
-          <line>105</line>
-          <option name="timeStamp" value="346" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/backend/http/controller/BonController.java</url>
-          <line>99</line>
-          <option name="timeStamp" value="347" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/backend/DBDAO.java</url>
+          <line>261</line>
+          <option name="timeStamp" value="373" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1028,6 +997,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Main__gui.ic" NAME="Main -gui Coverage Results" MODIFIED="1592600045848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Application.ic" NAME="Application Coverage Results" MODIFIED="1737378497436" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/OCR_Docs_Storage$Application.ic" NAME="Application Coverage Results" MODIFIED="1737460388230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>
