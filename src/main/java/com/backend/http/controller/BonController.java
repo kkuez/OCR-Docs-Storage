@@ -3,6 +3,7 @@ package com.backend.http.controller;
 import com.backend.BackendFacadeImpl;
 import com.data.Bon;
 import com.data.User;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -62,6 +63,32 @@ public class BonController extends Controller {
         return ResponseEntity.ok("");
     }
 
+    @PostMapping(value = BON + "/sendBytes")
+    public ResponseEntity<String> sendBytes(@RequestBody Map<String, Object> map) {
+        File pictureFile = new File("asv.jpg");
+        try {
+            if(pictureFile.exists()) {
+                pictureFile.delete();
+            }
+            pictureFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+        try(FileOutputStream fos = new FileOutputStream(pictureFile)) {
+            byte[] pictureBytes = String.valueOf(map.get("pictureBytes")).getBytes();
+            byte[] mimeDecodedPictureBytes = Base64.getMimeDecoder().decode(pictureBytes);
+            fos.write(mimeDecodedPictureBytes);
+            System.out.println("ruitbhgkjnfdg  " + pictureFile.getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println();
+        return ResponseEntity.ok("s");
+    }
+
     @PostMapping(BON + "/sendWithPath")
     public ResponseEntity<String> sendWithPath(@RequestBody Map map) {
         try {
@@ -97,8 +124,8 @@ public class BonController extends Controller {
         try (InputStream inputOfStream = uploadedFile.getInputStream()) {
             byte[] bytesOfUploadedFile = inputOfStream.readAllBytes();
 
-            File targetFolder = new File("../../Müll");
-            File targetFile = new File(targetFolder, originalFilename);
+
+            File targetFile = new File(FileUtils.getTempDirectory(), originalFilename);
 
             if (!targetFile.exists()) {
                 targetFile.createNewFile();
