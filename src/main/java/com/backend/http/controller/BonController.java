@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,8 @@ public class BonController extends Controller {
 
     @PostMapping(value = BON + "/sendBytes")
     public ResponseEntity<String> sendBytes(@RequestHeader Map<String, String> headers, @RequestBody Map<String, Object> body) {
-        File pictureFile = new File("asv.jpg");
+        String userid = headers.get("userid");
+        File pictureFile = new File(LocalDateTime.now() + "_" + backendFacade.getIdForNextDocument() + "_" + userid + ".jpg");
         try {
             if(pictureFile.exists()) {
                 pictureFile.delete();
@@ -80,7 +82,7 @@ public class BonController extends Controller {
             byte[] mimeDecodedPictureBytes = Base64.getMimeDecoder().decode(pictureBytes);
             fos.write(mimeDecodedPictureBytes);
 
-            Bon bon = insertNewBon(headers.get("userid"), pictureFile, Float.parseFloat(body.get("sum") + ""));
+            Bon bon = insertNewBon(userid, pictureFile, Float.parseFloat(body.get("sum") + ""));
             System.out.println("ruitbhgkjnfdg  " + bon.getOriginFile().getAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException(e);
