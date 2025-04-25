@@ -38,7 +38,8 @@ public class BonController extends Controller {
         logger.info("{}{}/get from {}", getLogPrefrix(), BON, userid);
         Float sumMe = backendFacade.getSum(userid);
         Float sumAll = backendFacade.getSum("");
-        return ResponseEntity.ok(Map.of("me", sumMe, "all", sumAll));
+        Map<String, Float> sumMap = Map.of("me", sumMe, "all", sumAll);
+        return ResponseEntity.ok(sumMap);
     }
 
     @GetMapping(BON + "/getLastBons")
@@ -88,7 +89,7 @@ public class BonController extends Controller {
             throw new RuntimeException(e);
         }
         System.out.println();
-        return ResponseEntity.ok("s");
+        return ResponseEntity.ok("Ok!!!");
     }
 
     @PostMapping(BON + "/sendWithPath")
