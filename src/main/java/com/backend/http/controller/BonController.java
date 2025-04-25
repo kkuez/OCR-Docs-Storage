@@ -64,7 +64,7 @@ public class BonController extends Controller {
     }
 
     @PostMapping(value = BON + "/sendBytes")
-    public ResponseEntity<String> sendBytes(@RequestBody Map<String, Object> map) {
+    public ResponseEntity<String> sendBytes(@RequestHeader Map<String, String> headers, @RequestBody Map<String, Object> body) {
         File pictureFile = new File("asv.jpg");
         try {
             if(pictureFile.exists()) {
@@ -75,13 +75,13 @@ public class BonController extends Controller {
             throw new RuntimeException(e);
         }
 
-
-
         try(FileOutputStream fos = new FileOutputStream(pictureFile)) {
-            byte[] pictureBytes = String.valueOf(map.get("pictureBytes")).getBytes();
+            byte[] pictureBytes = String.valueOf(body.get("pictureBytes")).getBytes();
             byte[] mimeDecodedPictureBytes = Base64.getMimeDecoder().decode(pictureBytes);
             fos.write(mimeDecodedPictureBytes);
-            System.out.println("ruitbhgkjnfdg  " + pictureFile.getAbsolutePath());
+
+            Bon bon = insertNewBon(headers.get("userid"), pictureFile, Float.parseFloat(body.get("sum") + ""));
+            System.out.println("ruitbhgkjnfdg  " + bon.getOriginFile().getAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -131,10 +131,7 @@ public class BonController extends Controller {
                 targetFile.createNewFile();
             }
             File createdFile = Files.write(targetFile.toPath(), bytesOfUploadedFile).toFile();
-            File copiedToArchiveFile = backendFacade.copyToArchive(createdFile, true);
-
-            Bon bon = new Bon(backendFacade.getIdForNextDocument(), backendFacade.getAllowedUsers().get(map.get("userid")), copiedToArchiveFile, betragFloat, UUID.randomUUID());
-            backendFacade.getDBDAO().insertBon(bon);
+            insertNewBon(map.get("userid"), createdFile, betragFloat);
         } catch (Exception e) {
             logger.error(COULD_NOT_PARSE_INCOMING_BON, e);
             return ResponseEntity.ok(COULD_NOT_PARSE_INCOMING_BON);
@@ -150,6 +147,14 @@ public class BonController extends Controller {
         String returnString = getAddBonStringBuilder(false, false, userid, passw).toString();
 
         return ResponseEntity.ok("Neuer Bon hingezugefügt!" + returnString);
+    }
+
+    private Bon insertNewBon(String userid, File createdFile, float betragFloat) {
+        File copiedToArchiveFile = backendFacade.copyToArchive(createdFile, true);
+
+        Bon bon = new Bon(backendFacade.getIdForNextDocument(), backendFacade.getAllowedUsers().get(userid), copiedToArchiveFile, betragFloat, UUID.randomUUID());
+        backendFacade.getDBDAO().insertBon(bon);
+        return bon;
     }
 
     @RequestMapping(value = BON + "/addBonsHTML", method = RequestMethod.GET)
