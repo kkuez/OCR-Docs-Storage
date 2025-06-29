@@ -13,3 +13,9 @@ keytool -v -certreq -keystore NAME.p12 -alias NAME
 
 IN ANDROID CLIENT:
 .pem cert nach res/raw/ kopieren, auf namen achten. Der ist zwar nicht wichtig aber hab ich in dem Code hardgecoded
+
+
+
+ODER
+
+https://www.baeldung.com/java-https-client-certificate-authentication
