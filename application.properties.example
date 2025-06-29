@@ -12,3 +12,4 @@ server.ssl.key-alias=
 server.ssl.enabled=
 spring.servlet.multipart.max-file-size=128MB
 spring.servlet.multipart.max-request-size=128MB
+logging.file=/logs/mylog.log
