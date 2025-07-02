@@ -10,7 +10,7 @@
 
     <!-- <packaging>jar</packaging>-->
 
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <properties>
         <maven.compiler.target>18</maven.compiler.target>
         <maven.compiler.source>18</maven.compiler.source>
@@ -20,8 +20,6 @@
         &lt;!&ndash; Organization and project keys are displayed in the right sidebar of the project homepage &ndash;&gt;
         <sonar.organization>kkuez</sonar.organization>
         <sonar.projectKey>OCR</sonar.projectKey>
-
-        &lt;!&ndash; Optional properties &ndash;&gt;
         <sonar.buildString>[...]</sonar.buildString>-->
     </properties>
     <profiles>
@@ -50,7 +48,7 @@
 <!--            <plugin>-->
 <!--                <groupId>org.sonarsource.scanner.maven</groupId>-->
 <!--                <artifactId>sonar-maven-plugin</artifactId>-->
-<!--                <version>3.5.0.1254</version>-->
+<!--                <version>3.0.0.1254</version>-->
 <!--                <executions>-->
 <!--                    <execution>-->
 <!--                        <phase>verify</phase>-->
@@ -60,40 +58,11 @@
 <!--                    </execution>-->
 <!--                </executions>-->
 <!--            </plugin>-->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.2</version>
-                <configuration>
-                    <append>true</append>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-site</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <!--Replaces the assembly plugin for packaging-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.4.5</version>
+                <version>3.0.3</version>
                 <configuration>
                     <!--<fork>true</fork>-->
                     <mainClass>com.Application</mainClass>
@@ -111,6 +80,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
+                    <parameters>true</parameters>
                     <release>11</release>
                 </configuration>
             </plugin>
@@ -149,22 +119,8 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>3.4.5</version>
+            <version>3.0.3</version>
             <scope>provided</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.6.2</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine -->
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>5.6.2</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -188,13 +144,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.4.5</version>
+            <version>3.0.3</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
-            <version>2.4.5</version>
+            <version>3.0.3</version>
         </dependency>
 
         <dependency>
