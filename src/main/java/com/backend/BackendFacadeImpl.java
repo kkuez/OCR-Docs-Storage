@@ -14,7 +14,7 @@ import java.util.*;
 public class BackendFacadeImpl implements BackendFacade {
 
     @Autowired
-    DBDAO dbdao;
+    private DBDAO dbdao;
     @Autowired
     private Archiver archiver;
     @Autowired
@@ -66,7 +66,7 @@ public class BackendFacadeImpl implements BackendFacade {
 
     @Override
     public Map<String, User> getAllowedUsers() {
-        return dbdao.getAllowedUsersMap(this);
+        return dbdao.getAllowedUsersMap();
     }
 
     @Override

@@ -31,7 +31,7 @@ public class BonController extends Controller {
     private BackendFacadeImpl backendFacade;
 
     @Autowired
-    public BonController(BackendFacadeImpl backendFacade) {
+    BonController(BackendFacadeImpl backendFacade) {
         this.backendFacade = backendFacade;
     }
 

@@ -34,10 +34,10 @@ public class DBDAO {
     private final TaskFactory taskFactory;
 
     @Autowired
-    public DBDAO(TaskFactory taskFactory, ObjectHub objectHub, BackendFacade facade) {
+    DBDAO(TaskFactory taskFactory, ObjectHub objectHub) {
         dbFile = new File(objectHub.getProperties().getProperty("dbPath"));
         this.taskFactory = taskFactory;
-        taskFactory.setAllowedUsersMap(getAllowedUsersMap(facade));
+        taskFactory.setAllowedUsersMap(getAllowedUsersMap());
         setBonUUIDs();
     }
 
@@ -71,7 +71,7 @@ public class DBDAO {
         return true;
     }
 
-    Map<String, User> getAllowedUsersMap(BackendFacade facade) {
+    Map<String, User> getAllowedUsersMap() {
         Map<String, User> userMap = new HashMap<>();
         try (Statement statement = getConnection().createStatement();
              ResultSet rs = statement.executeQuery("select * from AllowedUsers")) {
